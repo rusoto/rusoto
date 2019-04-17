@@ -975,17 +975,17 @@ impl AssumeRoleError {
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(AssumeRoleError::MalformedPolicyDocument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PackedPolicyTooLarge" => {
                         return RusotoError::Service(AssumeRoleError::PackedPolicyTooLarge(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RegionDisabledException" => {
                         return RusotoError::Service(AssumeRoleError::RegionDisabled(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -1044,34 +1044,34 @@ impl AssumeRoleWithSAMLError {
                     "ExpiredTokenException" => {
                         return RusotoError::Service(AssumeRoleWithSAMLError::ExpiredToken(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "IDPRejectedClaim" => {
                         return RusotoError::Service(AssumeRoleWithSAMLError::IDPRejectedClaim(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidIdentityToken" => {
                         return RusotoError::Service(AssumeRoleWithSAMLError::InvalidIdentityToken(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(
                             AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "PackedPolicyTooLarge" => {
                         return RusotoError::Service(AssumeRoleWithSAMLError::PackedPolicyTooLarge(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RegionDisabledException" => {
                         return RusotoError::Service(AssumeRoleWithSAMLError::RegionDisabled(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1135,47 +1135,49 @@ impl AssumeRoleWithWebIdentityError {
                     "ExpiredTokenException" => {
                         return RusotoError::Service(AssumeRoleWithWebIdentityError::ExpiredToken(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "IDPCommunicationError" => {
                         return RusotoError::Service(
                             AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "IDPRejectedClaim" => {
                         return RusotoError::Service(
                             AssumeRoleWithWebIdentityError::IDPRejectedClaim(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidIdentityToken" => {
                         return RusotoError::Service(
                             AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(
                             AssumeRoleWithWebIdentityError::MalformedPolicyDocument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "PackedPolicyTooLarge" => {
                         return RusotoError::Service(
                             AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "RegionDisabledException" => {
-                        return RusotoError::Service(AssumeRoleWithWebIdentityError::RegionDisabled(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            AssumeRoleWithWebIdentityError::RegionDisabled(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -1232,7 +1234,7 @@ impl DecodeAuthorizationMessageError {
                             DecodeAuthorizationMessageError::InvalidAuthorizationMessage(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -1322,17 +1324,17 @@ impl GetFederationTokenError {
                             GetFederationTokenError::MalformedPolicyDocument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "PackedPolicyTooLarge" => {
                         return RusotoError::Service(GetFederationTokenError::PackedPolicyTooLarge(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RegionDisabledException" => {
                         return RusotoError::Service(GetFederationTokenError::RegionDisabled(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1381,7 +1383,7 @@ impl GetSessionTokenError {
                     "RegionDisabledException" => {
                         return RusotoError::Service(GetSessionTokenError::RegionDisabled(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }

@@ -7017,27 +7017,27 @@ impl AddTagsToResourceError {
                 "InternalServerError" => {
                     return RusotoError::Service(AddTagsToResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(AddTagsToResourceError::InvalidResourceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(AddTagsToResourceError::InvalidResourceType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyTagsError" => {
                     return RusotoError::Service(AddTagsToResourceError::TooManyTagsError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(AddTagsToResourceError::TooManyUpdates(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7091,22 +7091,22 @@ impl CancelCommandError {
                 "DuplicateInstanceId" => {
                     return RusotoError::Service(CancelCommandError::DuplicateInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CancelCommandError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommandId" => {
-                    return RusotoError::Service(CancelCommandError::InvalidCommandId(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CancelCommandError::InvalidCommandId(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(CancelCommandError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7159,14 +7159,14 @@ impl CancelMaintenanceWindowExecutionError {
                         CancelMaintenanceWindowExecutionError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         CancelMaintenanceWindowExecutionError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7211,7 +7211,7 @@ impl CreateActivationError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateActivationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7275,57 +7275,57 @@ impl CreateAssociationError {
                 "AssociationAlreadyExists" => {
                     return RusotoError::Service(CreateAssociationError::AssociationAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AssociationLimitExceeded" => {
                     return RusotoError::Service(CreateAssociationError::AssociationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateAssociationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(CreateAssociationError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(CreateAssociationError::InvalidDocumentVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(CreateAssociationError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOutputLocation" => {
                     return RusotoError::Service(CreateAssociationError::InvalidOutputLocation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameters" => {
                     return RusotoError::Service(CreateAssociationError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSchedule" => {
                     return RusotoError::Service(CreateAssociationError::InvalidSchedule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTarget" => {
                     return RusotoError::Service(CreateAssociationError::InvalidTarget(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedPlatformType" => {
                     return RusotoError::Service(CreateAssociationError::UnsupportedPlatformType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7401,61 +7401,63 @@ impl CreateAssociationBatchError {
                         CreateAssociationBatchError::AssociationLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DuplicateInstanceId" => {
                     return RusotoError::Service(CreateAssociationBatchError::DuplicateInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateAssociationBatchError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(
                         CreateAssociationBatchError::InvalidDocumentVersion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOutputLocation" => {
-                    return RusotoError::Service(CreateAssociationBatchError::InvalidOutputLocation(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateAssociationBatchError::InvalidOutputLocation(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameters" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSchedule" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidSchedule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTarget" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidTarget(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedPlatformType" => {
                     return RusotoError::Service(
                         CreateAssociationBatchError::UnsupportedPlatformType(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7519,32 +7521,32 @@ impl CreateDocumentError {
                 "DocumentAlreadyExists" => {
                     return RusotoError::Service(CreateDocumentError::DocumentAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DocumentLimitExceeded" => {
                     return RusotoError::Service(CreateDocumentError::DocumentLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateDocumentError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocumentContent" => {
                     return RusotoError::Service(CreateDocumentError::InvalidDocumentContent(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return RusotoError::Service(CreateDocumentError::InvalidDocumentSchemaVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MaxDocumentSizeExceeded" => {
                     return RusotoError::Service(CreateDocumentError::MaxDocumentSizeExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7599,19 +7601,19 @@ impl CreateMaintenanceWindowError {
                         CreateMaintenanceWindowError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateMaintenanceWindowError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
                         CreateMaintenanceWindowError::ResourceLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7663,17 +7665,17 @@ impl CreatePatchBaselineError {
                         CreatePatchBaselineError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreatePatchBaselineError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(CreatePatchBaselineError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7725,28 +7727,28 @@ impl CreateResourceDataSyncError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateResourceDataSyncError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceDataSyncAlreadyExistsException" => {
                     return RusotoError::Service(
                         CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceDataSyncCountExceededException" => {
                     return RusotoError::Service(
                         CreateResourceDataSyncError::ResourceDataSyncCountExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceDataSyncInvalidConfigurationException" => {
                     return RusotoError::Service(
                         CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7799,22 +7801,22 @@ impl DeleteActivationError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteActivationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidActivation" => {
                     return RusotoError::Service(DeleteActivationError::InvalidActivation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidActivationId" => {
                     return RusotoError::Service(DeleteActivationError::InvalidActivationId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(DeleteActivationError::TooManyUpdates(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7869,27 +7871,27 @@ impl DeleteAssociationError {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(DeleteAssociationError::AssociationDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteAssociationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(DeleteAssociationError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(DeleteAssociationError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(DeleteAssociationError::TooManyUpdates(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7943,22 +7945,22 @@ impl DeleteDocumentError {
                 "AssociatedInstances" => {
                     return RusotoError::Service(DeleteDocumentError::AssociatedInstances(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteDocumentError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(DeleteDocumentError::InvalidDocument(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteDocumentError::InvalidDocument(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidDocumentOperation" => {
                     return RusotoError::Service(DeleteDocumentError::InvalidDocumentOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8013,29 +8015,29 @@ impl DeleteInventoryError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteInventoryError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeleteInventoryParametersException" => {
                     return RusotoError::Service(
                         DeleteInventoryError::InvalidDeleteInventoryParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInventoryRequestException" => {
                     return RusotoError::Service(DeleteInventoryError::InvalidInventoryRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOptionException" => {
                     return RusotoError::Service(DeleteInventoryError::InvalidOption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTypeNameException" => {
                     return RusotoError::Service(DeleteInventoryError::InvalidTypeName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8083,7 +8085,7 @@ impl DeleteMaintenanceWindowError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteMaintenanceWindowError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8129,12 +8131,12 @@ impl DeleteParameterError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteParameterError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterNotFound" => {
                     return RusotoError::Service(DeleteParameterError::ParameterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8179,7 +8181,7 @@ impl DeleteParametersError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteParametersError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8225,12 +8227,12 @@ impl DeletePatchBaselineError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeletePatchBaselineError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeletePatchBaselineError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8277,14 +8279,14 @@ impl DeleteResourceDataSyncError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteResourceDataSyncError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceDataSyncNotFoundException" => {
                     return RusotoError::Service(
                         DeleteResourceDataSyncError::ResourceDataSyncNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8333,12 +8335,12 @@ impl DeregisterManagedInstanceError {
                         DeregisterManagedInstanceError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(DeregisterManagedInstanceError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8389,14 +8391,14 @@ impl DeregisterPatchBaselineForPatchGroupError {
                         DeregisterPatchBaselineForPatchGroupError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(
                         DeregisterPatchBaselineForPatchGroupError::InvalidResourceId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8449,21 +8451,21 @@ impl DeregisterTargetFromMaintenanceWindowError {
                         DeregisterTargetFromMaintenanceWindowError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DeregisterTargetFromMaintenanceWindowError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "TargetInUseException" => {
                     return RusotoError::Service(
                         DeregisterTargetFromMaintenanceWindowError::TargetInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8515,14 +8517,14 @@ impl DeregisterTaskFromMaintenanceWindowError {
                         DeregisterTaskFromMaintenanceWindowError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DeregisterTaskFromMaintenanceWindowError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8571,17 +8573,17 @@ impl DescribeActivationsError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeActivationsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(DescribeActivationsError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribeActivationsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8635,29 +8637,29 @@ impl DescribeAssociationError {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(DescribeAssociationError::AssociationDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeAssociationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAssociationVersion" => {
                     return RusotoError::Service(
                         DescribeAssociationError::InvalidAssociationVersion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(DescribeAssociationError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(DescribeAssociationError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8715,28 +8717,28 @@ impl DescribeAssociationExecutionTargetsError {
                         DescribeAssociationExecutionTargetsError::AssociationDoesNotExist(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "AssociationExecutionDoesNotExist" => {
                     return RusotoError::Service(
                         DescribeAssociationExecutionTargetsError::AssociationExecutionDoesNotExist(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeAssociationExecutionTargetsError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
                         DescribeAssociationExecutionTargetsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8793,21 +8795,21 @@ impl DescribeAssociationExecutionsError {
                         DescribeAssociationExecutionsError::AssociationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeAssociationExecutionsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
                         DescribeAssociationExecutionsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8863,28 +8865,28 @@ impl DescribeAutomationExecutionsError {
                         DescribeAutomationExecutionsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(
                         DescribeAutomationExecutionsError::InvalidFilterKey(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilterValue" => {
                     return RusotoError::Service(
                         DescribeAutomationExecutionsError::InvalidFilterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
                         DescribeAutomationExecutionsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8943,35 +8945,35 @@ impl DescribeAutomationStepExecutionsError {
                         DescribeAutomationStepExecutionsError::AutomationExecutionNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeAutomationStepExecutionsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(
                         DescribeAutomationStepExecutionsError::InvalidFilterKey(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilterValue" => {
                     return RusotoError::Service(
                         DescribeAutomationStepExecutionsError::InvalidFilterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
                         DescribeAutomationStepExecutionsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9017,9 +9019,11 @@ impl DescribeAvailablePatchesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(DescribeAvailablePatchesError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeAvailablePatchesError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9067,17 +9071,17 @@ impl DescribeDocumentError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeDocumentError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(DescribeDocumentError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(DescribeDocumentError::InvalidDocumentVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9131,19 +9135,19 @@ impl DescribeDocumentPermissionError {
                         DescribeDocumentPermissionError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(DescribeDocumentPermissionError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPermissionType" => {
                     return RusotoError::Service(
                         DescribeDocumentPermissionError::InvalidPermissionType(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9197,21 +9201,21 @@ impl DescribeEffectiveInstanceAssociationsError {
                         DescribeEffectiveInstanceAssociationsError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(
                         DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
                         DescribeEffectiveInstanceAssociationsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9267,28 +9271,28 @@ impl DescribeEffectivePatchesForPatchBaselineError {
                         DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeEffectivePatchesForPatchBaselineError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(
                         DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnsupportedOperatingSystem" => {
                     return RusotoError::Service(
                         DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9345,21 +9349,21 @@ impl DescribeInstanceAssociationsStatusError {
                         DescribeInstanceAssociationsStatusError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(
                         DescribeInstanceAssociationsStatusError::InvalidInstanceId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
                         DescribeInstanceAssociationsStatusError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9417,31 +9421,35 @@ impl DescribeInstanceInformationError {
                         DescribeInstanceInformationError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilterKey" => {
-                    return RusotoError::Service(DescribeInstanceInformationError::InvalidFilterKey(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeInstanceInformationError::InvalidFilterKey(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(
                         DescribeInstanceInformationError::InvalidInstanceId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceInformationFilterValue" => {
                     return RusotoError::Service(
                         DescribeInstanceInformationError::InvalidInstanceInformationFilterValue(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(DescribeInstanceInformationError::InvalidNextToken(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeInstanceInformationError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9497,12 +9505,14 @@ impl DescribeInstancePatchStatesError {
                         DescribeInstancePatchStatesError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(DescribeInstancePatchStatesError::InvalidNextToken(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeInstancePatchStatesError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9555,21 +9565,21 @@ impl DescribeInstancePatchStatesForPatchGroupError {
                         DescribeInstancePatchStatesForPatchGroupError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(
                         DescribeInstancePatchStatesForPatchGroupError::InvalidFilter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
                         DescribeInstancePatchStatesForPatchGroupError::InvalidNextToken(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9621,22 +9631,22 @@ impl DescribeInstancePatchesError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeInstancePatchesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(DescribeInstancePatchesError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(DescribeInstancePatchesError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribeInstancePatchesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9691,17 +9701,19 @@ impl DescribeInventoryDeletionsError {
                         DescribeInventoryDeletionsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeletionIdException" => {
-                    return RusotoError::Service(DescribeInventoryDeletionsError::InvalidDeletionId(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeInventoryDeletionsError::InvalidDeletionId(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribeInventoryDeletionsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9753,14 +9765,14 @@ impl DescribeMaintenanceWindowExecutionTaskInvocationsError {
                         DescribeMaintenanceWindowExecutionTaskInvocationsError::DoesNotExist(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeMaintenanceWindowExecutionTaskInvocationsError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9815,14 +9827,14 @@ impl DescribeMaintenanceWindowExecutionTasksError {
                         DescribeMaintenanceWindowExecutionTasksError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeMaintenanceWindowExecutionTasksError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9871,7 +9883,7 @@ impl DescribeMaintenanceWindowExecutionsError {
                         DescribeMaintenanceWindowExecutionsError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9921,14 +9933,14 @@ impl DescribeMaintenanceWindowScheduleError {
                         DescribeMaintenanceWindowScheduleError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeMaintenanceWindowScheduleError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9979,14 +9991,14 @@ impl DescribeMaintenanceWindowTargetsError {
                         DescribeMaintenanceWindowTargetsError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeMaintenanceWindowTargetsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10035,14 +10047,14 @@ impl DescribeMaintenanceWindowTasksError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(DescribeMaintenanceWindowTasksError::DoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeMaintenanceWindowTasksError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10091,7 +10103,7 @@ impl DescribeMaintenanceWindowsError {
                         DescribeMaintenanceWindowsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10139,7 +10151,7 @@ impl DescribeMaintenanceWindowsForTargetError {
                         DescribeMaintenanceWindowsForTargetError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10191,27 +10203,27 @@ impl DescribeParametersError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeParametersError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(DescribeParametersError::InvalidFilterKey(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterOption" => {
                     return RusotoError::Service(DescribeParametersError::InvalidFilterOption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterValue" => {
                     return RusotoError::Service(DescribeParametersError::InvalidFilterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribeParametersError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10259,7 +10271,7 @@ impl DescribePatchBaselinesError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribePatchBaselinesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10305,12 +10317,12 @@ impl DescribePatchGroupStateError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribePatchGroupStateError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribePatchGroupStateError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10355,7 +10367,7 @@ impl DescribePatchGroupsError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribePatchGroupsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10403,17 +10415,17 @@ impl DescribeSessionsError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeSessionsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(DescribeSessionsError::InvalidFilterKey(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribeSessionsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10463,12 +10475,12 @@ impl GetAutomationExecutionError {
                         GetAutomationExecutionError::AutomationExecutionNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetAutomationExecutionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10521,27 +10533,27 @@ impl GetCommandInvocationError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetCommandInvocationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommandId" => {
                     return RusotoError::Service(GetCommandInvocationError::InvalidCommandId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(GetCommandInvocationError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPluginName" => {
                     return RusotoError::Service(GetCommandInvocationError::InvalidPluginName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvocationDoesNotExist" => {
                     return RusotoError::Service(GetCommandInvocationError::InvocationDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10589,7 +10601,7 @@ impl GetConnectionStatusError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetConnectionStatusError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10633,7 +10645,7 @@ impl GetDefaultPatchBaselineError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetDefaultPatchBaselineError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10683,14 +10695,14 @@ impl GetDeployablePatchSnapshotForInstanceError {
                         GetDeployablePatchSnapshotForInstanceError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnsupportedOperatingSystem" => {
                     return RusotoError::Service(
                         GetDeployablePatchSnapshotForInstanceError::UnsupportedOperatingSystem(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10741,17 +10753,17 @@ impl GetDocumentError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetDocumentError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(GetDocumentError::InvalidDocument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(GetDocumentError::InvalidDocumentVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10809,37 +10821,37 @@ impl GetInventoryError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetInventoryError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAggregatorException" => {
-                    return RusotoError::Service(GetInventoryError::InvalidAggregator(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetInventoryError::InvalidAggregator(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(GetInventoryError::InvalidFilter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInventoryGroupException" => {
                     return RusotoError::Service(GetInventoryError::InvalidInventoryGroup(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(GetInventoryError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidResultAttributeException" => {
                     return RusotoError::Service(GetInventoryError::InvalidResultAttribute(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTypeNameException" => {
                     return RusotoError::Service(GetInventoryError::InvalidTypeName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10893,17 +10905,17 @@ impl GetInventorySchemaError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetInventorySchemaError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(GetInventorySchemaError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTypeNameException" => {
                     return RusotoError::Service(GetInventorySchemaError::InvalidTypeName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10951,12 +10963,12 @@ impl GetMaintenanceWindowError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(GetMaintenanceWindowError::DoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetMaintenanceWindowError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11005,14 +11017,14 @@ impl GetMaintenanceWindowExecutionError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(GetMaintenanceWindowExecutionError::DoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         GetMaintenanceWindowExecutionError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11063,14 +11075,14 @@ impl GetMaintenanceWindowExecutionTaskError {
                         GetMaintenanceWindowExecutionTaskError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         GetMaintenanceWindowExecutionTaskError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11121,14 +11133,14 @@ impl GetMaintenanceWindowExecutionTaskInvocationError {
                         GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         GetMaintenanceWindowExecutionTaskInvocationError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11177,12 +11189,14 @@ impl GetMaintenanceWindowTaskError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(GetMaintenanceWindowTaskError::DoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(GetMaintenanceWindowTaskError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetMaintenanceWindowTaskError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11233,22 +11247,22 @@ impl GetParameterError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetParameterError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidKeyId" => {
                     return RusotoError::Service(GetParameterError::InvalidKeyId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ParameterNotFound" => {
-                    return RusotoError::Service(GetParameterError::ParameterNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetParameterError::ParameterNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ParameterVersionNotFound" => {
                     return RusotoError::Service(GetParameterError::ParameterVersionNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11301,22 +11315,22 @@ impl GetParameterHistoryError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetParameterHistoryError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidKeyId" => {
                     return RusotoError::Service(GetParameterHistoryError::InvalidKeyId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(GetParameterHistoryError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterNotFound" => {
                     return RusotoError::Service(GetParameterHistoryError::ParameterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11365,12 +11379,12 @@ impl GetParametersError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetParametersError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidKeyId" => {
                     return RusotoError::Service(GetParametersError::InvalidKeyId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11425,32 +11439,32 @@ impl GetParametersByPathError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetParametersByPathError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(GetParametersByPathError::InvalidFilterKey(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterOption" => {
                     return RusotoError::Service(GetParametersByPathError::InvalidFilterOption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterValue" => {
                     return RusotoError::Service(GetParametersByPathError::InvalidFilterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidKeyId" => {
                     return RusotoError::Service(GetParametersByPathError::InvalidKeyId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(GetParametersByPathError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11503,17 +11517,17 @@ impl GetPatchBaselineError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(GetPatchBaselineError::DoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetPatchBaselineError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(GetPatchBaselineError::InvalidResourceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11563,7 +11577,7 @@ impl GetPatchBaselineForPatchGroupError {
                         GetPatchBaselineForPatchGroupError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11615,31 +11629,31 @@ impl LabelParameterVersionError {
                 "InternalServerError" => {
                     return RusotoError::Service(LabelParameterVersionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterNotFound" => {
                     return RusotoError::Service(LabelParameterVersionError::ParameterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterVersionLabelLimitExceeded" => {
                     return RusotoError::Service(
                         LabelParameterVersionError::ParameterVersionLabelLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ParameterVersionNotFound" => {
                     return RusotoError::Service(
                         LabelParameterVersionError::ParameterVersionNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(LabelParameterVersionError::TooManyUpdates(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11693,17 +11707,17 @@ impl ListAssociationVersionsError {
                         ListAssociationVersionsError::AssociationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListAssociationVersionsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListAssociationVersionsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11751,12 +11765,12 @@ impl ListAssociationsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListAssociationsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListAssociationsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11809,27 +11823,27 @@ impl ListCommandInvocationsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListCommandInvocationsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommandId" => {
                     return RusotoError::Service(ListCommandInvocationsError::InvalidCommandId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(ListCommandInvocationsError::InvalidFilterKey(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(ListCommandInvocationsError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListCommandInvocationsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11885,27 +11899,27 @@ impl ListCommandsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListCommandsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommandId" => {
                     return RusotoError::Service(ListCommandsError::InvalidCommandId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(ListCommandsError::InvalidFilterKey(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInstanceId" => {
-                    return RusotoError::Service(ListCommandsError::InvalidInstanceId(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListCommandsError::InvalidInstanceId(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListCommandsError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11961,27 +11975,27 @@ impl ListComplianceItemsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListComplianceItemsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(ListComplianceItemsError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListComplianceItemsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(ListComplianceItemsError::InvalidResourceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(ListComplianceItemsError::InvalidResourceType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12033,17 +12047,17 @@ impl ListComplianceSummariesError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListComplianceSummariesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(ListComplianceSummariesError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListComplianceSummariesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12093,17 +12107,17 @@ impl ListDocumentVersionsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListDocumentVersionsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(ListDocumentVersionsError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListDocumentVersionsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12153,17 +12167,17 @@ impl ListDocumentsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListDocumentsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterKey" => {
-                    return RusotoError::Service(ListDocumentsError::InvalidFilterKey(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListDocumentsError::InvalidFilterKey(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(ListDocumentsError::InvalidNextToken(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListDocumentsError::InvalidNextToken(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12217,27 +12231,27 @@ impl ListInventoryEntriesError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListInventoryEntriesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(ListInventoryEntriesError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(ListInventoryEntriesError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListInventoryEntriesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTypeNameException" => {
                     return RusotoError::Service(ListInventoryEntriesError::InvalidTypeName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12293,21 +12307,21 @@ impl ListResourceComplianceSummariesError {
                         ListResourceComplianceSummariesError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(
                         ListResourceComplianceSummariesError::InvalidFilter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
                         ListResourceComplianceSummariesError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12355,12 +12369,12 @@ impl ListResourceDataSyncError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListResourceDataSyncError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListResourceDataSyncError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12409,17 +12423,17 @@ impl ListTagsForResourceError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidResourceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidResourceType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12475,31 +12489,33 @@ impl ModifyDocumentPermissionError {
                         ModifyDocumentPermissionError::DocumentLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DocumentPermissionLimit" => {
                     return RusotoError::Service(
                         ModifyDocumentPermissionError::DocumentPermissionLimit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(ModifyDocumentPermissionError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ModifyDocumentPermissionError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(ModifyDocumentPermissionError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPermissionType" => {
                     return RusotoError::Service(
                         ModifyDocumentPermissionError::InvalidPermissionType(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12561,37 +12577,37 @@ impl PutComplianceItemsError {
                         PutComplianceItemsError::ComplianceTypeCountLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutComplianceItemsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidItemContentException" => {
                     return RusotoError::Service(PutComplianceItemsError::InvalidItemContent(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(PutComplianceItemsError::InvalidResourceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(PutComplianceItemsError::InvalidResourceType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ItemSizeLimitExceededException" => {
                     return RusotoError::Service(PutComplianceItemsError::ItemSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TotalSizeLimitExceededException" => {
                     return RusotoError::Service(PutComplianceItemsError::TotalSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12663,64 +12679,66 @@ impl PutInventoryError {
                 "CustomSchemaCountLimitExceededException" => {
                     return RusotoError::Service(PutInventoryError::CustomSchemaCountLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutInventoryError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
-                    return RusotoError::Service(PutInventoryError::InvalidInstanceId(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutInventoryError::InvalidInstanceId(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInventoryItemContextException" => {
                     return RusotoError::Service(PutInventoryError::InvalidInventoryItemContext(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidItemContentException" => {
                     return RusotoError::Service(PutInventoryError::InvalidItemContent(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTypeNameException" => {
                     return RusotoError::Service(PutInventoryError::InvalidTypeName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ItemContentMismatchException" => {
                     return RusotoError::Service(PutInventoryError::ItemContentMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ItemSizeLimitExceededException" => {
                     return RusotoError::Service(PutInventoryError::ItemSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SubTypeCountLimitExceededException" => {
                     return RusotoError::Service(PutInventoryError::SubTypeCountLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TotalSizeLimitExceededException" => {
                     return RusotoError::Service(PutInventoryError::TotalSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedInventoryItemContextException" => {
-                    return RusotoError::Service(PutInventoryError::UnsupportedInventoryItemContext(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PutInventoryError::UnsupportedInventoryItemContext(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UnsupportedInventorySchemaVersionException" => {
                     return RusotoError::Service(
                         PutInventoryError::UnsupportedInventorySchemaVersion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12795,59 +12813,59 @@ impl PutParameterError {
                 "HierarchyLevelLimitExceededException" => {
                     return RusotoError::Service(PutParameterError::HierarchyLevelLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "HierarchyTypeMismatchException" => {
                     return RusotoError::Service(PutParameterError::HierarchyTypeMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutParameterError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAllowedPatternException" => {
                     return RusotoError::Service(PutParameterError::InvalidAllowedPattern(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidKeyId" => {
                     return RusotoError::Service(PutParameterError::InvalidKeyId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ParameterAlreadyExists" => {
                     return RusotoError::Service(PutParameterError::ParameterAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterLimitExceeded" => {
                     return RusotoError::Service(PutParameterError::ParameterLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterMaxVersionLimitExceeded" => {
                     return RusotoError::Service(
                         PutParameterError::ParameterMaxVersionLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ParameterPatternMismatchException" => {
                     return RusotoError::Service(PutParameterError::ParameterPatternMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(PutParameterError::TooManyUpdates(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedParameterType" => {
                     return RusotoError::Service(PutParameterError::UnsupportedParameterType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12907,21 +12925,21 @@ impl RegisterDefaultPatchBaselineError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(RegisterDefaultPatchBaselineError::DoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         RegisterDefaultPatchBaselineError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(
                         RegisterDefaultPatchBaselineError::InvalidResourceId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12979,35 +12997,35 @@ impl RegisterPatchBaselineForPatchGroupError {
                         RegisterPatchBaselineForPatchGroupError::AlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DoesNotExistException" => {
                     return RusotoError::Service(
                         RegisterPatchBaselineForPatchGroupError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         RegisterPatchBaselineForPatchGroupError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(
                         RegisterPatchBaselineForPatchGroupError::InvalidResourceId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
                         RegisterPatchBaselineForPatchGroupError::ResourceLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13065,28 +13083,28 @@ impl RegisterTargetWithMaintenanceWindowError {
                         RegisterTargetWithMaintenanceWindowError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "IdempotentParameterMismatch" => {
                     return RusotoError::Service(
                         RegisterTargetWithMaintenanceWindowError::IdempotentParameterMismatch(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         RegisterTargetWithMaintenanceWindowError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
                         RegisterTargetWithMaintenanceWindowError::ResourceLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13147,35 +13165,35 @@ impl RegisterTaskWithMaintenanceWindowError {
                         RegisterTaskWithMaintenanceWindowError::DoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "FeatureNotAvailableException" => {
                     return RusotoError::Service(
                         RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "IdempotentParameterMismatch" => {
                     return RusotoError::Service(
                         RegisterTaskWithMaintenanceWindowError::IdempotentParameterMismatch(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         RegisterTaskWithMaintenanceWindowError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
                         RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13229,22 +13247,22 @@ impl RemoveTagsFromResourceError {
                 "InternalServerError" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InvalidResourceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InvalidResourceType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::TooManyUpdates(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13293,12 +13311,12 @@ impl ResumeSessionError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(ResumeSessionError::DoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ResumeSessionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13351,22 +13369,24 @@ impl SendAutomationSignalError {
                         SendAutomationSignalError::AutomationExecutionNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AutomationStepNotFoundException" => {
                     return RusotoError::Service(SendAutomationSignalError::AutomationStepNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(SendAutomationSignalError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAutomationSignalException" => {
-                    return RusotoError::Service(SendAutomationSignalError::InvalidAutomationSignal(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        SendAutomationSignalError::InvalidAutomationSignal(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13433,57 +13453,57 @@ impl SendCommandError {
                 "DuplicateInstanceId" => {
                     return RusotoError::Service(SendCommandError::DuplicateInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(SendCommandError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(SendCommandError::InvalidDocument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(SendCommandError::InvalidDocumentVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(SendCommandError::InvalidInstanceId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNotificationConfig" => {
                     return RusotoError::Service(SendCommandError::InvalidNotificationConfig(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOutputFolder" => {
                     return RusotoError::Service(SendCommandError::InvalidOutputFolder(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameters" => {
                     return RusotoError::Service(SendCommandError::InvalidParameters(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRole" => {
                     return RusotoError::Service(SendCommandError::InvalidRole(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MaxDocumentSizeExceeded" => {
                     return RusotoError::Service(SendCommandError::MaxDocumentSizeExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedPlatformType" => {
                     return RusotoError::Service(SendCommandError::UnsupportedPlatformType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13541,12 +13561,12 @@ impl StartAssociationsOnceError {
                         StartAssociationsOnceError::AssociationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidAssociation" => {
                     return RusotoError::Service(StartAssociationsOnceError::InvalidAssociation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13605,45 +13625,47 @@ impl StartAutomationExecutionError {
                         StartAutomationExecutionError::AutomationDefinitionNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AutomationDefinitionVersionNotFoundException" => {
                     return RusotoError::Service(
                         StartAutomationExecutionError::AutomationDefinitionVersionNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "AutomationExecutionLimitExceededException" => {
                     return RusotoError::Service(
                         StartAutomationExecutionError::AutomationExecutionLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "IdempotentParameterMismatch" => {
                     return RusotoError::Service(
                         StartAutomationExecutionError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(StartAutomationExecutionError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        StartAutomationExecutionError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidAutomationExecutionParametersException" => {
                     return RusotoError::Service(
                         StartAutomationExecutionError::InvalidAutomationExecutionParameters(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidTarget" => {
                     return RusotoError::Service(StartAutomationExecutionError::InvalidTarget(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13697,17 +13719,17 @@ impl StartSessionError {
                 "InternalServerError" => {
                     return RusotoError::Service(StartSessionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(StartSessionError::InvalidDocument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TargetNotConnected" => {
                     return RusotoError::Service(StartSessionError::TargetNotConnected(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13759,19 +13781,19 @@ impl StopAutomationExecutionError {
                         StopAutomationExecutionError::AutomationExecutionNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StopAutomationExecutionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAutomationStatusUpdateException" => {
                     return RusotoError::Service(
                         StopAutomationExecutionError::InvalidAutomationStatusUpdate(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13819,12 +13841,12 @@ impl TerminateSessionError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(TerminateSessionError::DoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(TerminateSessionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13891,64 +13913,64 @@ impl UpdateAssociationError {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(UpdateAssociationError::AssociationDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AssociationVersionLimitExceeded" => {
                     return RusotoError::Service(
                         UpdateAssociationError::AssociationVersionLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateAssociationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAssociationVersion" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidAssociationVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidDocumentVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOutputLocation" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidOutputLocation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameters" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSchedule" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidSchedule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTarget" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidTarget(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUpdate" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(UpdateAssociationError::TooManyUpdates(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -14015,32 +14037,32 @@ impl UpdateAssociationStatusError {
                         UpdateAssociationStatusError::AssociationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateAssociationStatusError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(UpdateAssociationStatusError::InvalidDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(UpdateAssociationStatusError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StatusUnchanged" => {
                     return RusotoError::Service(UpdateAssociationStatusError::StatusUnchanged(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(UpdateAssociationStatusError::TooManyUpdates(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -14107,52 +14129,52 @@ impl UpdateDocumentError {
                 "DocumentVersionLimitExceeded" => {
                     return RusotoError::Service(UpdateDocumentError::DocumentVersionLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicateDocumentContent" => {
                     return RusotoError::Service(UpdateDocumentError::DuplicateDocumentContent(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicateDocumentVersionName" => {
                     return RusotoError::Service(UpdateDocumentError::DuplicateDocumentVersionName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateDocumentError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(UpdateDocumentError::InvalidDocument(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateDocumentError::InvalidDocument(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidDocumentContent" => {
                     return RusotoError::Service(UpdateDocumentError::InvalidDocumentContent(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocumentOperation" => {
                     return RusotoError::Service(UpdateDocumentError::InvalidDocumentOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return RusotoError::Service(UpdateDocumentError::InvalidDocumentSchemaVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(UpdateDocumentError::InvalidDocumentVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MaxDocumentSizeExceeded" => {
                     return RusotoError::Service(UpdateDocumentError::MaxDocumentSizeExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -14215,26 +14237,28 @@ impl UpdateDocumentDefaultVersionError {
                         UpdateDocumentDefaultVersionError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(UpdateDocumentDefaultVersionError::InvalidDocument(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateDocumentDefaultVersionError::InvalidDocument(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return RusotoError::Service(
                         UpdateDocumentDefaultVersionError::InvalidDocumentSchemaVersion(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(
                         UpdateDocumentDefaultVersionError::InvalidDocumentVersion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -14283,12 +14307,12 @@ impl UpdateMaintenanceWindowError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(UpdateMaintenanceWindowError::DoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateMaintenanceWindowError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -14337,14 +14361,14 @@ impl UpdateMaintenanceWindowTargetError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(UpdateMaintenanceWindowTargetError::DoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         UpdateMaintenanceWindowTargetError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -14393,14 +14417,14 @@ impl UpdateMaintenanceWindowTaskError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(UpdateMaintenanceWindowTaskError::DoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         UpdateMaintenanceWindowTaskError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -14449,12 +14473,12 @@ impl UpdateManagedInstanceRoleError {
                         UpdateManagedInstanceRoleError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(UpdateManagedInstanceRoleError::InvalidInstanceId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -14501,12 +14525,12 @@ impl UpdatePatchBaselineError {
                 "DoesNotExistException" => {
                     return RusotoError::Service(UpdatePatchBaselineError::DoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdatePatchBaselineError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

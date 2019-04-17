@@ -500,17 +500,17 @@ impl CreateScalingPlanError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(CreateScalingPlanError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateScalingPlanError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateScalingPlanError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -560,17 +560,17 @@ impl DeleteScalingPlanError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeleteScalingPlanError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteScalingPlanError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ObjectNotFoundException" => {
                     return RusotoError::Service(DeleteScalingPlanError::ObjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -624,19 +624,21 @@ impl DescribeScalingPlanResourcesError {
                         DescribeScalingPlanResourcesError::ConcurrentUpdate(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DescribeScalingPlanResourcesError::InternalService(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeScalingPlanResourcesError::InternalService(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         DescribeScalingPlanResourcesError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -686,17 +688,17 @@ impl DescribeScalingPlansError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalingPlansError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScalingPlansError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeScalingPlansError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -746,7 +748,7 @@ impl GetScalingPlanResourceForecastDataError {
                         GetScalingPlanResourceForecastDataError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -794,17 +796,17 @@ impl UpdateScalingPlanError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(UpdateScalingPlanError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateScalingPlanError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ObjectNotFoundException" => {
                     return RusotoError::Service(UpdateScalingPlanError::ObjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -1643,27 +1643,27 @@ impl AddTagsError {
                 "InternalServerException" => {
                     return RusotoError::Service(AddTagsError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(AddTagsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(AddTagsError::InvalidTag(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TagLimitExceededException" => {
                     return RusotoError::Service(AddTagsError::TagLimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1717,17 +1717,17 @@ impl CreateBatchPredictionError {
                         CreateBatchPredictionError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateBatchPredictionError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateBatchPredictionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1779,17 +1779,17 @@ impl CreateDataSourceFromRDSError {
                         CreateDataSourceFromRDSError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateDataSourceFromRDSError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateDataSourceFromRDSError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1843,17 +1843,17 @@ impl CreateDataSourceFromRedshiftError {
                         CreateDataSourceFromRedshiftError::IdempotentParameterMismatch(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateDataSourceFromRedshiftError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateDataSourceFromRedshiftError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1905,17 +1905,17 @@ impl CreateDataSourceFromS3Error {
                         CreateDataSourceFromS3Error::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateDataSourceFromS3Error::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateDataSourceFromS3Error::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1963,19 +1963,21 @@ impl CreateEvaluationError {
 
             match *error_type {
                 "IdempotentParameterMismatchException" => {
-                    return RusotoError::Service(CreateEvaluationError::IdempotentParameterMismatch(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateEvaluationError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateEvaluationError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateEvaluationError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2025,17 +2027,17 @@ impl CreateMLModelError {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(CreateMLModelError::IdempotentParameterMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateMLModelError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateMLModelError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2085,17 +2087,17 @@ impl CreateRealtimeEndpointError {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateRealtimeEndpointError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateRealtimeEndpointError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateRealtimeEndpointError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2145,17 +2147,17 @@ impl DeleteBatchPredictionError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteBatchPredictionError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteBatchPredictionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteBatchPredictionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2205,17 +2207,17 @@ impl DeleteDataSourceError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteDataSourceError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteDataSourceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteDataSourceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2265,17 +2267,17 @@ impl DeleteEvaluationError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteEvaluationError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteEvaluationError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteEvaluationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2325,17 +2327,17 @@ impl DeleteMLModelError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteMLModelError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteMLModelError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteMLModelError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteMLModelError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2385,17 +2387,17 @@ impl DeleteRealtimeEndpointError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteRealtimeEndpointError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteRealtimeEndpointError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteRealtimeEndpointError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2447,22 +2449,22 @@ impl DeleteTagsError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteTagsError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteTagsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(DeleteTagsError::InvalidTag(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2511,12 +2513,12 @@ impl DescribeBatchPredictionsError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeBatchPredictionsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeBatchPredictionsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2563,12 +2565,12 @@ impl DescribeDataSourcesError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeDataSourcesError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeDataSourcesError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2615,12 +2617,12 @@ impl DescribeEvaluationsError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEvaluationsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeEvaluationsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2667,12 +2669,12 @@ impl DescribeMLModelsError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeMLModelsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeMLModelsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2721,17 +2723,17 @@ impl DescribeTagsError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeTagsError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeTagsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2781,17 +2783,17 @@ impl GetBatchPredictionError {
                 "InternalServerException" => {
                     return RusotoError::Service(GetBatchPredictionError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetBatchPredictionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetBatchPredictionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2841,17 +2843,17 @@ impl GetDataSourceError {
                 "InternalServerException" => {
                     return RusotoError::Service(GetDataSourceError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetDataSourceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetDataSourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDataSourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2901,17 +2903,17 @@ impl GetEvaluationError {
                 "InternalServerException" => {
                     return RusotoError::Service(GetEvaluationError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetEvaluationError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetEvaluationError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetEvaluationError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2961,17 +2963,17 @@ impl GetMLModelError {
                 "InternalServerException" => {
                     return RusotoError::Service(GetMLModelError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetMLModelError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetMLModelError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3025,27 +3027,27 @@ impl PredictError {
                 "InternalServerException" => {
                     return RusotoError::Service(PredictError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(PredictError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PredictError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PredictorNotMountedException" => {
                     return RusotoError::Service(PredictError::PredictorNotMounted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PredictError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3097,17 +3099,17 @@ impl UpdateBatchPredictionError {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateBatchPredictionError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateBatchPredictionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateBatchPredictionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3157,17 +3159,17 @@ impl UpdateDataSourceError {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateDataSourceError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateDataSourceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateDataSourceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3217,17 +3219,17 @@ impl UpdateEvaluationError {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateEvaluationError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateEvaluationError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateEvaluationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3277,17 +3279,17 @@ impl UpdateMLModelError {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateMLModelError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateMLModelError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateMLModelError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateMLModelError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

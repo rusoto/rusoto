@@ -1031,28 +1031,28 @@ impl AssociateConfigurationItemsToApplicationError {
                         AssociateConfigurationItemsToApplicationError::AuthorizationError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         AssociateConfigurationItemsToApplicationError::InvalidParameter(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         AssociateConfigurationItemsToApplicationError::InvalidParameterValue(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(
                         AssociateConfigurationItemsToApplicationError::ServerInternalError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1105,17 +1105,17 @@ impl BatchDeleteImportDataError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(BatchDeleteImportDataError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(BatchDeleteImportDataError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(BatchDeleteImportDataError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1167,22 +1167,22 @@ impl CreateApplicationError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(CreateApplicationError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateApplicationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateApplicationError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(CreateApplicationError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1237,27 +1237,27 @@ impl CreateTagsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(CreateTagsError::AuthorizationError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateTagsError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateTagsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerInternalErrorException" => {
-                    return RusotoError::Service(CreateTagsError::ServerInternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateTagsError::ServerInternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1311,22 +1311,22 @@ impl DeleteApplicationsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DeleteApplicationsError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteApplicationsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteApplicationsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(DeleteApplicationsError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1381,27 +1381,27 @@ impl DeleteTagsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DeleteTagsError::AuthorizationError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteTagsError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteTagsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerInternalErrorException" => {
-                    return RusotoError::Service(DeleteTagsError::ServerInternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteTagsError::ServerInternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1455,22 +1455,22 @@ impl DescribeAgentsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeAgentsError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeAgentsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeAgentsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(DescribeAgentsError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1523,22 +1523,24 @@ impl DescribeConfigurationsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeConfigurationsError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeConfigurationsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(DescribeConfigurationsError::InvalidParameterValue(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeConfigurationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(DescribeConfigurationsError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1593,40 +1595,42 @@ impl DescribeContinuousExportsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return RusotoError::Service(DescribeContinuousExportsError::AuthorizationError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeContinuousExportsError::AuthorizationError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeContinuousExportsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeContinuousExportsError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         DescribeContinuousExportsError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeContinuousExportsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(
                         DescribeContinuousExportsError::ServerInternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1687,35 +1691,35 @@ impl DescribeExportConfigurationsError {
                         DescribeExportConfigurationsError::AuthorizationError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DescribeExportConfigurationsError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeExportConfigurationsError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DescribeExportConfigurationsError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(
                         DescribeExportConfigurationsError::ServerInternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1769,22 +1773,22 @@ impl DescribeExportTasksError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeExportTasksError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeExportTasksError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeExportTasksError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(DescribeExportTasksError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1835,17 +1839,17 @@ impl DescribeImportTasksError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeImportTasksError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeImportTasksError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(DescribeImportTasksError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1899,27 +1903,27 @@ impl DescribeTagsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeTagsError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeTagsError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeTagsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(DescribeTagsError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1977,28 +1981,28 @@ impl DisassociateConfigurationItemsFromApplicationError {
                         DisassociateConfigurationItemsFromApplicationError::AuthorizationError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DisassociateConfigurationItemsFromApplicationError::InvalidParameter(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(
                         DisassociateConfigurationItemsFromApplicationError::ServerInternalError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2061,27 +2065,27 @@ impl ExportConfigurationsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ExportConfigurationsError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ExportConfigurationsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ExportConfigurationsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(ExportConfigurationsError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(ExportConfigurationsError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2135,22 +2139,22 @@ impl GetDiscoverySummaryError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(GetDiscoverySummaryError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetDiscoverySummaryError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetDiscoverySummaryError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(GetDiscoverySummaryError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2205,27 +2209,27 @@ impl ListConfigurationsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ListConfigurationsError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListConfigurationsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListConfigurationsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListConfigurationsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(ListConfigurationsError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2279,22 +2283,22 @@ impl ListServerNeighborsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ListServerNeighborsError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListServerNeighborsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListServerNeighborsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(ListServerNeighborsError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2353,37 +2357,37 @@ impl StartContinuousExportError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartContinuousExportError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictErrorException" => {
                     return RusotoError::Service(StartContinuousExportError::ConflictError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartContinuousExportError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StartContinuousExportError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StartContinuousExportError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StartContinuousExportError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(StartContinuousExportError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2443,28 +2447,28 @@ impl StartDataCollectionByAgentIdsError {
                         StartDataCollectionByAgentIdsError::AuthorizationError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         StartDataCollectionByAgentIdsError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         StartDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(
                         StartDataCollectionByAgentIdsError::ServerInternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2519,27 +2523,27 @@ impl StartExportTaskError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartExportTaskError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartExportTaskError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StartExportTaskError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StartExportTaskError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(StartExportTaskError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2593,22 +2597,22 @@ impl StartImportTaskError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartImportTaskError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StartImportTaskError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StartImportTaskError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(StartImportTaskError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2667,37 +2671,37 @@ impl StopContinuousExportError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StopContinuousExportError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StopContinuousExportError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StopContinuousExportError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StopContinuousExportError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StopContinuousExportError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopContinuousExportError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(StopContinuousExportError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2757,28 +2761,28 @@ impl StopDataCollectionByAgentIdsError {
                         StopDataCollectionByAgentIdsError::AuthorizationError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         StopDataCollectionByAgentIdsError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         StopDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(
                         StopDataCollectionByAgentIdsError::ServerInternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2831,22 +2835,22 @@ impl UpdateApplicationError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(UpdateApplicationError::AuthorizationError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateApplicationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateApplicationError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalErrorException" => {
                     return RusotoError::Service(UpdateApplicationError::ServerInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

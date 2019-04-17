@@ -771,12 +771,12 @@ impl BatchGetNamedQueryError {
                 "InternalServerException" => {
                     return RusotoError::Service(BatchGetNamedQueryError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchGetNamedQueryError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -823,12 +823,12 @@ impl BatchGetQueryExecutionError {
                 "InternalServerException" => {
                     return RusotoError::Service(BatchGetQueryExecutionError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchGetQueryExecutionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -875,12 +875,12 @@ impl CreateNamedQueryError {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateNamedQueryError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateNamedQueryError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -925,14 +925,14 @@ impl CreateWorkGroupError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return RusotoError::Service(CreateWorkGroupError::InternalServer(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateWorkGroupError::InternalServer(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(CreateWorkGroupError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateWorkGroupError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -979,12 +979,12 @@ impl DeleteNamedQueryError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteNamedQueryError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteNamedQueryError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1029,14 +1029,14 @@ impl DeleteWorkGroupError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return RusotoError::Service(DeleteWorkGroupError::InternalServer(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteWorkGroupError::InternalServer(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteWorkGroupError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteWorkGroupError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1083,12 +1083,12 @@ impl GetNamedQueryError {
                 "InternalServerException" => {
                     return RusotoError::Service(GetNamedQueryError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetNamedQueryError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1135,12 +1135,12 @@ impl GetQueryExecutionError {
                 "InternalServerException" => {
                     return RusotoError::Service(GetQueryExecutionError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetQueryExecutionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1185,14 +1185,14 @@ impl GetQueryResultsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return RusotoError::Service(GetQueryResultsError::InternalServer(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetQueryResultsError::InternalServer(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(GetQueryResultsError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetQueryResultsError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1239,12 +1239,12 @@ impl GetWorkGroupError {
                 "InternalServerException" => {
                     return RusotoError::Service(GetWorkGroupError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetWorkGroupError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1291,12 +1291,12 @@ impl ListNamedQueriesError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListNamedQueriesError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListNamedQueriesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1343,12 +1343,12 @@ impl ListQueryExecutionsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListQueryExecutionsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListQueryExecutionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1395,12 +1395,12 @@ impl ListWorkGroupsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListWorkGroupsError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListWorkGroupsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1449,17 +1449,17 @@ impl StartQueryExecutionError {
                 "InternalServerException" => {
                     return RusotoError::Service(StartQueryExecutionError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartQueryExecutionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartQueryExecutionError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1507,12 +1507,12 @@ impl StopQueryExecutionError {
                 "InternalServerException" => {
                     return RusotoError::Service(StopQueryExecutionError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopQueryExecutionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1557,14 +1557,14 @@ impl UpdateWorkGroupError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return RusotoError::Service(UpdateWorkGroupError::InternalServer(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateWorkGroupError::InternalServer(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(UpdateWorkGroupError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateWorkGroupError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

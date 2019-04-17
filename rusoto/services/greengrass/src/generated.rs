@@ -3335,12 +3335,12 @@ impl AssociateRoleToGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(AssociateRoleToGroupError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(AssociateRoleToGroupError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3403,14 +3403,14 @@ impl AssociateServiceRoleToAccountError {
                 "BadRequestException" => {
                     return RusotoError::Service(AssociateServiceRoleToAccountError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         AssociateServiceRoleToAccountError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3469,7 +3469,7 @@ impl CreateConnectorDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateConnectorDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3529,7 +3529,7 @@ impl CreateConnectorDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateConnectorDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3587,7 +3587,7 @@ impl CreateCoreDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateCoreDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3647,7 +3647,7 @@ impl CreateCoreDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateCoreDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3705,7 +3705,7 @@ impl CreateDeploymentError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeploymentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3763,7 +3763,7 @@ impl CreateDeviceDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeviceDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3823,7 +3823,7 @@ impl CreateDeviceDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeviceDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3881,7 +3881,7 @@ impl CreateFunctionDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateFunctionDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3941,7 +3941,7 @@ impl CreateFunctionDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateFunctionDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3999,7 +3999,7 @@ impl CreateGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGroupError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4061,14 +4061,14 @@ impl CreateGroupCertificateAuthorityError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGroupCertificateAuthorityError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         CreateGroupCertificateAuthorityError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4127,7 +4127,7 @@ impl CreateGroupVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGroupVersionError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4185,7 +4185,7 @@ impl CreateLoggerDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateLoggerDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4245,7 +4245,7 @@ impl CreateLoggerDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateLoggerDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4303,7 +4303,7 @@ impl CreateResourceDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateResourceDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4363,7 +4363,7 @@ impl CreateResourceDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateResourceDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4423,12 +4423,12 @@ impl CreateSoftwareUpdateJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateSoftwareUpdateJobError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateSoftwareUpdateJobError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4489,7 +4489,7 @@ impl CreateSubscriptionDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateSubscriptionDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4551,7 +4551,7 @@ impl CreateSubscriptionDefinitionVersionError {
                         CreateSubscriptionDefinitionVersionError::BadRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4609,7 +4609,7 @@ impl DeleteConnectorDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteConnectorDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4667,7 +4667,7 @@ impl DeleteCoreDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteCoreDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4725,7 +4725,7 @@ impl DeleteDeviceDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDeviceDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4783,7 +4783,7 @@ impl DeleteFunctionDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteFunctionDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4841,7 +4841,7 @@ impl DeleteGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteGroupError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4899,7 +4899,7 @@ impl DeleteLoggerDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteLoggerDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4957,7 +4957,7 @@ impl DeleteResourceDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteResourceDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5017,7 +5017,7 @@ impl DeleteSubscriptionDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSubscriptionDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5077,14 +5077,14 @@ impl DisassociateRoleFromGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(DisassociateRoleFromGroupError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         DisassociateRoleFromGroupError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5147,7 +5147,7 @@ impl DisassociateServiceRoleFromAccountError {
                         DisassociateServiceRoleFromAccountError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5207,12 +5207,12 @@ impl GetAssociatedRoleError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAssociatedRoleError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(GetAssociatedRoleError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5271,7 +5271,7 @@ impl GetBulkDeploymentStatusError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBulkDeploymentStatusError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5329,14 +5329,14 @@ impl GetConnectivityInfoError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(GetConnectivityInfoError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetConnectivityInfoError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(GetConnectivityInfoError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5395,7 +5395,7 @@ impl GetConnectorDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetConnectorDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5455,7 +5455,7 @@ impl GetConnectorDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetConnectorDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5513,7 +5513,7 @@ impl GetCoreDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetCoreDefinitionError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5571,7 +5571,7 @@ impl GetCoreDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetCoreDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5627,9 +5627,9 @@ impl GetDeploymentStatusError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(GetDeploymentStatusError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDeploymentStatusError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5685,9 +5685,9 @@ impl GetDeviceDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(GetDeviceDefinitionError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDeviceDefinitionError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5747,7 +5747,7 @@ impl GetDeviceDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDeviceDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5805,7 +5805,7 @@ impl GetFunctionDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetFunctionDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5865,7 +5865,7 @@ impl GetFunctionDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetFunctionDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5923,7 +5923,7 @@ impl GetGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5985,14 +5985,14 @@ impl GetGroupCertificateAuthorityError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupCertificateAuthorityError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         GetGroupCertificateAuthorityError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6055,14 +6055,14 @@ impl GetGroupCertificateConfigurationError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupCertificateConfigurationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         GetGroupCertificateConfigurationError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6121,7 +6121,7 @@ impl GetGroupVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupVersionError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6177,9 +6177,9 @@ impl GetLoggerDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(GetLoggerDefinitionError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetLoggerDefinitionError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6239,7 +6239,7 @@ impl GetLoggerDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetLoggerDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6297,7 +6297,7 @@ impl GetResourceDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetResourceDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6357,7 +6357,7 @@ impl GetResourceDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetResourceDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6413,9 +6413,11 @@ impl GetServiceRoleForAccountError {
 
             match error_type {
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(GetServiceRoleForAccountError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetServiceRoleForAccountError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6473,7 +6475,7 @@ impl GetSubscriptionDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSubscriptionDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6533,7 +6535,7 @@ impl GetSubscriptionDefinitionVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSubscriptionDefinitionVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6591,9 +6593,11 @@ impl ListBulkDeploymentDetailedReportsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(ListBulkDeploymentDetailedReportsError::BadRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListBulkDeploymentDetailedReportsError::BadRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6649,9 +6653,9 @@ impl ListBulkDeploymentsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(ListBulkDeploymentsError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListBulkDeploymentsError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6711,7 +6715,7 @@ impl ListConnectorDefinitionVersionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConnectorDefinitionVersionsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6819,7 +6823,7 @@ impl ListCoreDefinitionVersionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListCoreDefinitionVersionsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6925,7 +6929,7 @@ impl ListDeploymentsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDeploymentsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6985,7 +6989,7 @@ impl ListDeviceDefinitionVersionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDeviceDefinitionVersionsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7093,7 +7097,7 @@ impl ListFunctionDefinitionVersionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListFunctionDefinitionVersionsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7203,14 +7207,14 @@ impl ListGroupCertificateAuthoritiesError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGroupCertificateAuthoritiesError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         ListGroupCertificateAuthoritiesError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7269,7 +7273,7 @@ impl ListGroupVersionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGroupVersionsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7377,7 +7381,7 @@ impl ListLoggerDefinitionVersionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListLoggerDefinitionVersionsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7485,7 +7489,7 @@ impl ListResourceDefinitionVersionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListResourceDefinitionVersionsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7595,7 +7599,7 @@ impl ListSubscriptionDefinitionVersionsError {
                         ListSubscriptionDefinitionVersionsError::BadRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7703,7 +7707,7 @@ impl ResetDeploymentsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ResetDeploymentsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7759,9 +7763,9 @@ impl StartBulkDeploymentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(StartBulkDeploymentError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StartBulkDeploymentError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7819,7 +7823,7 @@ impl StopBulkDeploymentError {
                 "BadRequestException" => {
                     return RusotoError::Service(StopBulkDeploymentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7879,12 +7883,12 @@ impl UpdateConnectivityInfoError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateConnectivityInfoError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateConnectivityInfoError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7943,7 +7947,7 @@ impl UpdateConnectorDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateConnectorDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8001,7 +8005,7 @@ impl UpdateCoreDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateCoreDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8059,7 +8063,7 @@ impl UpdateDeviceDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDeviceDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8117,7 +8121,7 @@ impl UpdateFunctionDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateFunctionDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8175,7 +8179,7 @@ impl UpdateGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGroupError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8239,14 +8243,14 @@ impl UpdateGroupCertificateConfigurationError {
                         UpdateGroupCertificateConfigurationError::BadRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         UpdateGroupCertificateConfigurationError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8305,7 +8309,7 @@ impl UpdateLoggerDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateLoggerDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8363,7 +8367,7 @@ impl UpdateResourceDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateResourceDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8423,7 +8427,7 @@ impl UpdateSubscriptionDefinitionError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateSubscriptionDefinitionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

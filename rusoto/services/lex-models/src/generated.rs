@@ -1882,32 +1882,32 @@ impl CreateBotVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateBotVersionError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateBotVersionError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateBotVersionError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateBotVersionError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateBotVersionError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateBotVersionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(CreateBotVersionError::PreconditionFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1978,34 +1978,34 @@ impl CreateIntentVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(CreateIntentVersionError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateIntentVersionError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateIntentVersionError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateIntentVersionError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateIntentVersionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateIntentVersionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(CreateIntentVersionError::PreconditionFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2078,32 +2078,32 @@ impl CreateSlotTypeVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateSlotTypeVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(CreateSlotTypeVersionError::Conflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateSlotTypeVersionError::Conflict(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateSlotTypeVersionError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateSlotTypeVersionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateSlotTypeVersionError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateSlotTypeVersionError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(CreateSlotTypeVersionError::PreconditionFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2176,32 +2176,32 @@ impl DeleteBotError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBotError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteBotError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteBotError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteBotError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBotError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteBotError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2274,32 +2274,32 @@ impl DeleteBotAliasError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBotAliasError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteBotAliasError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(DeleteBotAliasError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteBotAliasError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteBotAliasError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBotAliasError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteBotAliasError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2372,27 +2372,27 @@ impl DeleteBotChannelAssociationError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBotChannelAssociationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteBotChannelAssociationError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteBotChannelAssociationError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteBotChannelAssociationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBotChannelAssociationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2464,32 +2464,32 @@ impl DeleteBotVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBotVersionError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteBotVersionError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteBotVersionError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteBotVersionError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteBotVersionError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBotVersionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(DeleteBotVersionError::ResourceInUse(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteBotVersionError::ResourceInUse(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2562,32 +2562,32 @@ impl DeleteIntentError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteIntentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteIntentError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteIntentError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteIntentError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteIntentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteIntentError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2658,34 +2658,34 @@ impl DeleteIntentVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(DeleteIntentVersionError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteIntentVersionError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteIntentVersionError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteIntentVersionError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteIntentVersionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteIntentVersionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteIntentVersionError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2758,32 +2758,32 @@ impl DeleteSlotTypeError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSlotTypeError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteSlotTypeError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(DeleteSlotTypeError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteSlotTypeError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteSlotTypeError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteSlotTypeError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteSlotTypeError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2856,32 +2856,32 @@ impl DeleteSlotTypeVersionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSlotTypeVersionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(DeleteSlotTypeVersionError::Conflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteSlotTypeVersionError::Conflict(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteSlotTypeVersionError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteSlotTypeVersionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteSlotTypeVersionError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteSlotTypeVersionError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteSlotTypeVersionError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2950,22 +2950,22 @@ impl DeleteUtterancesError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteUtterancesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteUtterancesError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteUtterancesError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteUtterancesError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteUtterancesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3032,20 +3032,20 @@ impl GetBotError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBotError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetBotError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetBotError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetBotError::NotFound(String::from(error_message)))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3112,22 +3112,22 @@ impl GetBotAliasError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotAliasError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBotAliasError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetBotAliasError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetBotAliasError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3192,17 +3192,17 @@ impl GetBotAliasesError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotAliasesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBotAliasesError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetBotAliasesError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3268,22 +3268,22 @@ impl GetBotChannelAssociationError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotChannelAssociationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBotChannelAssociationError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetBotChannelAssociationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetBotChannelAssociationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3348,17 +3348,17 @@ impl GetBotChannelAssociationsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotChannelAssociationsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBotChannelAssociationsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetBotChannelAssociationsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3424,22 +3424,22 @@ impl GetBotVersionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotVersionsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(GetBotVersionsError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetBotVersionsError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetBotVersionsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetBotVersionsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3506,20 +3506,22 @@ impl GetBotsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBotsError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetBotsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetBotsError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetBotsError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3586,22 +3588,22 @@ impl GetBuiltinIntentError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBuiltinIntentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBuiltinIntentError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetBuiltinIntentError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetBuiltinIntentError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetBuiltinIntentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3666,17 +3668,17 @@ impl GetBuiltinIntentsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBuiltinIntentsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBuiltinIntentsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetBuiltinIntentsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3738,19 +3740,19 @@ impl GetBuiltinSlotTypesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(GetBuiltinSlotTypesError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetBuiltinSlotTypesError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBuiltinSlotTypesError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetBuiltinSlotTypesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3816,22 +3818,22 @@ impl GetExportError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetExportError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetExportError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetExportError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetExportError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3898,22 +3900,22 @@ impl GetImportError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetImportError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetImportError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetImportError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetImportError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3980,22 +3982,22 @@ impl GetIntentError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetIntentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetIntentError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetIntentError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4062,22 +4064,22 @@ impl GetIntentVersionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetIntentVersionsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetIntentVersionsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetIntentVersionsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntentVersionsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4144,22 +4146,22 @@ impl GetIntentsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetIntentsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetIntentsError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetIntentsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntentsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4226,22 +4228,22 @@ impl GetSlotTypeError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSlotTypeError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetSlotTypeError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetSlotTypeError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetSlotTypeError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4306,24 +4308,24 @@ impl GetSlotTypeVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(GetSlotTypeVersionsError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetSlotTypeVersionsError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetSlotTypeVersionsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetSlotTypeVersionsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetSlotTypeVersionsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4390,22 +4392,22 @@ impl GetSlotTypesError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSlotTypesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetSlotTypesError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetSlotTypesError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetSlotTypesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4470,17 +4472,17 @@ impl GetUtterancesViewError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUtterancesViewError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetUtterancesViewError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetUtterancesViewError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4548,25 +4550,25 @@ impl PutBotError {
                 "BadRequestException" => {
                     return RusotoError::Service(PutBotError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(PutBotError::Conflict(String::from(error_message)));
+                    return RusotoError::Service(PutBotError::Conflict(String::from(error_message)))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(PutBotError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutBotError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(PutBotError::PreconditionFailed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4636,27 +4638,27 @@ impl PutBotAliasError {
                 "BadRequestException" => {
                     return RusotoError::Service(PutBotAliasError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(PutBotAliasError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(PutBotAliasError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutBotAliasError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PreconditionFailedException" => {
-                    return RusotoError::Service(PutBotAliasError::PreconditionFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutBotAliasError::PreconditionFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4726,27 +4728,27 @@ impl PutIntentError {
                 "BadRequestException" => {
                     return RusotoError::Service(PutIntentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(PutIntentError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(PutIntentError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutIntentError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(PutIntentError::PreconditionFailed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4816,27 +4818,27 @@ impl PutSlotTypeError {
                 "BadRequestException" => {
                     return RusotoError::Service(PutSlotTypeError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(PutSlotTypeError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(PutSlotTypeError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutSlotTypeError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PreconditionFailedException" => {
-                    return RusotoError::Service(PutSlotTypeError::PreconditionFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutSlotTypeError::PreconditionFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4902,17 +4904,17 @@ impl StartImportError {
                 "BadRequestException" => {
                     return RusotoError::Service(StartImportError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(StartImportError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartImportError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

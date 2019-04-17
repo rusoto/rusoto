@@ -2974,22 +2974,22 @@ impl AcceptMatchError {
                 "InternalServiceException" => {
                     return RusotoError::Service(AcceptMatchError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(AcceptMatchError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(AcceptMatchError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(AcceptMatchError::UnsupportedRegion(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3044,27 +3044,27 @@ impl CreateAliasError {
                 "ConflictException" => {
                     return RusotoError::Service(CreateAliasError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateAliasError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateAliasError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAliasError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateAliasError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3118,22 +3118,22 @@ impl CreateBuildError {
                 "ConflictException" => {
                     return RusotoError::Service(CreateBuildError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateBuildError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateBuildError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateBuildError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3190,32 +3190,32 @@ impl CreateFleetError {
                 "ConflictException" => {
                     return RusotoError::Service(CreateFleetError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateFleetError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateFleetError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateFleetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateFleetError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateFleetError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3282,54 +3282,54 @@ impl CreateGameSessionError {
                 "ConflictException" => {
                     return RusotoError::Service(CreateGameSessionError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FleetCapacityExceededException" => {
                     return RusotoError::Service(CreateGameSessionError::FleetCapacityExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
                         CreateGameSessionError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateGameSessionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFleetStatusException" => {
                     return RusotoError::Service(CreateGameSessionError::InvalidFleetStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateGameSessionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateGameSessionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateGameSessionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TerminalRoutingStrategyException" => {
                     return RusotoError::Service(CreateGameSessionError::TerminalRoutingStrategy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
-                    return RusotoError::Service(CreateGameSessionError::Unauthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateGameSessionError::Unauthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3388,22 +3388,22 @@ impl CreateGameSessionQueueError {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateGameSessionQueueError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateGameSessionQueueError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateGameSessionQueueError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateGameSessionQueueError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3462,31 +3462,33 @@ impl CreateMatchmakingConfigurationError {
                         CreateMatchmakingConfigurationError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         CreateMatchmakingConfigurationError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateMatchmakingConfigurationError::LimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateMatchmakingConfigurationError::LimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateMatchmakingConfigurationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(
                         CreateMatchmakingConfigurationError::UnsupportedRegion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3538,17 +3540,17 @@ impl CreateMatchmakingRuleSetError {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateMatchmakingRuleSetError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateMatchmakingRuleSetError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(CreateMatchmakingRuleSetError::UnsupportedRegion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3606,37 +3608,39 @@ impl CreatePlayerSessionError {
                 "GameSessionFullException" => {
                     return RusotoError::Service(CreatePlayerSessionError::GameSessionFull(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreatePlayerSessionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGameSessionStatusException" => {
-                    return RusotoError::Service(CreatePlayerSessionError::InvalidGameSessionStatus(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreatePlayerSessionError::InvalidGameSessionStatus(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreatePlayerSessionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreatePlayerSessionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TerminalRoutingStrategyException" => {
                     return RusotoError::Service(CreatePlayerSessionError::TerminalRoutingStrategy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreatePlayerSessionError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3698,39 +3702,41 @@ impl CreatePlayerSessionsError {
                 "GameSessionFullException" => {
                     return RusotoError::Service(CreatePlayerSessionsError::GameSessionFull(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreatePlayerSessionsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGameSessionStatusException" => {
                     return RusotoError::Service(
                         CreatePlayerSessionsError::InvalidGameSessionStatus(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreatePlayerSessionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreatePlayerSessionsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TerminalRoutingStrategyException" => {
-                    return RusotoError::Service(CreatePlayerSessionsError::TerminalRoutingStrategy(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreatePlayerSessionsError::TerminalRoutingStrategy(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreatePlayerSessionsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3790,22 +3796,24 @@ impl CreateVpcPeeringAuthorizationError {
                         CreateVpcPeeringAuthorizationError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(CreateVpcPeeringAuthorizationError::InvalidRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateVpcPeeringAuthorizationError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateVpcPeeringAuthorizationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateVpcPeeringAuthorizationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3860,22 +3868,22 @@ impl CreateVpcPeeringConnectionError {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateVpcPeeringConnectionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateVpcPeeringConnectionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateVpcPeeringConnectionError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateVpcPeeringConnectionError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3928,22 +3936,22 @@ impl DeleteAliasError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteAliasError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteAliasError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteAliasError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteAliasError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3996,22 +4004,22 @@ impl DeleteBuildError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteBuildError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteBuildError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBuildError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteBuildError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4066,27 +4074,27 @@ impl DeleteFleetError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteFleetError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidFleetStatusException" => {
-                    return RusotoError::Service(DeleteFleetError::InvalidFleetStatus(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteFleetError::InvalidFleetStatus(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteFleetError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteFleetError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteFleetError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4140,22 +4148,22 @@ impl DeleteGameSessionQueueError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteGameSessionQueueError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteGameSessionQueueError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteGameSessionQueueError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteGameSessionQueueError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4212,26 +4220,26 @@ impl DeleteMatchmakingConfigurationError {
                         DeleteMatchmakingConfigurationError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         DeleteMatchmakingConfigurationError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteMatchmakingConfigurationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(
                         DeleteMatchmakingConfigurationError::UnsupportedRegion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4284,22 +4292,22 @@ impl DeleteMatchmakingRuleSetError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteMatchmakingRuleSetError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteMatchmakingRuleSetError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteMatchmakingRuleSetError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(DeleteMatchmakingRuleSetError::UnsupportedRegion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4352,22 +4360,22 @@ impl DeleteScalingPolicyError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4424,22 +4432,24 @@ impl DeleteVpcPeeringAuthorizationError {
                         DeleteVpcPeeringAuthorizationError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteVpcPeeringAuthorizationError::InvalidRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteVpcPeeringAuthorizationError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteVpcPeeringAuthorizationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteVpcPeeringAuthorizationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4494,22 +4504,22 @@ impl DeleteVpcPeeringConnectionError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteVpcPeeringConnectionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteVpcPeeringConnectionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteVpcPeeringConnectionError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteVpcPeeringConnectionError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4562,22 +4572,22 @@ impl DescribeAliasError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeAliasError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeAliasError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeAliasError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeAliasError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4630,22 +4640,22 @@ impl DescribeBuildError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeBuildError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeBuildError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeBuildError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeBuildError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4696,17 +4706,17 @@ impl DescribeEC2InstanceLimitsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeEC2InstanceLimitsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeEC2InstanceLimitsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeEC2InstanceLimitsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4758,22 +4768,22 @@ impl DescribeFleetAttributesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeFleetAttributesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeFleetAttributesError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeFleetAttributesError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4826,22 +4836,22 @@ impl DescribeFleetCapacityError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetCapacityError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeFleetCapacityError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeFleetCapacityError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeFleetCapacityError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeFleetCapacityError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4894,22 +4904,22 @@ impl DescribeFleetEventsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetEventsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeFleetEventsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeFleetEventsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeFleetEventsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4962,22 +4972,22 @@ impl DescribeFleetPortSettingsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetPortSettingsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeFleetPortSettingsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeFleetPortSettingsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeFleetPortSettingsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5030,22 +5040,22 @@ impl DescribeFleetUtilizationError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetUtilizationError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeFleetUtilizationError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeFleetUtilizationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeFleetUtilizationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5102,29 +5112,29 @@ impl DescribeGameSessionDetailsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeGameSessionDetailsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeGameSessionDetailsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeGameSessionDetailsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TerminalRoutingStrategyException" => {
                     return RusotoError::Service(
                         DescribeGameSessionDetailsError::TerminalRoutingStrategy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeGameSessionDetailsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5178,24 +5188,26 @@ impl DescribeGameSessionPlacementError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return RusotoError::Service(DescribeGameSessionPlacementError::InternalService(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeGameSessionPlacementError::InternalService(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeGameSessionPlacementError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeGameSessionPlacementError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeGameSessionPlacementError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5248,22 +5260,22 @@ impl DescribeGameSessionQueuesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeGameSessionQueuesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeGameSessionQueuesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeGameSessionQueuesError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeGameSessionQueuesError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5318,27 +5330,29 @@ impl DescribeGameSessionsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeGameSessionsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeGameSessionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeGameSessionsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TerminalRoutingStrategyException" => {
-                    return RusotoError::Service(DescribeGameSessionsError::TerminalRoutingStrategy(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeGameSessionsError::TerminalRoutingStrategy(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeGameSessionsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5392,22 +5406,22 @@ impl DescribeInstancesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeInstancesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeInstancesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeInstancesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
-                    return RusotoError::Service(DescribeInstancesError::Unauthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeInstancesError::Unauthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5458,17 +5472,17 @@ impl DescribeMatchmakingError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeMatchmakingError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeMatchmakingError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(DescribeMatchmakingError::UnsupportedRegion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5522,21 +5536,21 @@ impl DescribeMatchmakingConfigurationsError {
                         DescribeMatchmakingConfigurationsError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         DescribeMatchmakingConfigurationsError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(
                         DescribeMatchmakingConfigurationsError::UnsupportedRegion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5590,24 +5604,24 @@ impl DescribeMatchmakingRuleSetsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeMatchmakingRuleSetsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeMatchmakingRuleSetsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeMatchmakingRuleSetsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(
                         DescribeMatchmakingRuleSetsError::UnsupportedRegion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5660,22 +5674,22 @@ impl DescribePlayerSessionsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribePlayerSessionsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribePlayerSessionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribePlayerSessionsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribePlayerSessionsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5728,24 +5742,26 @@ impl DescribeRuntimeConfigurationError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return RusotoError::Service(DescribeRuntimeConfigurationError::InternalService(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeRuntimeConfigurationError::InternalService(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeRuntimeConfigurationError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeRuntimeConfigurationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeRuntimeConfigurationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5798,22 +5814,22 @@ impl DescribeScalingPoliciesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5868,21 +5884,21 @@ impl DescribeVpcPeeringAuthorizationsError {
                         DescribeVpcPeeringAuthorizationsError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         DescribeVpcPeeringAuthorizationsError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(
                         DescribeVpcPeeringAuthorizationsError::Unauthorized(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5938,22 +5954,24 @@ impl DescribeVpcPeeringConnectionsError {
                         DescribeVpcPeeringConnectionsError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeVpcPeeringConnectionsError::InvalidRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeVpcPeeringConnectionsError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeVpcPeeringConnectionsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeVpcPeeringConnectionsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6006,22 +6024,22 @@ impl GetGameSessionLogUrlError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetGameSessionLogUrlError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetGameSessionLogUrlError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetGameSessionLogUrlError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetGameSessionLogUrlError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6074,22 +6092,22 @@ impl GetInstanceAccessError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetInstanceAccessError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetInstanceAccessError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetInstanceAccessError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
-                    return RusotoError::Service(GetInstanceAccessError::Unauthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetInstanceAccessError::Unauthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6140,17 +6158,17 @@ impl ListAliasesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListAliasesError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListAliasesError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListAliasesError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6200,17 +6218,17 @@ impl ListBuildsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListBuildsError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListBuildsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListBuildsError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6262,22 +6280,22 @@ impl ListFleetsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListFleetsError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListFleetsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListFleetsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListFleetsError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6330,22 +6348,22 @@ impl PutScalingPolicyError {
                 "InternalServiceException" => {
                     return RusotoError::Service(PutScalingPolicyError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutScalingPolicyError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(PutScalingPolicyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(PutScalingPolicyError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6398,22 +6416,22 @@ impl RequestUploadCredentialsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(RequestUploadCredentialsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(RequestUploadCredentialsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(RequestUploadCredentialsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(RequestUploadCredentialsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6468,27 +6486,27 @@ impl ResolveAliasError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ResolveAliasError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ResolveAliasError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ResolveAliasError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TerminalRoutingStrategyException" => {
                     return RusotoError::Service(ResolveAliasError::TerminalRoutingStrategy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ResolveAliasError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6544,27 +6562,27 @@ impl SearchGameSessionsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(SearchGameSessionsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(SearchGameSessionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(SearchGameSessionsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TerminalRoutingStrategyException" => {
                     return RusotoError::Service(SearchGameSessionsError::TerminalRoutingStrategy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(SearchGameSessionsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6618,22 +6636,22 @@ impl StartFleetActionsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartFleetActionsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartFleetActionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StartFleetActionsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
-                    return RusotoError::Service(StartFleetActionsError::Unauthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StartFleetActionsError::Unauthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6686,22 +6704,22 @@ impl StartGameSessionPlacementError {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartGameSessionPlacementError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartGameSessionPlacementError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StartGameSessionPlacementError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(StartGameSessionPlacementError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6754,22 +6772,22 @@ impl StartMatchBackfillError {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartMatchBackfillError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartMatchBackfillError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StartMatchBackfillError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(StartMatchBackfillError::UnsupportedRegion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6822,22 +6840,22 @@ impl StartMatchmakingError {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartMatchmakingError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartMatchmakingError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StartMatchmakingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(StartMatchmakingError::UnsupportedRegion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6890,22 +6908,22 @@ impl StopFleetActionsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(StopFleetActionsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopFleetActionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StopFleetActionsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(StopFleetActionsError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6958,22 +6976,22 @@ impl StopGameSessionPlacementError {
                 "InternalServiceException" => {
                     return RusotoError::Service(StopGameSessionPlacementError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopGameSessionPlacementError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StopGameSessionPlacementError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(StopGameSessionPlacementError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7026,22 +7044,22 @@ impl StopMatchmakingError {
                 "InternalServiceException" => {
                     return RusotoError::Service(StopMatchmakingError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(StopMatchmakingError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StopMatchmakingError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StopMatchmakingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(StopMatchmakingError::UnsupportedRegion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7094,22 +7112,22 @@ impl UpdateAliasError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateAliasError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateAliasError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateAliasError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateAliasError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7162,22 +7180,22 @@ impl UpdateBuildError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateBuildError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateBuildError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateBuildError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateBuildError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7234,39 +7252,39 @@ impl UpdateFleetAttributesError {
 
             match *error_type {
                 "ConflictException" => {
-                    return RusotoError::Service(UpdateFleetAttributesError::Conflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateFleetAttributesError::Conflict(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateFleetAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFleetStatusException" => {
                     return RusotoError::Service(UpdateFleetAttributesError::InvalidFleetStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateFleetAttributesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateFleetAttributesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateFleetAttributesError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateFleetAttributesError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateFleetAttributesError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7328,37 +7346,37 @@ impl UpdateFleetCapacityError {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateFleetCapacityError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateFleetCapacityError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFleetStatusException" => {
                     return RusotoError::Service(UpdateFleetCapacityError::InvalidFleetStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateFleetCapacityError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateFleetCapacityError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateFleetCapacityError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateFleetCapacityError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7420,37 +7438,37 @@ impl UpdateFleetPortSettingsError {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateFleetPortSettingsError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateFleetPortSettingsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFleetStatusException" => {
                     return RusotoError::Service(UpdateFleetPortSettingsError::InvalidFleetStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateFleetPortSettingsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateFleetPortSettingsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateFleetPortSettingsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateFleetPortSettingsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7510,32 +7528,32 @@ impl UpdateGameSessionError {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateGameSessionError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateGameSessionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGameSessionStatusException" => {
                     return RusotoError::Service(UpdateGameSessionError::InvalidGameSessionStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateGameSessionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateGameSessionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
-                    return RusotoError::Service(UpdateGameSessionError::Unauthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateGameSessionError::Unauthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7590,22 +7608,22 @@ impl UpdateGameSessionQueueError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateGameSessionQueueError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateGameSessionQueueError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateGameSessionQueueError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateGameSessionQueueError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7662,26 +7680,26 @@ impl UpdateMatchmakingConfigurationError {
                         UpdateMatchmakingConfigurationError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         UpdateMatchmakingConfigurationError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateMatchmakingConfigurationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedRegionException" => {
                     return RusotoError::Service(
                         UpdateMatchmakingConfigurationError::UnsupportedRegion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7738,29 +7756,29 @@ impl UpdateRuntimeConfigurationError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateRuntimeConfigurationError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFleetStatusException" => {
                     return RusotoError::Service(
                         UpdateRuntimeConfigurationError::InvalidFleetStatus(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateRuntimeConfigurationError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateRuntimeConfigurationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateRuntimeConfigurationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7814,17 +7832,19 @@ impl ValidateMatchmakingRuleSetError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ValidateMatchmakingRuleSetError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ValidateMatchmakingRuleSetError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedRegionException" => {
-                    return RusotoError::Service(ValidateMatchmakingRuleSetError::UnsupportedRegion(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ValidateMatchmakingRuleSetError::UnsupportedRegion(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

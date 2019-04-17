@@ -1332,22 +1332,22 @@ impl AbortMultipartUploadError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(AbortMultipartUploadError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(AbortMultipartUploadError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AbortMultipartUploadError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(AbortMultipartUploadError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1414,22 +1414,22 @@ impl AbortVaultLockError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(AbortVaultLockError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(AbortVaultLockError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AbortVaultLockError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(AbortVaultLockError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1498,27 +1498,27 @@ impl AddTagsToVaultError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(AddTagsToVaultError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AddTagsToVaultError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(AddTagsToVaultError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddTagsToVaultError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(AddTagsToVaultError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1588,24 +1588,24 @@ impl CompleteMultipartUploadError {
                         CompleteMultipartUploadError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(
                         CompleteMultipartUploadError::MissingParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CompleteMultipartUploadError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CompleteMultipartUploadError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1672,22 +1672,22 @@ impl CompleteVaultLockError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CompleteVaultLockError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(CompleteVaultLockError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CompleteVaultLockError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CompleteVaultLockError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1754,22 +1754,22 @@ impl CreateVaultError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateVaultError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateVaultError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(CreateVaultError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(CreateVaultError::ServiceUnavailable(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateVaultError::ServiceUnavailable(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1836,22 +1836,22 @@ impl DeleteArchiveError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteArchiveError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(DeleteArchiveError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteArchiveError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteArchiveError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteArchiveError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1918,22 +1918,22 @@ impl DeleteVaultError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteVaultError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(DeleteVaultError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteVaultError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(DeleteVaultError::ServiceUnavailable(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteVaultError::ServiceUnavailable(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2002,24 +2002,24 @@ impl DeleteVaultAccessPolicyError {
                         DeleteVaultAccessPolicyError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(
                         DeleteVaultAccessPolicyError::MissingParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteVaultAccessPolicyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteVaultAccessPolicyError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2088,24 +2088,24 @@ impl DeleteVaultNotificationsError {
                         DeleteVaultNotificationsError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(
                         DeleteVaultNotificationsError::MissingParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteVaultNotificationsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteVaultNotificationsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2172,22 +2172,22 @@ impl DescribeJobError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeJobError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(DescribeJobError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeJobError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(DescribeJobError::ServiceUnavailable(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeJobError::ServiceUnavailable(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2254,22 +2254,22 @@ impl DescribeVaultError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeVaultError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(DescribeVaultError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeVaultError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeVaultError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeVaultError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2332,19 +2332,23 @@ impl GetDataRetrievalPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(GetDataRetrievalPolicyError::InvalidParameterValue(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetDataRetrievalPolicyError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "MissingParameterValueException" => {
-                    return RusotoError::Service(GetDataRetrievalPolicyError::MissingParameterValue(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetDataRetrievalPolicyError::MissingParameterValue(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetDataRetrievalPolicyError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2410,22 +2414,22 @@ impl GetJobOutputError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetJobOutputError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(GetJobOutputError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetJobOutputError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetJobOutputError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2492,22 +2496,22 @@ impl GetVaultAccessPolicyError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetVaultAccessPolicyError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(GetVaultAccessPolicyError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetVaultAccessPolicyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetVaultAccessPolicyError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2574,22 +2578,22 @@ impl GetVaultLockError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetVaultLockError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(GetVaultLockError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetVaultLockError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetVaultLockError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2656,22 +2660,22 @@ impl GetVaultNotificationsError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetVaultNotificationsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(GetVaultNotificationsError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetVaultNotificationsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetVaultNotificationsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2742,32 +2746,32 @@ impl InitiateJobError {
                 "InsufficientCapacityException" => {
                     return RusotoError::Service(InitiateJobError::InsufficientCapacity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(InitiateJobError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(InitiateJobError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyEnforcedException" => {
                     return RusotoError::Service(InitiateJobError::PolicyEnforced(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InitiateJobError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(InitiateJobError::ServiceUnavailable(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(InitiateJobError::ServiceUnavailable(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2838,24 +2842,24 @@ impl InitiateMultipartUploadError {
                         InitiateMultipartUploadError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(
                         InitiateMultipartUploadError::MissingParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InitiateMultipartUploadError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(InitiateMultipartUploadError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2922,22 +2926,22 @@ impl InitiateVaultLockError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(InitiateVaultLockError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(InitiateVaultLockError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InitiateVaultLockError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(InitiateVaultLockError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3002,24 +3006,24 @@ impl ListJobsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(ListJobsError::InvalidParameterValue(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListJobsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ))
                 }
                 "MissingParameterValueException" => {
-                    return RusotoError::Service(ListJobsError::MissingParameterValue(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListJobsError::MissingParameterValue(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListJobsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListJobsError::ServiceUnavailable(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3086,22 +3090,22 @@ impl ListMultipartUploadsError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListMultipartUploadsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(ListMultipartUploadsError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListMultipartUploadsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListMultipartUploadsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3168,22 +3172,22 @@ impl ListPartsError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListPartsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(ListPartsError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListPartsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListPartsError::ServiceUnavailable(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3250,19 +3254,19 @@ impl ListProvisionedCapacityError {
                         ListProvisionedCapacityError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(
                         ListProvisionedCapacityError::MissingParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListProvisionedCapacityError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3328,22 +3332,22 @@ impl ListTagsForVaultError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListTagsForVaultError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(ListTagsForVaultError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForVaultError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListTagsForVaultError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3410,22 +3414,22 @@ impl ListVaultsError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListVaultsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(ListVaultsError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListVaultsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListVaultsError::ServiceUnavailable(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3496,26 +3500,26 @@ impl PurchaseProvisionedCapacityError {
                         PurchaseProvisionedCapacityError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PurchaseProvisionedCapacityError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(
                         PurchaseProvisionedCapacityError::MissingParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         PurchaseProvisionedCapacityError::ServiceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3582,22 +3586,22 @@ impl RemoveTagsFromVaultError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(RemoveTagsFromVaultError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(RemoveTagsFromVaultError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RemoveTagsFromVaultError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(RemoveTagsFromVaultError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3660,19 +3664,23 @@ impl SetDataRetrievalPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(SetDataRetrievalPolicyError::InvalidParameterValue(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        SetDataRetrievalPolicyError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "MissingParameterValueException" => {
-                    return RusotoError::Service(SetDataRetrievalPolicyError::MissingParameterValue(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        SetDataRetrievalPolicyError::MissingParameterValue(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(SetDataRetrievalPolicyError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3738,22 +3746,22 @@ impl SetVaultAccessPolicyError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(SetVaultAccessPolicyError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(SetVaultAccessPolicyError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetVaultAccessPolicyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(SetVaultAccessPolicyError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3820,22 +3828,22 @@ impl SetVaultNotificationsError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(SetVaultNotificationsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(SetVaultNotificationsError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetVaultNotificationsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(SetVaultNotificationsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3904,27 +3912,27 @@ impl UploadArchiveError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UploadArchiveError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(UploadArchiveError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestTimeoutException" => {
                     return RusotoError::Service(UploadArchiveError::RequestTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UploadArchiveError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UploadArchiveError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UploadArchiveError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3994,27 +4002,27 @@ impl UploadMultipartPartError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UploadMultipartPartError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(UploadMultipartPartError::MissingParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestTimeoutException" => {
                     return RusotoError::Service(UploadMultipartPartError::RequestTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UploadMultipartPartError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UploadMultipartPartError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

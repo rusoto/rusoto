@@ -1320,9 +1320,9 @@ impl BatchDeleteBuildsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return RusotoError::Service(BatchDeleteBuildsError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(BatchDeleteBuildsError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1366,7 +1366,7 @@ impl BatchGetBuildsError {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchGetBuildsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1410,7 +1410,7 @@ impl BatchGetProjectsError {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchGetProjectsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1458,17 +1458,17 @@ impl CreateProjectError {
                 "AccountLimitExceededException" => {
                     return RusotoError::Service(CreateProjectError::AccountLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateProjectError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateProjectError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1520,22 +1520,22 @@ impl CreateWebhookError {
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateWebhookError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OAuthProviderException" => {
                     return RusotoError::Service(CreateWebhookError::OAuthProvider(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateWebhookError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(CreateWebhookError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateWebhookError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1582,7 +1582,7 @@ impl DeleteProjectError {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteProjectError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1628,12 +1628,12 @@ impl DeleteSourceCredentialsError {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteSourceCredentialsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteSourceCredentialsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1682,17 +1682,17 @@ impl DeleteWebhookError {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteWebhookError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OAuthProviderException" => {
                     return RusotoError::Service(DeleteWebhookError::OAuthProvider(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteWebhookError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteWebhookError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1738,14 +1738,16 @@ impl ImportSourceCredentialsError {
 
             match *error_type {
                 "AccountLimitExceededException" => {
-                    return RusotoError::Service(ImportSourceCredentialsError::AccountLimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ImportSourceCredentialsError::AccountLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ImportSourceCredentialsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1792,12 +1794,12 @@ impl InvalidateProjectCacheError {
                 "InvalidInputException" => {
                     return RusotoError::Service(InvalidateProjectCacheError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InvalidateProjectCacheError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1842,7 +1844,7 @@ impl ListBuildsError {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListBuildsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1888,12 +1890,12 @@ impl ListBuildsForProjectError {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListBuildsForProjectError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListBuildsForProjectError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1974,7 +1976,7 @@ impl ListProjectsError {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListProjectsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2056,17 +2058,17 @@ impl StartBuildError {
                 "AccountLimitExceededException" => {
                     return RusotoError::Service(StartBuildError::AccountLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(StartBuildError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartBuildError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2114,12 +2116,12 @@ impl StopBuildError {
                 "InvalidInputException" => {
                     return RusotoError::Service(StopBuildError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopBuildError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2166,12 +2168,12 @@ impl UpdateProjectError {
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateProjectError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateProjectError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateProjectError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2220,17 +2222,17 @@ impl UpdateWebhookError {
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateWebhookError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OAuthProviderException" => {
                     return RusotoError::Service(UpdateWebhookError::OAuthProvider(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateWebhookError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateWebhookError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

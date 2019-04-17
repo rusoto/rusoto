@@ -410,28 +410,30 @@ impl AssociateDeviceWithPlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return RusotoError::Service(AssociateDeviceWithPlacementError::InternalFailure(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AssociateDeviceWithPlacementError::InternalFailure(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(AssociateDeviceWithPlacementError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(
                         AssociateDeviceWithPlacementError::ResourceConflict(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         AssociateDeviceWithPlacementError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -498,22 +500,22 @@ impl CreatePlacementError {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreatePlacementError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(CreatePlacementError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreatePlacementError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(CreatePlacementError::ResourceConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreatePlacementError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -578,17 +580,17 @@ impl CreateProjectError {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateProjectError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateProjectError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceConflictException" => {
-                    return RusotoError::Service(CreateProjectError::ResourceConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateProjectError::ResourceConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -654,22 +656,22 @@ impl DeletePlacementError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeletePlacementError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DeletePlacementError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeletePlacementError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeletePlacementError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeletePlacementError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -736,22 +738,22 @@ impl DeleteProjectError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteProjectError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteProjectError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteProjectError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteProjectError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteProjectError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -816,17 +818,17 @@ impl DescribePlacementError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribePlacementError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribePlacementError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribePlacementError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -890,17 +892,17 @@ impl DescribeProjectError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeProjectError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeProjectError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeProjectError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeProjectError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -970,28 +972,28 @@ impl DisassociateDeviceFromPlacementError {
                         DisassociateDeviceFromPlacementError::InternalFailure(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         DisassociateDeviceFromPlacementError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DisassociateDeviceFromPlacementError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         DisassociateDeviceFromPlacementError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1056,17 +1058,17 @@ impl GetDevicesInPlacementError {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetDevicesInPlacementError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetDevicesInPlacementError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetDevicesInPlacementError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1128,19 +1130,19 @@ impl ListPlacementsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return RusotoError::Service(ListPlacementsError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListPlacementsError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListPlacementsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListPlacementsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1202,12 +1204,12 @@ impl ListProjectsError {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListProjectsError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListProjectsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1272,22 +1274,22 @@ impl UpdatePlacementError {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdatePlacementError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(UpdatePlacementError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdatePlacementError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdatePlacementError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdatePlacementError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1354,22 +1356,22 @@ impl UpdateProjectError {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateProjectError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateProjectError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateProjectError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateProjectError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateProjectError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

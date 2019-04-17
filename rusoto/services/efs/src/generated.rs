@@ -464,34 +464,34 @@ impl CreateFileSystemError {
                 "BadRequest" => {
                     return RusotoError::Service(CreateFileSystemError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileSystemAlreadyExists" => {
                     return RusotoError::Service(CreateFileSystemError::FileSystemAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileSystemLimitExceeded" => {
                     return RusotoError::Service(CreateFileSystemError::FileSystemLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InsufficientThroughputCapacity" => {
                     return RusotoError::Service(
                         CreateFileSystemError::InsufficientThroughputCapacity(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateFileSystemError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThroughputLimitExceeded" => {
                     return RusotoError::Service(CreateFileSystemError::ThroughputLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -576,68 +576,70 @@ impl CreateMountTargetError {
                 "BadRequest" => {
                     return RusotoError::Service(CreateMountTargetError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(CreateMountTargetError::FileSystemNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncorrectFileSystemLifeCycleState" => {
                     return RusotoError::Service(
                         CreateMountTargetError::IncorrectFileSystemLifeCycleState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateMountTargetError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IpAddressInUse" => {
                     return RusotoError::Service(CreateMountTargetError::IpAddressInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MountTargetConflict" => {
                     return RusotoError::Service(CreateMountTargetError::MountTargetConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NetworkInterfaceLimitExceeded" => {
                     return RusotoError::Service(
                         CreateMountTargetError::NetworkInterfaceLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoFreeAddressesInSubnet" => {
                     return RusotoError::Service(CreateMountTargetError::NoFreeAddressesInSubnet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SecurityGroupLimitExceeded" => {
-                    return RusotoError::Service(CreateMountTargetError::SecurityGroupLimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateMountTargetError::SecurityGroupLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "SecurityGroupNotFound" => {
                     return RusotoError::Service(CreateMountTargetError::SecurityGroupNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SubnetNotFound" => {
                     return RusotoError::Service(CreateMountTargetError::SubnetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedAvailabilityZone" => {
                     return RusotoError::Service(
                         CreateMountTargetError::UnsupportedAvailabilityZone(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -710,17 +712,17 @@ impl CreateTagsError {
                 "BadRequest" => {
                     return RusotoError::Service(CreateTagsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(CreateTagsError::FileSystemNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(CreateTagsError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateTagsError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -786,22 +788,22 @@ impl DeleteFileSystemError {
                 "BadRequest" => {
                     return RusotoError::Service(DeleteFileSystemError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileSystemInUse" => {
                     return RusotoError::Service(DeleteFileSystemError::FileSystemInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(DeleteFileSystemError::FileSystemNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteFileSystemError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -868,22 +870,22 @@ impl DeleteMountTargetError {
                 "BadRequest" => {
                     return RusotoError::Service(DeleteMountTargetError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DependencyTimeout" => {
                     return RusotoError::Service(DeleteMountTargetError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteMountTargetError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MountTargetNotFound" => {
                     return RusotoError::Service(DeleteMountTargetError::MountTargetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -948,17 +950,17 @@ impl DeleteTagsError {
                 "BadRequest" => {
                     return RusotoError::Service(DeleteTagsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(DeleteTagsError::FileSystemNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteTagsError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteTagsError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1020,19 +1022,19 @@ impl DescribeFileSystemsError {
 
             match error_type {
                 "BadRequest" => {
-                    return RusotoError::Service(DescribeFileSystemsError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeFileSystemsError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(DescribeFileSystemsError::FileSystemNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeFileSystemsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1098,21 +1100,21 @@ impl DescribeLifecycleConfigurationError {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeLifecycleConfigurationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(
                         DescribeLifecycleConfigurationError::FileSystemNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeLifecycleConfigurationError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1178,30 +1180,32 @@ impl DescribeMountTargetSecurityGroupsError {
 
             match error_type {
                 "BadRequest" => {
-                    return RusotoError::Service(DescribeMountTargetSecurityGroupsError::BadRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeMountTargetSecurityGroupsError::BadRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "IncorrectMountTargetState" => {
                     return RusotoError::Service(
                         DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeMountTargetSecurityGroupsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MountTargetNotFound" => {
                     return RusotoError::Service(
                         DescribeMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1268,22 +1272,22 @@ impl DescribeMountTargetsError {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeMountTargetsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(DescribeMountTargetsError::FileSystemNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeMountTargetsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MountTargetNotFound" => {
                     return RusotoError::Service(DescribeMountTargetsError::MountTargetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1348,17 +1352,17 @@ impl DescribeTagsError {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeTagsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(DescribeTagsError::FileSystemNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeTagsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1430,42 +1434,42 @@ impl ModifyMountTargetSecurityGroupsError {
                 "BadRequest" => {
                     return RusotoError::Service(ModifyMountTargetSecurityGroupsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncorrectMountTargetState" => {
                     return RusotoError::Service(
                         ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         ModifyMountTargetSecurityGroupsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MountTargetNotFound" => {
                     return RusotoError::Service(
                         ModifyMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "SecurityGroupLimitExceeded" => {
                     return RusotoError::Service(
                         ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "SecurityGroupNotFound" => {
                     return RusotoError::Service(
                         ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1534,26 +1538,28 @@ impl PutLifecycleConfigurationError {
                 "BadRequest" => {
                     return RusotoError::Service(PutLifecycleConfigurationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileSystemNotFound" => {
-                    return RusotoError::Service(PutLifecycleConfigurationError::FileSystemNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PutLifecycleConfigurationError::FileSystemNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "IncorrectFileSystemLifeCycleState" => {
                     return RusotoError::Service(
                         PutLifecycleConfigurationError::IncorrectFileSystemLifeCycleState(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         PutLifecycleConfigurationError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1626,41 +1632,41 @@ impl UpdateFileSystemError {
                 "BadRequest" => {
                     return RusotoError::Service(UpdateFileSystemError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(UpdateFileSystemError::FileSystemNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncorrectFileSystemLifeCycleState" => {
                     return RusotoError::Service(
                         UpdateFileSystemError::IncorrectFileSystemLifeCycleState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InsufficientThroughputCapacity" => {
                     return RusotoError::Service(
                         UpdateFileSystemError::InsufficientThroughputCapacity(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateFileSystemError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThroughputLimitExceeded" => {
                     return RusotoError::Service(UpdateFileSystemError::ThroughputLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequests" => {
                     return RusotoError::Service(UpdateFileSystemError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

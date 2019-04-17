@@ -1461,14 +1461,14 @@ impl AllocateConnectionOnInterconnectError {
                         AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1513,14 +1513,18 @@ impl AllocateHostedConnectionError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(AllocateHostedConnectionError::DirectConnectClient(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AllocateHostedConnectionError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(AllocateHostedConnectionError::DirectConnectServer(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AllocateHostedConnectionError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1571,14 +1575,14 @@ impl AllocatePrivateVirtualInterfaceError {
                         AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1629,14 +1633,14 @@ impl AllocatePublicVirtualInterfaceError {
                         AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1687,14 +1691,14 @@ impl AssociateConnectionWithLagError {
                         AssociateConnectionWithLagError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         AssociateConnectionWithLagError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1743,14 +1747,14 @@ impl AssociateHostedConnectionError {
                         AssociateHostedConnectionError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         AssociateHostedConnectionError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1799,14 +1803,14 @@ impl AssociateVirtualInterfaceError {
                         AssociateVirtualInterfaceError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         AssociateVirtualInterfaceError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1853,12 +1857,12 @@ impl ConfirmConnectionError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(ConfirmConnectionError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(ConfirmConnectionError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1909,14 +1913,14 @@ impl ConfirmPrivateVirtualInterfaceError {
                         ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1967,14 +1971,14 @@ impl ConfirmPublicVirtualInterfaceError {
                         ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2021,12 +2025,12 @@ impl CreateBGPPeerError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateBGPPeerError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(CreateBGPPeerError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2073,12 +2077,12 @@ impl CreateConnectionError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateConnectionError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(CreateConnectionError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2129,14 +2133,14 @@ impl CreateDirectConnectGatewayError {
                         CreateDirectConnectGatewayError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         CreateDirectConnectGatewayError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2187,14 +2191,14 @@ impl CreateDirectConnectGatewayAssociationError {
                         CreateDirectConnectGatewayAssociationError::DirectConnectClient(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         CreateDirectConnectGatewayAssociationError::DirectConnectServer(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2241,12 +2245,12 @@ impl CreateInterconnectError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateInterconnectError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(CreateInterconnectError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2293,12 +2297,12 @@ impl CreateLagError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateLagError::DirectConnectClient(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(CreateLagError::DirectConnectServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2349,14 +2353,14 @@ impl CreatePrivateVirtualInterfaceError {
                         CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2407,14 +2411,14 @@ impl CreatePublicVirtualInterfaceError {
                         CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2461,12 +2465,12 @@ impl DeleteBGPPeerError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteBGPPeerError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DeleteBGPPeerError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2513,12 +2517,12 @@ impl DeleteConnectionError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteConnectionError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DeleteConnectionError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2569,14 +2573,14 @@ impl DeleteDirectConnectGatewayError {
                         DeleteDirectConnectGatewayError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         DeleteDirectConnectGatewayError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2627,14 +2631,14 @@ impl DeleteDirectConnectGatewayAssociationError {
                         DeleteDirectConnectGatewayAssociationError::DirectConnectClient(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         DeleteDirectConnectGatewayAssociationError::DirectConnectServer(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2681,12 +2685,12 @@ impl DeleteInterconnectError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteInterconnectError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DeleteInterconnectError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2733,12 +2737,12 @@ impl DeleteLagError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteLagError::DirectConnectClient(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DeleteLagError::DirectConnectServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2785,12 +2789,12 @@ impl DeleteVirtualInterfaceError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteVirtualInterfaceError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DeleteVirtualInterfaceError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2837,12 +2841,12 @@ impl DescribeConnectionLoaError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeConnectionLoaError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeConnectionLoaError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2889,12 +2893,12 @@ impl DescribeConnectionsError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeConnectionsError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeConnectionsError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2945,14 +2949,14 @@ impl DescribeConnectionsOnInterconnectError {
                         DescribeConnectionsOnInterconnectError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         DescribeConnectionsOnInterconnectError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3003,14 +3007,14 @@ impl DescribeDirectConnectGatewayAssociationsError {
                         DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3061,14 +3065,14 @@ impl DescribeDirectConnectGatewayAttachmentsError {
                         DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3119,14 +3123,14 @@ impl DescribeDirectConnectGatewaysError {
                         DescribeDirectConnectGatewaysError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         DescribeDirectConnectGatewaysError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3175,14 +3179,14 @@ impl DescribeHostedConnectionsError {
                         DescribeHostedConnectionsError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         DescribeHostedConnectionsError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3229,12 +3233,12 @@ impl DescribeInterconnectLoaError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeInterconnectLoaError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeInterconnectLoaError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3281,12 +3285,12 @@ impl DescribeInterconnectsError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeInterconnectsError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeInterconnectsError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3333,12 +3337,12 @@ impl DescribeLagsError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeLagsError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeLagsError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3385,12 +3389,12 @@ impl DescribeLoaError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeLoaError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeLoaError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3437,12 +3441,12 @@ impl DescribeLocationsError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeLocationsError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeLocationsError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3489,12 +3493,12 @@ impl DescribeTagsError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeTagsError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeTagsError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3541,12 +3545,12 @@ impl DescribeVirtualGatewaysError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeVirtualGatewaysError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeVirtualGatewaysError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3595,14 +3599,14 @@ impl DescribeVirtualInterfacesError {
                         DescribeVirtualInterfacesError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         DescribeVirtualInterfacesError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3653,14 +3657,14 @@ impl DisassociateConnectionFromLagError {
                         DisassociateConnectionFromLagError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         DisassociateConnectionFromLagError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3711,22 +3715,22 @@ impl TagResourceError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(TagResourceError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(TagResourceError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicateTagKeysException" => {
                     return RusotoError::Service(TagResourceError::DuplicateTagKeys(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyTagsException" => {
                     return RusotoError::Service(TagResourceError::TooManyTags(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3775,12 +3779,12 @@ impl UntagResourceError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(UntagResourceError::DirectConnectClient(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(UntagResourceError::DirectConnectServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3827,12 +3831,12 @@ impl UpdateLagError {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(UpdateLagError::DirectConnectClient(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(UpdateLagError::DirectConnectServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3883,14 +3887,14 @@ impl UpdateVirtualInterfaceAttributesError {
                         UpdateVirtualInterfaceAttributesError::DirectConnectClient(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
                         UpdateVirtualInterfaceAttributesError::DirectConnectServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

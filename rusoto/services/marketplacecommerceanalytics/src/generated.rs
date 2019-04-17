@@ -122,9 +122,11 @@ impl GenerateDataSetError {
 
             match *error_type {
                 "MarketplaceCommerceAnalyticsException" => {
-                    return RusotoError::Service(GenerateDataSetError::MarketplaceCommerceAnalytics(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GenerateDataSetError::MarketplaceCommerceAnalytics(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -170,7 +172,7 @@ impl StartSupportDataExportError {
                         StartSupportDataExportError::MarketplaceCommerceAnalytics(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

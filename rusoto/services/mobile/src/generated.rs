@@ -395,37 +395,37 @@ impl CreateProjectError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateProjectError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateProjectError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateProjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateProjectError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateProjectError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateProjectError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateProjectError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -497,27 +497,27 @@ impl DeleteProjectError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteProjectError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteProjectError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteProjectError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteProjectError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteProjectError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -589,32 +589,32 @@ impl DescribeBundleError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeBundleError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(DescribeBundleError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeBundleError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeBundleError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeBundleError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeBundleError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeBundleError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeBundleError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -687,32 +687,32 @@ impl DescribeProjectError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeProjectError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeProjectError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeProjectError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeProjectError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeProjectError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DescribeProjectError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -785,32 +785,32 @@ impl ExportBundleError {
                 "BadRequestException" => {
                     return RusotoError::Service(ExportBundleError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ExportBundleError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ExportBundleError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ExportBundleError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ExportBundleError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ExportBundleError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -883,32 +883,32 @@ impl ExportProjectError {
                 "BadRequestException" => {
                     return RusotoError::Service(ExportProjectError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ExportProjectError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ExportProjectError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ExportProjectError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ExportProjectError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ExportProjectError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -979,27 +979,27 @@ impl ListBundlesError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListBundlesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListBundlesError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(ListBundlesError::ServiceUnavailable(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListBundlesError::ServiceUnavailable(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListBundlesError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListBundlesError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1069,27 +1069,27 @@ impl ListProjectsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListProjectsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListProjectsError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListProjectsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListProjectsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListProjectsError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1165,42 +1165,42 @@ impl UpdateProjectError {
                 "AccountActionRequiredException" => {
                     return RusotoError::Service(UpdateProjectError::AccountActionRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateProjectError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateProjectError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateProjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateProjectError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateProjectError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateProjectError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateProjectError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

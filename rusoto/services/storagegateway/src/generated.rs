@@ -2598,12 +2598,12 @@ impl ActivateGatewayError {
                 "InternalServerError" => {
                     return RusotoError::Service(ActivateGatewayError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ActivateGatewayError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2650,12 +2650,12 @@ impl AddCacheError {
                 "InternalServerError" => {
                     return RusotoError::Service(AddCacheError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(AddCacheError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AddCacheError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2702,12 +2702,12 @@ impl AddTagsToResourceError {
                 "InternalServerError" => {
                     return RusotoError::Service(AddTagsToResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(AddTagsToResourceError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2754,12 +2754,12 @@ impl AddUploadBufferError {
                 "InternalServerError" => {
                     return RusotoError::Service(AddUploadBufferError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(AddUploadBufferError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2806,12 +2806,12 @@ impl AddWorkingStorageError {
                 "InternalServerError" => {
                     return RusotoError::Service(AddWorkingStorageError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(AddWorkingStorageError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2858,12 +2858,12 @@ impl AttachVolumeError {
                 "InternalServerError" => {
                     return RusotoError::Service(AttachVolumeError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(AttachVolumeError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2910,12 +2910,12 @@ impl CancelArchivalError {
                 "InternalServerError" => {
                     return RusotoError::Service(CancelArchivalError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CancelArchivalError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2962,12 +2962,12 @@ impl CancelRetrievalError {
                 "InternalServerError" => {
                     return RusotoError::Service(CancelRetrievalError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CancelRetrievalError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3014,14 +3014,14 @@ impl CreateCachediSCSIVolumeError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateCachediSCSIVolumeError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         CreateCachediSCSIVolumeError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3068,12 +3068,12 @@ impl CreateNFSFileShareError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateNFSFileShareError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CreateNFSFileShareError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3120,12 +3120,12 @@ impl CreateSMBFileShareError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateSMBFileShareError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CreateSMBFileShareError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3174,17 +3174,17 @@ impl CreateSnapshotError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateSnapshotError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CreateSnapshotError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableError" => {
                     return RusotoError::Service(CreateSnapshotError::ServiceUnavailableError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3238,21 +3238,21 @@ impl CreateSnapshotFromVolumeRecoveryPointError {
                         CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ServiceUnavailableError" => {
                     return RusotoError::Service(
                         CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3300,14 +3300,14 @@ impl CreateStorediSCSIVolumeError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateStorediSCSIVolumeError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         CreateStorediSCSIVolumeError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3354,12 +3354,12 @@ impl CreateTapeWithBarcodeError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateTapeWithBarcodeError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CreateTapeWithBarcodeError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3406,12 +3406,12 @@ impl CreateTapesError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateTapesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CreateTapesError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3456,16 +3456,18 @@ impl DeleteBandwidthRateLimitError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteBandwidthRateLimitError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteBandwidthRateLimitError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         DeleteBandwidthRateLimitError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3512,12 +3514,12 @@ impl DeleteChapCredentialsError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteChapCredentialsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DeleteChapCredentialsError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3564,12 +3566,12 @@ impl DeleteFileShareError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteFileShareError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DeleteFileShareError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3616,12 +3618,12 @@ impl DeleteGatewayError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteGatewayError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DeleteGatewayError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3668,12 +3670,14 @@ impl DeleteSnapshotScheduleError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteSnapshotScheduleError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(DeleteSnapshotScheduleError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteSnapshotScheduleError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3718,14 +3722,14 @@ impl DeleteTapeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteTapeError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteTapeError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DeleteTapeError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3772,12 +3776,12 @@ impl DeleteTapeArchiveError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteTapeArchiveError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DeleteTapeArchiveError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3824,12 +3828,12 @@ impl DeleteVolumeError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteVolumeError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DeleteVolumeError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3880,14 +3884,14 @@ impl DescribeBandwidthRateLimitError {
                         DescribeBandwidthRateLimitError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         DescribeBandwidthRateLimitError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3934,12 +3938,12 @@ impl DescribeCacheError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeCacheError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeCacheError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3990,14 +3994,14 @@ impl DescribeCachediSCSIVolumesError {
                         DescribeCachediSCSIVolumesError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         DescribeCachediSCSIVolumesError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4044,14 +4048,14 @@ impl DescribeChapCredentialsError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeChapCredentialsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         DescribeChapCredentialsError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4102,14 +4106,14 @@ impl DescribeGatewayInformationError {
                         DescribeGatewayInformationError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         DescribeGatewayInformationError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4160,14 +4164,14 @@ impl DescribeMaintenanceStartTimeError {
                         DescribeMaintenanceStartTimeError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         DescribeMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4214,12 +4218,12 @@ impl DescribeNFSFileSharesError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeNFSFileSharesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeNFSFileSharesError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4266,12 +4270,12 @@ impl DescribeSMBFileSharesError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeSMBFileSharesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeSMBFileSharesError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4318,12 +4322,12 @@ impl DescribeSMBSettingsError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeSMBSettingsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeSMBSettingsError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4368,16 +4372,18 @@ impl DescribeSnapshotScheduleError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(DescribeSnapshotScheduleError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeSnapshotScheduleError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         DescribeSnapshotScheduleError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4428,14 +4434,14 @@ impl DescribeStorediSCSIVolumesError {
                         DescribeStorediSCSIVolumesError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         DescribeStorediSCSIVolumesError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4482,12 +4488,12 @@ impl DescribeTapeArchivesError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeTapeArchivesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeTapeArchivesError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4538,14 +4544,14 @@ impl DescribeTapeRecoveryPointsError {
                         DescribeTapeRecoveryPointsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         DescribeTapeRecoveryPointsError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4592,12 +4598,12 @@ impl DescribeTapesError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeTapesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeTapesError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4644,12 +4650,12 @@ impl DescribeUploadBufferError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeUploadBufferError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeUploadBufferError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4696,12 +4702,12 @@ impl DescribeVTLDevicesError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeVTLDevicesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeVTLDevicesError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4748,12 +4754,14 @@ impl DescribeWorkingStorageError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeWorkingStorageError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(DescribeWorkingStorageError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeWorkingStorageError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4800,12 +4808,12 @@ impl DetachVolumeError {
                 "InternalServerError" => {
                     return RusotoError::Service(DetachVolumeError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DetachVolumeError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4852,12 +4860,12 @@ impl DisableGatewayError {
                 "InternalServerError" => {
                     return RusotoError::Service(DisableGatewayError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DisableGatewayError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4902,14 +4910,14 @@ impl JoinDomainError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(JoinDomainError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(JoinDomainError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(JoinDomainError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4956,12 +4964,12 @@ impl ListFileSharesError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListFileSharesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListFileSharesError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5008,12 +5016,12 @@ impl ListGatewaysError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListGatewaysError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListGatewaysError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5060,12 +5068,12 @@ impl ListLocalDisksError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListLocalDisksError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListLocalDisksError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5112,12 +5120,12 @@ impl ListTagsForResourceError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5164,12 +5172,12 @@ impl ListTapesError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListTapesError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListTapesError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5216,12 +5224,12 @@ impl ListVolumeInitiatorsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListVolumeInitiatorsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListVolumeInitiatorsError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5266,16 +5274,18 @@ impl ListVolumeRecoveryPointsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListVolumeRecoveryPointsError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListVolumeRecoveryPointsError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         ListVolumeRecoveryPointsError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5322,12 +5332,12 @@ impl ListVolumesError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListVolumesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListVolumesError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5374,12 +5384,12 @@ impl NotifyWhenUploadedError {
                 "InternalServerError" => {
                     return RusotoError::Service(NotifyWhenUploadedError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(NotifyWhenUploadedError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5426,12 +5436,12 @@ impl RefreshCacheError {
                 "InternalServerError" => {
                     return RusotoError::Service(RefreshCacheError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(RefreshCacheError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5478,12 +5488,14 @@ impl RemoveTagsFromResourceError {
                 "InternalServerError" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(RemoveTagsFromResourceError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RemoveTagsFromResourceError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5528,14 +5540,14 @@ impl ResetCacheError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(ResetCacheError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ResetCacheError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ResetCacheError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5582,12 +5594,12 @@ impl RetrieveTapeArchiveError {
                 "InternalServerError" => {
                     return RusotoError::Service(RetrieveTapeArchiveError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(RetrieveTapeArchiveError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5636,14 +5648,14 @@ impl RetrieveTapeRecoveryPointError {
                         RetrieveTapeRecoveryPointError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         RetrieveTapeRecoveryPointError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5690,14 +5702,14 @@ impl SetLocalConsolePasswordError {
                 "InternalServerError" => {
                     return RusotoError::Service(SetLocalConsolePasswordError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         SetLocalConsolePasswordError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5744,12 +5756,12 @@ impl SetSMBGuestPasswordError {
                 "InternalServerError" => {
                     return RusotoError::Service(SetSMBGuestPasswordError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(SetSMBGuestPasswordError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5796,12 +5808,12 @@ impl ShutdownGatewayError {
                 "InternalServerError" => {
                     return RusotoError::Service(ShutdownGatewayError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ShutdownGatewayError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5848,12 +5860,12 @@ impl StartGatewayError {
                 "InternalServerError" => {
                     return RusotoError::Service(StartGatewayError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(StartGatewayError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5898,16 +5910,18 @@ impl UpdateBandwidthRateLimitError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(UpdateBandwidthRateLimitError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateBandwidthRateLimitError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         UpdateBandwidthRateLimitError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5954,12 +5968,12 @@ impl UpdateChapCredentialsError {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateChapCredentialsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(UpdateChapCredentialsError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6004,16 +6018,18 @@ impl UpdateGatewayInformationError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(UpdateGatewayInformationError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateGatewayInformationError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         UpdateGatewayInformationError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6058,16 +6074,18 @@ impl UpdateGatewaySoftwareNowError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(UpdateGatewaySoftwareNowError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateGatewaySoftwareNowError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         UpdateGatewaySoftwareNowError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6118,14 +6136,14 @@ impl UpdateMaintenanceStartTimeError {
                         UpdateMaintenanceStartTimeError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
                         UpdateMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6172,12 +6190,12 @@ impl UpdateNFSFileShareError {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateNFSFileShareError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(UpdateNFSFileShareError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6224,12 +6242,12 @@ impl UpdateSMBFileShareError {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateSMBFileShareError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(UpdateSMBFileShareError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6276,12 +6294,14 @@ impl UpdateSnapshotScheduleError {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateSnapshotScheduleError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(UpdateSnapshotScheduleError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateSnapshotScheduleError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6328,12 +6348,12 @@ impl UpdateVTLDeviceTypeError {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateVTLDeviceTypeError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(UpdateVTLDeviceTypeError::InvalidGatewayRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

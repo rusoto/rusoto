@@ -2056,22 +2056,22 @@ impl AddPermissionError {
                     "AuthorizationError" => {
                         return RusotoError::Service(AddPermissionError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(AddPermissionError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(AddPermissionError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(AddPermissionError::NotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -2131,26 +2131,26 @@ impl CheckIfPhoneNumberIsOptedOutError {
                             CheckIfPhoneNumberIsOptedOutError::AuthorizationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(
                             CheckIfPhoneNumberIsOptedOutError::InternalError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             CheckIfPhoneNumberIsOptedOutError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "Throttled" => {
                         return RusotoError::Service(CheckIfPhoneNumberIsOptedOutError::Throttled(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2208,29 +2208,29 @@ impl ConfirmSubscriptionError {
                     "AuthorizationError" => {
                         return RusotoError::Service(ConfirmSubscriptionError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(ConfirmSubscriptionError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(ConfirmSubscriptionError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(ConfirmSubscriptionError::NotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SubscriptionLimitExceeded" => {
                         return RusotoError::Service(
                             ConfirmSubscriptionError::SubscriptionLimitExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -2287,19 +2287,19 @@ impl CreatePlatformApplicationError {
                             CreatePlatformApplicationError::AuthorizationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(CreatePlatformApplicationError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             CreatePlatformApplicationError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -2356,22 +2356,22 @@ impl CreatePlatformEndpointError {
                             CreatePlatformEndpointError::AuthorizationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(CreatePlatformEndpointError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(CreatePlatformEndpointError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(CreatePlatformEndpointError::NotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2429,27 +2429,27 @@ impl CreateTopicError {
                     "AuthorizationError" => {
                         return RusotoError::Service(CreateTopicError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(CreateTopicError::InternalError(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(CreateTopicError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSecurity" => {
                         return RusotoError::Service(CreateTopicError::InvalidSecurity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TopicLimitExceeded" => {
                         return RusotoError::Service(CreateTopicError::TopicLimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2504,17 +2504,17 @@ impl DeleteEndpointError {
                     "AuthorizationError" => {
                         return RusotoError::Service(DeleteEndpointError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(DeleteEndpointError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(DeleteEndpointError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2569,19 +2569,19 @@ impl DeletePlatformApplicationError {
                             DeletePlatformApplicationError::AuthorizationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(DeletePlatformApplicationError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             DeletePlatformApplicationError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -2636,22 +2636,22 @@ impl DeleteTopicError {
                     "AuthorizationError" => {
                         return RusotoError::Service(DeleteTopicError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(DeleteTopicError::InternalError(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(DeleteTopicError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(DeleteTopicError::NotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -2705,24 +2705,26 @@ impl GetEndpointAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationError" => {
-                        return RusotoError::Service(GetEndpointAttributesError::AuthorizationError(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            GetEndpointAttributesError::AuthorizationError(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(GetEndpointAttributesError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(GetEndpointAttributesError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(GetEndpointAttributesError::NotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2782,28 +2784,28 @@ impl GetPlatformApplicationAttributesError {
                             GetPlatformApplicationAttributesError::AuthorizationError(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(
                             GetPlatformApplicationAttributesError::InternalError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             GetPlatformApplicationAttributesError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NotFound" => {
                         return RusotoError::Service(
                             GetPlatformApplicationAttributesError::NotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -2859,22 +2861,22 @@ impl GetSMSAttributesError {
                     "AuthorizationError" => {
                         return RusotoError::Service(GetSMSAttributesError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(GetSMSAttributesError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(GetSMSAttributesError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "Throttled" => {
-                        return RusotoError::Service(GetSMSAttributesError::Throttled(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(GetSMSAttributesError::Throttled(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -2932,24 +2934,24 @@ impl GetSubscriptionAttributesError {
                             GetSubscriptionAttributesError::AuthorizationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(GetSubscriptionAttributesError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             GetSubscriptionAttributesError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NotFound" => {
                         return RusotoError::Service(GetSubscriptionAttributesError::NotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3007,27 +3009,27 @@ impl GetTopicAttributesError {
                     "AuthorizationError" => {
                         return RusotoError::Service(GetTopicAttributesError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(GetTopicAttributesError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(GetTopicAttributesError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSecurity" => {
                         return RusotoError::Service(GetTopicAttributesError::InvalidSecurity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(GetTopicAttributesError::NotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3088,28 +3090,28 @@ impl ListEndpointsByPlatformApplicationError {
                             ListEndpointsByPlatformApplicationError::AuthorizationError(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(
                             ListEndpointsByPlatformApplicationError::InternalError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             ListEndpointsByPlatformApplicationError::InvalidParameter(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NotFound" => {
                         return RusotoError::Service(
                             ListEndpointsByPlatformApplicationError::NotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -3167,24 +3169,24 @@ impl ListPhoneNumbersOptedOutError {
                             ListPhoneNumbersOptedOutError::AuthorizationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(ListPhoneNumbersOptedOutError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             ListPhoneNumbersOptedOutError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "Throttled" => {
                         return RusotoError::Service(ListPhoneNumbersOptedOutError::Throttled(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3240,19 +3242,19 @@ impl ListPlatformApplicationsError {
                             ListPlatformApplicationsError::AuthorizationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(ListPlatformApplicationsError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             ListPlatformApplicationsError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -3305,17 +3307,17 @@ impl ListSubscriptionsError {
                     "AuthorizationError" => {
                         return RusotoError::Service(ListSubscriptionsError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(ListSubscriptionsError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(ListSubscriptionsError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3372,24 +3374,24 @@ impl ListSubscriptionsByTopicError {
                             ListSubscriptionsByTopicError::AuthorizationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(ListSubscriptionsByTopicError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             ListSubscriptionsByTopicError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NotFound" => {
                         return RusotoError::Service(ListSubscriptionsByTopicError::NotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3443,17 +3445,17 @@ impl ListTopicsError {
                     "AuthorizationError" => {
                         return RusotoError::Service(ListTopicsError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(ListTopicsError::InternalError(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(ListTopicsError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3508,22 +3510,22 @@ impl OptInPhoneNumberError {
                     "AuthorizationError" => {
                         return RusotoError::Service(OptInPhoneNumberError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(OptInPhoneNumberError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(OptInPhoneNumberError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "Throttled" => {
-                        return RusotoError::Service(OptInPhoneNumberError::Throttled(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(OptInPhoneNumberError::Throttled(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -3597,74 +3599,74 @@ impl PublishError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationError" => {
-                        return RusotoError::Service(PublishError::AuthorizationError(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(PublishError::AuthorizationError(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "EndpointDisabled" => {
                         return RusotoError::Service(PublishError::EndpointDisabled(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalError" => {
                         return RusotoError::Service(PublishError::InternalError(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(PublishError::InvalidParameter(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ParameterValueInvalid" => {
                         return RusotoError::Service(PublishError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSecurity" => {
                         return RusotoError::Service(PublishError::InvalidSecurity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "KMSAccessDenied" => {
                         return RusotoError::Service(PublishError::KMSAccessDenied(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "KMSDisabled" => {
                         return RusotoError::Service(PublishError::KMSDisabled(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "KMSInvalidState" => {
                         return RusotoError::Service(PublishError::KMSInvalidState(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "KMSNotFound" => {
                         return RusotoError::Service(PublishError::KMSNotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "KMSOptInRequired" => {
                         return RusotoError::Service(PublishError::KMSOptInRequired(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "KMSThrottling" => {
                         return RusotoError::Service(PublishError::KMSThrottling(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NotFound" => {
                         return RusotoError::Service(PublishError::NotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "PlatformApplicationDisabled" => {
                         return RusotoError::Service(PublishError::PlatformApplicationDisabled(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3730,22 +3732,22 @@ impl RemovePermissionError {
                     "AuthorizationError" => {
                         return RusotoError::Service(RemovePermissionError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(RemovePermissionError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(RemovePermissionError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(RemovePermissionError::NotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -3799,24 +3801,26 @@ impl SetEndpointAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationError" => {
-                        return RusotoError::Service(SetEndpointAttributesError::AuthorizationError(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            SetEndpointAttributesError::AuthorizationError(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(SetEndpointAttributesError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(SetEndpointAttributesError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(SetEndpointAttributesError::NotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3876,28 +3880,28 @@ impl SetPlatformApplicationAttributesError {
                             SetPlatformApplicationAttributesError::AuthorizationError(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(
                             SetPlatformApplicationAttributesError::InternalError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             SetPlatformApplicationAttributesError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NotFound" => {
                         return RusotoError::Service(
                             SetPlatformApplicationAttributesError::NotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -3953,22 +3957,22 @@ impl SetSMSAttributesError {
                     "AuthorizationError" => {
                         return RusotoError::Service(SetSMSAttributesError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(SetSMSAttributesError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(SetSMSAttributesError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "Throttled" => {
-                        return RusotoError::Service(SetSMSAttributesError::Throttled(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(SetSMSAttributesError::Throttled(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -4028,31 +4032,31 @@ impl SetSubscriptionAttributesError {
                             SetSubscriptionAttributesError::AuthorizationError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "FilterPolicyLimitExceeded" => {
                         return RusotoError::Service(
                             SetSubscriptionAttributesError::FilterPolicyLimitExceeded(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InternalError" => {
                         return RusotoError::Service(SetSubscriptionAttributesError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(
                             SetSubscriptionAttributesError::InvalidParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NotFound" => {
                         return RusotoError::Service(SetSubscriptionAttributesError::NotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4111,27 +4115,27 @@ impl SetTopicAttributesError {
                     "AuthorizationError" => {
                         return RusotoError::Service(SetTopicAttributesError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(SetTopicAttributesError::InternalError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(SetTopicAttributesError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSecurity" => {
                         return RusotoError::Service(SetTopicAttributesError::InvalidSecurity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(SetTopicAttributesError::NotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4194,37 +4198,37 @@ impl SubscribeError {
                     "AuthorizationError" => {
                         return RusotoError::Service(SubscribeError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "FilterPolicyLimitExceeded" => {
                         return RusotoError::Service(SubscribeError::FilterPolicyLimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(SubscribeError::InternalError(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidParameter" => {
-                        return RusotoError::Service(SubscribeError::InvalidParameter(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(SubscribeError::InvalidParameter(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "InvalidSecurity" => {
                         return RusotoError::Service(SubscribeError::InvalidSecurity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NotFound" => {
                         return RusotoError::Service(SubscribeError::NotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "SubscriptionLimitExceeded" => {
                         return RusotoError::Service(SubscribeError::SubscriptionLimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4285,27 +4289,27 @@ impl UnsubscribeError {
                     "AuthorizationError" => {
                         return RusotoError::Service(UnsubscribeError::AuthorizationError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalError" => {
                         return RusotoError::Service(UnsubscribeError::InternalError(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(UnsubscribeError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSecurity" => {
                         return RusotoError::Service(UnsubscribeError::InvalidSecurity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NotFound" => {
                         return RusotoError::Service(UnsubscribeError::NotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -4923,11 +4927,9 @@ impl Sns for SnsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetEndpointAttributesError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetEndpointAttributesError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -5625,11 +5627,9 @@ impl Sns for SnsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SetEndpointAttributesError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(SetEndpointAttributesError::from_response(response))
+                }));
             }
 
             Box::new(future::ok(::std::mem::drop(response)))

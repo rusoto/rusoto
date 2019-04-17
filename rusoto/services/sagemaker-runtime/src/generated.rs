@@ -105,24 +105,24 @@ impl InvokeEndpointError {
 
             match error_type {
                 "InternalFailure" => {
-                    return RusotoError::Service(InvokeEndpointError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(InvokeEndpointError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "ModelError" => {
                     return RusotoError::Service(InvokeEndpointError::ModelError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailable" => {
                     return RusotoError::Service(InvokeEndpointError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationError" => {
-                    return RusotoError::Service(InvokeEndpointError::ValidationError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(InvokeEndpointError::ValidationError(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

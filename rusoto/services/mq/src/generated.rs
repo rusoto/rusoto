@@ -1328,27 +1328,27 @@ impl CreateBrokerError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateBrokerError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateBrokerError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateBrokerError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateBrokerError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateBrokerError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1414,24 +1414,24 @@ impl CreateConfigurationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(CreateConfigurationError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateConfigurationError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateConfigurationError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateConfigurationError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateConfigurationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1498,22 +1498,22 @@ impl CreateTagsError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateTagsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateTagsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(CreateTagsError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateTagsError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateTagsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1582,27 +1582,27 @@ impl CreateUserError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateUserError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateUserError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateUserError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(CreateUserError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateUserError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateUserError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1670,22 +1670,22 @@ impl DeleteBrokerError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBrokerError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteBrokerError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteBrokerError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBrokerError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1752,22 +1752,22 @@ impl DeleteTagsError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteTagsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteTagsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(DeleteTagsError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteTagsError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteTagsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1834,22 +1834,22 @@ impl DeleteUserError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteUserError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteUserError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(DeleteUserError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteUserError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteUserError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1916,22 +1916,22 @@ impl DescribeBrokerError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeBrokerError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeBrokerError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeBrokerError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeBrokerError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1998,22 +1998,22 @@ impl DescribeConfigurationError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeConfigurationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeConfigurationError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeConfigurationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeConfigurationError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeConfigurationError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2082,24 +2082,24 @@ impl DescribeConfigurationRevisionError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeConfigurationRevisionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeConfigurationRevisionError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         DescribeConfigurationRevisionError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeConfigurationRevisionError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2166,22 +2166,22 @@ impl DescribeUserError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeUserError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeUserError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeUserError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeUserError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2246,17 +2246,17 @@ impl ListBrokersError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListBrokersError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListBrokersError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListBrokersError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2324,24 +2324,24 @@ impl ListConfigurationRevisionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConfigurationRevisionsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListConfigurationRevisionsError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         ListConfigurationRevisionsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListConfigurationRevisionsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2406,17 +2406,17 @@ impl ListConfigurationsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConfigurationsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListConfigurationsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListConfigurationsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2482,22 +2482,22 @@ impl ListTagsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListTagsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListTagsError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListTagsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2564,22 +2564,22 @@ impl ListUsersError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListUsersError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListUsersError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListUsersError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListUsersError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2646,22 +2646,22 @@ impl RebootBrokerError {
                 "BadRequestException" => {
                     return RusotoError::Service(RebootBrokerError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(RebootBrokerError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(RebootBrokerError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(RebootBrokerError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2730,27 +2730,27 @@ impl UpdateBrokerError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateBrokerError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateBrokerError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateBrokerError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateBrokerError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateBrokerError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2818,29 +2818,29 @@ impl UpdateConfigurationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(UpdateConfigurationError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateConfigurationError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateConfigurationError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateConfigurationError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateConfigurationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateConfigurationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2910,27 +2910,27 @@ impl UpdateUserError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateUserError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateUserError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateUserError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(UpdateUserError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateUserError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateUserError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

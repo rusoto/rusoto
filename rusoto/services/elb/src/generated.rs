@@ -4264,17 +4264,17 @@ impl AddTagsError {
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(AddTagsError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DuplicateTagKeys" => {
                         return RusotoError::Service(AddTagsError::DuplicateTagKeys(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TooManyTags" => {
                         return RusotoError::Service(AddTagsError::TooManyTags(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -4331,21 +4331,21 @@ impl ApplySecurityGroupsToLoadBalancerError {
                             ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidSecurityGroup" => {
                         return RusotoError::Service(
                             ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -4404,28 +4404,28 @@ impl AttachLoadBalancerToSubnetsError {
                             AttachLoadBalancerToSubnetsError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(
                             AttachLoadBalancerToSubnetsError::InvalidSubnet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SubnetNotFound" => {
                         return RusotoError::Service(
                             AttachLoadBalancerToSubnetsError::SubnetNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -4473,9 +4473,11 @@ impl ConfigureHealthCheckError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return RusotoError::Service(ConfigureHealthCheckError::AccessPointNotFound(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            ConfigureHealthCheckError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -4532,28 +4534,28 @@ impl CreateAppCookieStickinessPolicyError {
                             CreateAppCookieStickinessPolicyError::AccessPointNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DuplicatePolicyName" => {
                         return RusotoError::Service(
                             CreateAppCookieStickinessPolicyError::DuplicatePolicyName(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyPolicies" => {
                         return RusotoError::Service(
                             CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -4613,28 +4615,28 @@ impl CreateLBCookieStickinessPolicyError {
                             CreateLBCookieStickinessPolicyError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DuplicatePolicyName" => {
                         return RusotoError::Service(
                             CreateLBCookieStickinessPolicyError::DuplicatePolicyName(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyPolicies" => {
                         return RusotoError::Service(
                             CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -4706,66 +4708,68 @@ impl CreateLoadBalancerError {
                     "CertificateNotFound" => {
                         return RusotoError::Service(CreateLoadBalancerError::CertificateNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DuplicateLoadBalancerName" => {
                         return RusotoError::Service(
                             CreateLoadBalancerError::DuplicateAccessPointName(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DuplicateTagKeys" => {
                         return RusotoError::Service(CreateLoadBalancerError::DuplicateTagKeys(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidScheme" => {
                         return RusotoError::Service(CreateLoadBalancerError::InvalidScheme(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSecurityGroup" => {
                         return RusotoError::Service(CreateLoadBalancerError::InvalidSecurityGroup(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateLoadBalancerError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationNotPermitted" => {
-                        return RusotoError::Service(CreateLoadBalancerError::OperationNotPermitted(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerError::OperationNotPermitted(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "SubnetNotFound" => {
                         return RusotoError::Service(CreateLoadBalancerError::SubnetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyLoadBalancers" => {
                         return RusotoError::Service(CreateLoadBalancerError::TooManyAccessPoints(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyTags" => {
                         return RusotoError::Service(CreateLoadBalancerError::TooManyTags(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(CreateLoadBalancerError::UnsupportedProtocol(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4835,35 +4839,35 @@ impl CreateLoadBalancerListenersError {
                             CreateLoadBalancerListenersError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "CertificateNotFound" => {
                         return RusotoError::Service(
                             CreateLoadBalancerListenersError::CertificateNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DuplicateListener" => {
                         return RusotoError::Service(
                             CreateLoadBalancerListenersError::DuplicateListener(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             CreateLoadBalancerListenersError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(
                             CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -4924,33 +4928,35 @@ impl CreateLoadBalancerPolicyError {
                             CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DuplicatePolicyName" => {
                         return RusotoError::Service(
                             CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             CreateLoadBalancerPolicyError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "PolicyTypeNotFound" => {
                         return RusotoError::Service(
                             CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyPolicies" => {
-                        return RusotoError::Service(CreateLoadBalancerPolicyError::TooManyPolicies(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerPolicyError::TooManyPolicies(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -5042,7 +5048,7 @@ impl DeleteLoadBalancerListenersError {
                             DeleteLoadBalancerListenersError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5093,14 +5099,14 @@ impl DeleteLoadBalancerPolicyError {
                             DeleteLoadBalancerPolicyError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5154,14 +5160,14 @@ impl DeregisterInstancesFromLoadBalancerError {
                             DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidInstance" => {
                         return RusotoError::Service(
                             DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5250,12 +5256,12 @@ impl DescribeInstanceHealthError {
                             DescribeInstanceHealthError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInstance" => {
                         return RusotoError::Service(DescribeInstanceHealthError::InvalidEndPoint(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -5309,14 +5315,14 @@ impl DescribeLoadBalancerAttributesError {
                             DescribeLoadBalancerAttributesError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LoadBalancerAttributeNotFound" => {
                         return RusotoError::Service(
                             DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5370,14 +5376,14 @@ impl DescribeLoadBalancerPoliciesError {
                             DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "PolicyNotFound" => {
                         return RusotoError::Service(
                             DescribeLoadBalancerPoliciesError::PolicyNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5429,7 +5435,7 @@ impl DescribeLoadBalancerPolicyTypesError {
                             DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5480,12 +5486,14 @@ impl DescribeLoadBalancersError {
                             DescribeLoadBalancersError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DependencyThrottle" => {
-                        return RusotoError::Service(DescribeLoadBalancersError::DependencyThrottle(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DescribeLoadBalancersError::DependencyThrottle(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -5533,7 +5541,7 @@ impl DescribeTagsError {
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(DescribeTagsError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -5586,14 +5594,14 @@ impl DetachLoadBalancerFromSubnetsError {
                             DetachLoadBalancerFromSubnetsError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5647,7 +5655,7 @@ impl DisableAvailabilityZonesForLoadBalancerError {
                             DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => return RusotoError::Service(
                         DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
@@ -5706,7 +5714,7 @@ impl EnableAvailabilityZonesForLoadBalancerError {
                             EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5761,21 +5769,21 @@ impl ModifyLoadBalancerAttributesError {
                             ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "LoadBalancerAttributeNotFound" => {
                         return RusotoError::Service(
                             ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5830,14 +5838,14 @@ impl RegisterInstancesWithLoadBalancerError {
                             RegisterInstancesWithLoadBalancerError::AccessPointNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidInstance" => {
                         return RusotoError::Service(
                             RegisterInstancesWithLoadBalancerError::InvalidEndPoint(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5885,7 +5893,7 @@ impl RemoveTagsError {
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(RemoveTagsError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -5944,35 +5952,35 @@ impl SetLoadBalancerListenerSSLCertificateError {
                             SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "CertificateNotFound" => {
                         return RusotoError::Service(
                             SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ListenerNotFound" => {
                         return RusotoError::Service(
                             SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(
                             SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -6033,7 +6041,7 @@ impl SetLoadBalancerPoliciesForBackendServerError {
                             SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => return RusotoError::Service(
                         SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(
@@ -6045,7 +6053,7 @@ impl SetLoadBalancerPoliciesForBackendServerError {
                             SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -6106,28 +6114,28 @@ impl SetLoadBalancerPoliciesOfListenerError {
                             SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ListenerNotFound" => {
                         return RusotoError::Service(
                             SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "PolicyNotFound" => {
                         return RusotoError::Service(
                             SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7057,11 +7065,9 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeAccountLimitsError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAccountLimitsError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7313,11 +7319,9 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeLoadBalancersError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeLoadBalancersError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

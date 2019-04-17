@@ -251,48 +251,48 @@ impl GetHLSStreamingSessionURLError {
                         GetHLSStreamingSessionURLError::ClientLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(GetHLSStreamingSessionURLError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCodecPrivateDataException" => {
                     return RusotoError::Service(
                         GetHLSStreamingSessionURLError::InvalidCodecPrivateData(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingCodecPrivateDataException" => {
                     return RusotoError::Service(
                         GetHLSStreamingSessionURLError::MissingCodecPrivateData(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoDataRetentionException" => {
                     return RusotoError::Service(GetHLSStreamingSessionURLError::NoDataRetention(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetHLSStreamingSessionURLError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetHLSStreamingSessionURLError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedStreamMediaTypeException" => {
                     return RusotoError::Service(
                         GetHLSStreamingSessionURLError::UnsupportedStreamMediaType(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -363,22 +363,22 @@ impl GetMediaForFragmentListError {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(GetMediaForFragmentListError::ClientLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(GetMediaForFragmentListError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetMediaForFragmentListError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetMediaForFragmentListError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -445,22 +445,22 @@ impl ListFragmentsError {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(ListFragmentsError::ClientLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(ListFragmentsError::InvalidArgument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ListFragmentsError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListFragmentsError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListFragmentsError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

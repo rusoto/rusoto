@@ -1470,12 +1470,12 @@ impl BatchGetTracesError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchGetTracesError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(BatchGetTracesError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1536,12 +1536,12 @@ impl CreateGroupError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateGroupError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(CreateGroupError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1604,17 +1604,17 @@ impl CreateSamplingRuleError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateSamplingRuleError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RuleLimitExceededException" => {
                     return RusotoError::Service(CreateSamplingRuleError::RuleLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(CreateSamplingRuleError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1676,12 +1676,12 @@ impl DeleteGroupError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteGroupError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(DeleteGroupError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1742,12 +1742,12 @@ impl DeleteSamplingRuleError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteSamplingRuleError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(DeleteSamplingRuleError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1808,12 +1808,12 @@ impl GetEncryptionConfigError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetEncryptionConfigError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetEncryptionConfigError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1874,12 +1874,12 @@ impl GetGroupError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetGroupError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetGroupError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1940,12 +1940,12 @@ impl GetGroupsError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetGroupsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetGroupsError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2006,12 +2006,12 @@ impl GetSamplingRulesError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetSamplingRulesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetSamplingRulesError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2072,14 +2072,16 @@ impl GetSamplingStatisticSummariesError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return RusotoError::Service(GetSamplingStatisticSummariesError::InvalidRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetSamplingStatisticSummariesError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetSamplingStatisticSummariesError::Throttled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2140,12 +2142,12 @@ impl GetSamplingTargetsError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetSamplingTargetsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetSamplingTargetsError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2204,14 +2206,14 @@ impl GetServiceGraphError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return RusotoError::Service(GetServiceGraphError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetServiceGraphError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetServiceGraphError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2272,12 +2274,12 @@ impl GetTraceGraphError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetTraceGraphError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetTraceGraphError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2338,12 +2340,12 @@ impl GetTraceSummariesError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetTraceSummariesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetTraceSummariesError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2404,12 +2406,12 @@ impl PutEncryptionConfigError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutEncryptionConfigError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(PutEncryptionConfigError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2470,12 +2472,12 @@ impl PutTelemetryRecordsError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutTelemetryRecordsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(PutTelemetryRecordsError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2536,12 +2538,12 @@ impl PutTraceSegmentsError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutTraceSegmentsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(PutTraceSegmentsError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2602,12 +2604,12 @@ impl UpdateGroupError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateGroupError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(UpdateGroupError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2668,12 +2670,12 @@ impl UpdateSamplingRuleError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateSamplingRuleError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(UpdateSamplingRuleError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -285,17 +285,17 @@ impl DeleteTerminologyError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteTerminologyError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteTerminologyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteTerminologyError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -347,22 +347,22 @@ impl GetTerminologyError {
                 "InternalServerException" => {
                     return RusotoError::Service(GetTerminologyError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetTerminologyError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetTerminologyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetTerminologyError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetTerminologyError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -415,22 +415,22 @@ impl ImportTerminologyError {
                 "InternalServerException" => {
                     return RusotoError::Service(ImportTerminologyError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ImportTerminologyError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ImportTerminologyError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ImportTerminologyError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -481,17 +481,17 @@ impl ListTerminologiesError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTerminologiesError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListTerminologiesError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListTerminologiesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -551,42 +551,42 @@ impl TranslateTextError {
                 "DetectedLanguageLowConfidenceException" => {
                     return RusotoError::Service(TranslateTextError::DetectedLanguageLowConfidence(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(TranslateTextError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(TranslateTextError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(TranslateTextError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(TranslateTextError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(TranslateTextError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(TranslateTextError::TextSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(TranslateTextError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedLanguagePairException" => {
                     return RusotoError::Service(TranslateTextError::UnsupportedLanguagePair(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

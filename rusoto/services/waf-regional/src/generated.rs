@@ -2430,27 +2430,27 @@ impl AssociateWebACLError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(AssociateWebACLError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(AssociateWebACLError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(AssociateWebACLError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(AssociateWebACLError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFUnavailableEntityException" => {
                     return RusotoError::Service(AssociateWebACLError::WAFUnavailableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2508,32 +2508,32 @@ impl CreateByteMatchSetError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFDisallowedName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2592,32 +2592,32 @@ impl CreateGeoMatchSetError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateGeoMatchSetError::WAFDisallowedName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateGeoMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(CreateGeoMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateGeoMatchSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateGeoMatchSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateGeoMatchSetError::WAFStaleData(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2676,32 +2676,32 @@ impl CreateIPSetError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateIPSetError::WAFDisallowedName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateIPSetError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(CreateIPSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateIPSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateIPSetError::WAFLimitsExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateIPSetError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2758,27 +2758,27 @@ impl CreateRateBasedRuleError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFDisallowedName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2832,22 +2832,22 @@ impl CreateRegexMatchSetError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRegexMatchSetError::WAFDisallowedName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateRegexMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateRegexMatchSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateRegexMatchSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2900,22 +2900,22 @@ impl CreateRegexPatternSetError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRegexPatternSetError::WAFDisallowedName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateRegexPatternSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateRegexPatternSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateRegexPatternSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2970,27 +2970,27 @@ impl CreateRuleError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRuleError::WAFDisallowedName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateRuleError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidParameterException" => {
-                    return RusotoError::Service(CreateRuleError::WAFInvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateRuleError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateRuleError::WAFLimitsExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateRuleError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3044,22 +3044,22 @@ impl CreateRuleGroupError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRuleGroupError::WAFDisallowedName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateRuleGroupError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateRuleGroupError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateRuleGroupError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3116,32 +3116,32 @@ impl CreateSizeConstraintSetError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFDisallowedName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3200,36 +3200,42 @@ impl CreateSqlInjectionMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFDisallowedName(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateSqlInjectionMatchSetError::WAFDisallowedName(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
                         CreateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateSqlInjectionMatchSetError::WAFLimitsExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3286,34 +3292,34 @@ impl CreateWebACLError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return RusotoError::Service(CreateWebACLError::WAFDisallowedName(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateWebACLError::WAFDisallowedName(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateWebACLError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(CreateWebACLError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateWebACLError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateWebACLError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(CreateWebACLError::WAFLimitsExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateWebACLError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateWebACLError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3372,32 +3378,32 @@ impl CreateXssMatchSetError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateXssMatchSetError::WAFDisallowedName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateXssMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(CreateXssMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateXssMatchSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateXssMatchSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateXssMatchSetError::WAFStaleData(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateXssMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3456,32 +3462,32 @@ impl DeleteByteMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFNonEmptyEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3540,32 +3546,32 @@ impl DeleteGeoMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteGeoMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteGeoMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteGeoMatchSetError::WAFNonEmptyEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteGeoMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteGeoMatchSetError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteGeoMatchSetError::WAFStaleData(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3624,32 +3630,32 @@ impl DeleteIPSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteIPSetError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteIPSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteIPSetError::WAFNonEmptyEntity(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(DeleteIPSetError::WAFNonexistentItem(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteIPSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteIPSetError::WAFReferencedItem(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteIPSetError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3704,19 +3710,19 @@ impl DeleteLoggingConfigurationError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteLoggingConfigurationError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
                         DeleteLoggingConfigurationError::WAFNonexistentItem(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteLoggingConfigurationError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3766,17 +3772,17 @@ impl DeletePermissionPolicyError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeletePermissionPolicyError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeletePermissionPolicyError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeletePermissionPolicyError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3832,32 +3838,32 @@ impl DeleteRateBasedRuleError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFNonEmptyEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3916,32 +3922,32 @@ impl DeleteRegexMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFNonEmptyEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4000,32 +4006,32 @@ impl DeleteRegexPatternSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFNonEmptyEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4084,32 +4090,32 @@ impl DeleteRuleError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRuleError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteRuleError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteRuleError::WAFNonEmptyEntity(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteRuleError::WAFNonexistentItem(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteRuleError::WAFReferencedItem(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteRuleError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4168,32 +4174,32 @@ impl DeleteRuleGroupError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRuleGroupError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(DeleteRuleGroupError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteRuleGroupError::WAFNonEmptyEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteRuleGroupError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteRuleGroupError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteRuleGroupError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4252,32 +4258,32 @@ impl DeleteSizeConstraintSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFNonEmptyEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4338,34 +4344,40 @@ impl DeleteSqlInjectionMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFNonEmptyEntityException" => {
-                    return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFNonEmptyEntity(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteSqlInjectionMatchSetError::WAFNonEmptyEntity(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
                         DeleteSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFReferencedItem(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteSqlInjectionMatchSetError::WAFReferencedItem(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4424,32 +4436,32 @@ impl DeleteWebACLError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteWebACLError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(DeleteWebACLError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteWebACLError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFNonEmptyEntityException" => {
-                    return RusotoError::Service(DeleteWebACLError::WAFNonEmptyEntity(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteWebACLError::WAFNonEmptyEntity(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteWebACLError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(DeleteWebACLError::WAFReferencedItem(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteWebACLError::WAFReferencedItem(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteWebACLError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4508,32 +4520,32 @@ impl DeleteXssMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteXssMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteXssMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteXssMatchSetError::WAFNonEmptyEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteXssMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteXssMatchSetError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteXssMatchSetError::WAFStaleData(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4588,22 +4600,22 @@ impl DisassociateWebACLError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DisassociateWebACLError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DisassociateWebACLError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(DisassociateWebACLError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DisassociateWebACLError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4654,17 +4666,17 @@ impl GetByteMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetByteMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetByteMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetByteMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4710,7 +4722,7 @@ impl GetChangeTokenError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetChangeTokenError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4756,12 +4768,12 @@ impl GetChangeTokenStatusError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetChangeTokenStatusError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetChangeTokenStatusError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4810,17 +4822,17 @@ impl GetGeoMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetGeoMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetGeoMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetGeoMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4870,17 +4882,17 @@ impl GetIPSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetIPSetError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetIPSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetIPSetError::WAFNonexistentItem(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4928,12 +4940,12 @@ impl GetLoggingConfigurationError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetLoggingConfigurationError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetLoggingConfigurationError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4980,12 +4992,12 @@ impl GetPermissionPolicyError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetPermissionPolicyError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetPermissionPolicyError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5034,17 +5046,17 @@ impl GetRateBasedRuleError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRateBasedRuleError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetRateBasedRuleError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetRateBasedRuleError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5096,30 +5108,32 @@ impl GetRateBasedRuleManagedKeysError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetRateBasedRuleManagedKeysError::WAFInternalError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetRateBasedRuleManagedKeysError::WAFInternalError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(
                         GetRateBasedRuleManagedKeysError::WAFInvalidAccount(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
                         GetRateBasedRuleManagedKeysError::WAFInvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
                         GetRateBasedRuleManagedKeysError::WAFNonexistentItem(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5170,17 +5184,17 @@ impl GetRegexMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRegexMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetRegexMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetRegexMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5230,17 +5244,17 @@ impl GetRegexPatternSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRegexPatternSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetRegexPatternSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetRegexPatternSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5290,17 +5304,17 @@ impl GetRuleError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRuleError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetRuleError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetRuleError::WAFNonexistentItem(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5348,12 +5362,12 @@ impl GetRuleGroupError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRuleGroupError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetRuleGroupError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5400,12 +5414,12 @@ impl GetSampledRequestsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetSampledRequestsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetSampledRequestsError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5454,17 +5468,17 @@ impl GetSizeConstraintSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetSizeConstraintSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetSizeConstraintSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetSizeConstraintSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5514,17 +5528,17 @@ impl GetSqlInjectionMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetSqlInjectionMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetSqlInjectionMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetSqlInjectionMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5574,17 +5588,17 @@ impl GetWebACLError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetWebACLError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetWebACLError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetWebACLError::WAFNonexistentItem(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5638,27 +5652,27 @@ impl GetWebACLForResourceError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetWebACLForResourceError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetWebACLForResourceError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(GetWebACLForResourceError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetWebACLForResourceError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFUnavailableEntityException" => {
                     return RusotoError::Service(GetWebACLForResourceError::WAFUnavailableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5710,17 +5724,17 @@ impl GetXssMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetXssMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetXssMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetXssMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5774,21 +5788,21 @@ impl ListActivatedRulesInRuleGroupError {
                         ListActivatedRulesInRuleGroupError::WAFInternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
                         ListActivatedRulesInRuleGroupError::WAFInvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
                         ListActivatedRulesInRuleGroupError::WAFNonexistentItem(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5836,12 +5850,12 @@ impl ListByteMatchSetsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListByteMatchSetsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListByteMatchSetsError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5888,12 +5902,12 @@ impl ListGeoMatchSetsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListGeoMatchSetsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListGeoMatchSetsError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5940,12 +5954,12 @@ impl ListIPSetsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListIPSetsError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListIPSetsError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5994,19 +6008,21 @@ impl ListLoggingConfigurationsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListLoggingConfigurationsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
                         ListLoggingConfigurationsError::WAFInvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(ListLoggingConfigurationsError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListLoggingConfigurationsError::WAFNonexistentItem(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6054,12 +6070,12 @@ impl ListRateBasedRulesError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRateBasedRulesError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListRateBasedRulesError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6106,12 +6122,12 @@ impl ListRegexMatchSetsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRegexMatchSetsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListRegexMatchSetsError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6158,12 +6174,12 @@ impl ListRegexPatternSetsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRegexPatternSetsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListRegexPatternSetsError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6214,22 +6230,22 @@ impl ListResourcesForWebACLError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListResourcesForWebACLError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListResourcesForWebACLError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(ListResourcesForWebACLError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(ListResourcesForWebACLError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6276,7 +6292,7 @@ impl ListRuleGroupsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRuleGroupsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6322,12 +6338,12 @@ impl ListRulesError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRulesError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListRulesError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6374,12 +6390,12 @@ impl ListSizeConstraintSetsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListSizeConstraintSetsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListSizeConstraintSetsError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6426,12 +6442,12 @@ impl ListSqlInjectionMatchSetsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListSqlInjectionMatchSetsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListSqlInjectionMatchSetsError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6478,12 +6494,12 @@ impl ListSubscribedRuleGroupsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListSubscribedRuleGroupsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(ListSubscribedRuleGroupsError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6530,12 +6546,12 @@ impl ListWebACLsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListWebACLsError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListWebACLsError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6582,12 +6598,12 @@ impl ListXssMatchSetsError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListXssMatchSetsError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListXssMatchSetsError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6638,24 +6654,24 @@ impl PutLoggingConfigurationError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(PutLoggingConfigurationError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(PutLoggingConfigurationError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFServiceLinkedRoleErrorException" => {
                     return RusotoError::Service(
                         PutLoggingConfigurationError::WAFServiceLinkedRoleError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(PutLoggingConfigurationError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6708,24 +6724,24 @@ impl PutPermissionPolicyError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(PutPermissionPolicyError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidPermissionPolicyException" => {
                     return RusotoError::Service(
                         PutPermissionPolicyError::WAFInvalidPermissionPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(PutPermissionPolicyError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(PutPermissionPolicyError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6786,42 +6802,42 @@ impl UpdateByteMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFNonexistentContainer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6888,47 +6904,47 @@ impl UpdateGeoMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFNonexistentContainer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateGeoMatchSetError::WAFStaleData(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6996,47 +7012,47 @@ impl UpdateIPSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateIPSetError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateIPSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateIPSetError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateIPSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateIPSetError::WAFLimitsExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateIPSetError::WAFNonexistentContainer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFNonexistentItem(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateIPSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(UpdateIPSetError::WAFReferencedItem(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateIPSetError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7104,47 +7120,47 @@ impl UpdateRateBasedRuleError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFNonexistentContainer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7210,42 +7226,42 @@ impl UpdateRegexMatchSetError {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFDisallowedName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFNonexistentContainer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7310,44 +7326,46 @@ impl UpdateRegexPatternSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidRegexPatternException" => {
-                    return RusotoError::Service(UpdateRegexPatternSetError::WAFInvalidRegexPattern(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateRegexPatternSetError::WAFInvalidRegexPattern(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(
                         UpdateRegexPatternSetError::WAFNonexistentContainer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7414,47 +7432,47 @@ impl UpdateRuleError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRuleError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateRuleError::WAFInvalidAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidOperationException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFInvalidOperation(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateRuleError::WAFInvalidOperation(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFInvalidParameterException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFInvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateRuleError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateRuleError::WAFLimitsExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateRuleError::WAFNonexistentContainer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateRuleError::WAFNonexistentItem(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(UpdateRuleError::WAFReferencedItem(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateRuleError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7518,37 +7536,37 @@ impl UpdateRuleGroupError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRuleGroupError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateRuleGroupError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateRuleGroupError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateRuleGroupError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateRuleGroupError::WAFNonexistentContainer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateRuleGroupError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateRuleGroupError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7614,49 +7632,49 @@ impl UpdateSizeConstraintSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(
                         UpdateSizeConstraintSetError::WAFNonexistentContainer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFReferencedItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7724,50 +7742,54 @@ impl UpdateSqlInjectionMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(
                         UpdateSqlInjectionMatchSetError::WAFInvalidOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
                         UpdateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateSqlInjectionMatchSetError::WAFLimitsExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(
                         UpdateSqlInjectionMatchSetError::WAFNonexistentContainer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
                         UpdateSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFStaleData(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7836,52 +7858,52 @@ impl UpdateWebACLError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFInternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateWebACLError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFLimitsExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateWebACLError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFNonexistentContainer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFReferencedItem(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateWebACLError::WAFReferencedItem(
+                        String::from(error_message),
+                    ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFStaleData(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "WAFSubscriptionNotFoundException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFSubscriptionNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7948,42 +7970,42 @@ impl UpdateXssMatchSetError {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFInternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFLimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFNonexistentContainer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFNonexistentItem(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateXssMatchSetError::WAFStaleData(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -1101,12 +1101,12 @@ impl CreateActivityError {
                 "ActivityLimitExceeded" => {
                     return RusotoError::Service(CreateActivityError::ActivityLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidName" => {
                     return RusotoError::Service(CreateActivityError::InvalidName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1161,32 +1161,36 @@ impl CreateStateMachineError {
                 "InvalidArn" => {
                     return RusotoError::Service(CreateStateMachineError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidDefinition" => {
                     return RusotoError::Service(CreateStateMachineError::InvalidDefinition(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidName" => {
-                    return RusotoError::Service(CreateStateMachineError::InvalidName(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateStateMachineError::InvalidName(
+                        String::from(error_message),
+                    ))
                 }
                 "StateMachineAlreadyExists" => {
-                    return RusotoError::Service(CreateStateMachineError::StateMachineAlreadyExists(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateStateMachineError::StateMachineAlreadyExists(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "StateMachineDeleting" => {
                     return RusotoError::Service(CreateStateMachineError::StateMachineDeleting(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StateMachineLimitExceeded" => {
-                    return RusotoError::Service(CreateStateMachineError::StateMachineLimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateStateMachineError::StateMachineLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1235,7 +1239,7 @@ impl DeleteActivityError {
                 "InvalidArn" => {
                     return RusotoError::Service(DeleteActivityError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1279,7 +1283,7 @@ impl DeleteStateMachineError {
                 "InvalidArn" => {
                     return RusotoError::Service(DeleteStateMachineError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1325,12 +1329,12 @@ impl DescribeActivityError {
                 "ActivityDoesNotExist" => {
                     return RusotoError::Service(DescribeActivityError::ActivityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArn" => {
                     return RusotoError::Service(DescribeActivityError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1377,12 +1381,12 @@ impl DescribeExecutionError {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(DescribeExecutionError::ExecutionDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArn" => {
                     return RusotoError::Service(DescribeExecutionError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1429,14 +1433,14 @@ impl DescribeStateMachineError {
                 "InvalidArn" => {
                     return RusotoError::Service(DescribeStateMachineError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(
                         DescribeStateMachineError::StateMachineDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1487,12 +1491,12 @@ impl DescribeStateMachineForExecutionError {
                         DescribeStateMachineForExecutionError::ExecutionDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidArn" => {
                     return RusotoError::Service(DescribeStateMachineForExecutionError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1541,17 +1545,17 @@ impl GetActivityTaskError {
                 "ActivityDoesNotExist" => {
                     return RusotoError::Service(GetActivityTaskError::ActivityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ActivityWorkerLimitExceeded" => {
                     return RusotoError::Service(GetActivityTaskError::ActivityWorkerLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArn" => {
                     return RusotoError::Service(GetActivityTaskError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1601,17 +1605,17 @@ impl GetExecutionHistoryError {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(GetExecutionHistoryError::ExecutionDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArn" => {
-                    return RusotoError::Service(GetExecutionHistoryError::InvalidArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetExecutionHistoryError::InvalidArn(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidToken" => {
                     return RusotoError::Service(GetExecutionHistoryError::InvalidToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1657,7 +1661,7 @@ impl ListActivitiesError {
                 "InvalidToken" => {
                     return RusotoError::Service(ListActivitiesError::InvalidToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1705,17 +1709,17 @@ impl ListExecutionsError {
                 "InvalidArn" => {
                     return RusotoError::Service(ListExecutionsError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidToken" => {
                     return RusotoError::Service(ListExecutionsError::InvalidToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(ListExecutionsError::StateMachineDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1759,9 +1763,9 @@ impl ListStateMachinesError {
 
             match *error_type {
                 "InvalidToken" => {
-                    return RusotoError::Service(ListStateMachinesError::InvalidToken(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListStateMachinesError::InvalidToken(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1805,14 +1809,14 @@ impl ListTagsForResourceError {
 
             match *error_type {
                 "InvalidArn" => {
-                    return RusotoError::Service(ListTagsForResourceError::InvalidArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsForResourceError::InvalidArn(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1861,17 +1865,17 @@ impl SendTaskFailureError {
                 "InvalidToken" => {
                     return RusotoError::Service(SendTaskFailureError::InvalidToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TaskDoesNotExist" => {
                     return RusotoError::Service(SendTaskFailureError::TaskDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TaskTimedOut" => {
                     return RusotoError::Service(SendTaskFailureError::TaskTimedOut(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1919,19 +1923,19 @@ impl SendTaskHeartbeatError {
 
             match *error_type {
                 "InvalidToken" => {
-                    return RusotoError::Service(SendTaskHeartbeatError::InvalidToken(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(SendTaskHeartbeatError::InvalidToken(
+                        String::from(error_message),
+                    ))
                 }
                 "TaskDoesNotExist" => {
                     return RusotoError::Service(SendTaskHeartbeatError::TaskDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TaskTimedOut" => {
-                    return RusotoError::Service(SendTaskHeartbeatError::TaskTimedOut(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(SendTaskHeartbeatError::TaskTimedOut(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1983,22 +1987,22 @@ impl SendTaskSuccessError {
                 "InvalidOutput" => {
                     return RusotoError::Service(SendTaskSuccessError::InvalidOutput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidToken" => {
                     return RusotoError::Service(SendTaskSuccessError::InvalidToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TaskDoesNotExist" => {
                     return RusotoError::Service(SendTaskSuccessError::TaskDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TaskTimedOut" => {
                     return RusotoError::Service(SendTaskSuccessError::TaskTimedOut(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2057,37 +2061,37 @@ impl StartExecutionError {
                 "ExecutionAlreadyExists" => {
                     return RusotoError::Service(StartExecutionError::ExecutionAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ExecutionLimitExceeded" => {
                     return RusotoError::Service(StartExecutionError::ExecutionLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArn" => {
                     return RusotoError::Service(StartExecutionError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidExecutionInput" => {
                     return RusotoError::Service(StartExecutionError::InvalidExecutionInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidName" => {
                     return RusotoError::Service(StartExecutionError::InvalidName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "StateMachineDeleting" => {
                     return RusotoError::Service(StartExecutionError::StateMachineDeleting(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(StartExecutionError::StateMachineDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2139,12 +2143,12 @@ impl StopExecutionError {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(StopExecutionError::ExecutionDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArn" => {
                     return RusotoError::Service(StopExecutionError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2193,17 +2197,17 @@ impl TagResourceError {
                 "InvalidArn" => {
                     return RusotoError::Service(TagResourceError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFound" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyTags" => {
                     return RusotoError::Service(TagResourceError::TooManyTags(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2251,12 +2255,12 @@ impl UntagResourceError {
                 "InvalidArn" => {
                     return RusotoError::Service(UntagResourceError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFound" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2309,27 +2313,27 @@ impl UpdateStateMachineError {
                 "InvalidArn" => {
                     return RusotoError::Service(UpdateStateMachineError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidDefinition" => {
                     return RusotoError::Service(UpdateStateMachineError::InvalidDefinition(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameter" => {
                     return RusotoError::Service(UpdateStateMachineError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StateMachineDeleting" => {
                     return RusotoError::Service(UpdateStateMachineError::StateMachineDeleting(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(UpdateStateMachineError::StateMachineDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

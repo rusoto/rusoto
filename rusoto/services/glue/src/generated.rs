@@ -3897,39 +3897,39 @@ impl BatchCreatePartitionError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(BatchCreatePartitionError::AlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchCreatePartitionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(BatchCreatePartitionError::GlueEncryption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchCreatePartitionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchCreatePartitionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchCreatePartitionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(
                         BatchCreatePartitionError::ResourceNumberLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3981,12 +3981,12 @@ impl BatchDeleteConnectionError {
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchDeleteConnectionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchDeleteConnectionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4037,22 +4037,22 @@ impl BatchDeletePartitionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchDeletePartitionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchDeletePartitionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchDeletePartitionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchDeletePartitionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4105,22 +4105,22 @@ impl BatchDeleteTableError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchDeleteTableError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchDeleteTableError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchDeleteTableError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchDeleteTableError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4173,22 +4173,22 @@ impl BatchDeleteTableVersionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchDeleteTableVersionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchDeleteTableVersionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchDeleteTableVersionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchDeleteTableVersionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4243,27 +4243,27 @@ impl BatchGetPartitionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchGetPartitionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(BatchGetPartitionError::GlueEncryption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchGetPartitionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(BatchGetPartitionError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(BatchGetPartitionError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchGetPartitionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4315,17 +4315,17 @@ impl GlueBatchStopJobRunError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GlueBatchStopJobRunError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GlueBatchStopJobRunError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GlueBatchStopJobRunError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4373,19 +4373,19 @@ impl CreateClassifierError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateClassifierError::AlreadyExists(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateClassifierError::AlreadyExists(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateClassifierError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreateClassifierError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4437,29 +4437,31 @@ impl CreateConnectionError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateConnectionError::AlreadyExists(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateConnectionError::AlreadyExists(
+                        String::from(error_message),
+                    ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(CreateConnectionError::GlueEncryption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateConnectionError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreateConnectionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNumberLimitExceededException" => {
-                    return RusotoError::Service(CreateConnectionError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateConnectionError::ResourceNumberLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4513,22 +4515,22 @@ impl CreateCrawlerError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateCrawlerError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateCrawlerError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateCrawlerError::OperationTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateCrawlerError::OperationTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateCrawlerError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4585,32 +4587,32 @@ impl CreateDatabaseError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateDatabaseError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(CreateDatabaseError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(CreateDatabaseError::InternalService(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateDatabaseError::InternalService(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateDatabaseError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreateDatabaseError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateDatabaseError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4669,43 +4671,43 @@ impl CreateDevEndpointError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateDevEndpointError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateDevEndpointError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateDevEndpointError::AlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
                         CreateDevEndpointError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateDevEndpointError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateDevEndpointError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateDevEndpointError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreateDevEndpointError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(
                         CreateDevEndpointError::ResourceNumberLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4767,37 +4769,37 @@ impl CreateJobError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateJobError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateJobError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(CreateJobError::IdempotentParameterMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateJobError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateJobError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreateJobError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateJobError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4859,37 +4861,37 @@ impl CreatePartitionError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreatePartitionError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(CreatePartitionError::EntityNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreatePartitionError::EntityNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(CreatePartitionError::GlueEncryption(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreatePartitionError::GlueEncryption(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreatePartitionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreatePartitionError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreatePartitionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreatePartitionError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4943,17 +4945,17 @@ impl CreateScriptError {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateScriptError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateScriptError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreateScriptError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5009,29 +5011,31 @@ impl CreateSecurityConfigurationError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::AlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateSecurityConfigurationError::OperationTimeout(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateSecurityConfigurationError::OperationTimeout(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(
                         CreateSecurityConfigurationError::ResourceNumberLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5091,37 +5095,37 @@ impl CreateTableError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateTableError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(CreateTableError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(CreateTableError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateTableError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateTableError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreateTableError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateTableError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5183,37 +5187,37 @@ impl CreateTriggerError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateTriggerError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateTriggerError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(CreateTriggerError::IdempotentParameterMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateTriggerError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateTriggerError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateTriggerError::OperationTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateTriggerError::OperationTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateTriggerError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5275,39 +5279,39 @@ impl CreateUserDefinedFunctionError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::AlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::GlueEncryption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(
                         CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5359,12 +5363,12 @@ impl DeleteClassifierError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteClassifierError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteClassifierError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5411,12 +5415,12 @@ impl DeleteConnectionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteConnectionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteConnectionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5467,22 +5471,22 @@ impl DeleteCrawlerError {
                 "CrawlerRunningException" => {
                     return RusotoError::Service(DeleteCrawlerError::CrawlerRunning(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteCrawlerError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteCrawlerError::OperationTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteCrawlerError::OperationTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "SchedulerTransitioningException" => {
                     return RusotoError::Service(DeleteCrawlerError::SchedulerTransitioning(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5535,22 +5539,22 @@ impl DeleteDatabaseError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteDatabaseError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeleteDatabaseError::InternalService(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteDatabaseError::InternalService(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteDatabaseError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteDatabaseError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5603,22 +5607,22 @@ impl DeleteDevEndpointError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteDevEndpointError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteDevEndpointError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteDevEndpointError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteDevEndpointError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteDevEndpointError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5669,17 +5673,17 @@ impl DeleteJobError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteJobError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteJobError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteJobError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5729,24 +5733,24 @@ impl DeletePartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeletePartitionError::EntityNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeletePartitionError::EntityNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeletePartitionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeletePartitionError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeletePartitionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5801,27 +5805,27 @@ impl DeleteResourcePolicyError {
                 "ConditionCheckFailureException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::ConditionCheckFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5877,22 +5881,24 @@ impl DeleteSecurityConfigurationError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteSecurityConfigurationError::OperationTimeout(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteSecurityConfigurationError::OperationTimeout(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5945,22 +5951,22 @@ impl DeleteTableError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteTableError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteTableError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteTableError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteTableError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6013,22 +6019,22 @@ impl DeleteTableVersionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteTableVersionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteTableVersionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteTableVersionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteTableVersionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6081,22 +6087,22 @@ impl DeleteTriggerError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteTriggerError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteTriggerError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteTriggerError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteTriggerError::OperationTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteTriggerError::OperationTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6149,22 +6155,22 @@ impl DeleteUserDefinedFunctionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteUserDefinedFunctionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteUserDefinedFunctionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteUserDefinedFunctionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteUserDefinedFunctionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6213,12 +6219,12 @@ impl GetCatalogImportStatusError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetCatalogImportStatusError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetCatalogImportStatusError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6265,12 +6271,12 @@ impl GetClassifierError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetClassifierError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetClassifierError::OperationTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetClassifierError::OperationTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6315,7 +6321,7 @@ impl GetClassifiersError {
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetClassifiersError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6365,22 +6371,22 @@ impl GetConnectionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetConnectionError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetConnectionError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetConnectionError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetConnectionError::OperationTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetConnectionError::OperationTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6433,22 +6439,22 @@ impl GetConnectionsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetConnectionsError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetConnectionsError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetConnectionsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetConnectionsError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6497,12 +6503,12 @@ impl GetCrawlerError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetCrawlerError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetCrawlerError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6547,7 +6553,7 @@ impl GetCrawlerMetricsError {
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetCrawlerMetricsError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6591,7 +6597,7 @@ impl GetCrawlersError {
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetCrawlersError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6643,21 +6649,21 @@ impl GetDataCatalogEncryptionSettingsError {
                         GetDataCatalogEncryptionSettingsError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
                         GetDataCatalogEncryptionSettingsError::InvalidInput(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(
                         GetDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6711,27 +6717,27 @@ impl GetDatabaseError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetDatabaseError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetDatabaseError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetDatabaseError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetDatabaseError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetDatabaseError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6785,22 +6791,22 @@ impl GetDatabasesError {
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetDatabasesError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetDatabasesError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetDatabasesError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetDatabasesError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6851,17 +6857,17 @@ impl GetDataflowGraphError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetDataflowGraphError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetDataflowGraphError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetDataflowGraphError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6913,22 +6919,22 @@ impl GetDevEndpointError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetDevEndpointError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetDevEndpointError::InternalService(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDevEndpointError::InternalService(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetDevEndpointError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetDevEndpointError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6979,24 +6985,24 @@ impl GetDevEndpointsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetDevEndpointsError::EntityNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDevEndpointsError::EntityNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetDevEndpointsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetDevEndpointsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetDevEndpointsError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7049,22 +7055,22 @@ impl GetJobError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetJobError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetJobError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetJobError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetJobError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7117,22 +7123,22 @@ impl GetJobRunError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetJobRunError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetJobRunError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetJobRunError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetJobRunError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7185,22 +7191,22 @@ impl GetJobRunsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetJobRunsError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetJobRunsError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetJobRunsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetJobRunsError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7253,22 +7259,22 @@ impl GetJobsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetJobsError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetJobsError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetJobsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetJobsError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7321,22 +7327,22 @@ impl GetMappingError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetMappingError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetMappingError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetMappingError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetMappingError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7391,27 +7397,27 @@ impl GetPartitionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetPartitionError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetPartitionError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetPartitionError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetPartitionError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetPartitionError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7467,27 +7473,27 @@ impl GetPartitionsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetPartitionsError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetPartitionsError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetPartitionsError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetPartitionsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetPartitionsError::OperationTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetPartitionsError::OperationTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7539,17 +7545,17 @@ impl GetPlanError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetPlanError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetPlanError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetPlanError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7601,22 +7607,22 @@ impl GetResourcePolicyError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetResourcePolicyError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetResourcePolicyError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetResourcePolicyError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetResourcePolicyError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetResourcePolicyError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7669,22 +7675,22 @@ impl GetSecurityConfigurationError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetSecurityConfigurationError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetSecurityConfigurationError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetSecurityConfigurationError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetSecurityConfigurationError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7737,22 +7743,22 @@ impl GetSecurityConfigurationsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetSecurityConfigurationsError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetSecurityConfigurationsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetSecurityConfigurationsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetSecurityConfigurationsError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7807,27 +7813,27 @@ impl GetTableError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTableError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetTableError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTableError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetTableError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetTableError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7881,29 +7887,29 @@ impl GetTableVersionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetTableVersionError::EntityNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetTableVersionError::EntityNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetTableVersionError::GlueEncryption(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetTableVersionError::GlueEncryption(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTableVersionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetTableVersionError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetTableVersionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7959,27 +7965,27 @@ impl GetTableVersionsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTableVersionsError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetTableVersionsError::GlueEncryption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTableVersionsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetTableVersionsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetTableVersionsError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8035,27 +8041,27 @@ impl GetTablesError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTablesError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetTablesError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTablesError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetTablesError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetTablesError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8109,22 +8115,22 @@ impl GetTriggerError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTriggerError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTriggerError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetTriggerError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetTriggerError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8177,22 +8183,22 @@ impl GetTriggersError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTriggersError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTriggersError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetTriggersError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetTriggersError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8247,27 +8253,27 @@ impl GetUserDefinedFunctionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::GlueEncryption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8323,27 +8329,27 @@ impl GetUserDefinedFunctionsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::GlueEncryption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8393,12 +8399,12 @@ impl ImportCatalogToGlueError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ImportCatalogToGlueError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(ImportCatalogToGlueError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8451,21 +8457,21 @@ impl PutDataCatalogEncryptionSettingsError {
                         PutDataCatalogEncryptionSettingsError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
                         PutDataCatalogEncryptionSettingsError::InvalidInput(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(
                         PutDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8519,27 +8525,27 @@ impl PutResourcePolicyError {
                 "ConditionCheckFailureException" => {
                     return RusotoError::Service(PutResourcePolicyError::ConditionCheckFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(PutResourcePolicyError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(PutResourcePolicyError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(PutResourcePolicyError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutResourcePolicyError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(PutResourcePolicyError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8593,22 +8599,22 @@ impl ResetJobBookmarkError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ResetJobBookmarkError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ResetJobBookmarkError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ResetJobBookmarkError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(ResetJobBookmarkError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8659,17 +8665,17 @@ impl StartCrawlerError {
                 "CrawlerRunningException" => {
                     return RusotoError::Service(StartCrawlerError::CrawlerRunning(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StartCrawlerError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(StartCrawlerError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8723,27 +8729,27 @@ impl StartCrawlerScheduleError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StartCrawlerScheduleError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoScheduleException" => {
                     return RusotoError::Service(StartCrawlerScheduleError::NoSchedule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(StartCrawlerScheduleError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SchedulerRunningException" => {
                     return RusotoError::Service(StartCrawlerScheduleError::SchedulerRunning(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SchedulerTransitioningException" => {
                     return RusotoError::Service(StartCrawlerScheduleError::SchedulerTransitioning(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8801,32 +8807,32 @@ impl StartJobRunError {
                 "ConcurrentRunsExceededException" => {
                     return RusotoError::Service(StartJobRunError::ConcurrentRunsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StartJobRunError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(StartJobRunError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(StartJobRunError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(StartJobRunError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(StartJobRunError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8885,32 +8891,32 @@ impl StartTriggerError {
                 "ConcurrentRunsExceededException" => {
                     return RusotoError::Service(StartTriggerError::ConcurrentRunsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StartTriggerError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(StartTriggerError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(StartTriggerError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(StartTriggerError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(StartTriggerError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8965,22 +8971,22 @@ impl StopCrawlerError {
                 "CrawlerNotRunningException" => {
                     return RusotoError::Service(StopCrawlerError::CrawlerNotRunning(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CrawlerStoppingException" => {
                     return RusotoError::Service(StopCrawlerError::CrawlerStopping(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StopCrawlerError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(StopCrawlerError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9033,22 +9039,22 @@ impl StopCrawlerScheduleError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StopCrawlerScheduleError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(StopCrawlerScheduleError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SchedulerNotRunningException" => {
                     return RusotoError::Service(StopCrawlerScheduleError::SchedulerNotRunning(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SchedulerTransitioningException" => {
                     return RusotoError::Service(StopCrawlerScheduleError::SchedulerTransitioning(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9103,27 +9109,27 @@ impl StopTriggerError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StopTriggerError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StopTriggerError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(StopTriggerError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(StopTriggerError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(StopTriggerError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9177,22 +9183,22 @@ impl UpdateClassifierError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateClassifierError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateClassifierError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateClassifierError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "VersionMismatchException" => {
                     return RusotoError::Service(UpdateClassifierError::VersionMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9245,22 +9251,22 @@ impl UpdateConnectionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateConnectionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(UpdateConnectionError::GlueEncryption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateConnectionError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateConnectionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9315,27 +9321,27 @@ impl UpdateCrawlerError {
                 "CrawlerRunningException" => {
                     return RusotoError::Service(UpdateCrawlerError::CrawlerRunning(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateCrawlerError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateCrawlerError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateCrawlerError::OperationTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateCrawlerError::OperationTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "VersionMismatchException" => {
                     return RusotoError::Service(UpdateCrawlerError::VersionMismatch(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9391,27 +9397,29 @@ impl UpdateCrawlerScheduleError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateCrawlerScheduleError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateCrawlerScheduleError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateCrawlerScheduleError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SchedulerTransitioningException" => {
-                    return RusotoError::Service(UpdateCrawlerScheduleError::SchedulerTransitioning(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateCrawlerScheduleError::SchedulerTransitioning(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "VersionMismatchException" => {
                     return RusotoError::Service(UpdateCrawlerScheduleError::VersionMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9467,27 +9475,27 @@ impl UpdateDatabaseError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateDatabaseError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(UpdateDatabaseError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(UpdateDatabaseError::InternalService(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateDatabaseError::InternalService(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateDatabaseError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateDatabaseError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9541,22 +9549,22 @@ impl UpdateDevEndpointError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateDevEndpointError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateDevEndpointError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateDevEndpointError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateDevEndpointError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateDevEndpointError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9611,27 +9619,27 @@ impl UpdateJobError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateJobError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateJobError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateJobError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateJobError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateJobError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9685,29 +9693,29 @@ impl UpdatePartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdatePartitionError::EntityNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdatePartitionError::EntityNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(UpdatePartitionError::GlueEncryption(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdatePartitionError::GlueEncryption(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdatePartitionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdatePartitionError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdatePartitionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9767,37 +9775,37 @@ impl UpdateTableError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateTableError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateTableError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(UpdateTableError::GlueEncryption(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateTableError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateTableError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateTableError::OperationTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(UpdateTableError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9855,27 +9863,27 @@ impl UpdateTriggerError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateTriggerError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateTriggerError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateTriggerError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateTriggerError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateTriggerError::OperationTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateTriggerError::OperationTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9931,27 +9939,27 @@ impl UpdateUserDefinedFunctionError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::GlueEncryption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::OperationTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

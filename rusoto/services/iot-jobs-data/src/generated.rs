@@ -292,32 +292,32 @@ impl DescribeJobExecutionError {
                 "CertificateValidationException" => {
                     return RusotoError::Service(DescribeJobExecutionError::CertificateValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeJobExecutionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeJobExecutionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeJobExecutionError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TerminalStateException" => {
                     return RusotoError::Service(DescribeJobExecutionError::TerminalState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeJobExecutionError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -390,27 +390,27 @@ impl GetPendingJobExecutionsError {
                         GetPendingJobExecutionsError::CertificateValidation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetPendingJobExecutionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetPendingJobExecutionsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetPendingJobExecutionsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetPendingJobExecutionsError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -484,31 +484,31 @@ impl StartNextPendingJobExecutionError {
                         StartNextPendingJobExecutionError::CertificateValidation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartNextPendingJobExecutionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         StartNextPendingJobExecutionError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         StartNextPendingJobExecutionError::ServiceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(StartNextPendingJobExecutionError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -580,32 +580,32 @@ impl UpdateJobExecutionError {
                 "CertificateValidationException" => {
                     return RusotoError::Service(UpdateJobExecutionError::CertificateValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateJobExecutionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStateTransitionException" => {
                     return RusotoError::Service(UpdateJobExecutionError::InvalidStateTransition(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateJobExecutionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateJobExecutionError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateJobExecutionError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

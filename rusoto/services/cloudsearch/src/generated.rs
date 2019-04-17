@@ -4038,17 +4038,17 @@ impl BuildSuggestersError {
                     "BaseException" => {
                         return RusotoError::Service(BuildSuggestersError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(BuildSuggestersError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(BuildSuggestersError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4101,17 +4101,17 @@ impl CreateDomainError {
                     "BaseException" => {
                         return RusotoError::Service(CreateDomainError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(CreateDomainError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LimitExceeded" => {
-                        return RusotoError::Service(CreateDomainError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(CreateDomainError::LimitExceeded(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -4168,27 +4168,27 @@ impl DefineAnalysisSchemeError {
                     "BaseException" => {
                         return RusotoError::Service(DefineAnalysisSchemeError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DefineAnalysisSchemeError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DefineAnalysisSchemeError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DefineAnalysisSchemeError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DefineAnalysisSchemeError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4247,27 +4247,27 @@ impl DefineExpressionError {
                     "BaseException" => {
                         return RusotoError::Service(DefineExpressionError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DefineExpressionError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DefineExpressionError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DefineExpressionError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DefineExpressionError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4326,27 +4326,27 @@ impl DefineIndexFieldError {
                     "BaseException" => {
                         return RusotoError::Service(DefineIndexFieldError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DefineIndexFieldError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DefineIndexFieldError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DefineIndexFieldError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DefineIndexFieldError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4405,27 +4405,27 @@ impl DefineSuggesterError {
                     "BaseException" => {
                         return RusotoError::Service(DefineSuggesterError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DefineSuggesterError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DefineSuggesterError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DefineSuggesterError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DefineSuggesterError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4482,22 +4482,22 @@ impl DeleteAnalysisSchemeError {
                     "BaseException" => {
                         return RusotoError::Service(DeleteAnalysisSchemeError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DeleteAnalysisSchemeError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DeleteAnalysisSchemeError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteAnalysisSchemeError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4549,12 +4549,12 @@ impl DeleteDomainError {
                     "BaseException" => {
                         return RusotoError::Service(DeleteDomainError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DeleteDomainError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -4608,22 +4608,22 @@ impl DeleteExpressionError {
                     "BaseException" => {
                         return RusotoError::Service(DeleteExpressionError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DeleteExpressionError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DeleteExpressionError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteExpressionError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4679,22 +4679,22 @@ impl DeleteIndexFieldError {
                     "BaseException" => {
                         return RusotoError::Service(DeleteIndexFieldError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DeleteIndexFieldError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DeleteIndexFieldError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteIndexFieldError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4750,22 +4750,22 @@ impl DeleteSuggesterError {
                     "BaseException" => {
                         return RusotoError::Service(DeleteSuggesterError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DeleteSuggesterError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DeleteSuggesterError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteSuggesterError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -4819,17 +4819,19 @@ impl DescribeAnalysisSchemesError {
                     "BaseException" => {
                         return RusotoError::Service(DescribeAnalysisSchemesError::Base(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeAnalysisSchemesError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
-                        return RusotoError::Service(DescribeAnalysisSchemesError::ResourceNotFound(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DescribeAnalysisSchemesError::ResourceNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -4890,38 +4892,38 @@ impl DescribeAvailabilityOptionsError {
                     "BaseException" => {
                         return RusotoError::Service(DescribeAvailabilityOptionsError::Base(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DisabledAction" => {
                         return RusotoError::Service(
                             DescribeAvailabilityOptionsError::DisabledOperation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeAvailabilityOptionsError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DescribeAvailabilityOptionsError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             DescribeAvailabilityOptionsError::LimitExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
                             DescribeAvailabilityOptionsError::ResourceNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -4975,12 +4977,12 @@ impl DescribeDomainsError {
                     "BaseException" => {
                         return RusotoError::Service(DescribeDomainsError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeDomainsError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -5032,17 +5034,17 @@ impl DescribeExpressionsError {
                     "BaseException" => {
                         return RusotoError::Service(DescribeExpressionsError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeExpressionsError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DescribeExpressionsError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -5095,17 +5097,17 @@ impl DescribeIndexFieldsError {
                     "BaseException" => {
                         return RusotoError::Service(DescribeIndexFieldsError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeIndexFieldsError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DescribeIndexFieldsError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -5158,19 +5160,19 @@ impl DescribeScalingParametersError {
                     "BaseException" => {
                         return RusotoError::Service(DescribeScalingParametersError::Base(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeScalingParametersError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
                             DescribeScalingParametersError::ResourceNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5225,19 +5227,19 @@ impl DescribeServiceAccessPoliciesError {
                     "BaseException" => {
                         return RusotoError::Service(DescribeServiceAccessPoliciesError::Base(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeServiceAccessPoliciesError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
                             DescribeServiceAccessPoliciesError::ResourceNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5290,17 +5292,17 @@ impl DescribeSuggestersError {
                     "BaseException" => {
                         return RusotoError::Service(DescribeSuggestersError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeSuggestersError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DescribeSuggestersError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -5353,17 +5355,17 @@ impl IndexDocumentsError {
                     "BaseException" => {
                         return RusotoError::Service(IndexDocumentsError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InternalException" => {
                         return RusotoError::Service(IndexDocumentsError::Internal(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(IndexDocumentsError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -5412,7 +5414,7 @@ impl ListDomainNamesError {
                     "BaseException" => {
                         return RusotoError::Service(ListDomainNamesError::Base(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -5469,36 +5471,36 @@ impl UpdateAvailabilityOptionsError {
                     "BaseException" => {
                         return RusotoError::Service(UpdateAvailabilityOptionsError::Base(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DisabledAction" => {
                         return RusotoError::Service(
                             UpdateAvailabilityOptionsError::DisabledOperation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InternalException" => {
                         return RusotoError::Service(UpdateAvailabilityOptionsError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(UpdateAvailabilityOptionsError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateAvailabilityOptionsError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
                             UpdateAvailabilityOptionsError::ResourceNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5558,27 +5560,29 @@ impl UpdateScalingParametersError {
                     "BaseException" => {
                         return RusotoError::Service(UpdateScalingParametersError::Base(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(UpdateScalingParametersError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(UpdateScalingParametersError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateScalingParametersError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
-                        return RusotoError::Service(UpdateScalingParametersError::ResourceNotFound(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateScalingParametersError::ResourceNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -5639,31 +5643,31 @@ impl UpdateServiceAccessPoliciesError {
                     "BaseException" => {
                         return RusotoError::Service(UpdateServiceAccessPoliciesError::Base(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(UpdateServiceAccessPoliciesError::Internal(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(UpdateServiceAccessPoliciesError::InvalidType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             UpdateServiceAccessPoliciesError::LimitExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
                             UpdateServiceAccessPoliciesError::ResourceNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }

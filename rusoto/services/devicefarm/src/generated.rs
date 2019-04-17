@@ -2947,22 +2947,22 @@ impl CreateDevicePoolError {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateDevicePoolError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateDevicePoolError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateDevicePoolError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateDevicePoolError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateDevicePoolError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3013,24 +3013,24 @@ impl CreateInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RusotoError::Service(CreateInstanceProfileError::Argument(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateInstanceProfileError::Argument(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateInstanceProfileError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateInstanceProfileError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateInstanceProfileError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateInstanceProfileError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3083,22 +3083,22 @@ impl CreateNetworkProfileError {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateNetworkProfileError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateNetworkProfileError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateNetworkProfileError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateNetworkProfileError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3151,22 +3151,22 @@ impl CreateProjectError {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateProjectError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateProjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateProjectError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateProjectError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3219,22 +3219,22 @@ impl CreateRemoteAccessSessionError {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateRemoteAccessSessionError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateRemoteAccessSessionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateRemoteAccessSessionError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateRemoteAccessSessionError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3287,22 +3287,22 @@ impl CreateUploadError {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateUploadError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateUploadError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateUploadError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateUploadError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3353,17 +3353,17 @@ impl CreateVPCEConfigurationError {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateVPCEConfigurationError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateVPCEConfigurationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateVPCEConfigurationError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3415,22 +3415,22 @@ impl DeleteDevicePoolError {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteDevicePoolError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteDevicePoolError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteDevicePoolError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteDevicePoolError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteDevicePoolError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3481,24 +3481,24 @@ impl DeleteInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RusotoError::Service(DeleteInstanceProfileError::Argument(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteInstanceProfileError::Argument(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteInstanceProfileError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteInstanceProfileError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteInstanceProfileError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteInstanceProfileError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3551,22 +3551,22 @@ impl DeleteNetworkProfileError {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteNetworkProfileError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteNetworkProfileError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteNetworkProfileError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteNetworkProfileError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3619,22 +3619,22 @@ impl DeleteProjectError {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteProjectError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteProjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteProjectError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteProjectError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3687,22 +3687,22 @@ impl DeleteRemoteAccessSessionError {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteRemoteAccessSessionError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteRemoteAccessSessionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteRemoteAccessSessionError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteRemoteAccessSessionError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3755,22 +3755,22 @@ impl DeleteRunError {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteRunError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteRunError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteRunError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteRunError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3823,22 +3823,22 @@ impl DeleteUploadError {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteUploadError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteUploadError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteUploadError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteUploadError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3891,22 +3891,22 @@ impl DeleteVPCEConfigurationError {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteVPCEConfigurationError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DeleteVPCEConfigurationError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteVPCEConfigurationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteVPCEConfigurationError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3959,22 +3959,22 @@ impl GetAccountSettingsError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetAccountSettingsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetAccountSettingsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetAccountSettingsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetAccountSettingsError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4027,22 +4027,22 @@ impl GetDeviceError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetDeviceError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetDeviceError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetDeviceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetDeviceError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4095,22 +4095,22 @@ impl GetDeviceInstanceError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetDeviceInstanceError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetDeviceInstanceError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetDeviceInstanceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetDeviceInstanceError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4163,22 +4163,22 @@ impl GetDevicePoolError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetDevicePoolError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetDevicePoolError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetDevicePoolError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetDevicePoolError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4233,22 +4233,22 @@ impl GetDevicePoolCompatibilityError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetDevicePoolCompatibilityError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetDevicePoolCompatibilityError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetDevicePoolCompatibilityError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetDevicePoolCompatibilityError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4301,22 +4301,22 @@ impl GetInstanceProfileError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetInstanceProfileError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetInstanceProfileError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetInstanceProfileError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetInstanceProfileError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4367,20 +4367,20 @@ impl GetJobError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetJobError::Argument(String::from(error_message)));
+                    return RusotoError::Service(GetJobError::Argument(String::from(error_message)))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetJobError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetJobError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetJobError::NotFound(String::from(error_message)))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetJobError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4433,22 +4433,22 @@ impl GetNetworkProfileError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetNetworkProfileError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetNetworkProfileError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetNetworkProfileError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetNetworkProfileError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4503,27 +4503,27 @@ impl GetOfferingStatusError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetOfferingStatusError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetOfferingStatusError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotEligibleException" => {
                     return RusotoError::Service(GetOfferingStatusError::NotEligible(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetOfferingStatusError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetOfferingStatusError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4577,22 +4577,22 @@ impl GetProjectError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetProjectError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetProjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetProjectError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetProjectError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4645,22 +4645,22 @@ impl GetRemoteAccessSessionError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetRemoteAccessSessionError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetRemoteAccessSessionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRemoteAccessSessionError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetRemoteAccessSessionError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4711,20 +4711,20 @@ impl GetRunError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetRunError::Argument(String::from(error_message)));
+                    return RusotoError::Service(GetRunError::Argument(String::from(error_message)))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetRunError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetRunError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetRunError::NotFound(String::from(error_message)))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetRunError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4777,22 +4777,22 @@ impl GetSuiteError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetSuiteError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetSuiteError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetSuiteError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetSuiteError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4843,20 +4843,24 @@ impl GetTestError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetTestError::Argument(String::from(error_message)));
+                    return RusotoError::Service(GetTestError::Argument(String::from(
+                        error_message,
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetTestError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetTestError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetTestError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetTestError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4909,22 +4913,22 @@ impl GetUploadError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetUploadError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetUploadError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetUploadError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetUploadError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4975,17 +4979,17 @@ impl GetVPCEConfigurationError {
                 "ArgumentException" => {
                     return RusotoError::Service(GetVPCEConfigurationError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetVPCEConfigurationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetVPCEConfigurationError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5039,22 +5043,22 @@ impl InstallToRemoteAccessSessionError {
                 "ArgumentException" => {
                     return RusotoError::Service(InstallToRemoteAccessSessionError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(InstallToRemoteAccessSessionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(InstallToRemoteAccessSessionError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(InstallToRemoteAccessSessionError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5107,22 +5111,22 @@ impl ListArtifactsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListArtifactsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListArtifactsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListArtifactsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListArtifactsError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5175,22 +5179,22 @@ impl ListDeviceInstancesError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListDeviceInstancesError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListDeviceInstancesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListDeviceInstancesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListDeviceInstancesError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5243,22 +5247,22 @@ impl ListDevicePoolsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListDevicePoolsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListDevicePoolsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListDevicePoolsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListDevicePoolsError::ServiceAccount(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListDevicePoolsError::ServiceAccount(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5311,22 +5315,22 @@ impl ListDevicesError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListDevicesError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListDevicesError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListDevicesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListDevicesError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5379,22 +5383,22 @@ impl ListInstanceProfilesError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListInstanceProfilesError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListInstanceProfilesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListInstanceProfilesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListInstanceProfilesError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5447,22 +5451,22 @@ impl ListJobsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListJobsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListJobsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListJobsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListJobsError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5515,22 +5519,22 @@ impl ListNetworkProfilesError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListNetworkProfilesError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListNetworkProfilesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListNetworkProfilesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListNetworkProfilesError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5585,27 +5589,27 @@ impl ListOfferingPromotionsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListOfferingPromotionsError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListOfferingPromotionsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotEligibleException" => {
                     return RusotoError::Service(ListOfferingPromotionsError::NotEligible(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListOfferingPromotionsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListOfferingPromotionsError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5661,27 +5665,27 @@ impl ListOfferingTransactionsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListOfferingTransactionsError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListOfferingTransactionsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotEligibleException" => {
                     return RusotoError::Service(ListOfferingTransactionsError::NotEligible(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListOfferingTransactionsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListOfferingTransactionsError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5737,27 +5741,27 @@ impl ListOfferingsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListOfferingsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListOfferingsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotEligibleException" => {
                     return RusotoError::Service(ListOfferingsError::NotEligible(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListOfferingsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListOfferingsError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5811,22 +5815,22 @@ impl ListProjectsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListProjectsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListProjectsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListProjectsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListProjectsError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5879,22 +5883,22 @@ impl ListRemoteAccessSessionsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListRemoteAccessSessionsError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListRemoteAccessSessionsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListRemoteAccessSessionsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListRemoteAccessSessionsError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5947,22 +5951,22 @@ impl ListRunsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListRunsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListRunsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListRunsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListRunsError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6015,22 +6019,22 @@ impl ListSamplesError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListSamplesError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListSamplesError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListSamplesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListSamplesError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6083,22 +6087,22 @@ impl ListSuitesError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListSuitesError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListSuitesError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListSuitesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListSuitesError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6151,22 +6155,22 @@ impl ListTestsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListTestsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListTestsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListTestsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListTestsError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6219,22 +6223,22 @@ impl ListUniqueProblemsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListUniqueProblemsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListUniqueProblemsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListUniqueProblemsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListUniqueProblemsError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6287,22 +6291,22 @@ impl ListUploadsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListUploadsError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListUploadsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListUploadsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListUploadsError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6351,12 +6355,12 @@ impl ListVPCEConfigurationsError {
                 "ArgumentException" => {
                     return RusotoError::Service(ListVPCEConfigurationsError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListVPCEConfigurationsError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6409,27 +6413,27 @@ impl PurchaseOfferingError {
                 "ArgumentException" => {
                     return RusotoError::Service(PurchaseOfferingError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PurchaseOfferingError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PurchaseOfferingError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotEligibleException" => {
                     return RusotoError::Service(PurchaseOfferingError::NotEligible(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(PurchaseOfferingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(PurchaseOfferingError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6485,27 +6489,27 @@ impl RenewOfferingError {
                 "ArgumentException" => {
                     return RusotoError::Service(RenewOfferingError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RenewOfferingError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotEligibleException" => {
                     return RusotoError::Service(RenewOfferingError::NotEligible(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(RenewOfferingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(RenewOfferingError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6561,27 +6565,27 @@ impl ScheduleRunError {
                 "ArgumentException" => {
                     return RusotoError::Service(ScheduleRunError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IdempotencyException" => {
                     return RusotoError::Service(ScheduleRunError::Idempotency(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ScheduleRunError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ScheduleRunError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ScheduleRunError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6633,20 +6637,24 @@ impl StopJobError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RusotoError::Service(StopJobError::Argument(String::from(error_message)));
+                    return RusotoError::Service(StopJobError::Argument(String::from(
+                        error_message,
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StopJobError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StopJobError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(StopJobError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(StopJobError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6699,22 +6707,22 @@ impl StopRemoteAccessSessionError {
                 "ArgumentException" => {
                     return RusotoError::Service(StopRemoteAccessSessionError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StopRemoteAccessSessionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StopRemoteAccessSessionError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(StopRemoteAccessSessionError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6765,20 +6773,24 @@ impl StopRunError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RusotoError::Service(StopRunError::Argument(String::from(error_message)));
+                    return RusotoError::Service(StopRunError::Argument(String::from(
+                        error_message,
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StopRunError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StopRunError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(StopRunError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(StopRunError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6831,22 +6843,22 @@ impl UpdateDeviceInstanceError {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateDeviceInstanceError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateDeviceInstanceError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateDeviceInstanceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(UpdateDeviceInstanceError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6899,22 +6911,22 @@ impl UpdateDevicePoolError {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateDevicePoolError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateDevicePoolError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateDevicePoolError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateDevicePoolError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(UpdateDevicePoolError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6965,24 +6977,24 @@ impl UpdateInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RusotoError::Service(UpdateInstanceProfileError::Argument(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateInstanceProfileError::Argument(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateInstanceProfileError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateInstanceProfileError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateInstanceProfileError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(UpdateInstanceProfileError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7035,22 +7047,22 @@ impl UpdateNetworkProfileError {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateNetworkProfileError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateNetworkProfileError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateNetworkProfileError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(UpdateNetworkProfileError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7103,22 +7115,22 @@ impl UpdateProjectError {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateProjectError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateProjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateProjectError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(UpdateProjectError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7171,22 +7183,22 @@ impl UpdateUploadError {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateUploadError::Argument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateUploadError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateUploadError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(UpdateUploadError::ServiceAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7239,22 +7251,22 @@ impl UpdateVPCEConfigurationError {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateVPCEConfigurationError::Argument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(UpdateVPCEConfigurationError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateVPCEConfigurationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(UpdateVPCEConfigurationError::ServiceAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

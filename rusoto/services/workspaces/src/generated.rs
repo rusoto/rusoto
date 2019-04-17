@@ -1193,34 +1193,34 @@ impl AssociateIpGroupsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(AssociateIpGroupsError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AssociateIpGroupsError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(AssociateIpGroupsError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(AssociateIpGroupsError::InvalidResourceState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(AssociateIpGroupsError::OperationNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(AssociateIpGroupsError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssociateIpGroupsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1277,27 +1277,27 @@ impl AuthorizeIpRulesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AuthorizeIpRulesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(AuthorizeIpRulesError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(AuthorizeIpRulesError::InvalidResourceState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(AuthorizeIpRulesError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AuthorizeIpRulesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1353,27 +1353,27 @@ impl CreateIpGroupError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateIpGroupError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(CreateIpGroupError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateIpGroupError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceCreationFailedException" => {
                     return RusotoError::Service(CreateIpGroupError::ResourceCreationFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(CreateIpGroupError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1425,17 +1425,17 @@ impl CreateTagsError {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(CreateTagsError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(CreateTagsError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1483,12 +1483,12 @@ impl CreateWorkspacesError {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(CreateWorkspacesError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(CreateWorkspacesError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1539,22 +1539,22 @@ impl DeleteIpGroupError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteIpGroupError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DeleteIpGroupError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAssociatedException" => {
                     return RusotoError::Service(DeleteIpGroupError::ResourceAssociated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteIpGroupError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteIpGroupError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1603,12 +1603,12 @@ impl DeleteTagsError {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DeleteTagsError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1657,17 +1657,17 @@ impl DeleteWorkspaceImageError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteWorkspaceImageError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(DeleteWorkspaceImageError::InvalidResourceState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAssociatedException" => {
                     return RusotoError::Service(DeleteWorkspaceImageError::ResourceAssociated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1713,7 +1713,7 @@ impl DescribeAccountError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAccountError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1759,7 +1759,7 @@ impl DescribeAccountModificationsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAccountModificationsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1807,19 +1807,19 @@ impl DescribeClientPropertiesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeClientPropertiesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
                         DescribeClientPropertiesError::InvalidParameterValues(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeClientPropertiesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1867,12 +1867,12 @@ impl DescribeIpGroupsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeIpGroupsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DescribeIpGroupsError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1917,7 +1917,7 @@ impl DescribeTagsError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1963,7 +1963,7 @@ impl DescribeWorkspaceBundlesError {
                         DescribeWorkspaceBundlesError::InvalidParameterValues(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2011,7 +2011,7 @@ impl DescribeWorkspaceDirectoriesError {
                         DescribeWorkspaceDirectoriesError::InvalidParameterValues(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2055,7 +2055,7 @@ impl DescribeWorkspaceImagesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeWorkspaceImagesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2101,12 +2101,12 @@ impl DescribeWorkspacesError {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DescribeWorkspacesError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(DescribeWorkspacesError::ResourceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2155,7 +2155,7 @@ impl DescribeWorkspacesConnectionStatusError {
                         DescribeWorkspacesConnectionStatusError::InvalidParameterValues(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2205,22 +2205,22 @@ impl DisassociateIpGroupsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateIpGroupsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DisassociateIpGroupsError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(DisassociateIpGroupsError::InvalidResourceState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateIpGroupsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2275,27 +2275,27 @@ impl ImportWorkspaceImageError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::OperationNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2349,14 +2349,14 @@ impl ListAvailableManagementCidrRangesError {
                         ListAvailableManagementCidrRangesError::AccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
                         ListAvailableManagementCidrRangesError::InvalidParameterValues(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2409,27 +2409,27 @@ impl ModifyAccountError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ModifyAccountError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(ModifyAccountError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(ModifyAccountError::InvalidResourceState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ModifyAccountError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ModifyAccountError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(ModifyAccountError::ResourceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2481,19 +2481,19 @@ impl ModifyClientPropertiesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ModifyClientPropertiesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
                         ModifyClientPropertiesError::InvalidParameterValues(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ModifyClientPropertiesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2551,47 +2551,47 @@ impl ModifyWorkspacePropertiesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ModifyWorkspacePropertiesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
                         ModifyWorkspacePropertiesError::InvalidParameterValues(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(
                         ModifyWorkspacePropertiesError::InvalidResourceState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationInProgressException" => {
                     return RusotoError::Service(
                         ModifyWorkspacePropertiesError::OperationInProgress(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ModifyWorkspacePropertiesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(
                         ModifyWorkspacePropertiesError::ResourceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedWorkspaceConfigurationException" => {
                     return RusotoError::Service(
                         ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2645,17 +2645,17 @@ impl ModifyWorkspaceStateError {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(ModifyWorkspaceStateError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(ModifyWorkspaceStateError::InvalidResourceState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ModifyWorkspaceStateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2775,22 +2775,22 @@ impl RevokeIpRulesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RevokeIpRulesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(RevokeIpRulesError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(RevokeIpRulesError::InvalidResourceState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(RevokeIpRulesError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RevokeIpRulesError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2947,27 +2947,27 @@ impl UpdateRulesOfIpGroupError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::InvalidParameterValues(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::InvalidResourceState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

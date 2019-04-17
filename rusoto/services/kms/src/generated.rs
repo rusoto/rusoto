@@ -1181,27 +1181,27 @@ impl CancelKeyDeletionError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(CancelKeyDeletionError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(CancelKeyDeletionError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(CancelKeyDeletionError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(CancelKeyDeletionError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CancelKeyDeletionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1259,31 +1259,33 @@ impl ConnectCustomKeyStoreError {
                         ConnectCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "CloudHsmClusterNotActiveException" => {
                     return RusotoError::Service(
                         ConnectCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(
                         ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CustomKeyStoreNotFoundException" => {
-                    return RusotoError::Service(ConnectCustomKeyStoreError::CustomKeyStoreNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ConnectCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ConnectCustomKeyStoreError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1343,37 +1345,37 @@ impl CreateAliasError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateAliasError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(CreateAliasError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidAliasNameException" => {
                     return RusotoError::Service(CreateAliasError::InvalidAliasName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(CreateAliasError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(CreateAliasError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAliasError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateAliasError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1435,41 +1437,45 @@ impl CreateCustomKeyStoreError {
                 "CloudHsmClusterInUseException" => {
                     return RusotoError::Service(CreateCustomKeyStoreError::CloudHsmClusterInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmClusterInvalidConfigurationException" => {
                     return RusotoError::Service(
                         CreateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "CloudHsmClusterNotActiveException" => {
                     return RusotoError::Service(
                         CreateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CloudHsmClusterNotFoundException" => {
-                    return RusotoError::Service(CreateCustomKeyStoreError::CloudHsmClusterNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateCustomKeyStoreError::CloudHsmClusterNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "CustomKeyStoreNameInUseException" => {
-                    return RusotoError::Service(CreateCustomKeyStoreError::CustomKeyStoreNameInUse(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateCustomKeyStoreError::CustomKeyStoreNameInUse(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "IncorrectTrustAnchorException" => {
                     return RusotoError::Service(CreateCustomKeyStoreError::IncorrectTrustAnchor(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(CreateCustomKeyStoreError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1533,42 +1539,42 @@ impl CreateGrantError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(CreateGrantError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DisabledException" => {
                     return RusotoError::Service(CreateGrantError::Disabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(CreateGrantError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidGrantTokenException" => {
                     return RusotoError::Service(CreateGrantError::InvalidGrantToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(CreateGrantError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(CreateGrantError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateGrantError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateGrantError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1639,50 +1645,50 @@ impl CreateKeyError {
                         CreateKeyError::CloudHsmClusterInvalidConfiguration(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(CreateKeyError::CustomKeyStoreInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(CreateKeyError::CustomKeyStoreNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(CreateKeyError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(CreateKeyError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(CreateKeyError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateKeyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(CreateKeyError::MalformedPolicyDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagException" => {
-                    return RusotoError::Service(CreateKeyError::Tag(String::from(error_message)));
+                    return RusotoError::Service(CreateKeyError::Tag(String::from(error_message)))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(CreateKeyError::UnsupportedOperation(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateKeyError::UnsupportedOperation(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1749,38 +1755,42 @@ impl DecryptError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DecryptError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DisabledException" => {
-                    return RusotoError::Service(DecryptError::Disabled(String::from(error_message)));
+                    return RusotoError::Service(DecryptError::Disabled(String::from(
+                        error_message,
+                    )))
                 }
                 "InvalidCiphertextException" => {
                     return RusotoError::Service(DecryptError::InvalidCiphertext(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidGrantTokenException" => {
                     return RusotoError::Service(DecryptError::InvalidGrantToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DecryptError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(DecryptError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KeyUnavailableException" => {
                     return RusotoError::Service(DecryptError::KeyUnavailable(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DecryptError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(DecryptError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1837,22 +1847,22 @@ impl DeleteAliasError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DeleteAliasError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DeleteAliasError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(DeleteAliasError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteAliasError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1905,24 +1915,24 @@ impl DeleteCustomKeyStoreError {
                 "CustomKeyStoreHasCMKsException" => {
                     return RusotoError::Service(DeleteCustomKeyStoreError::CustomKeyStoreHasCMKs(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(
                         DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(DeleteCustomKeyStoreError::CustomKeyStoreNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DeleteCustomKeyStoreError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1979,34 +1989,34 @@ impl DeleteImportedKeyMaterialError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         DeleteImportedKeyMaterialError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2059,12 +2069,12 @@ impl DescribeCustomKeyStoresError {
                         DescribeCustomKeyStoresError::CustomKeyStoreNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DescribeCustomKeyStoresError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2115,22 +2125,22 @@ impl DescribeKeyError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DescribeKeyError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DescribeKeyError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DescribeKeyError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeKeyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2185,27 +2195,27 @@ impl DisableKeyError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DisableKeyError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DisableKeyError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DisableKeyError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(DisableKeyError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DisableKeyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2265,37 +2275,37 @@ impl DisableKeyRotationError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DisableKeyRotationError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DisabledException" => {
                     return RusotoError::Service(DisableKeyRotationError::Disabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DisableKeyRotationError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(DisableKeyRotationError::KMSInternal(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DisableKeyRotationError::KMSInternal(
+                        String::from(error_message),
+                    ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(DisableKeyRotationError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DisableKeyRotationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DisableKeyRotationError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2351,19 +2361,19 @@ impl DisconnectCustomKeyStoreError {
                         DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(
                         DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DisconnectCustomKeyStoreError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2419,32 +2429,32 @@ impl EnableKeyError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(EnableKeyError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(EnableKeyError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(EnableKeyError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(EnableKeyError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(EnableKeyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(EnableKeyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2505,37 +2515,37 @@ impl EnableKeyRotationError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(EnableKeyRotationError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DisabledException" => {
                     return RusotoError::Service(EnableKeyRotationError::Disabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(EnableKeyRotationError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(EnableKeyRotationError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(EnableKeyRotationError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(EnableKeyRotationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(EnableKeyRotationError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2599,38 +2609,42 @@ impl EncryptError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(EncryptError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DisabledException" => {
-                    return RusotoError::Service(EncryptError::Disabled(String::from(error_message)));
+                    return RusotoError::Service(EncryptError::Disabled(String::from(
+                        error_message,
+                    )))
                 }
                 "InvalidGrantTokenException" => {
                     return RusotoError::Service(EncryptError::InvalidGrantToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidKeyUsageException" => {
                     return RusotoError::Service(EncryptError::InvalidKeyUsage(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(EncryptError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(EncryptError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KeyUnavailableException" => {
                     return RusotoError::Service(EncryptError::KeyUnavailable(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(EncryptError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(EncryptError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2695,42 +2709,42 @@ impl GenerateDataKeyError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GenerateDataKeyError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DisabledException" => {
                     return RusotoError::Service(GenerateDataKeyError::Disabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidGrantTokenException" => {
                     return RusotoError::Service(GenerateDataKeyError::InvalidGrantToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidKeyUsageException" => {
                     return RusotoError::Service(GenerateDataKeyError::InvalidKeyUsage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(GenerateDataKeyError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(GenerateDataKeyError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KeyUnavailableException" => {
-                    return RusotoError::Service(GenerateDataKeyError::KeyUnavailable(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GenerateDataKeyError::KeyUnavailable(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GenerateDataKeyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2799,50 +2813,50 @@ impl GenerateDataKeyWithoutPlaintextError {
                         GenerateDataKeyWithoutPlaintextError::DependencyTimeout(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DisabledException" => {
                     return RusotoError::Service(GenerateDataKeyWithoutPlaintextError::Disabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGrantTokenException" => {
                     return RusotoError::Service(
                         GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidKeyUsageException" => {
                     return RusotoError::Service(
                         GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(GenerateDataKeyWithoutPlaintextError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(
                         GenerateDataKeyWithoutPlaintextError::KMSInvalidState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "KeyUnavailableException" => {
                     return RusotoError::Service(
                         GenerateDataKeyWithoutPlaintextError::KeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GenerateDataKeyWithoutPlaintextError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2899,22 +2913,22 @@ impl GenerateRandomError {
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(GenerateRandomError::CustomKeyStoreInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(GenerateRandomError::CustomKeyStoreNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GenerateRandomError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(GenerateRandomError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2967,29 +2981,29 @@ impl GetKeyPolicyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(GetKeyPolicyError::DependencyTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetKeyPolicyError::DependencyTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetKeyPolicyError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(GetKeyPolicyError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(GetKeyPolicyError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetKeyPolicyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3047,32 +3061,32 @@ impl GetKeyRotationStatusError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3131,32 +3145,32 @@ impl GetParametersForImportError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GetParametersForImportError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetParametersForImportError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(GetParametersForImportError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(GetParametersForImportError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetParametersForImportError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(GetParametersForImportError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3223,52 +3237,52 @@ impl ImportKeyMaterialError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ImportKeyMaterialError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ExpiredImportTokenException" => {
                     return RusotoError::Service(ImportKeyMaterialError::ExpiredImportToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncorrectKeyMaterialException" => {
                     return RusotoError::Service(ImportKeyMaterialError::IncorrectKeyMaterial(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ImportKeyMaterialError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidCiphertextException" => {
                     return RusotoError::Service(ImportKeyMaterialError::InvalidCiphertext(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidImportTokenException" => {
                     return RusotoError::Service(ImportKeyMaterialError::InvalidImportToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ImportKeyMaterialError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(ImportKeyMaterialError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ImportKeyMaterialError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(ImportKeyMaterialError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3329,27 +3343,27 @@ impl ListAliasesError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListAliasesError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListAliasesError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidMarkerException" => {
                     return RusotoError::Service(ListAliasesError::InvalidMarker(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ListAliasesError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListAliasesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3407,32 +3421,32 @@ impl ListGrantsError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListGrantsError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListGrantsError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidMarkerException" => {
                     return RusotoError::Service(ListGrantsError::InvalidMarker(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ListGrantsError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(ListGrantsError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListGrantsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3489,27 +3503,27 @@ impl ListKeyPoliciesError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListKeyPoliciesError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListKeyPoliciesError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ListKeyPoliciesError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(ListKeyPoliciesError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListKeyPoliciesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3561,17 +3575,17 @@ impl ListKeysError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListKeysError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidMarkerException" => {
                     return RusotoError::Service(ListKeysError::InvalidMarker(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ListKeysError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3623,22 +3637,22 @@ impl ListResourceTagsError {
                 "InvalidArnException" => {
                     return RusotoError::Service(ListResourceTagsError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidMarkerException" => {
-                    return RusotoError::Service(ListResourceTagsError::InvalidMarker(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListResourceTagsError::InvalidMarker(
+                        String::from(error_message),
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ListResourceTagsError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListResourceTagsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3693,27 +3707,27 @@ impl ListRetirableGrantsError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListRetirableGrantsError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListRetirableGrantsError::InvalidArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListRetirableGrantsError::InvalidArn(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidMarkerException" => {
                     return RusotoError::Service(ListRetirableGrantsError::InvalidMarker(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ListRetirableGrantsError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListRetirableGrantsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3773,44 +3787,44 @@ impl PutKeyPolicyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(PutKeyPolicyError::DependencyTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutKeyPolicyError::DependencyTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(PutKeyPolicyError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(PutKeyPolicyError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(PutKeyPolicyError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutKeyPolicyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(PutKeyPolicyError::MalformedPolicyDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(PutKeyPolicyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(PutKeyPolicyError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3877,47 +3891,47 @@ impl ReEncryptError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ReEncryptError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DisabledException" => {
                     return RusotoError::Service(ReEncryptError::Disabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidCiphertextException" => {
                     return RusotoError::Service(ReEncryptError::InvalidCiphertext(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidGrantTokenException" => {
                     return RusotoError::Service(ReEncryptError::InvalidGrantToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidKeyUsageException" => {
                     return RusotoError::Service(ReEncryptError::InvalidKeyUsage(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ReEncryptError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(ReEncryptError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KeyUnavailableException" => {
                     return RusotoError::Service(ReEncryptError::KeyUnavailable(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ReEncryptError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3981,37 +3995,37 @@ impl RetireGrantError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(RetireGrantError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(RetireGrantError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidGrantIdException" => {
                     return RusotoError::Service(RetireGrantError::InvalidGrantId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidGrantTokenException" => {
                     return RusotoError::Service(RetireGrantError::InvalidGrantToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(RetireGrantError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(RetireGrantError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(RetireGrantError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4071,32 +4085,32 @@ impl RevokeGrantError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(RevokeGrantError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(RevokeGrantError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidGrantIdException" => {
                     return RusotoError::Service(RevokeGrantError::InvalidGrantId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(RevokeGrantError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(RevokeGrantError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(RevokeGrantError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4153,27 +4167,27 @@ impl ScheduleKeyDeletionError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ScheduleKeyDeletionError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ScheduleKeyDeletionError::InvalidArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ScheduleKeyDeletionError::InvalidArn(
+                        String::from(error_message),
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(ScheduleKeyDeletionError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(ScheduleKeyDeletionError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ScheduleKeyDeletionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4231,30 +4245,30 @@ impl TagResourceError {
                 "InvalidArnException" => {
                     return RusotoError::Service(TagResourceError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(TagResourceError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(TagResourceError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(TagResourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TagException" => {
-                    return RusotoError::Service(TagResourceError::Tag(String::from(error_message)));
+                    return RusotoError::Service(TagResourceError::Tag(String::from(error_message)))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4311,27 +4325,27 @@ impl UntagResourceError {
                 "InvalidArnException" => {
                     return RusotoError::Service(UntagResourceError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(UntagResourceError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(UntagResourceError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UntagResourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TagException" => {
                     return RusotoError::Service(UntagResourceError::Tag(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4385,22 +4399,22 @@ impl UpdateAliasError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(UpdateAliasError::DependencyTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(UpdateAliasError::KMSInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(UpdateAliasError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateAliasError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4461,43 +4475,45 @@ impl UpdateCustomKeyStoreError {
                         UpdateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "CloudHsmClusterNotActiveException" => {
                     return RusotoError::Service(
                         UpdateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CloudHsmClusterNotFoundException" => {
-                    return RusotoError::Service(UpdateCustomKeyStoreError::CloudHsmClusterNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateCustomKeyStoreError::CloudHsmClusterNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "CloudHsmClusterNotRelatedException" => {
                     return RusotoError::Service(
                         UpdateCustomKeyStoreError::CloudHsmClusterNotRelated(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(
                         UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(UpdateCustomKeyStoreError::CustomKeyStoreNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(UpdateCustomKeyStoreError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4555,27 +4571,27 @@ impl UpdateKeyDescriptionError {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(UpdateKeyDescriptionError::DependencyTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UpdateKeyDescriptionError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(UpdateKeyDescriptionError::KMSInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(UpdateKeyDescriptionError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateKeyDescriptionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -10378,49 +10378,49 @@ impl AcceptReservedNodeExchangeError {
                             AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidReservedNodeState" => {
                         return RusotoError::Service(
                             AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeAlreadyExists" => {
                         return RusotoError::Service(
                             AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeAlreadyMigrated" => {
                         return RusotoError::Service(
                             AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeNotFound" => {
                         return RusotoError::Service(
                             AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeOfferingNotFound" => {
                         return RusotoError::Service(
                             AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "UnsupportedOperation" => {
                         return RusotoError::Service(
                             AcceptReservedNodeExchangeError::UnsupportedOperationFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10546,42 +10546,42 @@ impl AuthorizeSnapshotAccessError {
                             AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "AuthorizationQuotaExceeded" => {
                         return RusotoError::Service(
                             AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterSnapshotNotFound" => {
                         return RusotoError::Service(
                             AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return RusotoError::Service(
                             AuthorizeSnapshotAccessError::DependentServiceRequestThrottlingFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterSnapshotState" => {
                         return RusotoError::Service(
                             AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "LimitExceededFault" => {
                         return RusotoError::Service(
                             AuthorizeSnapshotAccessError::LimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10639,7 +10639,7 @@ impl BatchDeleteClusterSnapshotsError {
                             BatchDeleteClusterSnapshotsError::BatchDeleteRequestSizeExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10743,22 +10743,22 @@ impl CancelResizeError {
                     "ClusterNotFound" => {
                         return RusotoError::Service(CancelResizeError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(CancelResizeError::InvalidClusterStateFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResizeNotFound" => {
                         return RusotoError::Service(CancelResizeError::ResizeNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnsupportedOperation" => {
                         return RusotoError::Service(CancelResizeError::UnsupportedOperationFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10818,35 +10818,35 @@ impl CopyClusterSnapshotError {
                             CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterSnapshotNotFound" => {
                         return RusotoError::Service(
                             CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ClusterSnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterSnapshotState" => {
                         return RusotoError::Service(
                             CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidRetentionPeriodFault" => {
                         return RusotoError::Service(
                             CopyClusterSnapshotError::InvalidRetentionPeriodFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10939,138 +10939,138 @@ impl CreateClusterError {
                     "ClusterAlreadyExists" => {
                         return RusotoError::Service(CreateClusterError::ClusterAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             CreateClusterError::ClusterParameterGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ClusterQuotaExceeded" => {
                         return RusotoError::Service(CreateClusterError::ClusterQuotaExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ClusterSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             CreateClusterError::ClusterSecurityGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ClusterSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             CreateClusterError::ClusterSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return RusotoError::Service(
                             CreateClusterError::DependentServiceRequestThrottlingFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "HsmClientCertificateNotFoundFault" => {
                         return RusotoError::Service(
                             CreateClusterError::HsmClientCertificateNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "HsmConfigurationNotFoundFault" => {
                         return RusotoError::Service(
                             CreateClusterError::HsmConfigurationNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientClusterCapacity" => {
                         return RusotoError::Service(
                             CreateClusterError::InsufficientClusterCapacityFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterSubnetGroupStateFault" => {
                         return RusotoError::Service(
                             CreateClusterError::InvalidClusterSubnetGroupStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterTrack" => {
                         return RusotoError::Service(CreateClusterError::InvalidClusterTrackFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidElasticIpFault" => {
                         return RusotoError::Service(CreateClusterError::InvalidElasticIpFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidRetentionPeriodFault" => {
                         return RusotoError::Service(
                             CreateClusterError::InvalidRetentionPeriodFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateClusterError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(CreateClusterError::InvalidTagFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             CreateClusterError::InvalidVPCNetworkStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceededFault" => {
                         return RusotoError::Service(CreateClusterError::LimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NumberOfNodesPerClusterLimitExceeded" => {
                         return RusotoError::Service(
                             CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NumberOfNodesQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateClusterError::NumberOfNodesQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotScheduleNotFound" => {
                         return RusotoError::Service(
                             CreateClusterError::SnapshotScheduleNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(CreateClusterError::TagLimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnauthorizedOperation" => {
                         return RusotoError::Service(CreateClusterError::UnauthorizedOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11158,14 +11158,14 @@ impl CreateClusterParameterGroupError {
                             CreateClusterParameterGroupError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(
                             CreateClusterParameterGroupError::TagLimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11229,28 +11229,28 @@ impl CreateClusterSecurityGroupError {
                             CreateClusterSecurityGroupError::ClusterSecurityGroupAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "QuotaExceeded.ClusterSecurityGroup" => {
                         return RusotoError::Service(
                             CreateClusterSecurityGroupError::ClusterSecurityGroupQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(
                             CreateClusterSecurityGroupError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(
                             CreateClusterSecurityGroupError::TagLimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11318,47 +11318,47 @@ impl CreateClusterSnapshotError {
                             CreateClusterSnapshotError::ClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ClusterSnapshotAlreadyExists" => {
                         return RusotoError::Service(
                             CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterSnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(
                             CreateClusterSnapshotError::InvalidClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidRetentionPeriodFault" => {
                         return RusotoError::Service(
                             CreateClusterSnapshotError::InvalidRetentionPeriodFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(CreateClusterSnapshotError::InvalidTagFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(
                             CreateClusterSnapshotError::TagLimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11427,52 +11427,54 @@ impl CreateClusterSubnetGroupError {
                             CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterSubnetGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterSubnetQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return RusotoError::Service(
                             CreateClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateClusterSubnetGroupError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTagFault" => {
-                        return RusotoError::Service(CreateClusterSubnetGroupError::InvalidTagFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterSubnetGroupError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(
                             CreateClusterSubnetGroupError::TagLimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "UnauthorizedOperation" => {
                         return RusotoError::Service(
                             CreateClusterSubnetGroupError::UnauthorizedOperation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11550,75 +11552,75 @@ impl CreateEventSubscriptionError {
                             CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(CreateEventSubscriptionError::InvalidTagFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SNSInvalidTopic" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SNSNoAuthorization" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SNSTopicArnNotFound" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SourceNotFound" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SourceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SubscriptionAlreadyExist" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionCategoryNotFound" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionEventIdNotFound" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionSeverityNotFound" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::TagLimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11685,28 +11687,28 @@ impl CreateHsmClientCertificateError {
                             CreateHsmClientCertificateError::HsmClientCertificateAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "HsmClientCertificateQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateHsmClientCertificateError::HsmClientCertificateQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(
                             CreateHsmClientCertificateError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(
                             CreateHsmClientCertificateError::TagLimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11768,26 +11770,26 @@ impl CreateHsmConfigurationError {
                             CreateHsmConfigurationError::HsmConfigurationAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "HsmConfigurationQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateHsmConfigurationError::HsmConfigurationQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(CreateHsmConfigurationError::InvalidTagFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(
                             CreateHsmConfigurationError::TagLimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11849,40 +11851,40 @@ impl CreateSnapshotCopyGrantError {
                             CreateSnapshotCopyGrantError::DependentServiceRequestThrottlingFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(CreateSnapshotCopyGrantError::InvalidTagFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceededFault" => {
                         return RusotoError::Service(
                             CreateSnapshotCopyGrantError::LimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotCopyGrantAlreadyExistsFault" => {
                         return RusotoError::Service(
                             CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SnapshotCopyGrantQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(
                             CreateSnapshotCopyGrantError::TagLimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11946,35 +11948,35 @@ impl CreateSnapshotScheduleError {
                             CreateSnapshotScheduleError::InvalidScheduleFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ScheduleDefinitionTypeUnsupported" => {
                         return RusotoError::Service(
                             CreateSnapshotScheduleError::ScheduleDefinitionTypeUnsupportedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SnapshotScheduleAlreadyExists" => {
                         return RusotoError::Service(
                             CreateSnapshotScheduleError::SnapshotScheduleAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SnapshotScheduleQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateSnapshotScheduleError::SnapshotScheduleQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(
                             CreateSnapshotScheduleError::TagLimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12027,19 +12029,19 @@ impl CreateTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTagFault" => {
-                        return RusotoError::Service(CreateTagsError::InvalidTagFault(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(CreateTagsError::InvalidTagFault(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "ResourceNotFoundFault" => {
                         return RusotoError::Service(CreateTagsError::ResourceNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TagLimitExceededFault" => {
                         return RusotoError::Service(CreateTagsError::TagLimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12096,33 +12098,33 @@ impl DeleteClusterError {
                     "ClusterNotFound" => {
                         return RusotoError::Service(DeleteClusterError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ClusterSnapshotAlreadyExists" => {
                         return RusotoError::Service(
                             DeleteClusterError::ClusterSnapshotAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ClusterSnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             DeleteClusterError::ClusterSnapshotQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(DeleteClusterError::InvalidClusterStateFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidRetentionPeriodFault" => {
                         return RusotoError::Service(
                             DeleteClusterError::InvalidRetentionPeriodFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12179,7 +12181,7 @@ impl DeleteClusterParameterGroupError {
                             DeleteClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterParameterGroupState" => return RusotoError::Service(
                         DeleteClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
@@ -12242,14 +12244,14 @@ impl DeleteClusterSecurityGroupError {
                             DeleteClusterSecurityGroupError::ClusterSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterSecurityGroupState" => {
                         return RusotoError::Service(
                             DeleteClusterSecurityGroupError::InvalidClusterSecurityGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12303,14 +12305,14 @@ impl DeleteClusterSnapshotError {
                             DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterSnapshotState" => {
                         return RusotoError::Service(
                             DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12364,21 +12366,21 @@ impl DeleteClusterSubnetGroupError {
                             DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterSubnetGroupStateFault" => {
                         return RusotoError::Service(
                             DeleteClusterSubnetGroupError::InvalidClusterSubnetGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterSubnetStateFault" => {
                         return RusotoError::Service(
                             DeleteClusterSubnetGroupError::InvalidClusterSubnetStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12431,14 +12433,14 @@ impl DeleteEventSubscriptionError {
                             DeleteEventSubscriptionError::InvalidSubscriptionStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12492,14 +12494,14 @@ impl DeleteHsmClientCertificateError {
                             DeleteHsmClientCertificateError::HsmClientCertificateNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidHsmClientCertificateStateFault" => {
                         return RusotoError::Service(
                             DeleteHsmClientCertificateError::InvalidHsmClientCertificateStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12553,14 +12555,14 @@ impl DeleteHsmConfigurationError {
                             DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidHsmConfigurationStateFault" => {
                         return RusotoError::Service(
                             DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12612,14 +12614,14 @@ impl DeleteSnapshotCopyGrantError {
                             DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SnapshotCopyGrantNotFoundFault" => {
                         return RusotoError::Service(
                             DeleteSnapshotCopyGrantError::SnapshotCopyGrantNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12671,14 +12673,14 @@ impl DeleteSnapshotScheduleError {
                             DeleteSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SnapshotScheduleNotFound" => {
                         return RusotoError::Service(
                             DeleteSnapshotScheduleError::SnapshotScheduleNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12728,14 +12730,14 @@ impl DeleteTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTagFault" => {
-                        return RusotoError::Service(DeleteTagsError::InvalidTagFault(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(DeleteTagsError::InvalidTagFault(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "ResourceNotFoundFault" => {
                         return RusotoError::Service(DeleteTagsError::ResourceNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12826,14 +12828,14 @@ impl DescribeClusterDbRevisionsError {
                             DescribeClusterDbRevisionsError::ClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(
                             DescribeClusterDbRevisionsError::InvalidClusterStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12887,14 +12889,14 @@ impl DescribeClusterParameterGroupsError {
                             DescribeClusterParameterGroupsError::ClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(
                             DescribeClusterParameterGroupsError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12946,7 +12948,7 @@ impl DescribeClusterParametersError {
                             DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12999,14 +13001,14 @@ impl DescribeClusterSecurityGroupsError {
                             DescribeClusterSecurityGroupsError::ClusterSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(
                             DescribeClusterSecurityGroupsError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13062,19 +13064,21 @@ impl DescribeClusterSnapshotsError {
                             DescribeClusterSnapshotsError::ClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ClusterSnapshotNotFound" => {
                         return RusotoError::Service(
                             DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
-                        return RusotoError::Service(DescribeClusterSnapshotsError::InvalidTagFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DescribeClusterSnapshotsError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -13129,14 +13133,14 @@ impl DescribeClusterSubnetGroupsError {
                             DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(
                             DescribeClusterSubnetGroupsError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13188,14 +13192,14 @@ impl DescribeClusterTracksError {
                             DescribeClusterTracksError::InvalidClusterTrackFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "UnauthorizedOperation" => {
                         return RusotoError::Service(
                             DescribeClusterTracksError::UnauthorizedOperation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13282,12 +13286,12 @@ impl DescribeClustersError {
                     "ClusterNotFound" => {
                         return RusotoError::Service(DescribeClustersError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(DescribeClustersError::InvalidTagFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13417,14 +13421,14 @@ impl DescribeEventSubscriptionsError {
                             DescribeEventSubscriptionsError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13515,14 +13519,14 @@ impl DescribeHsmClientCertificatesError {
                             DescribeHsmClientCertificatesError::HsmClientCertificateNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(
                             DescribeHsmClientCertificatesError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13576,14 +13580,14 @@ impl DescribeHsmConfigurationsError {
                             DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidTagFault" => {
                         return RusotoError::Service(
                             DescribeHsmConfigurationsError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13633,7 +13637,7 @@ impl DescribeLoggingStatusError {
                             DescribeLoggingStatusError::ClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13727,21 +13731,21 @@ impl DescribeReservedNodeOfferingsError {
                             DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeOfferingNotFound" => {
                         return RusotoError::Service(
                             DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "UnsupportedOperation" => {
                         return RusotoError::Service(
                             DescribeReservedNodeOfferingsError::UnsupportedOperationFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13798,14 +13802,14 @@ impl DescribeReservedNodesError {
                             DescribeReservedNodesError::DependentServiceUnavailableFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeNotFound" => {
                         return RusotoError::Service(
                             DescribeReservedNodesError::ReservedNodeNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13855,12 +13859,12 @@ impl DescribeResizeError {
                     "ClusterNotFound" => {
                         return RusotoError::Service(DescribeResizeError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResizeNotFound" => {
                         return RusotoError::Service(DescribeResizeError::ResizeNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13914,14 +13918,14 @@ impl DescribeSnapshotCopyGrantsError {
                             DescribeSnapshotCopyGrantsError::InvalidTagFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotCopyGrantNotFoundFault" => {
                         return RusotoError::Service(
                             DescribeSnapshotCopyGrantsError::SnapshotCopyGrantNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14049,14 +14053,14 @@ impl DescribeTableRestoreStatusError {
                             DescribeTableRestoreStatusError::ClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TableRestoreNotFoundFault" => {
                         return RusotoError::Service(
                             DescribeTableRestoreStatusError::TableRestoreNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14106,12 +14110,12 @@ impl DescribeTagsError {
                     "InvalidTagFault" => {
                         return RusotoError::Service(DescribeTagsError::InvalidTagFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFoundFault" => {
                         return RusotoError::Service(DescribeTagsError::ResourceNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14159,7 +14163,7 @@ impl DisableLoggingError {
                     "ClusterNotFound" => {
                         return RusotoError::Service(DisableLoggingError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14210,30 +14214,32 @@ impl DisableSnapshotCopyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return RusotoError::Service(DisableSnapshotCopyError::ClusterNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DisableSnapshotCopyError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(
                             DisableSnapshotCopyError::InvalidClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotCopyAlreadyDisabledFault" => {
                         return RusotoError::Service(
                             DisableSnapshotCopyError::SnapshotCopyAlreadyDisabledFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "UnauthorizedOperation" => {
                         return RusotoError::Service(
                             DisableSnapshotCopyError::UnauthorizedOperation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14291,29 +14297,29 @@ impl EnableLoggingError {
                     "BucketNotFoundFault" => {
                         return RusotoError::Service(EnableLoggingError::BucketNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ClusterNotFound" => {
                         return RusotoError::Service(EnableLoggingError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InsufficientS3BucketPolicyFault" => {
                         return RusotoError::Service(
                             EnableLoggingError::InsufficientS3BucketPolicyFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidS3BucketNameFault" => {
                         return RusotoError::Service(EnableLoggingError::InvalidS3BucketNameFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidS3KeyPrefixFault" => {
                         return RusotoError::Service(EnableLoggingError::InvalidS3KeyPrefixFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14384,73 +14390,75 @@ impl EnableSnapshotCopyError {
                     "ClusterNotFound" => {
                         return RusotoError::Service(EnableSnapshotCopyError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "CopyToRegionDisabledFault" => {
                         return RusotoError::Service(
                             EnableSnapshotCopyError::CopyToRegionDisabledFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return RusotoError::Service(
                             EnableSnapshotCopyError::DependentServiceRequestThrottlingFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "IncompatibleOrderableOptions" => {
                         return RusotoError::Service(
                             EnableSnapshotCopyError::IncompatibleOrderableOptions(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(
                             EnableSnapshotCopyError::InvalidClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidRetentionPeriodFault" => {
                         return RusotoError::Service(
                             EnableSnapshotCopyError::InvalidRetentionPeriodFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceededFault" => {
                         return RusotoError::Service(EnableSnapshotCopyError::LimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SnapshotCopyAlreadyEnabledFault" => {
                         return RusotoError::Service(
                             EnableSnapshotCopyError::SnapshotCopyAlreadyEnabledFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotCopyGrantNotFoundFault" => {
                         return RusotoError::Service(
                             EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "UnauthorizedOperation" => {
-                        return RusotoError::Service(EnableSnapshotCopyError::UnauthorizedOperation(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            EnableSnapshotCopyError::UnauthorizedOperation(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "UnknownSnapshotCopyRegionFault" => {
                         return RusotoError::Service(
                             EnableSnapshotCopyError::UnknownSnapshotCopyRegionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14511,14 +14519,14 @@ impl GetClusterCredentialsError {
                             GetClusterCredentialsError::ClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "UnsupportedOperation" => {
                         return RusotoError::Service(
                             GetClusterCredentialsError::UnsupportedOperationFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14580,28 +14588,28 @@ impl GetReservedNodeExchangeOfferingsError {
                             GetReservedNodeExchangeOfferingsError::DependentServiceUnavailableFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidReservedNodeState" => {
                         return RusotoError::Service(
                             GetReservedNodeExchangeOfferingsError::InvalidReservedNodeStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeAlreadyMigrated" => {
                         return RusotoError::Service(
                             GetReservedNodeExchangeOfferingsError::ReservedNodeAlreadyMigratedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeNotFound" => {
                         return RusotoError::Service(
                             GetReservedNodeExchangeOfferingsError::ReservedNodeNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeOfferingNotFound" => return RusotoError::Service(
                         GetReservedNodeExchangeOfferingsError::ReservedNodeOfferingNotFoundFault(
@@ -14613,7 +14621,7 @@ impl GetReservedNodeExchangeOfferingsError {
                             GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14709,117 +14717,117 @@ impl ModifyClusterError {
                     "ClusterAlreadyExists" => {
                         return RusotoError::Service(ModifyClusterError::ClusterAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ClusterNotFound" => {
                         return RusotoError::Service(ModifyClusterError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyClusterError::ClusterParameterGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ClusterSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyClusterError::ClusterSecurityGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return RusotoError::Service(
                             ModifyClusterError::DependentServiceRequestThrottlingFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "HsmClientCertificateNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyClusterError::HsmClientCertificateNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "HsmConfigurationNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyClusterError::HsmConfigurationNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientClusterCapacity" => {
                         return RusotoError::Service(
                             ModifyClusterError::InsufficientClusterCapacityFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterSecurityGroupState" => {
                         return RusotoError::Service(
                             ModifyClusterError::InvalidClusterSecurityGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(ModifyClusterError::InvalidClusterStateFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidClusterTrack" => {
                         return RusotoError::Service(ModifyClusterError::InvalidClusterTrackFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidElasticIpFault" => {
                         return RusotoError::Service(ModifyClusterError::InvalidElasticIpFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidRetentionPeriodFault" => {
                         return RusotoError::Service(
                             ModifyClusterError::InvalidRetentionPeriodFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceededFault" => {
                         return RusotoError::Service(ModifyClusterError::LimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NumberOfNodesPerClusterLimitExceeded" => {
                         return RusotoError::Service(
                             ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NumberOfNodesQuotaExceeded" => {
                         return RusotoError::Service(
                             ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TableLimitExceeded" => {
                         return RusotoError::Service(ModifyClusterError::TableLimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnauthorizedOperation" => {
                         return RusotoError::Service(ModifyClusterError::UnauthorizedOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnsupportedOptionFault" => {
                         return RusotoError::Service(ModifyClusterError::UnsupportedOptionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14890,21 +14898,21 @@ impl ModifyClusterDbRevisionError {
                             ModifyClusterDbRevisionError::ClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ClusterOnLatestRevision" => {
                         return RusotoError::Service(
                             ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(
                             ModifyClusterDbRevisionError::InvalidClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14957,14 +14965,14 @@ impl ModifyClusterIamRolesError {
                             ModifyClusterIamRolesError::ClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(
                             ModifyClusterIamRolesError::InvalidClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15014,7 +15022,7 @@ impl ModifyClusterMaintenanceError {
                             ModifyClusterMaintenanceError::ClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15067,7 +15075,7 @@ impl ModifyClusterParameterGroupError {
                             ModifyClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterParameterGroupState" => return RusotoError::Service(
                         ModifyClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
@@ -15130,21 +15138,21 @@ impl ModifyClusterSnapshotError {
                             ModifyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterSnapshotState" => {
                         return RusotoError::Service(
                             ModifyClusterSnapshotError::InvalidClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidRetentionPeriodFault" => {
                         return RusotoError::Service(
                             ModifyClusterSnapshotError::InvalidRetentionPeriodFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15257,40 +15265,40 @@ impl ModifyClusterSubnetGroupError {
                             ModifyClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterSubnetQuotaExceededFault" => {
                         return RusotoError::Service(
                             ModifyClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return RusotoError::Service(
                             ModifyClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(ModifyClusterSubnetGroupError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SubnetAlreadyInUse" => {
                         return RusotoError::Service(
                             ModifyClusterSubnetGroupError::SubnetAlreadyInUse(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "UnauthorizedOperation" => {
                         return RusotoError::Service(
                             ModifyClusterSubnetGroupError::UnauthorizedOperation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15362,63 +15370,63 @@ impl ModifyEventSubscriptionError {
                             ModifyEventSubscriptionError::InvalidSubscriptionStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SNSInvalidTopic" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SNSNoAuthorization" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SNSTopicArnNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SourceNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SourceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SubscriptionCategoryNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionEventIdNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SubscriptionSeverityNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15485,35 +15493,35 @@ impl ModifySnapshotCopyRetentionPeriodError {
                             ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(
                             ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidRetentionPeriodFault" => {
                         return RusotoError::Service(
                             ModifySnapshotCopyRetentionPeriodError::InvalidRetentionPeriodFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SnapshotCopyDisabledFault" => {
                         return RusotoError::Service(
                             ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "UnauthorizedOperation" => {
                         return RusotoError::Service(
                             ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15570,21 +15578,21 @@ impl ModifySnapshotScheduleError {
                             ModifySnapshotScheduleError::InvalidScheduleFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotScheduleNotFound" => {
                         return RusotoError::Service(
                             ModifySnapshotScheduleError::SnapshotScheduleNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SnapshotScheduleUpdateInProgress" => {
                         return RusotoError::Service(
                             ModifySnapshotScheduleError::SnapshotScheduleUpdateInProgressFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15643,28 +15651,28 @@ impl PurchaseReservedNodeOfferingError {
                             PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeOfferingNotFound" => {
                         return RusotoError::Service(
                             PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ReservedNodeQuotaExceeded" => {
                         return RusotoError::Service(
                             PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "UnsupportedOperation" => {
                         return RusotoError::Service(
                             PurchaseReservedNodeOfferingError::UnsupportedOperationFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15718,12 +15726,12 @@ impl RebootClusterError {
                     "ClusterNotFound" => {
                         return RusotoError::Service(RebootClusterError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(RebootClusterError::InvalidClusterStateFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15777,14 +15785,14 @@ impl ResetClusterParameterGroupError {
                             ResetClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterParameterGroupState" => {
                         return RusotoError::Service(
                             ResetClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15850,53 +15858,53 @@ impl ResizeClusterError {
                     "ClusterNotFound" => {
                         return RusotoError::Service(ResizeClusterError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InsufficientClusterCapacity" => {
                         return RusotoError::Service(
                             ResizeClusterError::InsufficientClusterCapacityFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(ResizeClusterError::InvalidClusterStateFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceededFault" => {
                         return RusotoError::Service(ResizeClusterError::LimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NumberOfNodesPerClusterLimitExceeded" => {
                         return RusotoError::Service(
                             ResizeClusterError::NumberOfNodesPerClusterLimitExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NumberOfNodesQuotaExceeded" => {
                         return RusotoError::Service(
                             ResizeClusterError::NumberOfNodesQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "UnauthorizedOperation" => {
                         return RusotoError::Service(ResizeClusterError::UnauthorizedOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnsupportedOperation" => {
                         return RusotoError::Service(ResizeClusterError::UnsupportedOperationFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnsupportedOptionFault" => {
                         return RusotoError::Service(ResizeClusterError::UnsupportedOptionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15999,131 +16007,133 @@ impl RestoreFromClusterSnapshotError {
                             RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterAlreadyExists" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterSnapshotNotFound" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ClusterSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::ClusterSubnetGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::DependentServiceRequestThrottlingFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "HsmClientCertificateNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::HsmClientCertificateNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "HsmConfigurationNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::HsmConfigurationNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InsufficientClusterCapacity" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterSnapshotState" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterSubnetGroupStateFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterTrack" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::InvalidClusterTrackFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidElasticIpFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::InvalidElasticIpFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidRestore" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::InvalidRestoreFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
-                        return RusotoError::Service(RestoreFromClusterSnapshotError::InvalidSubnet(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InvalidSubnet(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "LimitExceededFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::LimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NumberOfNodesPerClusterLimitExceeded" => return RusotoError::Service(
                         RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(
@@ -16135,21 +16145,21 @@ impl RestoreFromClusterSnapshotError {
                             RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SnapshotScheduleNotFound" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "UnauthorizedOperation" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::UnauthorizedOperation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16352,21 +16362,21 @@ impl RevokeSnapshotAccessError {
                             RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "AuthorizationNotFound" => {
                         return RusotoError::Service(
                             RevokeSnapshotAccessError::AuthorizationNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ClusterSnapshotNotFound" => {
                         return RusotoError::Service(
                             RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16417,23 +16427,25 @@ impl RotateEncryptionKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return RusotoError::Service(RotateEncryptionKeyError::ClusterNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            RotateEncryptionKeyError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return RusotoError::Service(
                             RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(
                             RotateEncryptionKeyError::InvalidClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17519,11 +17531,9 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateClusterSnapshotError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateClusterSnapshotError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18005,11 +18015,9 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteClusterSnapshotError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteClusterSnapshotError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18596,11 +18604,9 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeClusterTracksError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClusterTracksError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19055,11 +19061,9 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeLoggingStatusError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeLoggingStatusError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19209,11 +19213,9 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeReservedNodesError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeReservedNodesError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19774,11 +19776,9 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetClusterCredentialsError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetClusterCredentialsError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19985,11 +19985,9 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ModifyClusterIamRolesError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyClusterIamRolesError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20137,11 +20135,9 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ModifyClusterSnapshotError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyClusterSnapshotError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

@@ -1561,12 +1561,12 @@ impl AcceptQualificationRequestError {
                 "RequestError" => {
                     return RusotoError::Service(AcceptQualificationRequestError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(AcceptQualificationRequestError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1611,14 +1611,14 @@ impl ApproveAssignmentError {
 
             match *error_type {
                 "RequestError" => {
-                    return RusotoError::Service(ApproveAssignmentError::RequestError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ApproveAssignmentError::RequestError(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceFault" => {
-                    return RusotoError::Service(ApproveAssignmentError::ServiceFault(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ApproveAssignmentError::ServiceFault(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1669,14 +1669,14 @@ impl AssociateQualificationWithWorkerError {
                         AssociateQualificationWithWorkerError::RequestError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(
                         AssociateQualificationWithWorkerError::ServiceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1727,14 +1727,14 @@ impl CreateAdditionalAssignmentsForHITError {
                         CreateAdditionalAssignmentsForHITError::RequestError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(
                         CreateAdditionalAssignmentsForHITError::ServiceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1781,12 +1781,12 @@ impl CreateHITError {
                 "RequestError" => {
                     return RusotoError::Service(CreateHITError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(CreateHITError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1833,12 +1833,12 @@ impl CreateHITTypeError {
                 "RequestError" => {
                     return RusotoError::Service(CreateHITTypeError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(CreateHITTypeError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1885,12 +1885,12 @@ impl CreateHITWithHITTypeError {
                 "RequestError" => {
                     return RusotoError::Service(CreateHITWithHITTypeError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(CreateHITWithHITTypeError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1937,12 +1937,12 @@ impl CreateQualificationTypeError {
                 "RequestError" => {
                     return RusotoError::Service(CreateQualificationTypeError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(CreateQualificationTypeError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1987,14 +1987,14 @@ impl CreateWorkerBlockError {
 
             match *error_type {
                 "RequestError" => {
-                    return RusotoError::Service(CreateWorkerBlockError::RequestError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateWorkerBlockError::RequestError(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceFault" => {
-                    return RusotoError::Service(CreateWorkerBlockError::ServiceFault(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateWorkerBlockError::ServiceFault(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2041,12 +2041,12 @@ impl DeleteHITError {
                 "RequestError" => {
                     return RusotoError::Service(DeleteHITError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(DeleteHITError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2093,12 +2093,12 @@ impl DeleteQualificationTypeError {
                 "RequestError" => {
                     return RusotoError::Service(DeleteQualificationTypeError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(DeleteQualificationTypeError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2143,14 +2143,14 @@ impl DeleteWorkerBlockError {
 
             match *error_type {
                 "RequestError" => {
-                    return RusotoError::Service(DeleteWorkerBlockError::RequestError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteWorkerBlockError::RequestError(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceFault" => {
-                    return RusotoError::Service(DeleteWorkerBlockError::ServiceFault(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteWorkerBlockError::ServiceFault(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2201,14 +2201,14 @@ impl DisassociateQualificationFromWorkerError {
                         DisassociateQualificationFromWorkerError::RequestError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(
                         DisassociateQualificationFromWorkerError::ServiceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2253,14 +2253,14 @@ impl GetAccountBalanceError {
 
             match *error_type {
                 "RequestError" => {
-                    return RusotoError::Service(GetAccountBalanceError::RequestError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetAccountBalanceError::RequestError(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceFault" => {
-                    return RusotoError::Service(GetAccountBalanceError::ServiceFault(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetAccountBalanceError::ServiceFault(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2307,12 +2307,12 @@ impl GetAssignmentError {
                 "RequestError" => {
                     return RusotoError::Service(GetAssignmentError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(GetAssignmentError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2359,12 +2359,12 @@ impl GetFileUploadURLError {
                 "RequestError" => {
                     return RusotoError::Service(GetFileUploadURLError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(GetFileUploadURLError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2411,12 +2411,12 @@ impl GetHITError {
                 "RequestError" => {
                     return RusotoError::Service(GetHITError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(GetHITError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2463,12 +2463,12 @@ impl GetQualificationScoreError {
                 "RequestError" => {
                     return RusotoError::Service(GetQualificationScoreError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(GetQualificationScoreError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2515,12 +2515,12 @@ impl GetQualificationTypeError {
                 "RequestError" => {
                     return RusotoError::Service(GetQualificationTypeError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(GetQualificationTypeError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2567,12 +2567,12 @@ impl ListAssignmentsForHITError {
                 "RequestError" => {
                     return RusotoError::Service(ListAssignmentsForHITError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(ListAssignmentsForHITError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2617,14 +2617,14 @@ impl ListBonusPaymentsError {
 
             match *error_type {
                 "RequestError" => {
-                    return RusotoError::Service(ListBonusPaymentsError::RequestError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListBonusPaymentsError::RequestError(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceFault" => {
-                    return RusotoError::Service(ListBonusPaymentsError::ServiceFault(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListBonusPaymentsError::ServiceFault(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2671,12 +2671,12 @@ impl ListHITsError {
                 "RequestError" => {
                     return RusotoError::Service(ListHITsError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(ListHITsError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2725,12 +2725,12 @@ impl ListHITsForQualificationTypeError {
                 "RequestError" => {
                     return RusotoError::Service(ListHITsForQualificationTypeError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(ListHITsForQualificationTypeError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2777,12 +2777,12 @@ impl ListQualificationRequestsError {
                 "RequestError" => {
                     return RusotoError::Service(ListQualificationRequestsError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(ListQualificationRequestsError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2829,12 +2829,12 @@ impl ListQualificationTypesError {
                 "RequestError" => {
                     return RusotoError::Service(ListQualificationTypesError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(ListQualificationTypesError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2883,12 +2883,12 @@ impl ListReviewPolicyResultsForHITError {
                 "RequestError" => {
                     return RusotoError::Service(ListReviewPolicyResultsForHITError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(ListReviewPolicyResultsForHITError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2935,12 +2935,12 @@ impl ListReviewableHITsError {
                 "RequestError" => {
                     return RusotoError::Service(ListReviewableHITsError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(ListReviewableHITsError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2987,12 +2987,12 @@ impl ListWorkerBlocksError {
                 "RequestError" => {
                     return RusotoError::Service(ListWorkerBlocksError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(ListWorkerBlocksError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3043,14 +3043,14 @@ impl ListWorkersWithQualificationTypeError {
                         ListWorkersWithQualificationTypeError::RequestError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(
                         ListWorkersWithQualificationTypeError::ServiceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3097,12 +3097,12 @@ impl NotifyWorkersError {
                 "RequestError" => {
                     return RusotoError::Service(NotifyWorkersError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(NotifyWorkersError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3149,12 +3149,12 @@ impl RejectAssignmentError {
                 "RequestError" => {
                     return RusotoError::Service(RejectAssignmentError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(RejectAssignmentError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3203,12 +3203,12 @@ impl RejectQualificationRequestError {
                 "RequestError" => {
                     return RusotoError::Service(RejectQualificationRequestError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(RejectQualificationRequestError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3255,12 +3255,12 @@ impl SendBonusError {
                 "RequestError" => {
                     return RusotoError::Service(SendBonusError::RequestError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(SendBonusError::ServiceFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3307,12 +3307,12 @@ impl SendTestEventNotificationError {
                 "RequestError" => {
                     return RusotoError::Service(SendTestEventNotificationError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(SendTestEventNotificationError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3359,12 +3359,12 @@ impl UpdateExpirationForHITError {
                 "RequestError" => {
                     return RusotoError::Service(UpdateExpirationForHITError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(UpdateExpirationForHITError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3411,12 +3411,12 @@ impl UpdateHITReviewStatusError {
                 "RequestError" => {
                     return RusotoError::Service(UpdateHITReviewStatusError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(UpdateHITReviewStatusError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3463,12 +3463,12 @@ impl UpdateHITTypeOfHITError {
                 "RequestError" => {
                     return RusotoError::Service(UpdateHITTypeOfHITError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(UpdateHITTypeOfHITError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3517,12 +3517,12 @@ impl UpdateNotificationSettingsError {
                 "RequestError" => {
                     return RusotoError::Service(UpdateNotificationSettingsError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(UpdateNotificationSettingsError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3569,12 +3569,12 @@ impl UpdateQualificationTypeError {
                 "RequestError" => {
                     return RusotoError::Service(UpdateQualificationTypeError::RequestError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFault" => {
                     return RusotoError::Service(UpdateQualificationTypeError::ServiceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

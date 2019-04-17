@@ -1005,27 +1005,27 @@ impl CreateAppError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateAppError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DependentServiceFailureException" => {
                     return RusotoError::Service(CreateAppError::DependentServiceFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateAppError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAppError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateAppError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1097,32 +1097,32 @@ impl CreateBranchError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateBranchError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DependentServiceFailureException" => {
                     return RusotoError::Service(CreateBranchError::DependentServiceFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateBranchError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateBranchError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateBranchError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateBranchError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1195,34 +1195,34 @@ impl CreateDomainAssociationError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDomainAssociationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DependentServiceFailureException" => {
                     return RusotoError::Service(
                         CreateDomainAssociationError::DependentServiceFailure(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDomainAssociationError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateDomainAssociationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateDomainAssociationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateDomainAssociationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1293,27 +1293,27 @@ impl DeleteAppError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteAppError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DependentServiceFailureException" => {
                     return RusotoError::Service(DeleteAppError::DependentServiceFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteAppError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteAppError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteAppError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1383,27 +1383,27 @@ impl DeleteBranchError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBranchError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DependentServiceFailureException" => {
                     return RusotoError::Service(DeleteBranchError::DependentServiceFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteBranchError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBranchError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteBranchError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1473,29 +1473,29 @@ impl DeleteDomainAssociationError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDomainAssociationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DependentServiceFailureException" => {
                     return RusotoError::Service(
                         DeleteDomainAssociationError::DependentServiceFailure(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDomainAssociationError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteDomainAssociationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteDomainAssociationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1565,27 +1565,27 @@ impl DeleteJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteJobError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteJobError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteJobError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteJobError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteJobError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1653,20 +1653,20 @@ impl GetAppError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAppError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetAppError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetAppError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetAppError::NotFound(String::from(error_message)))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetAppError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1733,22 +1733,22 @@ impl GetBranchError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBranchError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetBranchError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetBranchError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetBranchError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1815,22 +1815,22 @@ impl GetDomainAssociationError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDomainAssociationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetDomainAssociationError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetDomainAssociationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetDomainAssociationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1899,25 +1899,25 @@ impl GetJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetJobError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetJobError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetJobError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetJobError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetJobError::NotFound(String::from(error_message)))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetJobError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1983,17 +1983,17 @@ impl ListAppsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListAppsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListAppsError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListAppsError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2057,17 +2057,17 @@ impl ListBranchesError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListBranchesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListBranchesError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListBranchesError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2131,17 +2131,17 @@ impl ListDomainAssociationsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDomainAssociationsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDomainAssociationsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListDomainAssociationsError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2207,22 +2207,22 @@ impl ListJobsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListJobsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListJobsError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListJobsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListJobsError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2291,27 +2291,27 @@ impl StartJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(StartJobError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(StartJobError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartJobError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StartJobError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(StartJobError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2381,25 +2381,27 @@ impl StopJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(StopJobError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(StopJobError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StopJobError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StopJobError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(StopJobError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(StopJobError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2467,22 +2469,22 @@ impl UpdateAppError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateAppError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateAppError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateAppError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateAppError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2551,27 +2553,27 @@ impl UpdateBranchError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateBranchError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DependentServiceFailureException" => {
                     return RusotoError::Service(UpdateBranchError::DependentServiceFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateBranchError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateBranchError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateBranchError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2641,29 +2643,29 @@ impl UpdateDomainAssociationError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDomainAssociationError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DependentServiceFailureException" => {
                     return RusotoError::Service(
                         UpdateDomainAssociationError::DependentServiceFailure(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDomainAssociationError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateDomainAssociationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateDomainAssociationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

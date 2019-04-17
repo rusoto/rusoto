@@ -203,27 +203,27 @@ impl DescribeServicesError {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(DescribeServicesError::ExpiredNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeServicesError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeServicesError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeServicesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeServicesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeServicesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -279,27 +279,27 @@ impl GetAttributeValuesError {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(GetAttributeValuesError::ExpiredNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(GetAttributeValuesError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetAttributeValuesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetAttributeValuesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetAttributeValuesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -355,27 +355,27 @@ impl GetProductsError {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(GetProductsError::ExpiredNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(GetProductsError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetProductsError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetProductsError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetProductsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

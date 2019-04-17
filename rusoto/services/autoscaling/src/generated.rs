@@ -7241,12 +7241,14 @@ impl AttachInstancesError {
                     "ResourceContention" => {
                         return RusotoError::Service(AttachInstancesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(AttachInstancesError::ServiceLinkedRoleFailure(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            AttachInstancesError::ServiceLinkedRoleFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -7300,14 +7302,14 @@ impl AttachLoadBalancerTargetGroupsError {
                             AttachLoadBalancerTargetGroupsError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ServiceLinkedRoleFailure" => {
                         return RusotoError::Service(
                             AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7359,14 +7361,14 @@ impl AttachLoadBalancersError {
                             AttachLoadBalancersError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceLinkedRoleFailure" => {
                         return RusotoError::Service(
                             AttachLoadBalancersError::ServiceLinkedRoleFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7418,7 +7420,7 @@ impl BatchDeleteScheduledActionError {
                             BatchDeleteScheduledActionError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7473,21 +7475,21 @@ impl BatchPutScheduledUpdateGroupActionError {
                             BatchPutScheduledUpdateGroupActionError::AlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             BatchPutScheduledUpdateGroupActionError::LimitExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             BatchPutScheduledUpdateGroupActionError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7538,7 +7540,7 @@ impl CompleteLifecycleActionError {
                             CompleteLifecycleActionError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7593,28 +7595,28 @@ impl CreateAutoScalingGroupError {
                             CreateAutoScalingGroupError::AlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             CreateAutoScalingGroupError::LimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             CreateAutoScalingGroupError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceLinkedRoleFailure" => {
                         return RusotoError::Service(
                             CreateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7670,21 +7672,21 @@ impl CreateLaunchConfigurationError {
                             CreateLaunchConfigurationError::AlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             CreateLaunchConfigurationError::LimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             CreateLaunchConfigurationError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7739,24 +7741,24 @@ impl CreateOrUpdateTagsError {
                     "AlreadyExists" => {
                         return RusotoError::Service(CreateOrUpdateTagsError::AlreadyExistsFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateOrUpdateTagsError::LimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             CreateOrUpdateTagsError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(CreateOrUpdateTagsError::ResourceInUseFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7812,21 +7814,21 @@ impl DeleteAutoScalingGroupError {
                             DeleteAutoScalingGroupError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(
                             DeleteAutoScalingGroupError::ResourceInUseFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ScalingActivityInProgress" => {
                         return RusotoError::Service(
                             DeleteAutoScalingGroupError::ScalingActivityInProgressFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7879,14 +7881,14 @@ impl DeleteLaunchConfigurationError {
                             DeleteLaunchConfigurationError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(
                             DeleteLaunchConfigurationError::ResourceInUseFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7936,7 +7938,7 @@ impl DeleteLifecycleHookError {
                             DeleteLifecycleHookError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7987,7 +7989,7 @@ impl DeleteNotificationConfigurationError {
                             DeleteNotificationConfigurationError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8036,12 +8038,12 @@ impl DeletePolicyError {
                     "ResourceContention" => {
                         return RusotoError::Service(DeletePolicyError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceLinkedRoleFailure" => {
                         return RusotoError::Service(DeletePolicyError::ServiceLinkedRoleFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8091,7 +8093,7 @@ impl DeleteScheduledActionError {
                             DeleteScheduledActionError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8140,12 +8142,12 @@ impl DeleteTagsError {
                     "ResourceContention" => {
                         return RusotoError::Service(DeleteTagsError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(DeleteTagsError::ResourceInUseFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8195,7 +8197,7 @@ impl DescribeAccountLimitsError {
                             DescribeAccountLimitsError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8244,7 +8246,7 @@ impl DescribeAdjustmentTypesError {
                             DescribeAdjustmentTypesError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8295,14 +8297,14 @@ impl DescribeAutoScalingGroupsError {
                             DescribeAutoScalingGroupsError::InvalidNextToken(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             DescribeAutoScalingGroupsError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8356,14 +8358,14 @@ impl DescribeAutoScalingInstancesError {
                             DescribeAutoScalingInstancesError::InvalidNextToken(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             DescribeAutoScalingInstancesError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8415,7 +8417,7 @@ impl DescribeAutoScalingNotificationTypesError {
                             DescribeAutoScalingNotificationTypesError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8468,14 +8470,14 @@ impl DescribeLaunchConfigurationsError {
                             DescribeLaunchConfigurationsError::InvalidNextToken(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             DescribeLaunchConfigurationsError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8527,7 +8529,7 @@ impl DescribeLifecycleHookTypesError {
                             DescribeLifecycleHookTypesError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8576,7 +8578,7 @@ impl DescribeLifecycleHooksError {
                             DescribeLifecycleHooksError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8627,7 +8629,7 @@ impl DescribeLoadBalancerTargetGroupsError {
                             DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8676,7 +8678,7 @@ impl DescribeLoadBalancersError {
                             DescribeLoadBalancersError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8727,7 +8729,7 @@ impl DescribeMetricCollectionTypesError {
                             DescribeMetricCollectionTypesError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8780,14 +8782,14 @@ impl DescribeNotificationConfigurationsError {
                             DescribeNotificationConfigurationsError::InvalidNextToken(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             DescribeNotificationConfigurationsError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8839,19 +8841,21 @@ impl DescribePoliciesError {
                     "InvalidNextToken" => {
                         return RusotoError::Service(DescribePoliciesError::InvalidNextToken(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceContention" => {
-                        return RusotoError::Service(DescribePoliciesError::ResourceContentionFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DescribePoliciesError::ResourceContentionFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ServiceLinkedRoleFailure" => {
                         return RusotoError::Service(
                             DescribePoliciesError::ServiceLinkedRoleFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8904,14 +8908,14 @@ impl DescribeScalingActivitiesError {
                             DescribeScalingActivitiesError::InvalidNextToken(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             DescribeScalingActivitiesError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8963,7 +8967,7 @@ impl DescribeScalingProcessTypesError {
                             DescribeScalingProcessTypesError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9014,14 +9018,14 @@ impl DescribeScheduledActionsError {
                             DescribeScheduledActionsError::InvalidNextToken(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             DescribeScheduledActionsError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9071,12 +9075,12 @@ impl DescribeTagsError {
                     "InvalidNextToken" => {
                         return RusotoError::Service(DescribeTagsError::InvalidNextToken(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(DescribeTagsError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9128,7 +9132,7 @@ impl DescribeTerminationPolicyTypesError {
                             DescribeTerminationPolicyTypesError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9175,7 +9179,7 @@ impl DetachInstancesError {
                     "ResourceContention" => {
                         return RusotoError::Service(DetachInstancesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9226,7 +9230,7 @@ impl DetachLoadBalancerTargetGroupsError {
                             DetachLoadBalancerTargetGroupsError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9275,7 +9279,7 @@ impl DetachLoadBalancersError {
                             DetachLoadBalancersError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9324,7 +9328,7 @@ impl DisableMetricsCollectionError {
                             DisableMetricsCollectionError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9373,7 +9377,7 @@ impl EnableMetricsCollectionError {
                             EnableMetricsCollectionError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9420,7 +9424,7 @@ impl EnterStandbyError {
                     "ResourceContention" => {
                         return RusotoError::Service(EnterStandbyError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9469,14 +9473,14 @@ impl ExecutePolicyError {
                     "ResourceContention" => {
                         return RusotoError::Service(ExecutePolicyError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ScalingActivityInProgress" => {
                         return RusotoError::Service(
                             ExecutePolicyError::ScalingActivityInProgressFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9524,7 +9528,7 @@ impl ExitStandbyError {
                     "ResourceContention" => {
                         return RusotoError::Service(ExitStandbyError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9573,12 +9577,14 @@ impl PutLifecycleHookError {
                     "LimitExceeded" => {
                         return RusotoError::Service(PutLifecycleHookError::LimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceContention" => {
-                        return RusotoError::Service(PutLifecycleHookError::ResourceContentionFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            PutLifecycleHookError::ResourceContentionFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -9634,21 +9640,21 @@ impl PutNotificationConfigurationError {
                             PutNotificationConfigurationError::LimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             PutNotificationConfigurationError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ServiceLinkedRoleFailure" => {
                         return RusotoError::Service(
                             PutNotificationConfigurationError::ServiceLinkedRoleFailure(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9701,19 +9707,21 @@ impl PutScalingPolicyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(PutScalingPolicyError::LimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceContention" => {
-                        return RusotoError::Service(PutScalingPolicyError::ResourceContentionFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            PutScalingPolicyError::ResourceContentionFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ServiceLinkedRoleFailure" => {
                         return RusotoError::Service(
                             PutScalingPolicyError::ServiceLinkedRoleFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9770,21 +9778,21 @@ impl PutScheduledUpdateGroupActionError {
                             PutScheduledUpdateGroupActionError::AlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             PutScheduledUpdateGroupActionError::LimitExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             PutScheduledUpdateGroupActionError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9837,7 +9845,7 @@ impl RecordLifecycleActionHeartbeatError {
                             RecordLifecycleActionHeartbeatError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9886,12 +9894,12 @@ impl ResumeProcessesError {
                     "ResourceContention" => {
                         return RusotoError::Service(ResumeProcessesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(ResumeProcessesError::ResourceInUseFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9943,14 +9951,14 @@ impl SetDesiredCapacityError {
                             SetDesiredCapacityError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ScalingActivityInProgress" => {
                         return RusotoError::Service(
                             SetDesiredCapacityError::ScalingActivityInProgressFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10000,7 +10008,7 @@ impl SetInstanceHealthError {
                             SetInstanceHealthError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10047,16 +10055,18 @@ impl SetInstanceProtectionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return RusotoError::Service(SetInstanceProtectionError::LimitExceededFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            SetInstanceProtectionError::LimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ResourceContention" => {
                         return RusotoError::Service(
                             SetInstanceProtectionError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10104,14 +10114,16 @@ impl SuspendProcessesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ResourceContention" => {
-                        return RusotoError::Service(SuspendProcessesError::ResourceContentionFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            SuspendProcessesError::ResourceContentionFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(SuspendProcessesError::ResourceInUseFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10165,7 +10177,7 @@ impl TerminateInstanceInAutoScalingGroupError {
                             TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ScalingActivityInProgress" => return RusotoError::Service(
                         TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(
@@ -10226,21 +10238,21 @@ impl UpdateAutoScalingGroupError {
                             UpdateAutoScalingGroupError::ResourceContentionFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ScalingActivityInProgress" => {
                         return RusotoError::Service(
                             UpdateAutoScalingGroupError::ScalingActivityInProgressFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ServiceLinkedRoleFailure" => {
                         return RusotoError::Service(
                             UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11176,11 +11188,9 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteScheduledActionError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteScheduledActionError::from_response(response))
+                }));
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -11231,11 +11241,9 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeAccountLimitsError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAccountLimitsError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11688,11 +11696,9 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeLoadBalancersError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeLoadBalancersError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12787,11 +12793,9 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SetInstanceProtectionError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(SetInstanceProtectionError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

@@ -459,27 +459,27 @@ impl CreateGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGroupError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateGroupError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateGroupError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(CreateGroupError::MethodNotAllowed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateGroupError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -551,32 +551,32 @@ impl DeleteGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteGroupError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteGroupError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteGroupError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(DeleteGroupError::MethodNotAllowed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteGroupError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteGroupError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -649,32 +649,32 @@ impl GetGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(GetGroupError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(GetGroupError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(GetGroupError::MethodNotAllowed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetGroupError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetGroupError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -747,32 +747,32 @@ impl GetGroupQueryError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupQueryError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(GetGroupQueryError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(GetGroupQueryError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MethodNotAllowedException" => {
-                    return RusotoError::Service(GetGroupQueryError::MethodNotAllowed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetGroupQueryError::MethodNotAllowed(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetGroupQueryError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetGroupQueryError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -845,30 +845,32 @@ impl GetTagsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetTagsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(GetTagsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(GetTagsError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(GetTagsError::MethodNotAllowed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetTagsError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetTagsError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetTagsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -943,37 +945,37 @@ impl ListGroupResourcesError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGroupResourcesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListGroupResourcesError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListGroupResourcesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(ListGroupResourcesError::MethodNotAllowed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListGroupResourcesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListGroupResourcesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListGroupResourcesError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1045,27 +1047,27 @@ impl ListGroupsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGroupsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListGroupsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(ListGroupsError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListGroupsError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(ListGroupsError::MethodNotAllowed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListGroupsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1137,32 +1139,32 @@ impl SearchResourcesError {
                 "BadRequestException" => {
                     return RusotoError::Service(SearchResourcesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(SearchResourcesError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(SearchResourcesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(SearchResourcesError::MethodNotAllowed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(SearchResourcesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(SearchResourcesError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1233,28 +1235,28 @@ impl TagError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(TagError::BadRequest(String::from(error_message)));
+                    return RusotoError::Service(TagError::BadRequest(String::from(error_message)))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(TagError::Forbidden(String::from(error_message)));
+                    return RusotoError::Service(TagError::Forbidden(String::from(error_message)))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(TagError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(TagError::MethodNotAllowed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(TagError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(TagError::NotFound(String::from(error_message)))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(TagError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1325,28 +1327,30 @@ impl UntagError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(UntagError::BadRequest(String::from(error_message)));
+                    return RusotoError::Service(UntagError::BadRequest(String::from(
+                        error_message,
+                    )))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(UntagError::Forbidden(String::from(error_message)));
+                    return RusotoError::Service(UntagError::Forbidden(String::from(error_message)))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UntagError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(UntagError::MethodNotAllowed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UntagError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(UntagError::NotFound(String::from(error_message)))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UntagError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1419,32 +1423,32 @@ impl UpdateGroupError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGroupError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateGroupError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateGroupError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(UpdateGroupError::MethodNotAllowed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateGroupError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateGroupError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1517,32 +1521,32 @@ impl UpdateGroupQueryError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGroupQueryError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateGroupQueryError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateGroupQueryError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(UpdateGroupQueryError::MethodNotAllowed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateGroupQueryError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateGroupQueryError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

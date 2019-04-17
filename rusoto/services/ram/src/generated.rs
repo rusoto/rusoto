@@ -772,54 +772,56 @@ impl AcceptResourceShareInvitationError {
                 "MalformedArnException" => {
                     return RusotoError::Service(AcceptResourceShareInvitationError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         AcceptResourceShareInvitationError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceShareInvitationAlreadyAcceptedException" => {
                     return RusotoError::Service(
                         AcceptResourceShareInvitationError::ResourceShareInvitationAlreadyAccepted(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceShareInvitationAlreadyRejectedException" => {
                     return RusotoError::Service(
                         AcceptResourceShareInvitationError::ResourceShareInvitationAlreadyRejected(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceShareInvitationArnNotFoundException" => {
                     return RusotoError::Service(
                         AcceptResourceShareInvitationError::ResourceShareInvitationArnNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceShareInvitationExpiredException" => {
                     return RusotoError::Service(
                         AcceptResourceShareInvitationError::ResourceShareInvitationExpired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ServerInternalException" => {
-                    return RusotoError::Service(AcceptResourceShareInvitationError::ServerInternal(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AcceptResourceShareInvitationError::ServerInternal(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         AcceptResourceShareInvitationError::ServiceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -910,56 +912,58 @@ impl AssociateResourceShareError {
                         AssociateResourceShareError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(AssociateResourceShareError::InvalidClientToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AssociateResourceShareError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStateTransitionException" => {
                     return RusotoError::Service(
                         AssociateResourceShareError::InvalidStateTransition(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(AssociateResourceShareError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(AssociateResourceShareError::OperationNotPermitted(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AssociateResourceShareError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceShareLimitExceededException" => {
                     return RusotoError::Service(
                         AssociateResourceShareError::ResourceShareLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(AssociateResourceShareError::ServerInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(AssociateResourceShareError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceException" => {
                     return RusotoError::Service(AssociateResourceShareError::UnknownResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1046,54 +1050,54 @@ impl CreateResourceShareError {
                         CreateResourceShareError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(CreateResourceShareError::InvalidClientToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateResourceShareError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStateTransitionException" => {
                     return RusotoError::Service(CreateResourceShareError::InvalidStateTransition(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(CreateResourceShareError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateResourceShareError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceShareLimitExceededException" => {
                     return RusotoError::Service(
                         CreateResourceShareError::ResourceShareLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(CreateResourceShareError::ServerInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateResourceShareError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceException" => {
                     return RusotoError::Service(CreateResourceShareError::UnknownResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1178,47 +1182,47 @@ impl DeleteResourceShareError {
                         DeleteResourceShareError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(DeleteResourceShareError::InvalidClientToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteResourceShareError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStateTransitionException" => {
                     return RusotoError::Service(DeleteResourceShareError::InvalidStateTransition(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(DeleteResourceShareError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DeleteResourceShareError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(DeleteResourceShareError::ServerInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteResourceShareError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceException" => {
                     return RusotoError::Service(DeleteResourceShareError::UnknownResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1304,58 +1308,62 @@ impl DisassociateResourceShareError {
                         DisassociateResourceShareError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClientTokenException" => {
-                    return RusotoError::Service(DisassociateResourceShareError::InvalidClientToken(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DisassociateResourceShareError::InvalidClientToken(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DisassociateResourceShareError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStateTransitionException" => {
                     return RusotoError::Service(
                         DisassociateResourceShareError::InvalidStateTransition(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(DisassociateResourceShareError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         DisassociateResourceShareError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceShareLimitExceededException" => {
                     return RusotoError::Service(
                         DisassociateResourceShareError::ResourceShareLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(DisassociateResourceShareError::ServerInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(DisassociateResourceShareError::ServiceUnavailable(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DisassociateResourceShareError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UnknownResourceException" => {
                     return RusotoError::Service(DisassociateResourceShareError::UnknownResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1430,21 +1438,21 @@ impl EnableSharingWithAwsOrganizationError {
                         EnableSharingWithAwsOrganizationError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(
                         EnableSharingWithAwsOrganizationError::ServerInternal(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         EnableSharingWithAwsOrganizationError::ServiceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1512,27 +1520,27 @@ impl GetResourcePoliciesError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetResourcePoliciesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetResourcePoliciesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(GetResourcePoliciesError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(GetResourcePoliciesError::ServerInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetResourcePoliciesError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1610,43 +1618,45 @@ impl GetResourceShareAssociationsError {
                         GetResourceShareAssociationsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         GetResourceShareAssociationsError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(GetResourceShareAssociationsError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         GetResourceShareAssociationsError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(GetResourceShareAssociationsError::ServerInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         GetResourceShareAssociationsError::ServiceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceException" => {
-                    return RusotoError::Service(GetResourceShareAssociationsError::UnknownResource(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetResourceShareAssociationsError::UnknownResource(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1726,41 +1736,45 @@ impl GetResourceShareInvitationsError {
                         GetResourceShareInvitationsError::InvalidMaxResults(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(GetResourceShareInvitationsError::InvalidNextToken(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetResourceShareInvitationsError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetResourceShareInvitationsError::InvalidParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetResourceShareInvitationsError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(GetResourceShareInvitationsError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceShareInvitationArnNotFoundException" => {
                     return RusotoError::Service(
                         GetResourceShareInvitationsError::ResourceShareInvitationArnNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(GetResourceShareInvitationsError::ServerInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         GetResourceShareInvitationsError::ServiceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1836,32 +1850,32 @@ impl GetResourceSharesError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetResourceSharesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetResourceSharesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MalformedArnException" => {
-                    return RusotoError::Service(GetResourceSharesError::MalformedArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetResourceSharesError::MalformedArn(
+                        String::from(error_message),
+                    ))
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(GetResourceSharesError::ServerInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetResourceSharesError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceException" => {
                     return RusotoError::Service(GetResourceSharesError::UnknownResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1934,32 +1948,32 @@ impl ListPrincipalsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListPrincipalsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListPrincipalsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(ListPrincipalsError::MalformedArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(ListPrincipalsError::ServerInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListPrincipalsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceException" => {
-                    return RusotoError::Service(ListPrincipalsError::UnknownResource(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListPrincipalsError::UnknownResource(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2032,39 +2046,39 @@ impl ListResourcesError {
 
             match error_type {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListResourcesError::InvalidNextToken(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListResourcesError::InvalidNextToken(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListResourcesError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListResourcesError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidResourceTypeException" => {
                     return RusotoError::Service(ListResourcesError::InvalidResourceType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(ListResourcesError::MalformedArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(ListResourcesError::ServerInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListResourcesError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceException" => {
                     return RusotoError::Service(ListResourcesError::UnknownResource(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2144,54 +2158,56 @@ impl RejectResourceShareInvitationError {
                 "MalformedArnException" => {
                     return RusotoError::Service(RejectResourceShareInvitationError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         RejectResourceShareInvitationError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceShareInvitationAlreadyAcceptedException" => {
                     return RusotoError::Service(
                         RejectResourceShareInvitationError::ResourceShareInvitationAlreadyAccepted(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceShareInvitationAlreadyRejectedException" => {
                     return RusotoError::Service(
                         RejectResourceShareInvitationError::ResourceShareInvitationAlreadyRejected(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceShareInvitationArnNotFoundException" => {
                     return RusotoError::Service(
                         RejectResourceShareInvitationError::ResourceShareInvitationArnNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceShareInvitationExpiredException" => {
                     return RusotoError::Service(
                         RejectResourceShareInvitationError::ResourceShareInvitationExpired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ServerInternalException" => {
-                    return RusotoError::Service(RejectResourceShareInvitationError::ServerInternal(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RejectResourceShareInvitationError::ServerInternal(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         RejectResourceShareInvitationError::ServiceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2272,32 +2288,32 @@ impl TagResourceError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(TagResourceError::MalformedArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceArnNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceArnNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(TagResourceError::ServerInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(TagResourceError::ServiceUnavailable(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(TagResourceError::ServiceUnavailable(
+                        String::from(error_message),
+                    ))
                 }
                 "TagLimitExceededException" => {
                     return RusotoError::Service(TagResourceError::TagLimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2362,19 +2378,19 @@ impl UntagResourceError {
 
             match error_type {
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UntagResourceError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(UntagResourceError::ServerInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UntagResourceError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2452,47 +2468,49 @@ impl UpdateResourceShareError {
                         UpdateResourceShareError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(UpdateResourceShareError::InvalidClientToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateResourceShareError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MalformedArnException" => {
                     return RusotoError::Service(UpdateResourceShareError::MalformedArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(UpdateResourceShareError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateResourceShareError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(UpdateResourceShareError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerInternalException" => {
                     return RusotoError::Service(UpdateResourceShareError::ServerInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateResourceShareError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceException" => {
                     return RusotoError::Service(UpdateResourceShareError::UnknownResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

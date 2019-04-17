@@ -390,7 +390,7 @@ impl SearchError {
 
             match error_type {
                 "SearchException" => {
-                    return RusotoError::Service(SearchError::Search(String::from(error_message)));
+                    return RusotoError::Service(SearchError::Search(String::from(error_message)))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -446,7 +446,7 @@ impl SuggestError {
 
             match error_type {
                 "SearchException" => {
-                    return RusotoError::Service(SuggestError::Search(String::from(error_message)));
+                    return RusotoError::Service(SuggestError::Search(String::from(error_message)))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -504,7 +504,7 @@ impl UploadDocumentsError {
                 "DocumentServiceException" => {
                     return RusotoError::Service(UploadDocumentsError::DocumentService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -259,57 +259,57 @@ impl PostContentError {
                 "BadGatewayException" => {
                     return RusotoError::Service(PostContentError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(PostContentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(PostContentError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DependencyFailedException" => {
                     return RusotoError::Service(PostContentError::DependencyFailed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(PostContentError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PostContentError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LoopDetectedException" => {
                     return RusotoError::Service(PostContentError::LoopDetected(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAcceptableException" => {
                     return RusotoError::Service(PostContentError::NotAcceptable(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(PostContentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RequestTimeoutException" => {
                     return RusotoError::Service(PostContentError::RequestTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedMediaTypeException" => {
                     return RusotoError::Service(PostContentError::UnsupportedMediaType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -391,42 +391,42 @@ impl PostTextError {
                 "BadGatewayException" => {
                     return RusotoError::Service(PostTextError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(PostTextError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(PostTextError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DependencyFailedException" => {
                     return RusotoError::Service(PostTextError::DependencyFailed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(PostTextError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PostTextError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LoopDetectedException" => {
                     return RusotoError::Service(PostTextError::LoopDetected(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(PostTextError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -15073,7 +15073,7 @@ impl AbortMultipartUploadError {
                     "NoSuchUpload" => {
                         return RusotoError::Service(AbortMultipartUploadError::NoSuchUpload(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15155,7 +15155,7 @@ impl CopyObjectError {
                     "ObjectNotInActiveTierError" => {
                         return RusotoError::Service(CopyObjectError::ObjectNotInActiveTierError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15203,12 +15203,12 @@ impl CreateBucketError {
                     "BucketAlreadyExists" => {
                         return RusotoError::Service(CreateBucketError::BucketAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "BucketAlreadyOwnedByYou" => {
                         return RusotoError::Service(CreateBucketError::BucketAlreadyOwnedByYou(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16569,7 +16569,7 @@ impl GetObjectError {
                     "NoSuchKey" => {
                         return RusotoError::Service(GetObjectError::NoSuchKey(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -16615,7 +16615,7 @@ impl GetObjectAclError {
                     "NoSuchKey" => {
                         return RusotoError::Service(GetObjectAclError::NoSuchKey(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -16879,7 +16879,7 @@ impl HeadBucketError {
                     "NoSuchBucket" => {
                         return RusotoError::Service(HeadBucketError::NoSuchBucket(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -16925,7 +16925,7 @@ impl HeadObjectError {
                     "NoSuchKey" => {
                         return RusotoError::Service(HeadObjectError::NoSuchKey(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -17193,7 +17193,7 @@ impl ListObjectsError {
                     "NoSuchBucket" => {
                         return RusotoError::Service(ListObjectsError::NoSuchBucket(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -17237,9 +17237,9 @@ impl ListObjectsV2Error {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchBucket" => {
-                        return RusotoError::Service(ListObjectsV2Error::NoSuchBucket(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(ListObjectsV2Error::NoSuchBucket(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -18017,7 +18017,7 @@ impl PutObjectAclError {
                     "NoSuchKey" => {
                         return RusotoError::Service(PutObjectAclError::NoSuchKey(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -18247,7 +18247,7 @@ impl RestoreObjectError {
                             RestoreObjectError::ObjectAlreadyInActiveTierError(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19557,11 +19557,9 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateMultipartUploadError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateMultipartUploadError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19772,11 +19770,9 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteBucketLifecycleError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteBucketLifecycleError::from_response(response))
+                }));
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -20675,11 +20671,9 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetBucketNotificationError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetBucketNotificationError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20802,11 +20796,9 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetBucketPolicyStatusError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetBucketPolicyStatusError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22833,11 +22825,9 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutBucketNotificationError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutBucketNotificationError::from_response(response))
+                }));
             }
 
             Box::new(future::ok(::std::mem::drop(response)))

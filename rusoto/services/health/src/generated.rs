@@ -485,12 +485,12 @@ impl DescribeAffectedEntitiesError {
                         DescribeAffectedEntitiesError::InvalidPaginationToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedLocale" => {
                     return RusotoError::Service(DescribeAffectedEntitiesError::UnsupportedLocale(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -571,7 +571,7 @@ impl DescribeEventAggregatesError {
                         DescribeEventAggregatesError::InvalidPaginationToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -615,7 +615,7 @@ impl DescribeEventDetailsError {
                 "UnsupportedLocale" => {
                     return RusotoError::Service(DescribeEventDetailsError::UnsupportedLocale(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -661,12 +661,12 @@ impl DescribeEventTypesError {
                 "InvalidPaginationToken" => {
                     return RusotoError::Service(DescribeEventTypesError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLocale" => {
                     return RusotoError::Service(DescribeEventTypesError::UnsupportedLocale(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -713,12 +713,12 @@ impl DescribeEventsError {
                 "InvalidPaginationToken" => {
                     return RusotoError::Service(DescribeEventsError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLocale" => {
                     return RusotoError::Service(DescribeEventsError::UnsupportedLocale(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

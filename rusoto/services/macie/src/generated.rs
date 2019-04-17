@@ -274,17 +274,17 @@ impl AssociateMemberAccountError {
                 "InternalException" => {
                     return RusotoError::Service(AssociateMemberAccountError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(AssociateMemberAccountError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AssociateMemberAccountError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -336,22 +336,22 @@ impl AssociateS3ResourcesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociateS3ResourcesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(AssociateS3ResourcesError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(AssociateS3ResourcesError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AssociateS3ResourcesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -400,12 +400,12 @@ impl DisassociateMemberAccountError {
                 "InternalException" => {
                     return RusotoError::Service(DisassociateMemberAccountError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DisassociateMemberAccountError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -454,17 +454,17 @@ impl DisassociateS3ResourcesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateS3ResourcesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(DisassociateS3ResourcesError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DisassociateS3ResourcesError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -512,12 +512,12 @@ impl ListMemberAccountsError {
                 "InternalException" => {
                     return RusotoError::Service(ListMemberAccountsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListMemberAccountsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -566,17 +566,17 @@ impl ListS3ResourcesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListS3ResourcesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalException" => {
                     return RusotoError::Service(ListS3ResourcesError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListS3ResourcesError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -624,19 +624,19 @@ impl UpdateS3ResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UpdateS3ResourcesError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateS3ResourcesError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(UpdateS3ResourcesError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateS3ResourcesError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateS3ResourcesError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

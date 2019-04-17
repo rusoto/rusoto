@@ -2231,45 +2231,45 @@ impl AddTagsToOnPremisesInstancesError {
                         AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
                         AddTagsToOnPremisesInstancesError::InstanceNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InstanceNotRegisteredException" => {
                     return RusotoError::Service(
                         AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
                         AddTagsToOnPremisesInstancesError::InvalidInstanceName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(AddTagsToOnPremisesInstancesError::InvalidTag(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagLimitExceededException" => {
                     return RusotoError::Service(
                         AddTagsToOnPremisesInstancesError::TagLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TagRequiredException" => {
                     return RusotoError::Service(AddTagsToOnPremisesInstancesError::TagRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2333,40 +2333,42 @@ impl BatchGetApplicationRevisionsError {
                         BatchGetApplicationRevisionsError::ApplicationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
                         BatchGetApplicationRevisionsError::ApplicationNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(
                         BatchGetApplicationRevisionsError::BatchLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
                         BatchGetApplicationRevisionsError::InvalidApplicationName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRevisionException" => {
-                    return RusotoError::Service(BatchGetApplicationRevisionsError::InvalidRevision(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        BatchGetApplicationRevisionsError::InvalidRevision(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "RevisionRequiredException" => {
                     return RusotoError::Service(
                         BatchGetApplicationRevisionsError::RevisionRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2419,24 +2421,28 @@ impl BatchGetApplicationsError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return RusotoError::Service(BatchGetApplicationsError::ApplicationDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        BatchGetApplicationsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ApplicationNameRequiredException" => {
-                    return RusotoError::Service(BatchGetApplicationsError::ApplicationNameRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        BatchGetApplicationsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(BatchGetApplicationsError::BatchLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(BatchGetApplicationsError::InvalidApplicationName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2497,47 +2503,47 @@ impl BatchGetDeploymentGroupsError {
                         BatchGetDeploymentGroupsError::ApplicationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentGroupsError::ApplicationNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(BatchGetDeploymentGroupsError::BatchLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentGroupsError::DeploymentConfigDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentGroupsError::InvalidApplicationName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2603,49 +2609,49 @@ impl BatchGetDeploymentInstancesError {
                         BatchGetDeploymentInstancesError::BatchLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentInstancesError::DeploymentDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentInstancesError::DeploymentIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InstanceIdRequiredException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentInstancesError::InvalidComputePlatform(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentInstancesError::InvalidDeploymentId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentInstancesError::InvalidInstanceName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2709,49 +2715,49 @@ impl BatchGetDeploymentTargetsError {
                         BatchGetDeploymentTargetsError::DeploymentDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentTargetsError::DeploymentIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentTargetDoesNotExistException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentTargetIdRequiredException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentTargetListSizeExceededException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentTargetsError::InvalidDeploymentId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentTargetIdException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2805,17 +2811,17 @@ impl BatchGetDeploymentsError {
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(BatchGetDeploymentsError::BatchLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(BatchGetDeploymentsError::DeploymentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(BatchGetDeploymentsError::InvalidDeploymentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2869,21 +2875,21 @@ impl BatchGetOnPremisesInstancesError {
                         BatchGetOnPremisesInstancesError::BatchLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
                         BatchGetOnPremisesInstancesError::InstanceNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
                         BatchGetOnPremisesInstancesError::InvalidInstanceName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2945,46 +2951,48 @@ impl ContinueDeploymentError {
                         ContinueDeploymentError::DeploymentAlreadyCompleted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(ContinueDeploymentError::DeploymentDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(ContinueDeploymentError::DeploymentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentIsNotInReadyStateException" => {
                     return RusotoError::Service(
                         ContinueDeploymentError::DeploymentIsNotInReadyState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(ContinueDeploymentError::InvalidDeploymentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentStatusException" => {
                     return RusotoError::Service(ContinueDeploymentError::InvalidDeploymentStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentWaitTypeException" => {
-                    return RusotoError::Service(ContinueDeploymentError::InvalidDeploymentWaitType(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ContinueDeploymentError::InvalidDeploymentWaitType(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UnsupportedActionForDeploymentTypeException" => {
                     return RusotoError::Service(
                         ContinueDeploymentError::UnsupportedActionForDeploymentType(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3043,27 +3051,27 @@ impl CreateApplicationError {
                 "ApplicationAlreadyExistsException" => {
                     return RusotoError::Service(CreateApplicationError::ApplicationAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationLimitExceededException" => {
                     return RusotoError::Service(CreateApplicationError::ApplicationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(CreateApplicationError::ApplicationNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(CreateApplicationError::InvalidApplicationName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(CreateApplicationError::InvalidComputePlatform(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3155,123 +3163,129 @@ impl CreateDeploymentError {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(CreateDeploymentError::ApplicationDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(CreateDeploymentError::ApplicationNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
                         CreateDeploymentError::DeploymentConfigDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupDoesNotExistException" => {
-                    return RusotoError::Service(CreateDeploymentError::DeploymentGroupDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentError::DeploymentGroupDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "DeploymentGroupNameRequiredException" => {
-                    return RusotoError::Service(CreateDeploymentError::DeploymentGroupNameRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "DeploymentLimitExceededException" => {
                     return RusotoError::Service(CreateDeploymentError::DeploymentLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DescriptionTooLongException" => {
                     return RusotoError::Service(CreateDeploymentError::DescriptionTooLong(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidApplicationName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAutoRollbackConfigException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidAutoRollbackConfig(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAutoScalingGroupException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidAutoScalingGroup(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentConfigNameException" => {
-                    return RusotoError::Service(CreateDeploymentError::InvalidDeploymentConfigName(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidDeploymentGroupName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFileExistsBehaviorException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidFileExistsBehavior(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidGitHubAccountTokenException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidGitHubAccountToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidIgnoreApplicationStopFailuresValueException" => {
                     return RusotoError::Service(
                         CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidLoadBalancerInfoException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidLoadBalancerInfo(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRevisionException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidRevision(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidRole(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTargetInstancesException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidTargetInstances(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUpdateOutdatedInstancesOnlyValueException" => {
                     return RusotoError::Service(
                         CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RevisionDoesNotExistException" => {
                     return RusotoError::Service(CreateDeploymentError::RevisionDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RevisionRequiredException" => {
                     return RusotoError::Service(CreateDeploymentError::RevisionRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateDeploymentError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3351,49 +3365,49 @@ impl CreateDeploymentConfigError {
                         CreateDeploymentConfigError::DeploymentConfigAlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentConfigLimitExceededException" => {
                     return RusotoError::Service(
                         CreateDeploymentConfigError::DeploymentConfigLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return RusotoError::Service(
                         CreateDeploymentConfigError::DeploymentConfigNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(
                         CreateDeploymentConfigError::InvalidComputePlatform(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
                         CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidMinimumHealthyHostValueException" => {
                     return RusotoError::Service(
                         CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidTrafficRoutingConfigurationException" => {
                     return RusotoError::Service(
                         CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3503,193 +3517,199 @@ impl CreateDeploymentGroupError {
                 "AlarmsLimitExceededException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::AlarmsLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::ApplicationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::ApplicationNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupAlreadyExistsException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupLimitExceededException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::DeploymentGroupLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ECSServiceMappingLimitExceededException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidAlarmConfigException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidAlarmConfig(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApplicationNameException" => {
-                    return RusotoError::Service(CreateDeploymentGroupError::InvalidApplicationName(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidApplicationName(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidAutoRollbackConfigException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidAutoScalingGroupException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidBlueGreenDeploymentConfigurationException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentStyleException" => {
-                    return RusotoError::Service(CreateDeploymentGroupError::InvalidDeploymentStyle(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidDeploymentStyle(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidEC2TagCombinationException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidEC2TagCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidEC2TagException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidEC2Tag(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidECSServiceException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidECSService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLoadBalancerInfoException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidOnPremisesTagCombinationException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidTag(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTargetGroupPairException" => {
-                    return RusotoError::Service(CreateDeploymentGroupError::InvalidTargetGroupPair(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidTargetGroupPair(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidTriggerConfigException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidTriggerConfig(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LifecycleHookLimitExceededException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RoleRequiredException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::RoleRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagSetListLimitExceededException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::TagSetListLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TriggerTargetsLimitExceededException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3765,12 +3785,12 @@ impl DeleteApplicationError {
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(DeleteApplicationError::ApplicationNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(DeleteApplicationError::InvalidApplicationName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3819,28 +3839,30 @@ impl DeleteDeploymentConfigError {
 
             match *error_type {
                 "DeploymentConfigInUseException" => {
-                    return RusotoError::Service(DeleteDeploymentConfigError::DeploymentConfigInUse(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteDeploymentConfigError::DeploymentConfigInUse(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return RusotoError::Service(
                         DeleteDeploymentConfigError::DeploymentConfigNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
                         DeleteDeploymentConfigError::InvalidDeploymentConfigName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DeleteDeploymentConfigError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3897,31 +3919,33 @@ impl DeleteDeploymentGroupError {
                         DeleteDeploymentGroupError::ApplicationNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
                         DeleteDeploymentGroupError::DeploymentGroupNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidApplicationNameException" => {
-                    return RusotoError::Service(DeleteDeploymentGroupError::InvalidApplicationName(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteDeploymentGroupError::InvalidApplicationName(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
                         DeleteDeploymentGroupError::InvalidDeploymentGroupName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(DeleteDeploymentGroupError::InvalidRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3979,33 +4003,33 @@ impl DeleteGitHubAccountTokenError {
                         DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "GitHubAccountTokenNameRequiredException" => {
                     return RusotoError::Service(
                         DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidGitHubAccountTokenNameException" => {
                     return RusotoError::Service(
                         DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
                         DeleteGitHubAccountTokenError::OperationNotSupported(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceValidationException" => {
                     return RusotoError::Service(DeleteGitHubAccountTokenError::ResourceValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4059,14 +4083,14 @@ impl DeregisterOnPremisesInstanceError {
                         DeregisterOnPremisesInstanceError::InstanceNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
                         DeregisterOnPremisesInstanceError::InvalidInstanceName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4115,17 +4139,17 @@ impl GetApplicationError {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(GetApplicationError::ApplicationDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(GetApplicationError::ApplicationNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(GetApplicationError::InvalidApplicationName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4183,36 +4207,36 @@ impl GetApplicationRevisionError {
                         GetApplicationRevisionError::ApplicationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
                         GetApplicationRevisionError::ApplicationNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
                         GetApplicationRevisionError::InvalidApplicationName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRevisionException" => {
                     return RusotoError::Service(GetApplicationRevisionError::InvalidRevision(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RevisionDoesNotExistException" => {
                     return RusotoError::Service(GetApplicationRevisionError::RevisionDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RevisionRequiredException" => {
                     return RusotoError::Service(GetApplicationRevisionError::RevisionRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4265,17 +4289,17 @@ impl GetDeploymentError {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentError::DeploymentDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(GetDeploymentError::DeploymentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(GetDeploymentError::InvalidDeploymentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4329,26 +4353,26 @@ impl GetDeploymentConfigError {
                         GetDeploymentConfigError::DeploymentConfigDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return RusotoError::Service(
                         GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(GetDeploymentConfigError::InvalidComputePlatform(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
                         GetDeploymentConfigError::InvalidDeploymentConfigName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4407,45 +4431,45 @@ impl GetDeploymentGroupError {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentGroupError::ApplicationDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(GetDeploymentGroupError::ApplicationNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
                         GetDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return RusotoError::Service(
                         GetDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
                         GetDeploymentGroupError::DeploymentGroupNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(GetDeploymentGroupError::InvalidApplicationName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
                         GetDeploymentGroupError::InvalidDeploymentGroupName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4505,39 +4529,43 @@ impl GetDeploymentInstanceError {
 
             match *error_type {
                 "DeploymentDoesNotExistException" => {
-                    return RusotoError::Service(GetDeploymentInstanceError::DeploymentDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentInstanceError::DeploymentDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::DeploymentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InstanceDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::InstanceDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InstanceIdRequiredException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::InstanceIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidComputePlatformException" => {
-                    return RusotoError::Service(GetDeploymentInstanceError::InvalidComputePlatform(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentInstanceError::InvalidComputePlatform(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::InvalidDeploymentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::InvalidInstanceName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4599,43 +4627,43 @@ impl GetDeploymentTargetError {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentTargetError::DeploymentDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(GetDeploymentTargetError::DeploymentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentTargetDoesNotExistException" => {
                     return RusotoError::Service(
                         GetDeploymentTargetError::DeploymentTargetDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentTargetIdRequiredException" => {
                     return RusotoError::Service(
                         GetDeploymentTargetError::DeploymentTargetIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(GetDeploymentTargetError::InvalidDeploymentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentTargetIdException" => {
                     return RusotoError::Service(
                         GetDeploymentTargetError::InvalidDeploymentTargetId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(GetDeploymentTargetError::InvalidInstanceName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4689,17 +4717,17 @@ impl GetOnPremisesInstanceError {
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(GetOnPremisesInstanceError::InstanceNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InstanceNotRegisteredException" => {
                     return RusotoError::Service(GetOnPremisesInstanceError::InstanceNotRegistered(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(GetOnPremisesInstanceError::InvalidInstanceName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4765,64 +4793,64 @@ impl ListApplicationRevisionsError {
                         ListApplicationRevisionsError::ApplicationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
                         ListApplicationRevisionsError::ApplicationNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "BucketNameFilterRequiredException" => {
                     return RusotoError::Service(
                         ListApplicationRevisionsError::BucketNameFilterRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
                         ListApplicationRevisionsError::InvalidApplicationName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidBucketNameFilterException" => {
                     return RusotoError::Service(
                         ListApplicationRevisionsError::InvalidBucketNameFilter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeployedStateFilterException" => {
                     return RusotoError::Service(
                         ListApplicationRevisionsError::InvalidDeployedStateFilter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidKeyPrefixFilterException" => {
                     return RusotoError::Service(
                         ListApplicationRevisionsError::InvalidKeyPrefixFilter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListApplicationRevisionsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSortByException" => {
                     return RusotoError::Service(ListApplicationRevisionsError::InvalidSortBy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSortOrderException" => {
                     return RusotoError::Service(ListApplicationRevisionsError::InvalidSortOrder(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4875,7 +4903,7 @@ impl ListApplicationsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListApplicationsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4919,7 +4947,7 @@ impl ListDeploymentConfigsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentConfigsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4967,24 +4995,28 @@ impl ListDeploymentGroupsError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return RusotoError::Service(ListDeploymentGroupsError::ApplicationDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentGroupsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ApplicationNameRequiredException" => {
-                    return RusotoError::Service(ListDeploymentGroupsError::ApplicationNameRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentGroupsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(ListDeploymentGroupsError::InvalidApplicationName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentGroupsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5051,60 +5083,64 @@ impl ListDeploymentInstancesError {
                         ListDeploymentInstancesError::DeploymentDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentIdRequiredException" => {
-                    return RusotoError::Service(ListDeploymentInstancesError::DeploymentIdRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentInstancesError::DeploymentIdRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "DeploymentNotStartedException" => {
-                    return RusotoError::Service(ListDeploymentInstancesError::DeploymentNotStarted(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentInstancesError::DeploymentNotStarted(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(
                         ListDeploymentInstancesError::InvalidComputePlatform(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(ListDeploymentInstancesError::InvalidDeploymentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentInstanceTypeException" => {
                     return RusotoError::Service(
                         ListDeploymentInstancesError::InvalidDeploymentInstanceType(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceStatusException" => {
                     return RusotoError::Service(
                         ListDeploymentInstancesError::InvalidInstanceStatus(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceTypeException" => {
                     return RusotoError::Service(ListDeploymentInstancesError::InvalidInstanceType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentInstancesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTargetFilterNameException" => {
                     return RusotoError::Service(
                         ListDeploymentInstancesError::InvalidTargetFilterName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5169,46 +5205,48 @@ impl ListDeploymentTargetsError {
 
             match *error_type {
                 "DeploymentDoesNotExistException" => {
-                    return RusotoError::Service(ListDeploymentTargetsError::DeploymentDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentTargetsError::DeploymentDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::DeploymentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentNotStartedException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::DeploymentNotStarted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::InvalidDeploymentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentInstanceTypeException" => {
                     return RusotoError::Service(
                         ListDeploymentTargetsError::InvalidDeploymentInstanceType(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInstanceStatusException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::InvalidInstanceStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInstanceTypeException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::InvalidInstanceType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5275,47 +5313,47 @@ impl ListDeploymentsError {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(ListDeploymentsError::ApplicationDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(ListDeploymentsError::ApplicationNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return RusotoError::Service(ListDeploymentsError::DeploymentGroupDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(ListDeploymentsError::DeploymentGroupNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(ListDeploymentsError::InvalidApplicationName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(ListDeploymentsError::InvalidDeploymentGroupName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentStatusException" => {
                     return RusotoError::Service(ListDeploymentsError::InvalidDeploymentStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTimeRangeException" => {
                     return RusotoError::Service(ListDeploymentsError::InvalidTimeRange(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5371,23 +5409,25 @@ impl ListGitHubAccountTokenNamesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListGitHubAccountTokenNamesError::InvalidNextToken(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListGitHubAccountTokenNamesError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
                         ListGitHubAccountTokenNamesError::OperationNotSupported(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceValidationException" => {
                     return RusotoError::Service(
                         ListGitHubAccountTokenNamesError::ResourceValidation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5437,19 +5477,19 @@ impl ListOnPremisesInstancesError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListOnPremisesInstancesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRegistrationStatusException" => {
                     return RusotoError::Service(
                         ListOnPremisesInstancesError::InvalidRegistrationStatus(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidTagFilterException" => {
                     return RusotoError::Service(ListOnPremisesInstancesError::InvalidTagFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5583,38 +5623,40 @@ impl RegisterApplicationRevisionError {
                         RegisterApplicationRevisionError::ApplicationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
                         RegisterApplicationRevisionError::ApplicationNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DescriptionTooLongException" => {
                     return RusotoError::Service(
                         RegisterApplicationRevisionError::DescriptionTooLong(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
                         RegisterApplicationRevisionError::InvalidApplicationName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRevisionException" => {
                     return RusotoError::Service(RegisterApplicationRevisionError::InvalidRevision(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RevisionRequiredException" => {
-                    return RusotoError::Service(RegisterApplicationRevisionError::RevisionRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RegisterApplicationRevisionError::RevisionRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5683,68 +5725,70 @@ impl RegisterOnPremisesInstanceError {
                 "IamArnRequiredException" => {
                     return RusotoError::Service(RegisterOnPremisesInstanceError::IamArnRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IamSessionArnAlreadyRegisteredException" => {
                     return RusotoError::Service(
                         RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "IamUserArnAlreadyRegisteredException" => {
                     return RusotoError::Service(
                         RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "IamUserArnRequiredException" => {
                     return RusotoError::Service(
                         RegisterOnPremisesInstanceError::IamUserArnRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InstanceNameAlreadyRegisteredException" => {
                     return RusotoError::Service(
                         RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
                         RegisterOnPremisesInstanceError::InstanceNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidIamSessionArnException" => {
                     return RusotoError::Service(
                         RegisterOnPremisesInstanceError::InvalidIamSessionArn(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidIamUserArnException" => {
-                    return RusotoError::Service(RegisterOnPremisesInstanceError::InvalidIamUserArn(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RegisterOnPremisesInstanceError::InvalidIamUserArn(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
                         RegisterOnPremisesInstanceError::InvalidInstanceName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MultipleIamArnsProvidedException" => {
                     return RusotoError::Service(
                         RegisterOnPremisesInstanceError::MultipleIamArnsProvided(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5813,47 +5857,49 @@ impl RemoveTagsFromOnPremisesInstancesError {
                         RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
                         RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InstanceNotRegisteredException" => {
                     return RusotoError::Service(
                         RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
                         RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidTagException" => {
-                    return RusotoError::Service(RemoveTagsFromOnPremisesInstancesError::InvalidTag(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RemoveTagsFromOnPremisesInstancesError::InvalidTag(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "TagLimitExceededException" => {
                     return RusotoError::Service(
                         RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TagRequiredException" => {
                     return RusotoError::Service(
                         RemoveTagsFromOnPremisesInstancesError::TagRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5917,42 +5963,42 @@ impl SkipWaitTimeForInstanceTerminationError {
                         SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
                         SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(
                         SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DeploymentNotStartedException" => {
                     return RusotoError::Service(
                         SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(
                         SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedActionForDeploymentTypeException" => {
                     return RusotoError::Service(
                         SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6011,27 +6057,27 @@ impl StopDeploymentError {
                 "DeploymentAlreadyCompletedException" => {
                     return RusotoError::Service(StopDeploymentError::DeploymentAlreadyCompleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(StopDeploymentError::DeploymentDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return RusotoError::Service(StopDeploymentError::DeploymentGroupDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(StopDeploymentError::DeploymentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(StopDeploymentError::InvalidDeploymentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6085,22 +6131,22 @@ impl UpdateApplicationError {
                 "ApplicationAlreadyExistsException" => {
                     return RusotoError::Service(UpdateApplicationError::ApplicationAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(UpdateApplicationError::ApplicationDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(UpdateApplicationError::ApplicationNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(UpdateApplicationError::InvalidApplicationName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6205,188 +6251,194 @@ impl UpdateDeploymentGroupError {
                 "AlarmsLimitExceededException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::AlarmsLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::ApplicationDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::ApplicationNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupAlreadyExistsException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ECSServiceMappingLimitExceededException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidAlarmConfigException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidAlarmConfig(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApplicationNameException" => {
-                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidApplicationName(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidApplicationName(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidAutoRollbackConfigException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidAutoScalingGroupException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidBlueGreenDeploymentConfigurationException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeploymentStyleException" => {
-                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidDeploymentStyle(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidDeploymentStyle(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidEC2TagCombinationException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::InvalidEC2TagCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidEC2TagException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidEC2Tag(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidECSServiceException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidECSService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLoadBalancerInfoException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidOnPremisesTagCombinationException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidTag(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTargetGroupPairException" => {
-                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidTargetGroupPair(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidTargetGroupPair(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidTriggerConfigException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidTriggerConfig(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LifecycleHookLimitExceededException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TagSetListLimitExceededException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::TagSetListLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TriggerTargetsLimitExceededException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

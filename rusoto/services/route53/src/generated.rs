@@ -8061,43 +8061,45 @@ impl AssociateVPCWithHostedZoneError {
                             AssociateVPCWithHostedZoneError::ConflictingDomainExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(AssociateVPCWithHostedZoneError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(AssociateVPCWithHostedZoneError::InvalidVPCId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitsExceeded" => {
                         return RusotoError::Service(
                             AssociateVPCWithHostedZoneError::LimitsExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             AssociateVPCWithHostedZoneError::NoSuchHostedZone(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NotAuthorizedException" => {
-                        return RusotoError::Service(AssociateVPCWithHostedZoneError::NotAuthorized(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            AssociateVPCWithHostedZoneError::NotAuthorized(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "PublicZoneVPCAssociation" => {
                         return RusotoError::Service(
                             AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8160,33 +8162,33 @@ impl ChangeResourceRecordSetsError {
                             ChangeResourceRecordSetsError::InvalidChangeBatch(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(ChangeResourceRecordSetsError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(
                             ChangeResourceRecordSetsError::NoSuchHealthCheck(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             ChangeResourceRecordSetsError::NoSuchHostedZone(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
                             ChangeResourceRecordSetsError::PriorRequestNotComplete(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8245,29 +8247,29 @@ impl ChangeTagsForResourceError {
                     "InvalidInput" => {
                         return RusotoError::Service(ChangeTagsForResourceError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(ChangeTagsForResourceError::NoSuchHealthCheck(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(ChangeTagsForResourceError::NoSuchHostedZone(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
                             ChangeTagsForResourceError::PriorRequestNotComplete(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ThrottlingException" => {
                         return RusotoError::Service(ChangeTagsForResourceError::Throttling(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8324,17 +8326,17 @@ impl CreateHealthCheckError {
                             CreateHealthCheckError::HealthCheckAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreateHealthCheckError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyHealthChecks" => {
                         return RusotoError::Service(CreateHealthCheckError::TooManyHealthChecks(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8397,53 +8399,57 @@ impl CreateHostedZoneError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConflictingDomainExists" => {
-                        return RusotoError::Service(CreateHostedZoneError::ConflictingDomainExists(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateHostedZoneError::ConflictingDomainExists(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "DelegationSetNotAvailable" => {
                         return RusotoError::Service(
                             CreateHostedZoneError::DelegationSetNotAvailable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DelegationSetNotReusable" => {
                         return RusotoError::Service(
                             CreateHostedZoneError::DelegationSetNotReusable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "HostedZoneAlreadyExists" => {
-                        return RusotoError::Service(CreateHostedZoneError::HostedZoneAlreadyExists(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateHostedZoneError::HostedZoneAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidDomainName" => {
                         return RusotoError::Service(CreateHostedZoneError::InvalidDomainName(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreateHostedZoneError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(CreateHostedZoneError::InvalidVPCId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(CreateHostedZoneError::NoSuchDelegationSet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyHostedZones" => {
                         return RusotoError::Service(CreateHostedZoneError::TooManyHostedZones(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8510,40 +8516,40 @@ impl CreateQueryLoggingConfigError {
                             CreateQueryLoggingConfigError::ConcurrentModification(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientCloudWatchLogsResourcePolicy" => {
                         return RusotoError::Service(
                             CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreateQueryLoggingConfigError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchCloudWatchLogsLogGroup" => {
                         return RusotoError::Service(
                             CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             CreateQueryLoggingConfigError::NoSuchHostedZone(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "QueryLoggingConfigAlreadyExists" => {
                         return RusotoError::Service(
                             CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8613,47 +8619,49 @@ impl CreateReusableDelegationSetError {
                             CreateReusableDelegationSetError::DelegationSetAlreadyCreated(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DelegationSetAlreadyReusable" => {
                         return RusotoError::Service(
                             CreateReusableDelegationSetError::DelegationSetAlreadyReusable(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DelegationSetNotAvailable" => {
                         return RusotoError::Service(
                             CreateReusableDelegationSetError::DelegationSetNotAvailable(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "HostedZoneNotFound" => {
                         return RusotoError::Service(
                             CreateReusableDelegationSetError::HostedZoneNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(
                             CreateReusableDelegationSetError::InvalidArgument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
-                        return RusotoError::Service(CreateReusableDelegationSetError::InvalidInput(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateReusableDelegationSetError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "LimitsExceeded" => {
                         return RusotoError::Service(
                             CreateReusableDelegationSetError::LimitsExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8712,28 +8720,28 @@ impl CreateTrafficPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(CreateTrafficPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTrafficPolicyDocument" => {
                         return RusotoError::Service(
                             CreateTrafficPolicyError::InvalidTrafficPolicyDocument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTrafficPolicies" => {
                         return RusotoError::Service(
                             CreateTrafficPolicyError::TooManyTrafficPolicies(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TrafficPolicyAlreadyExists" => {
                         return RusotoError::Service(
                             CreateTrafficPolicyError::TrafficPolicyAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8791,37 +8799,39 @@ impl CreateTrafficPolicyInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return RusotoError::Service(CreateTrafficPolicyInstanceError::InvalidInput(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateTrafficPolicyInstanceError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             CreateTrafficPolicyInstanceError::NoSuchHostedZone(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
                             CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTrafficPolicyInstances" => {
                         return RusotoError::Service(
                             CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TrafficPolicyInstanceAlreadyExists" => {
                         return RusotoError::Service(
                             CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8944,28 +8954,28 @@ impl CreateVPCAssociationAuthorizationError {
                             CreateVPCAssociationAuthorizationError::ConcurrentModification(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(
                             CreateVPCAssociationAuthorizationError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(
                             CreateVPCAssociationAuthorizationError::InvalidVPCId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             CreateVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyVPCAssociationAuthorizations" => return RusotoError::Service(
                         CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(
@@ -9027,17 +9037,17 @@ impl DeleteHealthCheckError {
                     "HealthCheckInUse" => {
                         return RusotoError::Service(DeleteHealthCheckError::HealthCheckInUse(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeleteHealthCheckError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(DeleteHealthCheckError::NoSuchHealthCheck(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9094,27 +9104,29 @@ impl DeleteHostedZoneError {
                     "HostedZoneNotEmpty" => {
                         return RusotoError::Service(DeleteHostedZoneError::HostedZoneNotEmpty(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidDomainName" => {
                         return RusotoError::Service(DeleteHostedZoneError::InvalidDomainName(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeleteHostedZoneError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(DeleteHostedZoneError::NoSuchHostedZone(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PriorRequestNotComplete" => {
-                        return RusotoError::Service(DeleteHostedZoneError::PriorRequestNotComplete(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteHostedZoneError::PriorRequestNotComplete(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -9171,19 +9183,19 @@ impl DeleteQueryLoggingConfigError {
                             DeleteQueryLoggingConfigError::ConcurrentModification(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeleteQueryLoggingConfigError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchQueryLoggingConfig" => {
                         return RusotoError::Service(
                             DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9242,26 +9254,28 @@ impl DeleteReusableDelegationSetError {
                             DeleteReusableDelegationSetError::DelegationSetInUse(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DelegationSetNotReusable" => {
                         return RusotoError::Service(
                             DeleteReusableDelegationSetError::DelegationSetNotReusable(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidInput" => {
-                        return RusotoError::Service(DeleteReusableDelegationSetError::InvalidInput(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteReusableDelegationSetError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(
                             DeleteReusableDelegationSetError::NoSuchDelegationSet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9319,22 +9333,22 @@ impl DeleteTrafficPolicyError {
                             DeleteTrafficPolicyError::ConcurrentModification(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeleteTrafficPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(DeleteTrafficPolicyError::NoSuchTrafficPolicy(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TrafficPolicyInUse" => {
                         return RusotoError::Service(DeleteTrafficPolicyError::TrafficPolicyInUse(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9388,23 +9402,25 @@ impl DeleteTrafficPolicyInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return RusotoError::Service(DeleteTrafficPolicyInstanceError::InvalidInput(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteTrafficPolicyInstanceError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
                             DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9465,28 +9481,28 @@ impl DeleteVPCAssociationAuthorizationError {
                             DeleteVPCAssociationAuthorizationError::ConcurrentModification(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(
                             DeleteVPCAssociationAuthorizationError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(
                             DeleteVPCAssociationAuthorizationError::InvalidVPCId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "VPCAssociationAuthorizationNotFound" => return RusotoError::Service(
                         DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(
@@ -9556,35 +9572,35 @@ impl DisassociateVPCFromHostedZoneError {
                             DisassociateVPCFromHostedZoneError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(
                             DisassociateVPCFromHostedZoneError::InvalidVPCId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LastVPCAssociation" => {
                         return RusotoError::Service(
                             DisassociateVPCFromHostedZoneError::LastVPCAssociation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             DisassociateVPCFromHostedZoneError::NoSuchHostedZone(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "VPCAssociationNotFound" => {
                         return RusotoError::Service(
                             DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9635,7 +9651,7 @@ impl GetAccountLimitError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetAccountLimitError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9684,12 +9700,12 @@ impl GetChangeError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetChangeError::InvalidInput(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchChange" => {
                         return RusotoError::Service(GetChangeError::NoSuchChange(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -9776,12 +9792,12 @@ impl GetGeoLocationError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetGeoLocationError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchGeoLocation" => {
                         return RusotoError::Service(GetGeoLocationError::NoSuchGeoLocation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9833,17 +9849,17 @@ impl GetHealthCheckError {
                     "IncompatibleVersion" => {
                         return RusotoError::Service(GetHealthCheckError::IncompatibleVersion(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(GetHealthCheckError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(GetHealthCheckError::NoSuchHealthCheck(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9935,14 +9951,14 @@ impl GetHealthCheckLastFailureReasonError {
                             GetHealthCheckLastFailureReasonError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(
                             GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9992,12 +10008,12 @@ impl GetHealthCheckStatusError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetHealthCheckStatusError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(GetHealthCheckStatusError::NoSuchHealthCheck(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10045,14 +10061,14 @@ impl GetHostedZoneError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return RusotoError::Service(GetHostedZoneError::InvalidInput(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(GetHostedZoneError::InvalidInput(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(GetHostedZoneError::NoSuchHostedZone(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10100,7 +10116,7 @@ impl GetHostedZoneCountError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetHostedZoneCountError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10151,17 +10167,17 @@ impl GetHostedZoneLimitError {
                     "HostedZoneNotPrivate" => {
                         return RusotoError::Service(GetHostedZoneLimitError::HostedZoneNotPrivate(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(GetHostedZoneLimitError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(GetHostedZoneLimitError::NoSuchHostedZone(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10212,14 +10228,14 @@ impl GetQueryLoggingConfigError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetQueryLoggingConfigError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchQueryLoggingConfig" => {
                         return RusotoError::Service(
                             GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10273,19 +10289,19 @@ impl GetReusableDelegationSetError {
                             GetReusableDelegationSetError::DelegationSetNotReusable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(GetReusableDelegationSetError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(
                             GetReusableDelegationSetError::NoSuchDelegationSet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10340,14 +10356,14 @@ impl GetReusableDelegationSetLimitError {
                             GetReusableDelegationSetLimitError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(
                             GetReusableDelegationSetLimitError::NoSuchDelegationSet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10397,12 +10413,12 @@ impl GetTrafficPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetTrafficPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(GetTrafficPolicyError::NoSuchTrafficPolicy(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10452,14 +10468,14 @@ impl GetTrafficPolicyInstanceError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetTrafficPolicyInstanceError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10546,7 +10562,7 @@ impl ListGeoLocationsError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListGeoLocationsError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10595,12 +10611,12 @@ impl ListHealthChecksError {
                     "IncompatibleVersion" => {
                         return RusotoError::Service(ListHealthChecksError::IncompatibleVersion(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(ListHealthChecksError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10650,19 +10666,21 @@ impl ListHostedZonesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DelegationSetNotReusable" => {
-                        return RusotoError::Service(ListHostedZonesError::DelegationSetNotReusable(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            ListHostedZonesError::DelegationSetNotReusable(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(ListHostedZonesError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(ListHostedZonesError::NoSuchDelegationSet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10713,12 +10731,12 @@ impl ListHostedZonesByNameError {
                     "InvalidDomainName" => {
                         return RusotoError::Service(ListHostedZonesByNameError::InvalidDomainName(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(ListHostedZonesByNameError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10770,19 +10788,21 @@ impl ListQueryLoggingConfigsError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListQueryLoggingConfigsError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidPaginationToken" => {
                         return RusotoError::Service(
                             ListQueryLoggingConfigsError::InvalidPaginationToken(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchHostedZone" => {
-                        return RusotoError::Service(ListQueryLoggingConfigsError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            ListQueryLoggingConfigsError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -10833,12 +10853,12 @@ impl ListResourceRecordSetsError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListResourceRecordSetsError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(ListResourceRecordSetsError::NoSuchHostedZone(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10888,7 +10908,7 @@ impl ListReusableDelegationSetsError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListReusableDelegationSetsError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10943,29 +10963,29 @@ impl ListTagsForResourceError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTagsForResourceError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(ListTagsForResourceError::NoSuchHealthCheck(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(ListTagsForResourceError::NoSuchHostedZone(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
                             ListTagsForResourceError::PriorRequestNotComplete(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ThrottlingException" => {
                         return RusotoError::Service(ListTagsForResourceError::Throttling(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11024,29 +11044,29 @@ impl ListTagsForResourcesError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTagsForResourcesError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(ListTagsForResourcesError::NoSuchHealthCheck(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(ListTagsForResourcesError::NoSuchHostedZone(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
                             ListTagsForResourcesError::PriorRequestNotComplete(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ThrottlingException" => {
                         return RusotoError::Service(ListTagsForResourcesError::Throttling(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11097,7 +11117,7 @@ impl ListTrafficPoliciesError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTrafficPoliciesError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11148,14 +11168,14 @@ impl ListTrafficPolicyInstancesError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTrafficPolicyInstancesError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11211,14 +11231,14 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
                             ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NoSuchTrafficPolicyInstance" => return RusotoError::Service(
                         ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(
@@ -11282,21 +11302,21 @@ impl ListTrafficPolicyInstancesByPolicyError {
                             ListTrafficPolicyInstancesByPolicyError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
                             ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11349,14 +11369,14 @@ impl ListTrafficPolicyVersionsError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTrafficPolicyVersionsError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
                             ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11412,21 +11432,21 @@ impl ListVPCAssociationAuthorizationsError {
                             ListVPCAssociationAuthorizationsError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidPaginationToken" => {
                         return RusotoError::Service(
                             ListVPCAssociationAuthorizationsError::InvalidPaginationToken(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             ListVPCAssociationAuthorizationsError::NoSuchHostedZone(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11475,14 +11495,14 @@ impl TestDNSAnswerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return RusotoError::Service(TestDNSAnswerError::InvalidInput(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(TestDNSAnswerError::InvalidInput(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(TestDNSAnswerError::NoSuchHostedZone(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11536,17 +11556,17 @@ impl UpdateHealthCheckError {
                             UpdateHealthCheckError::HealthCheckVersionMismatch(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(UpdateHealthCheckError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(UpdateHealthCheckError::NoSuchHealthCheck(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11597,12 +11617,14 @@ impl UpdateHostedZoneCommentError {
                     "InvalidInput" => {
                         return RusotoError::Service(UpdateHostedZoneCommentError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchHostedZone" => {
-                        return RusotoError::Service(UpdateHostedZoneCommentError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateHostedZoneCommentError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -11658,19 +11680,19 @@ impl UpdateTrafficPolicyCommentError {
                             UpdateTrafficPolicyCommentError::ConcurrentModification(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(UpdateTrafficPolicyCommentError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
                             UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11731,33 +11753,35 @@ impl UpdateTrafficPolicyInstanceError {
                             UpdateTrafficPolicyInstanceError::ConflictingTypes(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
-                        return RusotoError::Service(UpdateTrafficPolicyInstanceError::InvalidInput(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateTrafficPolicyInstanceError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
                             UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
                             UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12316,11 +12340,9 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ChangeTagsForResourceError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ChangeTagsForResourceError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13690,11 +13712,9 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetQueryLoggingConfigError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetQueryLoggingConfigError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14133,11 +14153,9 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListHostedZonesByNameError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListHostedZonesByNameError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

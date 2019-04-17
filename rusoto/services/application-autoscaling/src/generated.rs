@@ -655,17 +655,17 @@ impl DeleteScalingPolicyError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ObjectNotFoundException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::ObjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -715,17 +715,17 @@ impl DeleteScheduledActionError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeleteScheduledActionError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteScheduledActionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ObjectNotFoundException" => {
                     return RusotoError::Service(DeleteScheduledActionError::ObjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -775,17 +775,17 @@ impl DeregisterScalableTargetError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeregisterScalableTargetError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeregisterScalableTargetError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ObjectNotFoundException" => {
                     return RusotoError::Service(DeregisterScalableTargetError::ObjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -835,17 +835,17 @@ impl DescribeScalableTargetsError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalableTargetsError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScalableTargetsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeScalableTargetsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -895,17 +895,17 @@ impl DescribeScalingActivitiesError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalingActivitiesError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScalingActivitiesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeScalingActivitiesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -957,22 +957,24 @@ impl DescribeScalingPoliciesError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FailedResourceAccessException" => {
-                    return RusotoError::Service(DescribeScalingPoliciesError::FailedResourceAccess(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeScalingPoliciesError::FailedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1023,17 +1025,17 @@ impl DescribeScheduledActionsError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScheduledActionsError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScheduledActionsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeScheduledActionsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1087,27 +1089,27 @@ impl PutScalingPolicyError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(PutScalingPolicyError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FailedResourceAccessException" => {
                     return RusotoError::Service(PutScalingPolicyError::FailedResourceAccess(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(PutScalingPolicyError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PutScalingPolicyError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutScalingPolicyError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ObjectNotFoundException" => {
                     return RusotoError::Service(PutScalingPolicyError::ObjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1161,22 +1163,22 @@ impl PutScheduledActionError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(PutScheduledActionError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(PutScheduledActionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutScheduledActionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ObjectNotFoundException" => {
                     return RusotoError::Service(PutScheduledActionError::ObjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1227,17 +1229,17 @@ impl RegisterScalableTargetError {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(RegisterScalableTargetError::ConcurrentUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(RegisterScalableTargetError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RegisterScalableTargetError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

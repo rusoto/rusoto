@@ -556,22 +556,22 @@ impl AddTagsToCertificateError {
                 "InvalidArnException" => {
                     return RusotoError::Service(AddTagsToCertificateError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(AddTagsToCertificateError::InvalidTag(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddTagsToCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyTagsException" => {
                     return RusotoError::Service(AddTagsToCertificateError::TooManyTags(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -622,17 +622,17 @@ impl DeleteCertificateError {
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteCertificateError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteCertificateError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -678,14 +678,14 @@ impl DescribeCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return RusotoError::Service(DescribeCertificateError::InvalidArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeCertificateError::InvalidArn(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -734,17 +734,17 @@ impl ExportCertificateError {
                 "InvalidArnException" => {
                     return RusotoError::Service(ExportCertificateError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RequestInProgressException" => {
                     return RusotoError::Service(ExportCertificateError::RequestInProgress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ExportCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -794,17 +794,17 @@ impl GetCertificateError {
                 "InvalidArnException" => {
                     return RusotoError::Service(GetCertificateError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RequestInProgressException" => {
                     return RusotoError::Service(GetCertificateError::RequestInProgress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -852,12 +852,12 @@ impl ImportCertificateError {
                 "LimitExceededException" => {
                     return RusotoError::Service(ImportCertificateError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ImportCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -938,12 +938,12 @@ impl ListTagsForCertificateError {
                 "InvalidArnException" => {
                     return RusotoError::Service(ListTagsForCertificateError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -992,17 +992,17 @@ impl RemoveTagsFromCertificateError {
                 "InvalidArnException" => {
                     return RusotoError::Service(RemoveTagsFromCertificateError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(RemoveTagsFromCertificateError::InvalidTag(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RemoveTagsFromCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1052,19 +1052,19 @@ impl RequestCertificateError {
                 "InvalidArnException" => {
                     return RusotoError::Service(RequestCertificateError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidDomainValidationOptionsException" => {
                     return RusotoError::Service(
                         RequestCertificateError::InvalidDomainValidationOptions(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RequestCertificateError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1116,24 +1116,24 @@ impl ResendValidationEmailError {
                 "InvalidArnException" => {
                     return RusotoError::Service(ResendValidationEmailError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDomainValidationOptionsException" => {
                     return RusotoError::Service(
                         ResendValidationEmailError::InvalidDomainValidationOptions(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(ResendValidationEmailError::InvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ResendValidationEmailError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1186,22 +1186,22 @@ impl UpdateCertificateOptionsError {
                 "InvalidArnException" => {
                     return RusotoError::Service(UpdateCertificateOptionsError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(UpdateCertificateOptionsError::InvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateCertificateOptionsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateCertificateOptionsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

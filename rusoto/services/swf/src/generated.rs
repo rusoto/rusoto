@@ -2845,14 +2845,14 @@ impl CountClosedWorkflowExecutionsError {
                         CountClosedWorkflowExecutionsError::OperationNotPermittedFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         CountClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2903,14 +2903,14 @@ impl CountOpenWorkflowExecutionsError {
                         CountOpenWorkflowExecutionsError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         CountOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2959,14 +2959,14 @@ impl CountPendingActivityTasksError {
                         CountPendingActivityTasksError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         CountPendingActivityTasksError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3015,14 +3015,14 @@ impl CountPendingDecisionTasksError {
                         CountPendingDecisionTasksError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         CountPendingDecisionTasksError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3073,17 +3073,17 @@ impl DeprecateActivityTypeError {
                         DeprecateActivityTypeError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TypeDeprecatedFault" => {
                     return RusotoError::Service(DeprecateActivityTypeError::TypeDeprecatedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DeprecateActivityTypeError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3133,17 +3133,17 @@ impl DeprecateDomainError {
                 "DomainDeprecatedFault" => {
                     return RusotoError::Service(DeprecateDomainError::DomainDeprecatedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(DeprecateDomainError::OperationNotPermittedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DeprecateDomainError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3195,17 +3195,17 @@ impl DeprecateWorkflowTypeError {
                         DeprecateWorkflowTypeError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TypeDeprecatedFault" => {
                     return RusotoError::Service(DeprecateWorkflowTypeError::TypeDeprecatedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DeprecateWorkflowTypeError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3255,12 +3255,12 @@ impl DescribeActivityTypeError {
                         DescribeActivityTypeError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DescribeActivityTypeError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3307,12 +3307,12 @@ impl DescribeDomainError {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(DescribeDomainError::OperationNotPermittedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DescribeDomainError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3361,14 +3361,14 @@ impl DescribeWorkflowExecutionError {
                         DescribeWorkflowExecutionError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         DescribeWorkflowExecutionError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3417,12 +3417,12 @@ impl DescribeWorkflowTypeError {
                         DescribeWorkflowTypeError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DescribeWorkflowTypeError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3473,14 +3473,14 @@ impl GetWorkflowExecutionHistoryError {
                         GetWorkflowExecutionHistoryError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         GetWorkflowExecutionHistoryError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3525,14 +3525,16 @@ impl ListActivityTypesError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return RusotoError::Service(ListActivityTypesError::OperationNotPermittedFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListActivityTypesError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(ListActivityTypesError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3583,14 +3585,14 @@ impl ListClosedWorkflowExecutionsError {
                         ListClosedWorkflowExecutionsError::OperationNotPermittedFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         ListClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3635,7 +3637,7 @@ impl ListDomainsError {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(ListDomainsError::OperationNotPermittedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3685,14 +3687,14 @@ impl ListOpenWorkflowExecutionsError {
                         ListOpenWorkflowExecutionsError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         ListOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3737,14 +3739,16 @@ impl ListWorkflowTypesError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return RusotoError::Service(ListWorkflowTypesError::OperationNotPermittedFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListWorkflowTypesError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(ListWorkflowTypesError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3793,19 +3797,19 @@ impl PollForActivityTaskError {
                 "LimitExceededFault" => {
                     return RusotoError::Service(PollForActivityTaskError::LimitExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
                         PollForActivityTaskError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(PollForActivityTaskError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3855,19 +3859,19 @@ impl PollForDecisionTaskError {
                 "LimitExceededFault" => {
                     return RusotoError::Service(PollForDecisionTaskError::LimitExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
                         PollForDecisionTaskError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(PollForDecisionTaskError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3919,14 +3923,14 @@ impl RecordActivityTaskHeartbeatError {
                         RecordActivityTaskHeartbeatError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         RecordActivityTaskHeartbeatError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3977,24 +3981,24 @@ impl RegisterActivityTypeError {
                 "LimitExceededFault" => {
                     return RusotoError::Service(RegisterActivityTypeError::LimitExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
                         RegisterActivityTypeError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TypeAlreadyExistsFault" => {
                     return RusotoError::Service(RegisterActivityTypeError::TypeAlreadyExistsFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(RegisterActivityTypeError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4045,17 +4049,17 @@ impl RegisterDomainError {
                 "DomainAlreadyExistsFault" => {
                     return RusotoError::Service(RegisterDomainError::DomainAlreadyExistsFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededFault" => {
                     return RusotoError::Service(RegisterDomainError::LimitExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(RegisterDomainError::OperationNotPermittedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4107,24 +4111,24 @@ impl RegisterWorkflowTypeError {
                 "LimitExceededFault" => {
                     return RusotoError::Service(RegisterWorkflowTypeError::LimitExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
                         RegisterWorkflowTypeError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TypeAlreadyExistsFault" => {
                     return RusotoError::Service(RegisterWorkflowTypeError::TypeAlreadyExistsFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(RegisterWorkflowTypeError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4177,14 +4181,14 @@ impl RequestCancelWorkflowExecutionError {
                         RequestCancelWorkflowExecutionError::OperationNotPermittedFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         RequestCancelWorkflowExecutionError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4235,14 +4239,14 @@ impl RespondActivityTaskCanceledError {
                         RespondActivityTaskCanceledError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         RespondActivityTaskCanceledError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4293,14 +4297,14 @@ impl RespondActivityTaskCompletedError {
                         RespondActivityTaskCompletedError::OperationNotPermittedFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         RespondActivityTaskCompletedError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4349,14 +4353,14 @@ impl RespondActivityTaskFailedError {
                         RespondActivityTaskFailedError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         RespondActivityTaskFailedError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4407,14 +4411,14 @@ impl RespondDecisionTaskCompletedError {
                         RespondDecisionTaskCompletedError::OperationNotPermittedFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         RespondDecisionTaskCompletedError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4463,12 +4467,14 @@ impl SignalWorkflowExecutionError {
                         SignalWorkflowExecutionError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
-                    return RusotoError::Service(SignalWorkflowExecutionError::UnknownResourceFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        SignalWorkflowExecutionError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4521,38 +4527,40 @@ impl StartWorkflowExecutionError {
 
             match *error_type {
                 "DefaultUndefinedFault" => {
-                    return RusotoError::Service(StartWorkflowExecutionError::DefaultUndefinedFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        StartWorkflowExecutionError::DefaultUndefinedFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "LimitExceededFault" => {
                     return RusotoError::Service(StartWorkflowExecutionError::LimitExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
                         StartWorkflowExecutionError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TypeDeprecatedFault" => {
                     return RusotoError::Service(StartWorkflowExecutionError::TypeDeprecatedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(StartWorkflowExecutionError::UnknownResourceFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "WorkflowExecutionAlreadyStartedFault" => {
                     return RusotoError::Service(
                         StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4607,14 +4615,14 @@ impl TerminateWorkflowExecutionError {
                         TerminateWorkflowExecutionError::OperationNotPermittedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
                         TerminateWorkflowExecutionError::UnknownResourceFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

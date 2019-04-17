@@ -1845,27 +1845,29 @@ impl AcceptSharedDirectoryError {
                 "ClientException" => {
                     return RusotoError::Service(AcceptSharedDirectoryError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryAlreadySharedException" => {
-                    return RusotoError::Service(AcceptSharedDirectoryError::DirectoryAlreadyShared(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AcceptSharedDirectoryError::DirectoryAlreadyShared(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(AcceptSharedDirectoryError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AcceptSharedDirectoryError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(AcceptSharedDirectoryError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1925,37 +1927,37 @@ impl AddIpRoutesError {
                 "ClientException" => {
                     return RusotoError::Service(AddIpRoutesError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(AddIpRoutesError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(AddIpRoutesError::EntityAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(AddIpRoutesError::EntityDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AddIpRoutesError::EntityDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AddIpRoutesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IpRouteLimitExceededException" => {
                     return RusotoError::Service(AddIpRoutesError::IpRouteLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(AddIpRoutesError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2013,27 +2015,27 @@ impl AddTagsToResourceError {
                 "ClientException" => {
                     return RusotoError::Service(AddTagsToResourceError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(AddTagsToResourceError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AddTagsToResourceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(AddTagsToResourceError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TagLimitExceededException" => {
                     return RusotoError::Service(AddTagsToResourceError::TagLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2085,17 +2087,17 @@ impl CancelSchemaExtensionError {
                 "ClientException" => {
                     return RusotoError::Service(CancelSchemaExtensionError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(CancelSchemaExtensionError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CancelSchemaExtensionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2147,22 +2149,22 @@ impl ConnectDirectoryError {
                 "ClientException" => {
                     return RusotoError::Service(ConnectDirectoryError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryLimitExceededException" => {
                     return RusotoError::Service(ConnectDirectoryError::DirectoryLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ConnectDirectoryError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ConnectDirectoryError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2217,27 +2219,27 @@ impl CreateAliasError {
                 "ClientException" => {
                     return RusotoError::Service(CreateAliasError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(CreateAliasError::EntityAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(CreateAliasError::EntityDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateAliasError::EntityDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateAliasError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateAliasError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2299,42 +2301,42 @@ impl CreateComputerError {
                 "AuthenticationFailedException" => {
                     return RusotoError::Service(CreateComputerError::AuthenticationFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClientException" => {
                     return RusotoError::Service(CreateComputerError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(CreateComputerError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(CreateComputerError::EntityAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(CreateComputerError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateComputerError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateComputerError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(CreateComputerError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2399,45 +2401,45 @@ impl CreateConditionalForwarderError {
                 "ClientException" => {
                     return RusotoError::Service(CreateConditionalForwarderError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
                         CreateConditionalForwarderError::DirectoryUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(
                         CreateConditionalForwarderError::EntityAlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
                         CreateConditionalForwarderError::EntityDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateConditionalForwarderError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateConditionalForwarderError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         CreateConditionalForwarderError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2493,22 +2495,22 @@ impl CreateDirectoryError {
                 "ClientException" => {
                     return RusotoError::Service(CreateDirectoryError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryLimitExceededException" => {
                     return RusotoError::Service(CreateDirectoryError::DirectoryLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateDirectoryError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateDirectoryError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2565,34 +2567,34 @@ impl CreateLogSubscriptionError {
                 "ClientException" => {
                     return RusotoError::Service(CreateLogSubscriptionError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(CreateLogSubscriptionError::EntityAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(CreateLogSubscriptionError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(
                         CreateLogSubscriptionError::InsufficientPermissions(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateLogSubscriptionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(CreateLogSubscriptionError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2649,27 +2651,27 @@ impl CreateMicrosoftADError {
                 "ClientException" => {
                     return RusotoError::Service(CreateMicrosoftADError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryLimitExceededException" => {
                     return RusotoError::Service(CreateMicrosoftADError::DirectoryLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateMicrosoftADError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateMicrosoftADError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(CreateMicrosoftADError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2725,27 +2727,27 @@ impl CreateSnapshotError {
                 "ClientException" => {
                     return RusotoError::Service(CreateSnapshotError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(CreateSnapshotError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateSnapshotError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateSnapshotError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "SnapshotLimitExceededException" => {
                     return RusotoError::Service(CreateSnapshotError::SnapshotLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2803,32 +2805,32 @@ impl CreateTrustError {
                 "ClientException" => {
                     return RusotoError::Service(CreateTrustError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(CreateTrustError::EntityAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(CreateTrustError::EntityDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateTrustError::EntityDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateTrustError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateTrustError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(CreateTrustError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2889,38 +2891,38 @@ impl DeleteConditionalForwarderError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteConditionalForwarderError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
                         DeleteConditionalForwarderError::DirectoryUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
                         DeleteConditionalForwarderError::EntityDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteConditionalForwarderError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteConditionalForwarderError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         DeleteConditionalForwarderError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2973,17 +2975,17 @@ impl DeleteDirectoryError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteDirectoryError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DeleteDirectoryError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteDirectoryError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3035,22 +3037,22 @@ impl DeleteLogSubscriptionError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteLogSubscriptionError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DeleteLogSubscriptionError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteLogSubscriptionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DeleteLogSubscriptionError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3103,22 +3105,22 @@ impl DeleteSnapshotError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteSnapshotError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DeleteSnapshotError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteSnapshotError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteSnapshotError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3173,27 +3175,27 @@ impl DeleteTrustError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteTrustError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(DeleteTrustError::EntityDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteTrustError::EntityDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteTrustError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteTrustError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DeleteTrustError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3247,22 +3249,22 @@ impl DeregisterEventTopicError {
                 "ClientException" => {
                     return RusotoError::Service(DeregisterEventTopicError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DeregisterEventTopicError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeregisterEventTopicError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeregisterEventTopicError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3321,40 +3323,40 @@ impl DescribeConditionalForwardersError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeConditionalForwardersError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
                         DescribeConditionalForwardersError::DirectoryUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
                         DescribeConditionalForwardersError::EntityDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DescribeConditionalForwardersError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeConditionalForwardersError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         DescribeConditionalForwardersError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3411,27 +3413,27 @@ impl DescribeDirectoriesError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeDirectoriesError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DescribeDirectoriesError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeDirectoriesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeDirectoriesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeDirectoriesError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3489,34 +3491,36 @@ impl DescribeDomainControllersError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeDomainControllersError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(DescribeDomainControllersError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeDomainControllersError::EntityDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeDomainControllersError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeDomainControllersError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeDomainControllersError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         DescribeDomainControllersError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3571,22 +3575,22 @@ impl DescribeEventTopicsError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeEventTopicsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DescribeEventTopicsError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeEventTopicsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeEventTopicsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3643,34 +3647,36 @@ impl DescribeSharedDirectoriesError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeSharedDirectoriesError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(DescribeSharedDirectoriesError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeSharedDirectoriesError::EntityDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeSharedDirectoriesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeSharedDirectoriesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeSharedDirectoriesError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         DescribeSharedDirectoriesError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3727,27 +3733,27 @@ impl DescribeSnapshotsError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeSnapshotsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DescribeSnapshotsError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeSnapshotsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeSnapshotsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeSnapshotsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3805,32 +3811,32 @@ impl DescribeTrustsError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeTrustsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DescribeTrustsError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeTrustsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeTrustsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeTrustsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DescribeTrustsError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3883,17 +3889,17 @@ impl DisableRadiusError {
                 "ClientException" => {
                     return RusotoError::Service(DisableRadiusError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DisableRadiusError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DisableRadiusError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3947,27 +3953,27 @@ impl DisableSsoError {
                 "AuthenticationFailedException" => {
                     return RusotoError::Service(DisableSsoError::AuthenticationFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClientException" => {
                     return RusotoError::Service(DisableSsoError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DisableSsoError::EntityDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(DisableSsoError::InsufficientPermissions(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DisableSsoError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4023,27 +4029,27 @@ impl EnableRadiusError {
                 "ClientException" => {
                     return RusotoError::Service(EnableRadiusError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(EnableRadiusError::EntityAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(EnableRadiusError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(EnableRadiusError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(EnableRadiusError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4097,27 +4103,29 @@ impl EnableSsoError {
 
             match *error_type {
                 "AuthenticationFailedException" => {
-                    return RusotoError::Service(EnableSsoError::AuthenticationFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(EnableSsoError::AuthenticationFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "ClientException" => {
-                    return RusotoError::Service(EnableSsoError::Client(String::from(error_message)));
+                    return RusotoError::Service(EnableSsoError::Client(String::from(
+                        error_message,
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(EnableSsoError::EntityDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(EnableSsoError::InsufficientPermissions(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(EnableSsoError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4169,17 +4177,17 @@ impl GetDirectoryLimitsError {
                 "ClientException" => {
                     return RusotoError::Service(GetDirectoryLimitsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(GetDirectoryLimitsError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetDirectoryLimitsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4229,17 +4237,17 @@ impl GetSnapshotLimitsError {
                 "ClientException" => {
                     return RusotoError::Service(GetSnapshotLimitsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(GetSnapshotLimitsError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetSnapshotLimitsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4293,27 +4301,27 @@ impl ListIpRoutesError {
                 "ClientException" => {
                     return RusotoError::Service(ListIpRoutesError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ListIpRoutesError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListIpRoutesError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListIpRoutesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListIpRoutesError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4367,22 +4375,22 @@ impl ListLogSubscriptionsError {
                 "ClientException" => {
                     return RusotoError::Service(ListLogSubscriptionsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ListLogSubscriptionsError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListLogSubscriptionsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListLogSubscriptionsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4435,22 +4443,22 @@ impl ListSchemaExtensionsError {
                 "ClientException" => {
                     return RusotoError::Service(ListSchemaExtensionsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ListSchemaExtensionsError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListSchemaExtensionsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListSchemaExtensionsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4505,27 +4513,27 @@ impl ListTagsForResourceError {
                 "ClientException" => {
                     return RusotoError::Service(ListTagsForResourceError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ListTagsForResourceError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListTagsForResourceError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4579,22 +4587,22 @@ impl RegisterEventTopicError {
                 "ClientException" => {
                     return RusotoError::Service(RegisterEventTopicError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(RegisterEventTopicError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RegisterEventTopicError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(RegisterEventTopicError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4649,27 +4657,29 @@ impl RejectSharedDirectoryError {
                 "ClientException" => {
                     return RusotoError::Service(RejectSharedDirectoryError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryAlreadySharedException" => {
-                    return RusotoError::Service(RejectSharedDirectoryError::DirectoryAlreadyShared(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RejectSharedDirectoryError::DirectoryAlreadyShared(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(RejectSharedDirectoryError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RejectSharedDirectoryError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(RejectSharedDirectoryError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4725,27 +4735,27 @@ impl RemoveIpRoutesError {
                 "ClientException" => {
                     return RusotoError::Service(RemoveIpRoutesError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(RemoveIpRoutesError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(RemoveIpRoutesError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RemoveIpRoutesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(RemoveIpRoutesError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4799,22 +4809,22 @@ impl RemoveTagsFromResourceError {
                 "ClientException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(RemoveTagsFromResourceError::Service(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RemoveTagsFromResourceError::Service(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4873,37 +4883,37 @@ impl ResetUserPasswordError {
                 "ClientException" => {
                     return RusotoError::Service(ResetUserPasswordError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(ResetUserPasswordError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ResetUserPasswordError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(ResetUserPasswordError::InvalidPassword(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ResetUserPasswordError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(ResetUserPasswordError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserDoesNotExistException" => {
                     return RusotoError::Service(ResetUserPasswordError::UserDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4959,22 +4969,22 @@ impl RestoreFromSnapshotError {
                 "ClientException" => {
                     return RusotoError::Service(RestoreFromSnapshotError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(RestoreFromSnapshotError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RestoreFromSnapshotError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(RestoreFromSnapshotError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5039,52 +5049,52 @@ impl ShareDirectoryError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ShareDirectoryError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClientException" => {
                     return RusotoError::Service(ShareDirectoryError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryAlreadySharedException" => {
                     return RusotoError::Service(ShareDirectoryError::DirectoryAlreadyShared(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ShareDirectoryError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ShareDirectoryError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTargetException" => {
                     return RusotoError::Service(ShareDirectoryError::InvalidTarget(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationsException" => {
                     return RusotoError::Service(ShareDirectoryError::Organizations(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ShareDirectoryError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ShareLimitExceededException" => {
                     return RusotoError::Service(ShareDirectoryError::ShareLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(ShareDirectoryError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5147,32 +5157,32 @@ impl StartSchemaExtensionError {
                 "ClientException" => {
                     return RusotoError::Service(StartSchemaExtensionError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(StartSchemaExtensionError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(StartSchemaExtensionError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartSchemaExtensionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(StartSchemaExtensionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "SnapshotLimitExceededException" => {
                     return RusotoError::Service(StartSchemaExtensionError::SnapshotLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5229,27 +5239,27 @@ impl UnshareDirectoryError {
                 "ClientException" => {
                     return RusotoError::Service(UnshareDirectoryError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotSharedException" => {
                     return RusotoError::Service(UnshareDirectoryError::DirectoryNotShared(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(UnshareDirectoryError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTargetException" => {
-                    return RusotoError::Service(UnshareDirectoryError::InvalidTarget(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UnshareDirectoryError::InvalidTarget(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UnshareDirectoryError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5309,38 +5319,38 @@ impl UpdateConditionalForwarderError {
                 "ClientException" => {
                     return RusotoError::Service(UpdateConditionalForwarderError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
                         UpdateConditionalForwarderError::DirectoryUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
                         UpdateConditionalForwarderError::EntityDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateConditionalForwarderError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateConditionalForwarderError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         UpdateConditionalForwarderError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5403,47 +5413,47 @@ impl UpdateNumberOfDomainControllersError {
                 "ClientException" => {
                     return RusotoError::Service(UpdateNumberOfDomainControllersError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
                         UpdateNumberOfDomainControllersError::DirectoryUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DomainControllerLimitExceededException" => {
                     return RusotoError::Service(
                         UpdateNumberOfDomainControllersError::DomainControllerLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
                         UpdateNumberOfDomainControllersError::EntityDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         UpdateNumberOfDomainControllersError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateNumberOfDomainControllersError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         UpdateNumberOfDomainControllersError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5499,22 +5509,22 @@ impl UpdateRadiusError {
                 "ClientException" => {
                     return RusotoError::Service(UpdateRadiusError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(UpdateRadiusError::EntityDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateRadiusError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateRadiusError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5567,22 +5577,22 @@ impl UpdateTrustError {
                 "ClientException" => {
                     return RusotoError::Service(UpdateTrustError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(UpdateTrustError::EntityDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateTrustError::EntityDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateTrustError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateTrustError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5637,27 +5647,27 @@ impl VerifyTrustError {
                 "ClientException" => {
                     return RusotoError::Service(VerifyTrustError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(VerifyTrustError::EntityDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(VerifyTrustError::EntityDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(VerifyTrustError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(VerifyTrustError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(VerifyTrustError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

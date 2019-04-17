@@ -1000,31 +1000,33 @@ impl AssociateDelegateToResourceError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(AssociateDelegateToResourceError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(AssociateDelegateToResourceError::EntityState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AssociateDelegateToResourceError::InvalidParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AssociateDelegateToResourceError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(
                         AssociateDelegateToResourceError::OrganizationNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(
                         AssociateDelegateToResourceError::OrganizationState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1088,42 +1090,42 @@ impl AssociateMemberToGroupError {
                         AssociateMemberToGroupError::DirectoryServiceAuthenticationFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(AssociateMemberToGroupError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(AssociateMemberToGroupError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(AssociateMemberToGroupError::EntityState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AssociateMemberToGroupError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(AssociateMemberToGroupError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(AssociateMemberToGroupError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(AssociateMemberToGroupError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1188,42 +1190,42 @@ impl CreateAliasError {
                 "EmailAddressInUseException" => {
                     return RusotoError::Service(CreateAliasError::EmailAddressInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(CreateAliasError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(CreateAliasError::EntityState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateAliasError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MailDomainNotFoundException" => {
-                    return RusotoError::Service(CreateAliasError::MailDomainNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateAliasError::MailDomainNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "MailDomainStateException" => {
                     return RusotoError::Service(CreateAliasError::MailDomainState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(CreateAliasError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(CreateAliasError::OrganizationState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1290,42 +1292,42 @@ impl CreateGroupError {
                         CreateGroupError::DirectoryServiceAuthenticationFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(CreateGroupError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateGroupError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NameAvailabilityException" => {
                     return RusotoError::Service(CreateGroupError::NameAvailability(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(CreateGroupError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(CreateGroupError::OrganizationState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ReservedNameException" => {
                     return RusotoError::Service(CreateGroupError::ReservedName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(CreateGroupError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1390,37 +1392,37 @@ impl CreateResourceError {
                         CreateResourceError::DirectoryServiceAuthenticationFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(CreateResourceError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateResourceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NameAvailabilityException" => {
                     return RusotoError::Service(CreateResourceError::NameAvailability(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(CreateResourceError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(CreateResourceError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReservedNameException" => {
                     return RusotoError::Service(CreateResourceError::ReservedName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1488,47 +1490,47 @@ impl CreateUserError {
                         CreateUserError::DirectoryServiceAuthenticationFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(CreateUserError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateUserError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(CreateUserError::InvalidPassword(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NameAvailabilityException" => {
                     return RusotoError::Service(CreateUserError::NameAvailability(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(CreateUserError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(CreateUserError::OrganizationState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ReservedNameException" => {
                     return RusotoError::Service(CreateUserError::ReservedName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(CreateUserError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1588,27 +1590,27 @@ impl DeleteAliasError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteAliasError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(DeleteAliasError::EntityState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteAliasError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(DeleteAliasError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(DeleteAliasError::OrganizationState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1670,37 +1672,37 @@ impl DeleteGroupError {
                         DeleteGroupError::DirectoryServiceAuthenticationFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(DeleteGroupError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(DeleteGroupError::EntityState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteGroupError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(DeleteGroupError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(DeleteGroupError::OrganizationState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DeleteGroupError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1758,29 +1760,29 @@ impl DeleteMailboxPermissionsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteMailboxPermissionsError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(DeleteMailboxPermissionsError::EntityState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteMailboxPermissionsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(
                         DeleteMailboxPermissionsError::OrganizationNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(DeleteMailboxPermissionsError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1834,22 +1836,22 @@ impl DeleteResourceError {
                 "EntityStateException" => {
                     return RusotoError::Service(DeleteResourceError::EntityState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteResourceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(DeleteResourceError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(DeleteResourceError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1910,37 +1912,37 @@ impl DeleteUserError {
                         DeleteUserError::DirectoryServiceAuthenticationFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(DeleteUserError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(DeleteUserError::EntityState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(DeleteUserError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(DeleteUserError::OrganizationState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DeleteUserError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1998,27 +2000,27 @@ impl DeregisterFromWorkMailError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeregisterFromWorkMailError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(DeregisterFromWorkMailError::EntityState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeregisterFromWorkMailError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(DeregisterFromWorkMailError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(DeregisterFromWorkMailError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2072,22 +2074,22 @@ impl DescribeGroupError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DescribeGroupError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeGroupError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeGroupError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(DescribeGroupError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(DescribeGroupError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2136,12 +2138,12 @@ impl DescribeOrganizationError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeOrganizationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(DescribeOrganizationError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2192,22 +2194,22 @@ impl DescribeResourceError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DescribeResourceError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeResourceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(DescribeResourceError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(DescribeResourceError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2260,22 +2262,22 @@ impl DescribeUserError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DescribeUserError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(DescribeUserError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
-                    return RusotoError::Service(DescribeUserError::OrganizationState(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeUserError::OrganizationState(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2334,33 +2336,35 @@ impl DisassociateDelegateFromResourceError {
                         DisassociateDelegateFromResourceError::EntityNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EntityStateException" => {
-                    return RusotoError::Service(DisassociateDelegateFromResourceError::EntityState(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DisassociateDelegateFromResourceError::EntityState(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DisassociateDelegateFromResourceError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(
                         DisassociateDelegateFromResourceError::OrganizationNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(
                         DisassociateDelegateFromResourceError::OrganizationState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2426,50 +2430,52 @@ impl DisassociateMemberFromGroupError {
                         DisassociateMemberFromGroupError::DirectoryServiceAuthenticationFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
                         DisassociateMemberFromGroupError::DirectoryUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DisassociateMemberFromGroupError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(DisassociateMemberFromGroupError::EntityState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DisassociateMemberFromGroupError::InvalidParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DisassociateMemberFromGroupError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(
                         DisassociateMemberFromGroupError::OrganizationNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(
                         DisassociateMemberFromGroupError::OrganizationState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         DisassociateMemberFromGroupError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2530,27 +2536,27 @@ impl ListAliasesError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListAliasesError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(ListAliasesError::EntityState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListAliasesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(ListAliasesError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(ListAliasesError::OrganizationState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2606,27 +2612,27 @@ impl ListGroupMembersError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListGroupMembersError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(ListGroupMembersError::EntityState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListGroupMembersError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(ListGroupMembersError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(ListGroupMembersError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2680,22 +2686,22 @@ impl ListGroupsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListGroupsError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListGroupsError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(ListGroupsError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(ListGroupsError::OrganizationState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2748,22 +2754,22 @@ impl ListMailboxPermissionsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListMailboxPermissionsError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListMailboxPermissionsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(ListMailboxPermissionsError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(ListMailboxPermissionsError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2810,7 +2816,7 @@ impl ListOrganizationsError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListOrganizationsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2862,27 +2868,27 @@ impl ListResourceDelegatesError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListResourceDelegatesError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(ListResourceDelegatesError::EntityState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListResourceDelegatesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(ListResourceDelegatesError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(ListResourceDelegatesError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2932,19 +2938,19 @@ impl ListResourcesError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListResourcesError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListResourcesError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(ListResourcesError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(ListResourcesError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2994,17 +3000,17 @@ impl ListUsersError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListUsersError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
-                    return RusotoError::Service(ListUsersError::OrganizationNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListUsersError::OrganizationNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(ListUsersError::OrganizationState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3058,27 +3064,27 @@ impl PutMailboxPermissionsError {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(PutMailboxPermissionsError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(PutMailboxPermissionsError::EntityState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutMailboxPermissionsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(PutMailboxPermissionsError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(PutMailboxPermissionsError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3148,57 +3154,57 @@ impl RegisterToWorkMailError {
                         RegisterToWorkMailError::DirectoryServiceAuthenticationFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(RegisterToWorkMailError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EmailAddressInUseException" => {
                     return RusotoError::Service(RegisterToWorkMailError::EmailAddressInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityAlreadyRegisteredException" => {
                     return RusotoError::Service(RegisterToWorkMailError::EntityAlreadyRegistered(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(RegisterToWorkMailError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
-                    return RusotoError::Service(RegisterToWorkMailError::EntityState(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RegisterToWorkMailError::EntityState(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RegisterToWorkMailError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MailDomainNotFoundException" => {
                     return RusotoError::Service(RegisterToWorkMailError::MailDomainNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MailDomainStateException" => {
                     return RusotoError::Service(RegisterToWorkMailError::MailDomainState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(RegisterToWorkMailError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(RegisterToWorkMailError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3270,47 +3276,47 @@ impl ResetPasswordError {
                         ResetPasswordError::DirectoryServiceAuthenticationFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(ResetPasswordError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ResetPasswordError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(ResetPasswordError::EntityState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ResetPasswordError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ResetPasswordError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(ResetPasswordError::InvalidPassword(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(ResetPasswordError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(ResetPasswordError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(ResetPasswordError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3384,63 +3390,65 @@ impl UpdatePrimaryEmailAddressError {
                         UpdatePrimaryEmailAddressError::DirectoryServiceAuthenticationFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
                         UpdatePrimaryEmailAddressError::DirectoryUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EmailAddressInUseException" => {
                     return RusotoError::Service(UpdatePrimaryEmailAddressError::EmailAddressInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdatePrimaryEmailAddressError::EntityNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(UpdatePrimaryEmailAddressError::EntityState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdatePrimaryEmailAddressError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MailDomainNotFoundException" => {
-                    return RusotoError::Service(UpdatePrimaryEmailAddressError::MailDomainNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdatePrimaryEmailAddressError::MailDomainNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "MailDomainStateException" => {
                     return RusotoError::Service(UpdatePrimaryEmailAddressError::MailDomainState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(
                         UpdatePrimaryEmailAddressError::OrganizationNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(UpdatePrimaryEmailAddressError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         UpdatePrimaryEmailAddressError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3514,52 +3522,52 @@ impl UpdateResourceError {
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(UpdateResourceError::DirectoryUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EmailAddressInUseException" => {
                     return RusotoError::Service(UpdateResourceError::EmailAddressInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateResourceError::EntityNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EntityStateException" => {
                     return RusotoError::Service(UpdateResourceError::EntityState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidConfigurationException" => {
                     return RusotoError::Service(UpdateResourceError::InvalidConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MailDomainNotFoundException" => {
                     return RusotoError::Service(UpdateResourceError::MailDomainNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MailDomainStateException" => {
-                    return RusotoError::Service(UpdateResourceError::MailDomainState(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateResourceError::MailDomainState(
+                        String::from(error_message),
+                    ))
                 }
                 "NameAvailabilityException" => {
                     return RusotoError::Service(UpdateResourceError::NameAvailability(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(UpdateResourceError::OrganizationNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationStateException" => {
                     return RusotoError::Service(UpdateResourceError::OrganizationState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

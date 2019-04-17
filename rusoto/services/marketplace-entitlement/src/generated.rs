@@ -134,17 +134,17 @@ impl GetEntitlementsError {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(GetEntitlementsError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetEntitlementsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetEntitlementsError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

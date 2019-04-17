@@ -968,37 +968,37 @@ impl CreateUserError {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateUserError::DuplicateResource(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateUserError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateUserError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateUserError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateUserError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateUserError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateUserError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1070,27 +1070,27 @@ impl DeleteUserError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteUserError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteUserError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeleteUserError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1160,27 +1160,27 @@ impl DescribeUserError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeUserError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeUserError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeUserError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1252,27 +1252,27 @@ impl DescribeUserHierarchyGroupError {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeUserHierarchyGroupError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserHierarchyGroupError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeUserHierarchyGroupError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserHierarchyGroupError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeUserHierarchyGroupError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1346,33 +1346,33 @@ impl DescribeUserHierarchyStructureError {
                         DescribeUserHierarchyStructureError::InternalService(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DescribeUserHierarchyStructureError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         DescribeUserHierarchyStructureError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DescribeUserHierarchyStructureError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeUserHierarchyStructureError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1438,17 +1438,17 @@ impl GetContactAttributesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetContactAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetContactAttributesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetContactAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1516,27 +1516,27 @@ impl GetCurrentMetricDataError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetCurrentMetricDataError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetCurrentMetricDataError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetCurrentMetricDataError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetCurrentMetricDataError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetCurrentMetricDataError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1608,32 +1608,32 @@ impl GetFederationTokenError {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(GetFederationTokenError::DuplicateResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetFederationTokenError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetFederationTokenError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetFederationTokenError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetFederationTokenError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(GetFederationTokenError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1704,27 +1704,27 @@ impl GetMetricDataError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetMetricDataError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetMetricDataError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetMetricDataError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetMetricDataError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetMetricDataError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetMetricDataError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetMetricDataError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1794,27 +1794,27 @@ impl ListRoutingProfilesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListRoutingProfilesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListRoutingProfilesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListRoutingProfilesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListRoutingProfilesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(ListRoutingProfilesError::Throttling(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListRoutingProfilesError::Throttling(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1884,27 +1884,27 @@ impl ListSecurityProfilesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListSecurityProfilesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListSecurityProfilesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListSecurityProfilesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListSecurityProfilesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListSecurityProfilesError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1974,27 +1974,27 @@ impl ListUserHierarchyGroupsError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListUserHierarchyGroupsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListUserHierarchyGroupsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListUserHierarchyGroupsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListUserHierarchyGroupsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListUserHierarchyGroupsError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2064,27 +2064,27 @@ impl ListUsersError {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListUsersError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListUsersError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListUsersError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListUsersError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListUsersError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2160,39 +2160,39 @@ impl StartOutboundVoiceContactError {
                         StartOutboundVoiceContactError::DestinationNotAllowed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(StartOutboundVoiceContactError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartOutboundVoiceContactError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartOutboundVoiceContactError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartOutboundVoiceContactError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OutboundContactNotPermittedException" => {
                     return RusotoError::Service(
                         StartOutboundVoiceContactError::OutboundContactNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartOutboundVoiceContactError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2264,27 +2264,27 @@ impl StopContactError {
                 "ContactNotFoundException" => {
                     return RusotoError::Service(StopContactError::ContactNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(StopContactError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StopContactError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopContactError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopContactError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2352,22 +2352,22 @@ impl UpdateContactAttributesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateContactAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateContactAttributesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateContactAttributesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateContactAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2436,27 +2436,27 @@ impl UpdateUserHierarchyError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserHierarchyError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserHierarchyError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateUserHierarchyError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserHierarchyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(UpdateUserHierarchyError::Throttling(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateUserHierarchyError::Throttling(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2526,27 +2526,27 @@ impl UpdateUserIdentityInfoError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserIdentityInfoError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserIdentityInfoError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateUserIdentityInfoError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserIdentityInfoError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateUserIdentityInfoError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2616,27 +2616,27 @@ impl UpdateUserPhoneConfigError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserPhoneConfigError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserPhoneConfigError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateUserPhoneConfigError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserPhoneConfigError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateUserPhoneConfigError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2706,27 +2706,27 @@ impl UpdateUserRoutingProfileError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserRoutingProfileError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserRoutingProfileError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateUserRoutingProfileError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserRoutingProfileError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateUserRoutingProfileError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2798,27 +2798,27 @@ impl UpdateUserSecurityProfilesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserSecurityProfilesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserSecurityProfilesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateUserSecurityProfilesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserSecurityProfilesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateUserSecurityProfilesError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

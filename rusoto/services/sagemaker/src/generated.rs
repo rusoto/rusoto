@@ -4658,12 +4658,12 @@ impl CreateCompilationJobError {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateCompilationJobError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateCompilationJobError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4708,7 +4708,7 @@ impl CreateEndpointError {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateEndpointError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4752,7 +4752,7 @@ impl CreateEndpointConfigError {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateEndpointConfigError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4800,14 +4800,14 @@ impl CreateHyperParameterTuningJobError {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateHyperParameterTuningJobError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
                         CreateHyperParameterTuningJobError::ResourceLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4854,12 +4854,12 @@ impl CreateLabelingJobError {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateLabelingJobError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateLabelingJobError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4904,7 +4904,7 @@ impl CreateModelError {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateModelError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4980,9 +4980,11 @@ impl CreateNotebookInstanceError {
 
             match *error_type {
                 "ResourceLimitExceeded" => {
-                    return RusotoError::Service(CreateNotebookInstanceError::ResourceLimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateNotebookInstanceError::ResourceLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5030,7 +5032,7 @@ impl CreateNotebookInstanceLifecycleConfigError {
                         CreateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5112,12 +5114,12 @@ impl CreateTrainingJobError {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateTrainingJobError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateTrainingJobError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5164,12 +5166,12 @@ impl CreateTransformJobError {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateTransformJobError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateTransformJobError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5216,12 +5218,12 @@ impl CreateWorkteamError {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateWorkteamError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateWorkteamError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5574,7 +5576,7 @@ impl DeleteWorkteamError {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(DeleteWorkteamError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5686,7 +5688,7 @@ impl DescribeCompilationJobError {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeCompilationJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5802,7 +5804,7 @@ impl DescribeHyperParameterTuningJobError {
                         DescribeHyperParameterTuningJobError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5846,7 +5848,7 @@ impl DescribeLabelingJobError {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeLabelingJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6064,7 +6066,7 @@ impl DescribeTrainingJobError {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeTrainingJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6108,7 +6110,7 @@ impl DescribeTransformJobError {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeTransformJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6460,9 +6462,11 @@ impl ListLabelingJobsForWorkteamError {
 
             match *error_type {
                 "ResourceNotFound" => {
-                    return RusotoError::Service(ListLabelingJobsForWorkteamError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListLabelingJobsForWorkteamError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6750,7 +6754,7 @@ impl ListTrainingJobsForHyperParameterTuningJobError {
                         ListTrainingJobsForHyperParameterTuningJobError::ResourceNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6930,7 +6934,7 @@ impl StartNotebookInstanceError {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(StartNotebookInstanceError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6974,7 +6978,7 @@ impl StopCompilationJobError {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopCompilationJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7018,9 +7022,11 @@ impl StopHyperParameterTuningJobError {
 
             match *error_type {
                 "ResourceNotFound" => {
-                    return RusotoError::Service(StopHyperParameterTuningJobError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        StopHyperParameterTuningJobError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7064,7 +7070,7 @@ impl StopLabelingJobError {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopLabelingJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7142,7 +7148,7 @@ impl StopTrainingJobError {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopTrainingJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7186,7 +7192,7 @@ impl StopTransformJobError {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopTransformJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7264,7 +7270,7 @@ impl UpdateEndpointError {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(UpdateEndpointError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7312,7 +7318,7 @@ impl UpdateEndpointWeightsAndCapacitiesError {
                         UpdateEndpointWeightsAndCapacitiesError::ResourceLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7354,9 +7360,11 @@ impl UpdateNotebookInstanceError {
 
             match *error_type {
                 "ResourceLimitExceeded" => {
-                    return RusotoError::Service(UpdateNotebookInstanceError::ResourceLimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateNotebookInstanceError::ResourceLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7404,7 +7412,7 @@ impl UpdateNotebookInstanceLifecycleConfigError {
                         UpdateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7448,7 +7456,7 @@ impl UpdateWorkteamError {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(UpdateWorkteamError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -451,12 +451,12 @@ impl DeleteLexiconError {
                 "LexiconNotFoundException" => {
                     return RusotoError::Service(DeleteLexiconError::LexiconNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(DeleteLexiconError::ServiceFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -517,12 +517,12 @@ impl DescribeVoicesError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeVoicesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(DescribeVoicesError::ServiceFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -583,12 +583,12 @@ impl GetLexiconError {
                 "LexiconNotFoundException" => {
                     return RusotoError::Service(GetLexiconError::LexiconNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(GetLexiconError::ServiceFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -651,17 +651,19 @@ impl GetSpeechSynthesisTaskError {
                 "InvalidTaskIdException" => {
                     return RusotoError::Service(GetSpeechSynthesisTaskError::InvalidTaskId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(GetSpeechSynthesisTaskError::ServiceFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SynthesisTaskNotFoundException" => {
-                    return RusotoError::Service(GetSpeechSynthesisTaskError::SynthesisTaskNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetSpeechSynthesisTaskError::SynthesisTaskNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -723,12 +725,12 @@ impl ListLexiconsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListLexiconsError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(ListLexiconsError::ServiceFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -789,12 +791,12 @@ impl ListSpeechSynthesisTasksError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListSpeechSynthesisTasksError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(ListSpeechSynthesisTasksError::ServiceFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -865,37 +867,37 @@ impl PutLexiconError {
                 "InvalidLexiconException" => {
                     return RusotoError::Service(PutLexiconError::InvalidLexicon(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LexiconSizeExceededException" => {
-                    return RusotoError::Service(PutLexiconError::LexiconSizeExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutLexiconError::LexiconSizeExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "MaxLexemeLengthExceededException" => {
                     return RusotoError::Service(PutLexiconError::MaxLexemeLengthExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MaxLexiconsNumberExceededException" => {
                     return RusotoError::Service(PutLexiconError::MaxLexiconsNumberExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(PutLexiconError::ServiceFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedPlsAlphabetException" => {
                     return RusotoError::Service(PutLexiconError::UnsupportedPlsAlphabet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedPlsLanguageException" => {
                     return RusotoError::Service(PutLexiconError::UnsupportedPlsLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -979,63 +981,63 @@ impl StartSpeechSynthesisTaskError {
                 "InvalidS3BucketException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidS3Bucket(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3KeyException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidS3Key(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSampleRateException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidSampleRate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSnsTopicArnException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidSnsTopicArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSsmlException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidSsml(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LanguageNotSupportedException" => {
                     return RusotoError::Service(
                         StartSpeechSynthesisTaskError::LanguageNotSupported(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LexiconNotFoundException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::LexiconNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MarksNotSupportedForFormatException" => {
                     return RusotoError::Service(
                         StartSpeechSynthesisTaskError::MarksNotSupportedForFormat(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::ServiceFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SsmlMarksNotSupportedForTextTypeException" => {
                     return RusotoError::Service(
                         StartSpeechSynthesisTaskError::SsmlMarksNotSupportedForTextType(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "TextLengthExceededException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::TextLengthExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1117,44 +1119,44 @@ impl SynthesizeSpeechError {
                 "InvalidSampleRateException" => {
                     return RusotoError::Service(SynthesizeSpeechError::InvalidSampleRate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSsmlException" => {
                     return RusotoError::Service(SynthesizeSpeechError::InvalidSsml(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LanguageNotSupportedException" => {
                     return RusotoError::Service(SynthesizeSpeechError::LanguageNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LexiconNotFoundException" => {
                     return RusotoError::Service(SynthesizeSpeechError::LexiconNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MarksNotSupportedForFormatException" => {
                     return RusotoError::Service(SynthesizeSpeechError::MarksNotSupportedForFormat(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(SynthesizeSpeechError::ServiceFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SsmlMarksNotSupportedForTextTypeException" => {
                     return RusotoError::Service(
                         SynthesizeSpeechError::SsmlMarksNotSupportedForTextType(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TextLengthExceededException" => {
                     return RusotoError::Service(SynthesizeSpeechError::TextLengthExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -115,32 +115,32 @@ impl GetMediaError {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(GetMediaError::ClientLimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConnectionLimitExceededException" => {
                     return RusotoError::Service(GetMediaError::ConnectionLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(GetMediaError::InvalidArgument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidEndpointException" => {
                     return RusotoError::Service(GetMediaError::InvalidEndpoint(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetMediaError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetMediaError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

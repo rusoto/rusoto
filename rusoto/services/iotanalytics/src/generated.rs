@@ -1534,27 +1534,27 @@ impl BatchPutMessageError {
                 "InternalFailureException" => {
                     return RusotoError::Service(BatchPutMessageError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(BatchPutMessageError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(BatchPutMessageError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(BatchPutMessageError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(BatchPutMessageError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(BatchPutMessageError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1626,29 +1626,29 @@ impl CancelPipelineReprocessingError {
                 "InternalFailureException" => {
                     return RusotoError::Service(CancelPipelineReprocessingError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CancelPipelineReprocessingError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CancelPipelineReprocessingError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         CancelPipelineReprocessingError::ServiceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CancelPipelineReprocessingError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1720,32 +1720,32 @@ impl CreateChannelError {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateChannelError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateChannelError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateChannelError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateChannelError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateChannelError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateChannelError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1818,32 +1818,32 @@ impl CreateDatasetError {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDatasetError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateDatasetError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateDatasetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateDatasetError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateDatasetError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateDatasetError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1914,27 +1914,27 @@ impl CreateDatasetContentError {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDatasetContentError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateDatasetContentError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateDatasetContentError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateDatasetContentError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateDatasetContentError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2006,32 +2006,32 @@ impl CreateDatastoreError {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDatastoreError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(CreateDatastoreError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateDatastoreError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateDatastoreError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateDatastoreError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateDatastoreError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateDatastoreError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2102,34 +2102,34 @@ impl CreatePipelineError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return RusotoError::Service(CreatePipelineError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreatePipelineError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePipelineError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreatePipelineError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreatePipelineError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreatePipelineError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2200,27 +2200,27 @@ impl DeleteChannelError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteChannelError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteChannelError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteChannelError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteChannelError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteChannelError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeleteChannelError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2290,27 +2290,27 @@ impl DeleteDatasetError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDatasetError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteDatasetError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteDatasetError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteDatasetError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteDatasetError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeleteDatasetError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2380,27 +2380,27 @@ impl DeleteDatasetContentError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDatasetContentError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteDatasetContentError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteDatasetContentError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteDatasetContentError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeleteDatasetContentError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2470,27 +2470,27 @@ impl DeleteDatastoreError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDatastoreError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteDatastoreError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteDatastoreError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteDatastoreError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteDatastoreError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeleteDatastoreError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2558,29 +2558,29 @@ impl DeletePipelineError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return RusotoError::Service(DeletePipelineError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeletePipelineError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeletePipelineError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeletePipelineError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeletePipelineError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeletePipelineError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2650,27 +2650,27 @@ impl DescribeChannelError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeChannelError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeChannelError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeChannelError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeChannelError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeChannelError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeChannelError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2740,27 +2740,27 @@ impl DescribeDatasetError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDatasetError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeDatasetError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeDatasetError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDatasetError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeDatasetError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeDatasetError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2830,27 +2830,27 @@ impl DescribeDatastoreError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDatastoreError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeDatastoreError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDatastoreError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeDatastoreError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeDatastoreError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2920,27 +2920,27 @@ impl DescribeLoggingOptionsError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeLoggingOptionsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeLoggingOptionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeLoggingOptionsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeLoggingOptionsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeLoggingOptionsError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3010,27 +3010,27 @@ impl DescribePipelineError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribePipelineError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribePipelineError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribePipelineError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribePipelineError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribePipelineError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3100,27 +3100,27 @@ impl GetDatasetContentError {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetDatasetContentError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetDatasetContentError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetDatasetContentError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetDatasetContentError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetDatasetContentError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3188,22 +3188,22 @@ impl ListChannelsError {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListChannelsError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListChannelsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListChannelsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListChannelsError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3272,27 +3272,27 @@ impl ListDatasetContentsError {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDatasetContentsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListDatasetContentsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListDatasetContentsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListDatasetContentsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(ListDatasetContentsError::Throttling(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListDatasetContentsError::Throttling(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3360,22 +3360,22 @@ impl ListDatasetsError {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDatasetsError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListDatasetsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListDatasetsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListDatasetsError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3440,24 +3440,24 @@ impl ListDatastoresError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return RusotoError::Service(ListDatastoresError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListDatastoresError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListDatastoresError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListDatastoresError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListDatastoresError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3524,22 +3524,22 @@ impl ListPipelinesError {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListPipelinesError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListPipelinesError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListPipelinesError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListPipelinesError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3610,32 +3610,32 @@ impl ListTagsForResourceError {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListTagsForResourceError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListTagsForResourceError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(ListTagsForResourceError::Throttling(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsForResourceError::Throttling(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3704,22 +3704,22 @@ impl PutLoggingOptionsError {
                 "InternalFailureException" => {
                     return RusotoError::Service(PutLoggingOptionsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutLoggingOptionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(PutLoggingOptionsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(PutLoggingOptionsError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3786,22 +3786,22 @@ impl RunPipelineActivityError {
                 "InternalFailureException" => {
                     return RusotoError::Service(RunPipelineActivityError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(RunPipelineActivityError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(RunPipelineActivityError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(RunPipelineActivityError::Throttling(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RunPipelineActivityError::Throttling(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3870,27 +3870,27 @@ impl SampleChannelDataError {
                 "InternalFailureException" => {
                     return RusotoError::Service(SampleChannelDataError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(SampleChannelDataError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SampleChannelDataError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(SampleChannelDataError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(SampleChannelDataError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3962,34 +3962,36 @@ impl StartPipelineReprocessingError {
                 "InternalFailureException" => {
                     return RusotoError::Service(StartPipelineReprocessingError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartPipelineReprocessingError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(
                         StartPipelineReprocessingError::ResourceAlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartPipelineReprocessingError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(StartPipelineReprocessingError::ServiceUnavailable(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        StartPipelineReprocessingError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(StartPipelineReprocessingError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4062,32 +4064,32 @@ impl TagResourceError {
                 "InternalFailureException" => {
                     return RusotoError::Service(TagResourceError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(TagResourceError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(TagResourceError::ServiceUnavailable(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(TagResourceError::ServiceUnavailable(
+                        String::from(error_message),
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(TagResourceError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4160,32 +4162,32 @@ impl UntagResourceError {
                 "InternalFailureException" => {
                     return RusotoError::Service(UntagResourceError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UntagResourceError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UntagResourceError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UntagResourceError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UntagResourceError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4256,27 +4258,27 @@ impl UpdateChannelError {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateChannelError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateChannelError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateChannelError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateChannelError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateChannelError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateChannelError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4346,27 +4348,27 @@ impl UpdateDatasetError {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDatasetError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateDatasetError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateDatasetError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateDatasetError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateDatasetError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateDatasetError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4436,27 +4438,27 @@ impl UpdateDatastoreError {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDatastoreError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(UpdateDatastoreError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateDatastoreError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateDatastoreError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateDatastoreError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateDatastoreError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4526,34 +4528,34 @@ impl UpdatePipelineError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return RusotoError::Service(UpdatePipelineError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdatePipelineError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdatePipelineError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdatePipelineError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdatePipelineError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdatePipelineError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdatePipelineError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

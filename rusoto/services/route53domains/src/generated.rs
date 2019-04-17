@@ -895,12 +895,12 @@ impl CheckDomainAvailabilityError {
                 "InvalidInput" => {
                     return RusotoError::Service(CheckDomainAvailabilityError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(CheckDomainAvailabilityError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -949,12 +949,12 @@ impl CheckDomainTransferabilityError {
                 "InvalidInput" => {
                     return RusotoError::Service(CheckDomainTransferabilityError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(CheckDomainTransferabilityError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1003,17 +1003,17 @@ impl DeleteTagsForDomainError {
                 "InvalidInput" => {
                     return RusotoError::Service(DeleteTagsForDomainError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(DeleteTagsForDomainError::OperationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(DeleteTagsForDomainError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1061,12 +1061,12 @@ impl DisableDomainAutoRenewError {
                 "InvalidInput" => {
                     return RusotoError::Service(DisableDomainAutoRenewError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(DisableDomainAutoRenewError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1119,29 +1119,29 @@ impl DisableDomainTransferLockError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(DisableDomainTransferLockError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(DisableDomainTransferLockError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
                         DisableDomainTransferLockError::OperationLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(DisableDomainTransferLockError::TLDRulesViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(DisableDomainTransferLockError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1193,17 +1193,17 @@ impl EnableDomainAutoRenewError {
                 "InvalidInput" => {
                     return RusotoError::Service(EnableDomainAutoRenewError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(EnableDomainAutoRenewError::TLDRulesViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(EnableDomainAutoRenewError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1257,29 +1257,29 @@ impl EnableDomainTransferLockError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(EnableDomainTransferLockError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(EnableDomainTransferLockError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
                         EnableDomainTransferLockError::OperationLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(EnableDomainTransferLockError::TLDRulesViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(EnableDomainTransferLockError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1333,19 +1333,19 @@ impl GetContactReachabilityStatusError {
                 "InvalidInput" => {
                     return RusotoError::Service(GetContactReachabilityStatusError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
                         GetContactReachabilityStatusError::OperationLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(GetContactReachabilityStatusError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1393,12 +1393,12 @@ impl GetDomainDetailError {
                 "InvalidInput" => {
                     return RusotoError::Service(GetDomainDetailError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(GetDomainDetailError::UnsupportedTLD(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDomainDetailError::UnsupportedTLD(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1445,12 +1445,12 @@ impl GetDomainSuggestionsError {
                 "InvalidInput" => {
                     return RusotoError::Service(GetDomainSuggestionsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(GetDomainSuggestionsError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1495,7 +1495,7 @@ impl GetOperationDetailError {
                 "InvalidInput" => {
                     return RusotoError::Service(GetOperationDetailError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1539,7 +1539,7 @@ impl ListDomainsError {
                 "InvalidInput" => {
                     return RusotoError::Service(ListDomainsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1583,7 +1583,7 @@ impl ListOperationsError {
                 "InvalidInput" => {
                     return RusotoError::Service(ListOperationsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1629,19 +1629,19 @@ impl ListTagsForDomainError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return RusotoError::Service(ListTagsForDomainError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsForDomainError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(ListTagsForDomainError::OperationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(ListTagsForDomainError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1697,32 +1697,32 @@ impl RegisterDomainError {
                 "DomainLimitExceeded" => {
                     return RusotoError::Service(RegisterDomainError::DomainLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicateRequest" => {
                     return RusotoError::Service(RegisterDomainError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(RegisterDomainError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(RegisterDomainError::OperationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(RegisterDomainError::TLDRulesViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(RegisterDomainError::UnsupportedTLD(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1779,27 +1779,27 @@ impl RenewDomainError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(RenewDomainError::DuplicateRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(RenewDomainError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(RenewDomainError::OperationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(RenewDomainError::TLDRulesViolation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(RenewDomainError::UnsupportedTLD(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1853,21 +1853,21 @@ impl ResendContactReachabilityEmailError {
                 "InvalidInput" => {
                     return RusotoError::Service(ResendContactReachabilityEmailError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
                         ResendContactReachabilityEmailError::OperationLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(
                         ResendContactReachabilityEmailError::UnsupportedTLD(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1915,12 +1915,12 @@ impl RetrieveDomainAuthCodeError {
                 "InvalidInput" => {
                     return RusotoError::Service(RetrieveDomainAuthCodeError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(RetrieveDomainAuthCodeError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1975,32 +1975,32 @@ impl TransferDomainError {
                 "DomainLimitExceeded" => {
                     return RusotoError::Service(TransferDomainError::DomainLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicateRequest" => {
                     return RusotoError::Service(TransferDomainError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(TransferDomainError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(TransferDomainError::OperationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(TransferDomainError::TLDRulesViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(TransferDomainError::UnsupportedTLD(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2057,27 +2057,27 @@ impl UpdateDomainContactError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateDomainContactError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(UpdateDomainContactError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(UpdateDomainContactError::OperationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(UpdateDomainContactError::TLDRulesViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(UpdateDomainContactError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2135,29 +2135,31 @@ impl UpdateDomainContactPrivacyError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateDomainContactPrivacyError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(UpdateDomainContactPrivacyError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
                         UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TLDRulesViolation" => {
-                    return RusotoError::Service(UpdateDomainContactPrivacyError::TLDRulesViolation(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateDomainContactPrivacyError::TLDRulesViolation(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(UpdateDomainContactPrivacyError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2213,29 +2215,29 @@ impl UpdateDomainNameserversError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateDomainNameserversError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(UpdateDomainNameserversError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
                         UpdateDomainNameserversError::OperationLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(UpdateDomainNameserversError::TLDRulesViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(UpdateDomainNameserversError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2287,17 +2289,17 @@ impl UpdateTagsForDomainError {
                 "InvalidInput" => {
                     return RusotoError::Service(UpdateTagsForDomainError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(UpdateTagsForDomainError::OperationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(UpdateTagsForDomainError::UnsupportedTLD(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2343,7 +2345,7 @@ impl ViewBillingError {
                 "InvalidInput" => {
                     return RusotoError::Service(ViewBillingError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

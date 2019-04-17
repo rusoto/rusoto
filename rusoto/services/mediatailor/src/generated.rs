@@ -555,9 +555,9 @@ impl ListTagsForResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(ListTagsForResourceError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -663,7 +663,7 @@ impl TagResourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -721,7 +721,7 @@ impl UntagResourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
