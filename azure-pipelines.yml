@@ -8,7 +8,7 @@ jobs:
     vmImage: 'Ubuntu-16.04'
 
   steps:
-    - checkout:
+    - checkout: self
       fetchDepth: 5
     - script: |
         set -e
