@@ -21,11 +21,11 @@ extern crate shlex;
 extern crate tokio_process;
 extern crate tokio_timer;
 
-pub use container::{ContainerProvider, ContainerProviderFuture};
-pub use environment::{EnvironmentProvider, EnvironmentProviderFuture};
-pub use instance_metadata::{InstanceMetadataProvider, InstanceMetadataProviderFuture};
-pub use profile::{ProfileProvider, ProfileProviderFuture};
-pub use static_provider::StaticProvider;
+pub use crate::container::{ContainerProvider, ContainerProviderFuture};
+pub use crate::environment::{EnvironmentProvider, EnvironmentProviderFuture};
+pub use crate::instance_metadata::{InstanceMetadataProvider, InstanceMetadataProviderFuture};
+pub use crate::profile::{ProfileProvider, ProfileProviderFuture};
+pub use crate::static_provider::StaticProvider;
 
 pub mod claims;
 mod container;
@@ -540,7 +540,7 @@ mod tests {
     use std::path::Path;
 
     use futures::Future;
-    use test_utils::{is_secret_hidden_behind_asterisks, lock, ENV_MUTEX, SECRET};
+    use crate::test_utils::{is_secret_hidden_behind_asterisks, lock, ENV_MUTEX, SECRET};
 
     use super::*;
 
@@ -617,7 +617,7 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg(test)]
     quickcheck! {
         fn test_aws_credentials_secrets_not_in_debug(
             key: String,

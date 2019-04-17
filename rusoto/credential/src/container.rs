@@ -7,8 +7,8 @@ use futures::future::{err, FutureResult};
 use futures::{Async, Future, Poll};
 use hyper::{Body, Request};
 
-use request::{HttpClient, HttpClientFuture};
-use {
+use crate::request::{HttpClient, HttpClientFuture};
+use crate::{
     non_empty_env_var, parse_credentials_from_aws_service, AwsCredentials, CredentialsError,
     ProvideAwsCredentials,
 };
@@ -164,7 +164,7 @@ fn new_request(uri: &str, env_var_name: &str) -> Result<Request<Body>, Credentia
 mod tests {
     use super::*;
     use std::env;
-    use test_utils::{lock, ENV_MUTEX};
+    use crate::test_utils::{lock, ENV_MUTEX};
 
     #[test]
     fn request_from_relative_uri() {
