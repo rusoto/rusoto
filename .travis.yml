@@ -12,7 +12,7 @@ script:
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "1.33.0" && "$JOB" == "api_docs" ]]; then
         echo "Running cargo docs on stable Rust on Linux" &&
-        make docs
+        RUST_VERSION=1.33.0 make docs
       fi
 after_success:
   # upload the documentation from the build if it's from Rust stable, Linux and not a pull request:
