@@ -8,6 +8,8 @@ jobs:
     vmImage: 'Ubuntu-16.04'
 
   steps:
+    - checkout: self
+      fetchDepth: 5
     - script: |
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
@@ -51,10 +53,13 @@ jobs:
       displayName: 'Install Rust'
     - script: RUST_VERSION=nightly make unit_test
       displayName: 'Run unit tests'
+      continueOnError: true
     - script: RUST_VERSION=nightly make rustls_unit_test
       displayName: 'Run unit tests with rustls'
+      continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
       displayName: 'Cargo check integration tests'
+      continueOnError: true
 
 - job: 'unit_and_integration_tests_osx'
   displayName: 'Unit and integration tests on OSX'
@@ -105,10 +110,13 @@ jobs:
       displayName: 'Install Rust'
     - script: RUST_VERSION=nightly make unit_test
       displayName: 'Run unit tests'
+      continueOnError: true
     - script: RUST_VERSION=nightly make rustls_unit_test
       displayName: 'Run unit tests with rustls'
+      continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
       displayName: 'Cargo check integration tests'
+      continueOnError: true
 
 - job: 'crate_gen_linux'
   displayName: 'Crate generation on Linux'
