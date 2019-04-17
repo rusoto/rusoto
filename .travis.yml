@@ -3,8 +3,9 @@ language: rust
 cache:
   directories:
     - ~/.cargo
+# rustdoc is slow on 1.34.0 and 1.35.0 (beta): use older version for docs
 rust:
-  - stable
+  - 1.33.0
 os:
   - linux
 script:
