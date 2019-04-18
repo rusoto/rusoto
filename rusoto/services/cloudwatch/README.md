@@ -23,7 +23,7 @@ To use `rusoto_cloudwatch` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_cloudwatch = "0.37.0"
+rusoto_cloudwatch = "0.38.0"
 ```
 
 ## Contributing

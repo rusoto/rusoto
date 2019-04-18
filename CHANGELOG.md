@@ -1,6 +1,9 @@
 # Rusoto changes
 
 ## [Unreleased]
+(Please put notes here)
+
+## [0.38.0] - 2019-04-17
 
 - Add `RusotoError` enum as base error type for all services
 - Improve error messages for BufferedHttpResponse in Unknown error variants.
@@ -8,6 +11,9 @@
 - Support presigned URLs for multipart uploads to S3
 - Add Us-Gov-East region
 - Fix a bug in SNS CreateTopic and Subscribe
+- Reduced generated xml deserializer logic
+- Move credentials crate to Rust 2018
+- Remove internal test files from published crates for rusoto_credential and rusoto_core
 
 ## [0.37.0] - 2019-03-12
 

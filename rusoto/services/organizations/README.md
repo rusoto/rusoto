@@ -23,7 +23,7 @@ To use `rusoto_organizations` in your application, add it as a dependency in you
 
 ```toml
 [dependencies]
-rusoto_organizations = "0.37.0"
+rusoto_organizations = "0.38.0"
 ```
 
 ## Contributing

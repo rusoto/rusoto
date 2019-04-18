@@ -23,7 +23,7 @@ To use `rusoto_firehose` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_firehose = "0.37.0"
+rusoto_firehose = "0.38.0"
 ```
 
 ## Contributing

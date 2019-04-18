@@ -23,7 +23,7 @@ To use `rusoto_appsync` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_appsync = "0.37.0"
+rusoto_appsync = "0.38.0"
 ```
 
 ## Contributing

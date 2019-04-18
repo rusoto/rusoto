@@ -23,7 +23,7 @@ To use `rusoto_cloud9` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_cloud9 = "0.37.0"
+rusoto_cloud9 = "0.38.0"
 ```
 
 ## Contributing
