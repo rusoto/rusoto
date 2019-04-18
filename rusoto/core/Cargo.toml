@@ -46,7 +46,7 @@ xml-rs = "0.7"
 
 [dependencies.rusoto_credential]
 path = "../credential"
-version = "0.16"
+version = "0.17"
 
 [dependencies.clippy]
 optional = true
