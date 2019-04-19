@@ -1,6 +1,7 @@
 use std::error::Error;
 use std::fmt::{Formatter, Result as FmtResult};
 
+use bytes::Bytes;
 use base64;
 use serde::de::{Error as SerdeError, Visitor, SeqAccess};
 use serde::ser::SerializeSeq;
@@ -19,7 +20,7 @@ pub trait SerdeBlob: Sized {
 struct BlobVisitor;
 
 impl<'de> Visitor<'de> for BlobVisitor {
-    type Value = Vec<u8>;
+    type Value = Bytes;
 
     fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
         write!(formatter, "a blob")
@@ -29,12 +30,14 @@ impl<'de> Visitor<'de> for BlobVisitor {
     where
         E: SerdeError,
     {
-        base64::decode(v).map_err(|err| SerdeError::custom(err.description()))
+        base64::decode(v)
+            .map(Bytes::from)
+            .map_err(|err| SerdeError::custom(err.description()))
     }
 }
 
-impl SerdeBlob for Vec<u8> {
-    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Vec<u8>, D::Error>
+impl SerdeBlob for Bytes {
+    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
@@ -45,14 +48,14 @@ impl SerdeBlob for Vec<u8> {
     where
         S: Serializer,
     {
-        serializer.serialize_str(&base64::encode(&self.as_slice()))
+        serializer.serialize_str(&base64::encode(self.as_ref()))
     }
 }
 
 struct OptionalBlobVisitor;
 
 impl<'de> Visitor<'de> for OptionalBlobVisitor {
-    type Value = Option<Vec<u8>>;
+    type Value = Option<Bytes>;
 
     fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
         write!(formatter, "a blob")
@@ -73,8 +76,8 @@ impl<'de> Visitor<'de> for OptionalBlobVisitor {
     }
 }
 
-impl SerdeBlob for Option<Vec<u8>> {
-    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
+impl SerdeBlob for Option<Bytes> {
+    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
@@ -133,7 +136,7 @@ pub trait SerdeBlobList: Sized {
 struct BlobListVisitor;
 
 impl<'de> Visitor<'de> for BlobListVisitor {
-    type Value = Vec<Vec<u8>>;
+    type Value = Vec<Bytes>;
 
     fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
         write!(formatter, "a list of blobs")
@@ -151,7 +154,7 @@ impl<'de> Visitor<'de> for BlobListVisitor {
     }
 }
 
-impl SerdeBlobList for Vec<Vec<u8>> {
+impl SerdeBlobList for Vec<Bytes> {
     fn deserialize_blob_list<'de, D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -174,7 +177,7 @@ impl SerdeBlobList for Vec<Vec<u8>> {
 struct OptionalBlobListVisitor;
 
 impl<'de> Visitor<'de> for OptionalBlobListVisitor {
-    type Value = Option<Vec<Vec<u8>>>;
+    type Value = Option<Vec<Bytes>>;
 
     fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
         write!(formatter, "an optional blob list")
@@ -195,7 +198,7 @@ impl<'de> Visitor<'de> for OptionalBlobListVisitor {
     }
 }
 
-impl SerdeBlobList for Option<Vec<Vec<u8>>> {
+impl SerdeBlobList for Option<Vec<Bytes>> {
     fn deserialize_blob_list<'de, D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -219,11 +222,12 @@ mod tests {
     extern crate serde;
     extern crate serde_json;
 
+    use bytes::Bytes;
     use super::{SerdeBlob, SerdeBlobList};
 
     #[test]
     fn serialize_optional_blob_when_none() {
-        let blob: Option<Vec<u8>> = None;
+        let blob: Option<Bytes> = None;
         let serialized = serialize_blob_helper(blob);
 
         assert_eq!("null", serialized);
@@ -231,7 +235,7 @@ mod tests {
 
     #[test]
     fn serialize_optional_blob_when_empty() {
-        let blob = Some(vec![]);
+        let blob = Some(Bytes::new());
         let serialized = serialize_blob_helper(blob);
 
         assert_eq!("\"\"", serialized);
@@ -239,7 +243,7 @@ mod tests {
 
     #[test]
     fn serialize_optional_blob_when_has_content() {
-        let blob = Some("hello world!".as_bytes().to_vec());
+        let blob = Some(Bytes::from_static(b"hello world!"));
         let serialized = serialize_blob_helper(blob);
 
         assert_eq!("\"aGVsbG8gd29ybGQh\"", serialized);
@@ -247,29 +251,29 @@ mod tests {
 
     #[test]
     fn deserialize_optional_blob_when_null() {
-        let deserialized: Option<Vec<u8>> = deserialize_blob_helper("null").unwrap();
+        let deserialized: Option<Bytes> = deserialize_blob_helper("null").unwrap();
 
         assert!(deserialized.is_none());
     }
 
     #[test]
     fn deserialize_optional_blob_when_empty() {
-        let deserialized: Option<Vec<u8>> = deserialize_blob_helper("\"\"").unwrap();
+        let deserialized: Option<Bytes> = deserialize_blob_helper("\"\"").unwrap();
 
-        assert_eq!(Some(vec![]), deserialized);
+        assert_eq!(Some(Bytes::new()), deserialized);
     }
 
     #[test]
     fn deserialize_optional_blob_when_has_content() {
-        let deserialized: Option<Vec<u8>> =
+        let deserialized: Option<Bytes> =
             deserialize_blob_helper("\"aGVsbG8gd29ybGQh\"").unwrap();
 
-        assert_eq!(Some("hello world!".as_bytes().to_vec()), deserialized);
+        assert_eq!(Some(Bytes::from_static(b"hello world!")), deserialized);
     }
 
     #[test]
     fn serialize_blob_when_empty() {
-        let blob = vec![];
+        let blob = Bytes::new();
         let serialized = serialize_blob_helper(blob);
 
         assert_eq!("\"\"", serialized);
@@ -277,7 +281,7 @@ mod tests {
 
     #[test]
     fn serialize_blob_when_has_content() {
-        let blob = "hello world!".as_bytes().to_vec();
+        let blob = Bytes::from_static(b"hello world!");
         let serialized = serialize_blob_helper(blob);
 
         assert_eq!("\"aGVsbG8gd29ybGQh\"", serialized);
@@ -285,23 +289,23 @@ mod tests {
 
     #[test]
     fn deserialize_blob_when_null() {
-        let deserialized: Result<Vec<u8>, _> = deserialize_blob_helper("null");
+        let deserialized: Result<Bytes, _> = deserialize_blob_helper("null");
 
         assert!(deserialized.is_err());
     }
 
     #[test]
     fn deserialize_blob_when_empty() {
-        let deserialized: Vec<u8> = deserialize_blob_helper("\"\"").unwrap();
+        let deserialized: Bytes = deserialize_blob_helper("\"\"").unwrap();
 
-        assert_eq!(Vec::<u8>::new(), deserialized);
+        assert_eq!(Bytes::new(), deserialized);
     }
 
     #[test]
     fn deserialize_blob_when_has_content() {
-        let deserialized: Vec<u8> = deserialize_blob_helper("\"aGVsbG8gd29ybGQh\"").unwrap();
+        let deserialized: Bytes = deserialize_blob_helper("\"aGVsbG8gd29ybGQh\"").unwrap();
 
-        assert_eq!("hello world!".as_bytes().to_vec(), deserialized);
+        assert_eq!(Bytes::from_static(b"hello world!"), deserialized);
     }
 
     #[test]
@@ -315,9 +319,9 @@ mod tests {
     #[test]
     fn serialize_blob_list_when_has_content() {
         let blob_list = vec![
-            "Sunny".as_bytes().to_vec(),
-            "Rainy".as_bytes().to_vec(),
-            "Snowy".as_bytes().to_vec()
+            Bytes::from_static(b"Sunny"),
+            Bytes::from_static(b"Rainy"),
+            Bytes::from_static(b"Snowy")
         ];
         let serialized = serialize_blob_list_helper(blob_list);
 
@@ -326,19 +330,19 @@ mod tests {
 
     #[test]
     fn deserialize_blob_list_when_empty() {
-        let deserialized: Vec<Vec<u8>> = deserialize_blob_list_helper("[]").unwrap();
+        let deserialized: Vec<Bytes> = deserialize_blob_list_helper("[]").unwrap();
 
-        assert_eq!(Vec::<Vec<u8>>::new(), deserialized);
+        assert_eq!(Vec::<Bytes>::new(), deserialized);
     }
 
     #[test]
     fn deserialize_blob_list_when_has_content() {
-        let deserialized: Vec<Vec<u8>> = deserialize_blob_list_helper("[\"U3Vubnk=\",\"UmFpbnk=\",\"U25vd3k=\"]").unwrap();
+        let deserialized: Vec<Bytes> = deserialize_blob_list_helper("[\"U3Vubnk=\",\"UmFpbnk=\",\"U25vd3k=\"]").unwrap();
 
         assert_eq!(vec![
-            "Sunny".as_bytes().to_vec(),
-            "Rainy".as_bytes().to_vec(),
-            "Snowy".as_bytes().to_vec()
+            Bytes::from_static(b"Sunny"),
+            Bytes::from_static(b"Rainy"),
+            Bytes::from_static(b"Snowy")
         ], deserialized);
     }
 

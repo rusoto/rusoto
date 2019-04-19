@@ -20,6 +20,7 @@
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
 //! A high level overview is available in `README.md` at <https://github.com/rusoto/rusoto>.
 
+extern crate bytes;
 extern crate futures;
 extern crate hyper;
 #[cfg(feature = "rustls")]
