@@ -431,7 +431,7 @@ fn test_put_object_stream_with_filename(
         bucket: bucket.to_owned(),
         key: dest_filename.to_owned(),
         content_length: Some(meta.len() as i64),
-        body: Some(StreamingBody::new(read_stream.map(|bytes| bytes.to_vec()))),
+        body: Some(StreamingBody::new(read_stream)),
         ..Default::default()
     };
     let result = client.put_object(req).sync().expect("Couldn't PUT object");
