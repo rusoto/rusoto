@@ -23,7 +23,7 @@ To use `rusoto_iot_data` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_iot_data = "0.37.0"
+rusoto_iot_data = "0.38.0"
 ```
 
 ## Contributing

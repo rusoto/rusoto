@@ -23,7 +23,7 @@ To use `rusoto_iot1click_devices` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_iot1click_devices = "0.37.0"
+rusoto_iot1click_devices = "0.38.0"
 ```
 
 ## Contributing
