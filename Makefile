@@ -27,6 +27,10 @@ docs:
 unit_test:
 	cargo +$$RUST_VERSION test --all
 
+.PHONY: skeptical
+skeptical:
+	(cd skeptical && cargo +$$RUST_VERSION test)
+
 .PHONY: integration_test
 integration_test:
 	(cd integration_tests && cargo +$$RUST_VERSION test --features all)
