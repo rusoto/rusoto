@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [GameLiftClient](struct.GameLiftClient.html) and [GameLift](trait.GameLift.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

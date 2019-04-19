@@ -7653,7 +7653,7 @@ pub enum AbortEnvironmentUpdateError {
 impl AbortEnvironmentUpdateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AbortEnvironmentUpdateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7706,7 +7706,7 @@ impl ApplyEnvironmentManagedActionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ApplyEnvironmentManagedActionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7760,7 +7760,7 @@ pub enum CheckDNSAvailabilityError {}
 impl CheckDNSAvailabilityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CheckDNSAvailabilityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7802,7 +7802,7 @@ pub enum ComposeEnvironmentsError {
 impl ComposeEnvironmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ComposeEnvironmentsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7857,7 +7857,7 @@ pub enum CreateApplicationError {
 impl CreateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7912,7 +7912,7 @@ pub enum CreateApplicationVersionError {
 impl CreateApplicationVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationVersionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7999,7 +7999,7 @@ impl CreateConfigurationTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateConfigurationTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8066,7 +8066,7 @@ pub enum CreateEnvironmentError {
 impl CreateEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEnvironmentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8125,7 +8125,7 @@ pub enum CreatePlatformVersionError {
 impl CreatePlatformVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePlatformVersionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8192,7 +8192,7 @@ pub enum CreateStorageLocationError {
 impl CreateStorageLocationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStorageLocationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8255,7 +8255,7 @@ pub enum DeleteApplicationError {
 impl DeleteApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8308,7 +8308,7 @@ pub enum DeleteApplicationVersionError {
 impl DeleteApplicationVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationVersionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8383,7 +8383,7 @@ impl DeleteConfigurationTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8431,7 +8431,7 @@ impl DeleteEnvironmentConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteEnvironmentConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8477,7 +8477,7 @@ pub enum DeletePlatformVersionError {
 impl DeletePlatformVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePlatformVersionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8550,7 +8550,7 @@ pub enum DescribeAccountAttributesError {
 impl DescribeAccountAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8598,7 +8598,7 @@ impl DescribeApplicationVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeApplicationVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8635,7 +8635,7 @@ pub enum DescribeApplicationsError {}
 impl DescribeApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeApplicationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8677,7 +8677,7 @@ impl DescribeConfigurationOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8728,7 +8728,7 @@ impl DescribeConfigurationSettingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationSettingsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8779,7 +8779,7 @@ pub enum DescribeEnvironmentHealthError {
 impl DescribeEnvironmentHealthError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentHealthError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8838,7 +8838,7 @@ impl DescribeEnvironmentManagedActionHistoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEnvironmentManagedActionHistoryError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8891,7 +8891,7 @@ impl DescribeEnvironmentManagedActionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEnvironmentManagedActionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8942,7 +8942,7 @@ impl DescribeEnvironmentResourcesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEnvironmentResourcesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8988,7 +8988,7 @@ pub enum DescribeEnvironmentsError {}
 impl DescribeEnvironmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9025,7 +9025,7 @@ pub enum DescribeEventsError {}
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9067,7 +9067,7 @@ pub enum DescribeInstancesHealthError {
 impl DescribeInstancesHealthError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstancesHealthError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9124,7 +9124,7 @@ pub enum DescribePlatformVersionError {
 impl DescribePlatformVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePlatformVersionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9180,7 +9180,7 @@ impl ListAvailableSolutionStacksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAvailableSolutionStacksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9222,7 +9222,7 @@ pub enum ListPlatformVersionsError {
 impl ListPlatformVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPlatformVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9283,7 +9283,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9346,7 +9346,7 @@ pub enum RebuildEnvironmentError {
 impl RebuildEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebuildEnvironmentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9392,7 +9392,7 @@ pub enum RequestEnvironmentInfoError {}
 impl RequestEnvironmentInfoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RequestEnvironmentInfoError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9429,7 +9429,7 @@ pub enum RestartAppServerError {}
 impl RestartAppServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestartAppServerError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9466,7 +9466,7 @@ pub enum RetrieveEnvironmentInfoError {}
 impl RetrieveEnvironmentInfoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetrieveEnvironmentInfoError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9503,7 +9503,7 @@ pub enum SwapEnvironmentCNAMEsError {}
 impl SwapEnvironmentCNAMEsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SwapEnvironmentCNAMEsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9543,7 +9543,7 @@ pub enum TerminateEnvironmentError {
 impl TerminateEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateEnvironmentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9589,7 +9589,7 @@ pub enum UpdateApplicationError {}
 impl UpdateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9631,7 +9631,7 @@ impl UpdateApplicationResourceLifecycleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateApplicationResourceLifecycleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9677,7 +9677,7 @@ pub enum UpdateApplicationVersionError {}
 impl UpdateApplicationVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationVersionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9721,7 +9721,7 @@ impl UpdateConfigurationTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConfigurationTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9780,7 +9780,7 @@ pub enum UpdateEnvironmentError {
 impl UpdateEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEnvironmentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9843,7 +9843,7 @@ pub enum UpdateTagsForResourceError {
 impl UpdateTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTagsForResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9924,7 +9924,7 @@ impl ValidateConfigurationSettingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ValidateConfigurationSettingsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10288,9 +10288,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "AbortEnvironmentUpdate");
         params.put("Version", "2010-12-01");
         AbortEnvironmentUpdateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10315,9 +10313,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ApplyEnvironmentManagedAction");
         params.put("Version", "2010-12-01");
         ApplyEnvironmentManagedActionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10334,7 +10330,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ApplyEnvironmentManagedActionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10365,9 +10361,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CheckDNSAvailability");
         params.put("Version", "2010-12-01");
         CheckDNSAvailabilityMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10386,7 +10380,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = CheckDNSAvailabilityResultMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10417,9 +10411,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ComposeEnvironments");
         params.put("Version", "2010-12-01");
         ComposeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10438,7 +10430,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = EnvironmentDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10469,9 +10461,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateApplication");
         params.put("Version", "2010-12-01");
         CreateApplicationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10491,7 +10481,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ApplicationDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10522,9 +10512,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateApplicationVersion");
         params.put("Version", "2010-12-01");
         CreateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10541,7 +10529,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ApplicationVersionDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10572,9 +10560,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateConfigurationTemplate");
         params.put("Version", "2010-12-01");
         CreateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10591,7 +10577,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ConfigurationSettingsDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10622,9 +10608,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateEnvironment");
         params.put("Version", "2010-12-01");
         CreateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10644,7 +10628,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = EnvironmentDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10675,9 +10659,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreatePlatformVersion");
         params.put("Version", "2010-12-01");
         CreatePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10694,7 +10676,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = CreatePlatformVersionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10724,9 +10706,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateStorageLocation");
         params.put("Version", "2010-12-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10743,7 +10723,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = CreateStorageLocationResultMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10774,9 +10754,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeleteApplication");
         params.put("Version", "2010-12-01");
         DeleteApplicationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10804,9 +10782,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeleteApplicationVersion");
         params.put("Version", "2010-12-01");
         DeleteApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10831,9 +10807,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeleteConfigurationTemplate");
         params.put("Version", "2010-12-01");
         DeleteConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10858,9 +10832,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeleteEnvironmentConfiguration");
         params.put("Version", "2010-12-01");
         DeleteEnvironmentConfigurationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10885,9 +10857,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeletePlatformVersion");
         params.put("Version", "2010-12-01");
         DeletePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10904,7 +10874,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = DeletePlatformVersionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10934,9 +10904,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2010-12-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10953,7 +10921,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = DescribeAccountAttributesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10984,9 +10952,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeApplicationVersions");
         params.put("Version", "2010-12-01");
         DescribeApplicationVersionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11003,7 +10969,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ApplicationVersionDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11034,9 +11000,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeApplications");
         params.put("Version", "2010-12-01");
         DescribeApplicationsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11055,7 +11019,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ApplicationDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11086,9 +11050,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeConfigurationOptions");
         params.put("Version", "2010-12-01");
         DescribeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11105,7 +11067,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ConfigurationOptionsDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11136,9 +11098,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeConfigurationSettings");
         params.put("Version", "2010-12-01");
         DescribeConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11155,7 +11115,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ConfigurationSettingsDescriptions::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11186,9 +11146,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEnvironmentHealth");
         params.put("Version", "2010-12-01");
         DescribeEnvironmentHealthRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11205,7 +11163,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = DescribeEnvironmentHealthResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11243,9 +11201,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11264,7 +11220,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = DescribeEnvironmentManagedActionHistoryResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11297,9 +11253,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEnvironmentManagedActions");
         params.put("Version", "2010-12-01");
         DescribeEnvironmentManagedActionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11318,7 +11272,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = DescribeEnvironmentManagedActionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11350,9 +11304,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEnvironmentResources");
         params.put("Version", "2010-12-01");
         DescribeEnvironmentResourcesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11369,7 +11321,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = EnvironmentResourceDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11400,9 +11352,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEnvironments");
         params.put("Version", "2010-12-01");
         DescribeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11421,7 +11371,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = EnvironmentDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11452,9 +11402,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEvents");
         params.put("Version", "2010-12-01");
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11474,7 +11422,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = EventDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11505,9 +11453,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeInstancesHealth");
         params.put("Version", "2010-12-01");
         DescribeInstancesHealthRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11524,7 +11470,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = DescribeInstancesHealthResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11555,9 +11501,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribePlatformVersion");
         params.put("Version", "2010-12-01");
         DescribePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11574,7 +11518,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = DescribePlatformVersionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11605,9 +11549,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ListAvailableSolutionStacks");
         params.put("Version", "2010-12-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11624,7 +11566,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ListAvailableSolutionStacksResultMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11655,9 +11597,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ListPlatformVersions");
         params.put("Version", "2010-12-01");
         ListPlatformVersionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11676,7 +11616,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ListPlatformVersionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11707,9 +11647,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2010-12-01");
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11728,7 +11666,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ResourceTagsDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11759,9 +11697,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "RebuildEnvironment");
         params.put("Version", "2010-12-01");
         RebuildEnvironmentMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11789,9 +11725,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "RequestEnvironmentInfo");
         params.put("Version", "2010-12-01");
         RequestEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11816,9 +11750,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "RestartAppServer");
         params.put("Version", "2010-12-01");
         RestartAppServerMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11846,9 +11778,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "RetrieveEnvironmentInfo");
         params.put("Version", "2010-12-01");
         RetrieveEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11865,7 +11795,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = RetrieveEnvironmentInfoResultMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11896,9 +11826,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "SwapEnvironmentCNAMEs");
         params.put("Version", "2010-12-01");
         SwapEnvironmentCNAMEsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11923,9 +11851,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "TerminateEnvironment");
         params.put("Version", "2010-12-01");
         TerminateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11944,7 +11870,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = EnvironmentDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11975,9 +11901,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateApplication");
         params.put("Version", "2010-12-01");
         UpdateApplicationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11997,7 +11921,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ApplicationDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12031,9 +11955,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateApplicationResourceLifecycle");
         params.put("Version", "2010-12-01");
         UpdateApplicationResourceLifecycleMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12052,7 +11974,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ApplicationResourceLifecycleDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12084,9 +12006,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateApplicationVersion");
         params.put("Version", "2010-12-01");
         UpdateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12103,7 +12023,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ApplicationVersionDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12134,9 +12054,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateConfigurationTemplate");
         params.put("Version", "2010-12-01");
         UpdateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12153,7 +12071,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ConfigurationSettingsDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12184,9 +12102,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateEnvironment");
         params.put("Version", "2010-12-01");
         UpdateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12206,7 +12122,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = EnvironmentDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12237,9 +12153,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateTagsForResource");
         params.put("Version", "2010-12-01");
         UpdateTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12265,9 +12179,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ValidateConfigurationSettings");
         params.put("Version", "2010-12-01");
         ValidateConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12284,7 +12196,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     result = ConfigurationSettingsValidationMessages::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

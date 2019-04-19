@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [ComprehendClient](struct.ComprehendClient.html) and [Comprehend](trait.Comprehend.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

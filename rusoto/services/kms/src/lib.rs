@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [KmsClient](struct.KmsClient.html) and [Kms](trait.Kms.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

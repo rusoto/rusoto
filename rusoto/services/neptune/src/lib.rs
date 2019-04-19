@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [NeptuneClient](struct.NeptuneClient.html) and [Neptune](trait.Neptune.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde_urlencoded;

@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [AWSHealthClient](struct.AWSHealthClient.html) and [AWSHealth](trait.AWSHealth.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

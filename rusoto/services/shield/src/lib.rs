@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [ShieldClient](struct.ShieldClient.html) and [Shield](trait.Shield.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

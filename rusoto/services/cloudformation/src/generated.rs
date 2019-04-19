@@ -7656,7 +7656,7 @@ pub enum CancelUpdateStackError {
 impl CancelUpdateStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelUpdateStackError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7703,7 +7703,7 @@ pub enum ContinueUpdateRollbackError {
 impl ContinueUpdateRollbackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ContinueUpdateRollbackError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7756,7 +7756,7 @@ pub enum CreateChangeSetError {
 impl CreateChangeSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChangeSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7823,7 +7823,7 @@ pub enum CreateStackError {
 impl CreateStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStackError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7898,7 +7898,7 @@ pub enum CreateStackInstancesError {
 impl CreateStackInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStackInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7983,7 +7983,7 @@ pub enum CreateStackSetError {
 impl CreateStackSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStackSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8042,7 +8042,7 @@ pub enum DeleteChangeSetError {
 impl DeleteChangeSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChangeSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8089,7 +8089,7 @@ pub enum DeleteStackError {
 impl DeleteStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStackError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8144,7 +8144,7 @@ pub enum DeleteStackInstancesError {
 impl DeleteStackInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStackInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8221,7 +8221,7 @@ pub enum DeleteStackSetError {
 impl DeleteStackSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStackSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8271,7 +8271,7 @@ pub enum DescribeAccountLimitsError {}
 impl DescribeAccountLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountLimitsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8311,7 +8311,7 @@ pub enum DescribeChangeSetError {
 impl DescribeChangeSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChangeSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8357,7 +8357,7 @@ impl DescribeStackDriftDetectionStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeStackDriftDetectionStatusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8394,7 +8394,7 @@ pub enum DescribeStackEventsError {}
 impl DescribeStackEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStackEventsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8436,7 +8436,7 @@ pub enum DescribeStackInstanceError {
 impl DescribeStackInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStackInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8488,7 +8488,7 @@ pub enum DescribeStackResourceError {}
 impl DescribeStackResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStackResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8527,7 +8527,7 @@ impl DescribeStackResourceDriftsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeStackResourceDriftsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8564,7 +8564,7 @@ pub enum DescribeStackResourcesError {}
 impl DescribeStackResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStackResourcesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8604,7 +8604,7 @@ pub enum DescribeStackSetError {
 impl DescribeStackSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStackSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8653,7 +8653,7 @@ pub enum DescribeStackSetOperationError {
 impl DescribeStackSetOperationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStackSetOperationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8707,7 +8707,7 @@ pub enum DescribeStacksError {}
 impl DescribeStacksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStacksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8744,7 +8744,7 @@ pub enum DetectStackDriftError {}
 impl DetectStackDriftError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectStackDriftError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8781,7 +8781,7 @@ pub enum DetectStackResourceDriftError {}
 impl DetectStackResourceDriftError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectStackResourceDriftError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8818,7 +8818,7 @@ pub enum EstimateTemplateCostError {}
 impl EstimateTemplateCostError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EstimateTemplateCostError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8864,7 +8864,7 @@ pub enum ExecuteChangeSetError {
 impl ExecuteChangeSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecuteChangeSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8928,7 +8928,7 @@ pub enum GetStackPolicyError {}
 impl GetStackPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStackPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8968,7 +8968,7 @@ pub enum GetTemplateError {
 impl GetTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9015,7 +9015,7 @@ pub enum GetTemplateSummaryError {
 impl GetTemplateSummaryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTemplateSummaryError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9059,7 +9059,7 @@ pub enum ListChangeSetsError {}
 impl ListChangeSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChangeSetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9096,7 +9096,7 @@ pub enum ListExportsError {}
 impl ListExportsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListExportsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9133,7 +9133,7 @@ pub enum ListImportsError {}
 impl ListImportsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImportsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9173,7 +9173,7 @@ pub enum ListStackInstancesError {
 impl ListStackInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStackInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9217,7 +9217,7 @@ pub enum ListStackResourcesError {}
 impl ListStackResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStackResourcesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9261,7 +9261,7 @@ impl ListStackSetOperationResultsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListStackSetOperationResultsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9318,7 +9318,7 @@ pub enum ListStackSetOperationsError {
 impl ListStackSetOperationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStackSetOperationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9362,7 +9362,7 @@ pub enum ListStackSetsError {}
 impl ListStackSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStackSetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9399,7 +9399,7 @@ pub enum ListStacksError {}
 impl ListStacksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStacksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9436,7 +9436,7 @@ pub enum SetStackPolicyError {}
 impl SetStackPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetStackPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9473,7 +9473,7 @@ pub enum SignalResourceError {}
 impl SignalResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SignalResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9517,7 +9517,7 @@ pub enum StopStackSetOperationError {
 impl StopStackSetOperationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopStackSetOperationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9578,7 +9578,7 @@ pub enum UpdateStackError {
 impl UpdateStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStackError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9641,7 +9641,7 @@ pub enum UpdateStackInstancesError {
 impl UpdateStackInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStackInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9734,7 +9734,7 @@ pub enum UpdateStackSetError {
 impl UpdateStackSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStackSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9810,7 +9810,7 @@ impl UpdateTerminationProtectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateTerminationProtectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9847,7 +9847,7 @@ pub enum ValidateTemplateError {}
 impl ValidateTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ValidateTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10189,9 +10189,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "CancelUpdateStack");
         params.put("Version", "2010-05-15");
         CancelUpdateStackInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10219,9 +10217,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ContinueUpdateRollback");
         params.put("Version", "2010-05-15");
         ContinueUpdateRollbackInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10238,7 +10234,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ContinueUpdateRollbackOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10269,9 +10265,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "CreateChangeSet");
         params.put("Version", "2010-05-15");
         CreateChangeSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10291,7 +10285,7 @@ impl CloudFormation for CloudFormationClient {
                     result = CreateChangeSetOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10322,9 +10316,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "CreateStack");
         params.put("Version", "2010-05-15");
         CreateStackInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10344,7 +10336,7 @@ impl CloudFormation for CloudFormationClient {
                     result = CreateStackOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10375,9 +10367,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "CreateStackInstances");
         params.put("Version", "2010-05-15");
         CreateStackInstancesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10396,7 +10386,7 @@ impl CloudFormation for CloudFormationClient {
                     result = CreateStackInstancesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10427,9 +10417,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "CreateStackSet");
         params.put("Version", "2010-05-15");
         CreateStackSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10449,7 +10437,7 @@ impl CloudFormation for CloudFormationClient {
                     result = CreateStackSetOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10480,9 +10468,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DeleteChangeSet");
         params.put("Version", "2010-05-15");
         DeleteChangeSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10502,7 +10488,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DeleteChangeSetOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10530,9 +10516,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DeleteStack");
         params.put("Version", "2010-05-15");
         DeleteStackInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10560,9 +10544,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DeleteStackInstances");
         params.put("Version", "2010-05-15");
         DeleteStackInstancesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10581,7 +10563,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DeleteStackInstancesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10612,9 +10594,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DeleteStackSet");
         params.put("Version", "2010-05-15");
         DeleteStackSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10634,7 +10614,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DeleteStackSetOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10665,9 +10645,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeAccountLimits");
         params.put("Version", "2010-05-15");
         DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10684,7 +10662,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeAccountLimitsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10715,9 +10693,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeChangeSet");
         params.put("Version", "2010-05-15");
         DescribeChangeSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10737,7 +10713,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeChangeSetOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10769,9 +10745,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeStackDriftDetectionStatus");
         params.put("Version", "2010-05-15");
         DescribeStackDriftDetectionStatusInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10790,7 +10764,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeStackDriftDetectionStatusOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10821,9 +10795,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeStackEvents");
         params.put("Version", "2010-05-15");
         DescribeStackEventsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10842,7 +10814,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeStackEventsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10873,9 +10845,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeStackInstance");
         params.put("Version", "2010-05-15");
         DescribeStackInstanceInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10892,7 +10862,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeStackInstanceOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10923,9 +10893,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeStackResource");
         params.put("Version", "2010-05-15");
         DescribeStackResourceInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10942,7 +10910,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeStackResourceOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10973,9 +10941,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeStackResourceDrifts");
         params.put("Version", "2010-05-15");
         DescribeStackResourceDriftsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10992,7 +10958,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeStackResourceDriftsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11023,9 +10989,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeStackResources");
         params.put("Version", "2010-05-15");
         DescribeStackResourcesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11042,7 +11006,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeStackResourcesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11073,9 +11037,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeStackSet");
         params.put("Version", "2010-05-15");
         DescribeStackSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11095,7 +11057,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeStackSetOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11126,9 +11088,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeStackSetOperation");
         params.put("Version", "2010-05-15");
         DescribeStackSetOperationInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11145,7 +11105,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeStackSetOperationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11176,9 +11136,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DescribeStacks");
         params.put("Version", "2010-05-15");
         DescribeStacksInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11198,7 +11156,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DescribeStacksOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11229,9 +11187,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DetectStackDrift");
         params.put("Version", "2010-05-15");
         DetectStackDriftInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11251,7 +11207,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DetectStackDriftOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11282,9 +11238,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "DetectStackResourceDrift");
         params.put("Version", "2010-05-15");
         DetectStackResourceDriftInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11301,7 +11255,7 @@ impl CloudFormation for CloudFormationClient {
                     result = DetectStackResourceDriftOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11332,9 +11286,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "EstimateTemplateCost");
         params.put("Version", "2010-05-15");
         EstimateTemplateCostInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11353,7 +11305,7 @@ impl CloudFormation for CloudFormationClient {
                     result = EstimateTemplateCostOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11384,9 +11336,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ExecuteChangeSet");
         params.put("Version", "2010-05-15");
         ExecuteChangeSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11406,7 +11356,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ExecuteChangeSetOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11437,9 +11387,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "GetStackPolicy");
         params.put("Version", "2010-05-15");
         GetStackPolicyInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11459,7 +11407,7 @@ impl CloudFormation for CloudFormationClient {
                     result = GetStackPolicyOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11490,9 +11438,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "GetTemplate");
         params.put("Version", "2010-05-15");
         GetTemplateInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11512,7 +11458,7 @@ impl CloudFormation for CloudFormationClient {
                     result = GetTemplateOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11543,9 +11489,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "GetTemplateSummary");
         params.put("Version", "2010-05-15");
         GetTemplateSummaryInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11565,7 +11509,7 @@ impl CloudFormation for CloudFormationClient {
                     result = GetTemplateSummaryOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11596,9 +11540,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ListChangeSets");
         params.put("Version", "2010-05-15");
         ListChangeSetsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11618,7 +11560,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ListChangeSetsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11649,9 +11591,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ListExports");
         params.put("Version", "2010-05-15");
         ListExportsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11671,7 +11611,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ListExportsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11702,9 +11642,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ListImports");
         params.put("Version", "2010-05-15");
         ListImportsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11724,7 +11662,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ListImportsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11755,9 +11693,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ListStackInstances");
         params.put("Version", "2010-05-15");
         ListStackInstancesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11777,7 +11713,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ListStackInstancesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11808,9 +11744,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ListStackResources");
         params.put("Version", "2010-05-15");
         ListStackResourcesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11830,7 +11764,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ListStackResourcesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11861,9 +11795,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ListStackSetOperationResults");
         params.put("Version", "2010-05-15");
         ListStackSetOperationResultsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11880,7 +11812,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ListStackSetOperationResultsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11911,9 +11843,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ListStackSetOperations");
         params.put("Version", "2010-05-15");
         ListStackSetOperationsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11930,7 +11860,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ListStackSetOperationsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11961,9 +11891,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ListStackSets");
         params.put("Version", "2010-05-15");
         ListStackSetsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11983,7 +11911,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ListStackSetsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12014,9 +11942,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ListStacks");
         params.put("Version", "2010-05-15");
         ListStacksInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12036,7 +11962,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ListStacksOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12065,9 +11991,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "SetStackPolicy");
         params.put("Version", "2010-05-15");
         SetStackPolicyInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12092,9 +12016,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "SignalResource");
         params.put("Version", "2010-05-15");
         SignalResourceInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12122,9 +12044,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "StopStackSetOperation");
         params.put("Version", "2010-05-15");
         StopStackSetOperationInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12141,7 +12061,7 @@ impl CloudFormation for CloudFormationClient {
                     result = StopStackSetOperationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12172,9 +12092,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "UpdateStack");
         params.put("Version", "2010-05-15");
         UpdateStackInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12194,7 +12112,7 @@ impl CloudFormation for CloudFormationClient {
                     result = UpdateStackOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12225,9 +12143,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "UpdateStackInstances");
         params.put("Version", "2010-05-15");
         UpdateStackInstancesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12246,7 +12162,7 @@ impl CloudFormation for CloudFormationClient {
                     result = UpdateStackInstancesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12277,9 +12193,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "UpdateStackSet");
         params.put("Version", "2010-05-15");
         UpdateStackSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12299,7 +12213,7 @@ impl CloudFormation for CloudFormationClient {
                     result = UpdateStackSetOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12330,9 +12244,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "UpdateTerminationProtection");
         params.put("Version", "2010-05-15");
         UpdateTerminationProtectionInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12349,7 +12261,7 @@ impl CloudFormation for CloudFormationClient {
                     result = UpdateTerminationProtectionOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12380,9 +12292,7 @@ impl CloudFormation for CloudFormationClient {
         params.put("Action", "ValidateTemplate");
         params.put("Version", "2010-05-15");
         ValidateTemplateInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12402,7 +12312,7 @@ impl CloudFormation for CloudFormationClient {
                     result = ValidateTemplateOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

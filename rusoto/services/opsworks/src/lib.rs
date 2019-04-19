@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [OpsWorksClient](struct.OpsWorksClient.html) and [OpsWorks](trait.OpsWorks.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

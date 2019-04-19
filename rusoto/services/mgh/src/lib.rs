@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [MigrationHubClient](struct.MigrationHubClient.html) and [MigrationHub](trait.MigrationHub.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

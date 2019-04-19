@@ -10368,7 +10368,7 @@ impl AcceptReservedNodeExchangeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptReservedNodeExchangeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10473,7 +10473,7 @@ impl AuthorizeClusterSecurityGroupIngressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AuthorizeClusterSecurityGroupIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10536,7 +10536,7 @@ pub enum AuthorizeSnapshotAccessError {
 impl AuthorizeSnapshotAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AuthorizeSnapshotAccessError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10629,7 +10629,7 @@ impl BatchDeleteClusterSnapshotsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDeleteClusterSnapshotsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10684,7 +10684,7 @@ impl BatchModifyClusterSnapshotsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchModifyClusterSnapshotsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10735,7 +10735,7 @@ pub enum CancelResizeError {
 impl CancelResizeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelResizeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10808,7 +10808,7 @@ pub enum CopyClusterSnapshotError {
 impl CopyClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10931,7 +10931,7 @@ pub enum CreateClusterError {
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11138,7 +11138,7 @@ impl CreateClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11219,7 +11219,7 @@ impl CreateClusterSecurityGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateClusterSecurityGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11308,7 +11308,7 @@ pub enum CreateClusterSnapshotError {
 impl CreateClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11417,7 +11417,7 @@ pub enum CreateClusterSubnetGroupError {
 impl CreateClusterSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11542,7 +11542,7 @@ pub enum CreateEventSubscriptionError {
 impl CreateEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11677,7 +11677,7 @@ impl CreateHsmClientCertificateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateHsmClientCertificateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11760,7 +11760,7 @@ pub enum CreateHsmConfigurationError {
 impl CreateHsmConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHsmConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11841,7 +11841,7 @@ pub enum CreateSnapshotCopyGrantError {
 impl CreateSnapshotCopyGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotCopyGrantError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11938,7 +11938,7 @@ pub enum CreateSnapshotScheduleError {
 impl CreateSnapshotScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotScheduleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12023,7 +12023,7 @@ pub enum CreateTagsError {
 impl CreateTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12090,7 +12090,7 @@ pub enum DeleteClusterError {
 impl DeleteClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12171,7 +12171,7 @@ impl DeleteClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12234,7 +12234,7 @@ impl DeleteClusterSecurityGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteClusterSecurityGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12295,7 +12295,7 @@ pub enum DeleteClusterSnapshotError {
 impl DeleteClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12356,7 +12356,7 @@ pub enum DeleteClusterSubnetGroupError {
 impl DeleteClusterSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12423,7 +12423,7 @@ pub enum DeleteEventSubscriptionError {
 impl DeleteEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12484,7 +12484,7 @@ impl DeleteHsmClientCertificateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteHsmClientCertificateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12545,7 +12545,7 @@ pub enum DeleteHsmConfigurationError {
 impl DeleteHsmConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHsmConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12604,7 +12604,7 @@ pub enum DeleteSnapshotCopyGrantError {
 impl DeleteSnapshotCopyGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotCopyGrantError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12663,7 +12663,7 @@ pub enum DeleteSnapshotScheduleError {
 impl DeleteSnapshotScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotScheduleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12724,7 +12724,7 @@ pub enum DeleteTagsError {
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12774,7 +12774,7 @@ pub enum DescribeAccountAttributesError {}
 impl DescribeAccountAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12818,7 +12818,7 @@ impl DescribeClusterDbRevisionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeClusterDbRevisionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12879,7 +12879,7 @@ impl DescribeClusterParameterGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeClusterParameterGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12938,7 +12938,7 @@ pub enum DescribeClusterParametersError {
 impl DescribeClusterParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12991,7 +12991,7 @@ impl DescribeClusterSecurityGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeClusterSecurityGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13054,7 +13054,7 @@ pub enum DescribeClusterSnapshotsError {
 impl DescribeClusterSnapshotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterSnapshotsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13123,7 +13123,7 @@ impl DescribeClusterSubnetGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeClusterSubnetGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13182,7 +13182,7 @@ pub enum DescribeClusterTracksError {
 impl DescribeClusterTracksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterTracksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13236,7 +13236,7 @@ pub enum DescribeClusterVersionsError {}
 impl DescribeClusterVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13278,7 +13278,7 @@ pub enum DescribeClustersError {
 impl DescribeClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13330,7 +13330,7 @@ impl DescribeDefaultClusterParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDefaultClusterParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13367,7 +13367,7 @@ pub enum DescribeEventCategoriesError {}
 impl DescribeEventCategoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventCategoriesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13411,7 +13411,7 @@ impl DescribeEventSubscriptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEventSubscriptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13465,7 +13465,7 @@ pub enum DescribeEventsError {}
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13509,7 +13509,7 @@ impl DescribeHsmClientCertificatesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeHsmClientCertificatesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13570,7 +13570,7 @@ pub enum DescribeHsmConfigurationsError {
 impl DescribeHsmConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHsmConfigurationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13627,7 +13627,7 @@ pub enum DescribeLoggingStatusError {
 impl DescribeLoggingStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoggingStatusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13675,7 +13675,7 @@ impl DescribeOrderableClusterOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrderableClusterOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13721,7 +13721,7 @@ impl DescribeReservedNodeOfferingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedNodeOfferingsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13792,7 +13792,7 @@ pub enum DescribeReservedNodesError {
 impl DescribeReservedNodesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReservedNodesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13851,7 +13851,7 @@ pub enum DescribeResizeError {
 impl DescribeResizeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResizeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13908,7 +13908,7 @@ impl DescribeSnapshotCopyGrantsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSnapshotCopyGrantsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13962,7 +13962,7 @@ pub enum DescribeSnapshotSchedulesError {}
 impl DescribeSnapshotSchedulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSnapshotSchedulesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13999,7 +13999,7 @@ pub enum DescribeStorageError {}
 impl DescribeStorageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStorageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14043,7 +14043,7 @@ impl DescribeTableRestoreStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTableRestoreStatusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14102,7 +14102,7 @@ pub enum DescribeTagsError {
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14155,7 +14155,7 @@ pub enum DisableLoggingError {
 impl DisableLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableLoggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14208,7 +14208,7 @@ pub enum DisableSnapshotCopyError {
 impl DisableSnapshotCopyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableSnapshotCopyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14289,7 +14289,7 @@ pub enum EnableLoggingError {
 impl EnableLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableLoggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14382,7 +14382,7 @@ pub enum EnableSnapshotCopyError {
 impl EnableSnapshotCopyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableSnapshotCopyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14509,7 +14509,7 @@ pub enum GetClusterCredentialsError {
 impl GetClusterCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClusterCredentialsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14578,7 +14578,7 @@ impl GetReservedNodeExchangeOfferingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetReservedNodeExchangeOfferingsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14709,7 +14709,7 @@ pub enum ModifyClusterError {
 impl ModifyClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14888,7 +14888,7 @@ pub enum ModifyClusterDbRevisionError {
 impl ModifyClusterDbRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterDbRevisionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -14955,7 +14955,7 @@ pub enum ModifyClusterIamRolesError {
 impl ModifyClusterIamRolesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterIamRolesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15012,7 +15012,7 @@ pub enum ModifyClusterMaintenanceError {
 impl ModifyClusterMaintenanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterMaintenanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15065,7 +15065,7 @@ impl ModifyClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15128,7 +15128,7 @@ pub enum ModifyClusterSnapshotError {
 impl ModifyClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15199,7 +15199,7 @@ impl ModifyClusterSnapshotScheduleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyClusterSnapshotScheduleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15255,7 +15255,7 @@ pub enum ModifyClusterSubnetGroupError {
 impl ModifyClusterSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15360,7 +15360,7 @@ pub enum ModifyEventSubscriptionError {
 impl ModifyEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEventSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15483,7 +15483,7 @@ impl ModifySnapshotCopyRetentionPeriodError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifySnapshotCopyRetentionPeriodError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15568,7 +15568,7 @@ pub enum ModifySnapshotScheduleError {
 impl ModifySnapshotScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifySnapshotScheduleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15641,7 +15641,7 @@ impl PurchaseReservedNodeOfferingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PurchaseReservedNodeOfferingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15718,7 +15718,7 @@ pub enum RebootClusterError {
 impl RebootClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15775,7 +15775,7 @@ impl ResetClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ResetClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15850,7 +15850,7 @@ pub enum ResizeClusterError {
 impl ResizeClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResizeClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15997,7 +15997,7 @@ impl RestoreFromClusterSnapshotError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreFromClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16240,7 +16240,7 @@ impl RestoreTableFromClusterSnapshotError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreTableFromClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16300,7 +16300,7 @@ impl RevokeClusterSecurityGroupIngressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RevokeClusterSecurityGroupIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16352,7 +16352,7 @@ pub enum RevokeSnapshotAccessError {
 impl RevokeSnapshotAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeSnapshotAccessError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16421,7 +16421,7 @@ pub enum RotateEncryptionKeyError {
 impl RotateEncryptionKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RotateEncryptionKeyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17010,9 +17010,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "AcceptReservedNodeExchange");
         params.put("Version", "2012-12-01");
         AcceptReservedNodeExchangeInputMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17029,7 +17027,7 @@ impl Redshift for RedshiftClient {
                     result = AcceptReservedNodeExchangeOutputMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17063,9 +17061,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "AuthorizeClusterSecurityGroupIngress");
         params.put("Version", "2012-12-01");
         AuthorizeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17084,7 +17080,7 @@ impl Redshift for RedshiftClient {
                     result = AuthorizeClusterSecurityGroupIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17115,9 +17111,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "AuthorizeSnapshotAccess");
         params.put("Version", "2012-12-01");
         AuthorizeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17134,7 +17128,7 @@ impl Redshift for RedshiftClient {
                     result = AuthorizeSnapshotAccessResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17165,9 +17159,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "BatchDeleteClusterSnapshots");
         params.put("Version", "2012-12-01");
         BatchDeleteClusterSnapshotsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17184,7 +17176,7 @@ impl Redshift for RedshiftClient {
                     result = BatchDeleteClusterSnapshotsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17216,9 +17208,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "BatchModifyClusterSnapshots");
         params.put("Version", "2012-12-01");
         BatchModifyClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17235,7 +17225,7 @@ impl Redshift for RedshiftClient {
                     result = BatchModifyClusterSnapshotsOutputMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17266,9 +17256,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CancelResize");
         params.put("Version", "2012-12-01");
         CancelResizeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17288,7 +17276,7 @@ impl Redshift for RedshiftClient {
                     result = ResizeProgressMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17319,9 +17307,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CopyClusterSnapshot");
         params.put("Version", "2012-12-01");
         CopyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17340,7 +17326,7 @@ impl Redshift for RedshiftClient {
                     result = CopyClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17371,9 +17357,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateCluster");
         params.put("Version", "2012-12-01");
         CreateClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17393,7 +17377,7 @@ impl Redshift for RedshiftClient {
                     result = CreateClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17424,9 +17408,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateClusterParameterGroup");
         params.put("Version", "2012-12-01");
         CreateClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17443,7 +17425,7 @@ impl Redshift for RedshiftClient {
                     result = CreateClusterParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17474,9 +17456,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateClusterSecurityGroup");
         params.put("Version", "2012-12-01");
         CreateClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17493,7 +17473,7 @@ impl Redshift for RedshiftClient {
                     result = CreateClusterSecurityGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17524,9 +17504,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateClusterSnapshot");
         params.put("Version", "2012-12-01");
         CreateClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17543,7 +17521,7 @@ impl Redshift for RedshiftClient {
                     result = CreateClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17574,9 +17552,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateClusterSubnetGroup");
         params.put("Version", "2012-12-01");
         CreateClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17593,7 +17569,7 @@ impl Redshift for RedshiftClient {
                     result = CreateClusterSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17624,9 +17600,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateEventSubscription");
         params.put("Version", "2012-12-01");
         CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17643,7 +17617,7 @@ impl Redshift for RedshiftClient {
                     result = CreateEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17674,9 +17648,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateHsmClientCertificate");
         params.put("Version", "2012-12-01");
         CreateHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17693,7 +17665,7 @@ impl Redshift for RedshiftClient {
                     result = CreateHsmClientCertificateResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17724,9 +17696,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateHsmConfiguration");
         params.put("Version", "2012-12-01");
         CreateHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17743,7 +17713,7 @@ impl Redshift for RedshiftClient {
                     result = CreateHsmConfigurationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17774,9 +17744,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateSnapshotCopyGrant");
         params.put("Version", "2012-12-01");
         CreateSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17793,7 +17761,7 @@ impl Redshift for RedshiftClient {
                     result = CreateSnapshotCopyGrantResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17824,9 +17792,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateSnapshotSchedule");
         params.put("Version", "2012-12-01");
         CreateSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17843,7 +17809,7 @@ impl Redshift for RedshiftClient {
                     result = SnapshotSchedule::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17871,9 +17837,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "CreateTags");
         params.put("Version", "2012-12-01");
         CreateTagsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17901,9 +17865,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteCluster");
         params.put("Version", "2012-12-01");
         DeleteClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17923,7 +17885,7 @@ impl Redshift for RedshiftClient {
                     result = DeleteClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17954,9 +17916,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteClusterParameterGroup");
         params.put("Version", "2012-12-01");
         DeleteClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -17981,9 +17941,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteClusterSecurityGroup");
         params.put("Version", "2012-12-01");
         DeleteClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18008,9 +17966,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteClusterSnapshot");
         params.put("Version", "2012-12-01");
         DeleteClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18027,7 +17983,7 @@ impl Redshift for RedshiftClient {
                     result = DeleteClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18058,9 +18014,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteClusterSubnetGroup");
         params.put("Version", "2012-12-01");
         DeleteClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18085,9 +18039,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteEventSubscription");
         params.put("Version", "2012-12-01");
         DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18112,9 +18064,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteHsmClientCertificate");
         params.put("Version", "2012-12-01");
         DeleteHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18139,9 +18089,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteHsmConfiguration");
         params.put("Version", "2012-12-01");
         DeleteHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18166,9 +18114,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteSnapshotCopyGrant");
         params.put("Version", "2012-12-01");
         DeleteSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18193,9 +18139,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteSnapshotSchedule");
         params.put("Version", "2012-12-01");
         DeleteSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18217,9 +18161,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DeleteTags");
         params.put("Version", "2012-12-01");
         DeleteTagsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18247,9 +18189,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2012-12-01");
         DescribeAccountAttributesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18266,7 +18206,7 @@ impl Redshift for RedshiftClient {
                     result = AccountAttributeList::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18297,9 +18237,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeClusterDbRevisions");
         params.put("Version", "2012-12-01");
         DescribeClusterDbRevisionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18316,7 +18254,7 @@ impl Redshift for RedshiftClient {
                     result = ClusterDbRevisionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18347,9 +18285,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeClusterParameterGroups");
         params.put("Version", "2012-12-01");
         DescribeClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18366,7 +18302,7 @@ impl Redshift for RedshiftClient {
                     result = ClusterParameterGroupsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18397,9 +18333,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeClusterParameters");
         params.put("Version", "2012-12-01");
         DescribeClusterParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18416,7 +18350,7 @@ impl Redshift for RedshiftClient {
                     result = ClusterParameterGroupDetails::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18447,9 +18381,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeClusterSecurityGroups");
         params.put("Version", "2012-12-01");
         DescribeClusterSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18466,7 +18398,7 @@ impl Redshift for RedshiftClient {
                     result = ClusterSecurityGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18497,9 +18429,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeClusterSnapshots");
         params.put("Version", "2012-12-01");
         DescribeClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18516,7 +18446,7 @@ impl Redshift for RedshiftClient {
                     result = SnapshotMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18547,9 +18477,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeClusterSubnetGroups");
         params.put("Version", "2012-12-01");
         DescribeClusterSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18566,7 +18494,7 @@ impl Redshift for RedshiftClient {
                     result = ClusterSubnetGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18597,9 +18525,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeClusterTracks");
         params.put("Version", "2012-12-01");
         DescribeClusterTracksMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18616,7 +18542,7 @@ impl Redshift for RedshiftClient {
                     result = TrackListMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18647,9 +18573,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeClusterVersions");
         params.put("Version", "2012-12-01");
         DescribeClusterVersionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18666,7 +18590,7 @@ impl Redshift for RedshiftClient {
                     result = ClusterVersionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18697,9 +18621,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeClusters");
         params.put("Version", "2012-12-01");
         DescribeClustersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18719,7 +18641,7 @@ impl Redshift for RedshiftClient {
                     result = ClustersMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18751,9 +18673,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeDefaultClusterParameters");
         params.put("Version", "2012-12-01");
         DescribeDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18772,7 +18692,7 @@ impl Redshift for RedshiftClient {
                     result = DescribeDefaultClusterParametersResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18803,9 +18723,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeEventCategories");
         params.put("Version", "2012-12-01");
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18822,7 +18740,7 @@ impl Redshift for RedshiftClient {
                     result = EventCategoriesMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18853,9 +18771,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeEventSubscriptions");
         params.put("Version", "2012-12-01");
         DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18872,7 +18788,7 @@ impl Redshift for RedshiftClient {
                     result = EventSubscriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18903,9 +18819,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeEvents");
         params.put("Version", "2012-12-01");
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18925,7 +18839,7 @@ impl Redshift for RedshiftClient {
                     result = EventsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18954,9 +18868,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeHsmClientCertificates");
         params.put("Version", "2012-12-01");
         DescribeHsmClientCertificatesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -18973,7 +18885,7 @@ impl Redshift for RedshiftClient {
                     result = HsmClientCertificateMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19004,9 +18916,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeHsmConfigurations");
         params.put("Version", "2012-12-01");
         DescribeHsmConfigurationsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19023,7 +18933,7 @@ impl Redshift for RedshiftClient {
                     result = HsmConfigurationMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19054,9 +18964,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeLoggingStatus");
         params.put("Version", "2012-12-01");
         DescribeLoggingStatusMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19073,7 +18981,7 @@ impl Redshift for RedshiftClient {
                     result = LoggingStatus::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19104,9 +19012,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeOrderableClusterOptions");
         params.put("Version", "2012-12-01");
         DescribeOrderableClusterOptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19125,7 +19031,7 @@ impl Redshift for RedshiftClient {
                     result = OrderableClusterOptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19156,9 +19062,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeReservedNodeOfferings");
         params.put("Version", "2012-12-01");
         DescribeReservedNodeOfferingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19175,7 +19079,7 @@ impl Redshift for RedshiftClient {
                     result = ReservedNodeOfferingsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19206,9 +19110,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeReservedNodes");
         params.put("Version", "2012-12-01");
         DescribeReservedNodesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19225,7 +19127,7 @@ impl Redshift for RedshiftClient {
                     result = ReservedNodesMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19256,9 +19158,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeResize");
         params.put("Version", "2012-12-01");
         DescribeResizeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19278,7 +19178,7 @@ impl Redshift for RedshiftClient {
                     result = ResizeProgressMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19309,9 +19209,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeSnapshotCopyGrants");
         params.put("Version", "2012-12-01");
         DescribeSnapshotCopyGrantsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19328,7 +19226,7 @@ impl Redshift for RedshiftClient {
                     result = SnapshotCopyGrantMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19359,9 +19257,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeSnapshotSchedules");
         params.put("Version", "2012-12-01");
         DescribeSnapshotSchedulesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19378,7 +19274,7 @@ impl Redshift for RedshiftClient {
                     result = DescribeSnapshotSchedulesOutputMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19406,9 +19302,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeStorage");
         params.put("Version", "2012-12-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19428,7 +19322,7 @@ impl Redshift for RedshiftClient {
                     result = CustomerStorageMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19459,9 +19353,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeTableRestoreStatus");
         params.put("Version", "2012-12-01");
         DescribeTableRestoreStatusMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19478,7 +19370,7 @@ impl Redshift for RedshiftClient {
                     result = TableRestoreStatusMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19509,9 +19401,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DescribeTags");
         params.put("Version", "2012-12-01");
         DescribeTagsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19531,7 +19421,7 @@ impl Redshift for RedshiftClient {
                     result = TaggedResourceListMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19562,9 +19452,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DisableLogging");
         params.put("Version", "2012-12-01");
         DisableLoggingMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19584,7 +19472,7 @@ impl Redshift for RedshiftClient {
                     result = LoggingStatus::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19613,9 +19501,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "DisableSnapshotCopy");
         params.put("Version", "2012-12-01");
         DisableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19634,7 +19520,7 @@ impl Redshift for RedshiftClient {
                     result = DisableSnapshotCopyResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19665,9 +19551,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "EnableLogging");
         params.put("Version", "2012-12-01");
         EnableLoggingMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19687,7 +19571,7 @@ impl Redshift for RedshiftClient {
                     result = LoggingStatus::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19716,9 +19600,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "EnableSnapshotCopy");
         params.put("Version", "2012-12-01");
         EnableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19738,7 +19620,7 @@ impl Redshift for RedshiftClient {
                     result = EnableSnapshotCopyResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19769,9 +19651,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "GetClusterCredentials");
         params.put("Version", "2012-12-01");
         GetClusterCredentialsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19788,7 +19668,7 @@ impl Redshift for RedshiftClient {
                     result = ClusterCredentials::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19822,9 +19702,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "GetReservedNodeExchangeOfferings");
         params.put("Version", "2012-12-01");
         GetReservedNodeExchangeOfferingsInputMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19843,7 +19721,7 @@ impl Redshift for RedshiftClient {
                     result = GetReservedNodeExchangeOfferingsOutputMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19875,9 +19753,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifyCluster");
         params.put("Version", "2012-12-01");
         ModifyClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19897,7 +19773,7 @@ impl Redshift for RedshiftClient {
                     result = ModifyClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19928,9 +19804,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifyClusterDbRevision");
         params.put("Version", "2012-12-01");
         ModifyClusterDbRevisionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19947,7 +19821,7 @@ impl Redshift for RedshiftClient {
                     result = ModifyClusterDbRevisionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19978,9 +19852,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifyClusterIamRoles");
         params.put("Version", "2012-12-01");
         ModifyClusterIamRolesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -19997,7 +19869,7 @@ impl Redshift for RedshiftClient {
                     result = ModifyClusterIamRolesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20028,9 +19900,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifyClusterMaintenance");
         params.put("Version", "2012-12-01");
         ModifyClusterMaintenanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20047,7 +19917,7 @@ impl Redshift for RedshiftClient {
                     result = ModifyClusterMaintenanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20078,9 +19948,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifyClusterParameterGroup");
         params.put("Version", "2012-12-01");
         ModifyClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20097,7 +19965,7 @@ impl Redshift for RedshiftClient {
                     result = ClusterParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20128,9 +19996,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifyClusterSnapshot");
         params.put("Version", "2012-12-01");
         ModifyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20147,7 +20013,7 @@ impl Redshift for RedshiftClient {
                     result = ModifyClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20178,9 +20044,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifyClusterSnapshotSchedule");
         params.put("Version", "2012-12-01");
         ModifyClusterSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20205,9 +20069,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifyClusterSubnetGroup");
         params.put("Version", "2012-12-01");
         ModifyClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20224,7 +20086,7 @@ impl Redshift for RedshiftClient {
                     result = ModifyClusterSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20255,9 +20117,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifyEventSubscription");
         params.put("Version", "2012-12-01");
         ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20274,7 +20134,7 @@ impl Redshift for RedshiftClient {
                     result = ModifyEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20306,9 +20166,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifySnapshotCopyRetentionPeriod");
         params.put("Version", "2012-12-01");
         ModifySnapshotCopyRetentionPeriodMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20327,7 +20185,7 @@ impl Redshift for RedshiftClient {
                     result = ModifySnapshotCopyRetentionPeriodResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20358,9 +20216,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ModifySnapshotSchedule");
         params.put("Version", "2012-12-01");
         ModifySnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20377,7 +20233,7 @@ impl Redshift for RedshiftClient {
                     result = SnapshotSchedule::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20408,9 +20264,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "PurchaseReservedNodeOffering");
         params.put("Version", "2012-12-01");
         PurchaseReservedNodeOfferingMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20427,7 +20281,7 @@ impl Redshift for RedshiftClient {
                     result = PurchaseReservedNodeOfferingResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20458,9 +20312,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "RebootCluster");
         params.put("Version", "2012-12-01");
         RebootClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20480,7 +20332,7 @@ impl Redshift for RedshiftClient {
                     result = RebootClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20511,9 +20363,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ResetClusterParameterGroup");
         params.put("Version", "2012-12-01");
         ResetClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20530,7 +20380,7 @@ impl Redshift for RedshiftClient {
                     result = ClusterParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20561,9 +20411,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "ResizeCluster");
         params.put("Version", "2012-12-01");
         ResizeClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20583,7 +20431,7 @@ impl Redshift for RedshiftClient {
                     result = ResizeClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20614,9 +20462,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "RestoreFromClusterSnapshot");
         params.put("Version", "2012-12-01");
         RestoreFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20633,7 +20479,7 @@ impl Redshift for RedshiftClient {
                     result = RestoreFromClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20665,9 +20511,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "RestoreTableFromClusterSnapshot");
         params.put("Version", "2012-12-01");
         RestoreTableFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20686,7 +20530,7 @@ impl Redshift for RedshiftClient {
                     result = RestoreTableFromClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20718,9 +20562,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "RevokeClusterSecurityGroupIngress");
         params.put("Version", "2012-12-01");
         RevokeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20739,7 +20581,7 @@ impl Redshift for RedshiftClient {
                     result = RevokeClusterSecurityGroupIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20770,9 +20612,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "RevokeSnapshotAccess");
         params.put("Version", "2012-12-01");
         RevokeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20791,7 +20631,7 @@ impl Redshift for RedshiftClient {
                     result = RevokeSnapshotAccessResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20822,9 +20662,7 @@ impl Redshift for RedshiftClient {
         params.put("Action", "RotateEncryptionKey");
         params.put("Version", "2012-12-01");
         RotateEncryptionKeyMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -20843,7 +20681,7 @@ impl Redshift for RedshiftClient {
                     result = RotateEncryptionKeyResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

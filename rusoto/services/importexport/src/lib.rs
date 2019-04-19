@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [ImportExportClient](struct.ImportExportClient.html) and [ImportExport](trait.ImportExport.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde_urlencoded;

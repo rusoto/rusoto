@@ -893,7 +893,7 @@ pub enum BatchDeleteAttributesError {}
 impl BatchDeleteAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -949,7 +949,7 @@ pub enum BatchPutAttributesError {
 impl BatchPutAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchPutAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1060,7 +1060,7 @@ pub enum CreateDomainError {
 impl CreateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1125,7 +1125,7 @@ pub enum DeleteAttributesError {
 impl DeleteAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1190,7 +1190,7 @@ pub enum DeleteDomainError {
 impl DeleteDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1239,7 +1239,7 @@ pub enum DomainMetadataError {
 impl DomainMetadataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DomainMetadataError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1296,7 +1296,7 @@ pub enum GetAttributesError {
 impl GetAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1357,7 +1357,7 @@ pub enum ListDomainsError {
 impl ListDomainsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1422,7 +1422,7 @@ pub enum PutAttributesError {
 impl PutAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1525,7 +1525,7 @@ pub enum SelectError {
 impl SelectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SelectError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1708,9 +1708,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "BatchDeleteAttributes");
         params.put("Version", "2009-04-15");
         BatchDeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1735,9 +1733,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "BatchPutAttributes");
         params.put("Version", "2009-04-15");
         BatchPutAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1762,9 +1758,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "CreateDomain");
         params.put("Version", "2009-04-15");
         CreateDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1792,9 +1786,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "DeleteAttributes");
         params.put("Version", "2009-04-15");
         DeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1819,9 +1811,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "DeleteDomain");
         params.put("Version", "2009-04-15");
         DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1849,9 +1839,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "DomainMetadata");
         params.put("Version", "2009-04-15");
         DomainMetadataRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1871,7 +1859,7 @@ impl SimpleDb for SimpleDbClient {
                     result = DomainMetadataResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1902,9 +1890,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "GetAttributes");
         params.put("Version", "2009-04-15");
         GetAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1924,7 +1910,7 @@ impl SimpleDb for SimpleDbClient {
                     result = GetAttributesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1955,9 +1941,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "ListDomains");
         params.put("Version", "2009-04-15");
         ListDomainsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1977,7 +1961,7 @@ impl SimpleDb for SimpleDbClient {
                     result = ListDomainsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2005,9 +1989,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "PutAttributes");
         params.put("Version", "2009-04-15");
         PutAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -2032,9 +2014,7 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "Select");
         params.put("Version", "2009-04-15");
         SelectRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -2054,7 +2034,7 @@ impl SimpleDb for SimpleDbClient {
                     result = SelectResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [IotClient](struct.IotClient.html) and [Iot](trait.Iot.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

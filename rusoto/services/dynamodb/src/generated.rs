@@ -47,7 +47,7 @@ pub struct AttributeValue {
         default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub b: Option<Vec<u8>>,
+    pub b: Option<bytes::Bytes>,
     /// <p>An attribute of type Boolean. For example:</p> <p> <code>"BOOL": true</code> </p>
     #[serde(rename = "BOOL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -60,7 +60,7 @@ pub struct AttributeValue {
         default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bs: Option<Vec<Vec<u8>>>,
+    pub bs: Option<Vec<bytes::Bytes>>,
     /// <p>An attribute of type List. For example:</p> <p> <code>"L": [ {"S": "Cookies"} , {"S": "Coffee"}, {"N", "3.14159"}]</code> </p>
     #[serde(rename = "L")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5202,15 +5202,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.BatchGetItem");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<BatchGetItemOutput>(
@@ -5239,15 +5239,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.BatchWriteItem");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<BatchWriteItemOutput>(
@@ -5276,15 +5276,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.CreateBackup");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateBackupOutput>(
@@ -5313,15 +5313,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.CreateGlobalTable");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateGlobalTableOutput>(
@@ -5350,15 +5350,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.CreateTable");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateTableOutput>(
@@ -5387,15 +5387,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DeleteBackup");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteBackupOutput>(
@@ -5424,15 +5424,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DeleteItem");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteItemOutput>(
@@ -5461,15 +5461,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DeleteTable");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteTableOutput>(
@@ -5498,15 +5498,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeBackup");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeBackupOutput>(
@@ -5538,15 +5538,15 @@ impl DynamoDb for DynamoDbClient {
             "DynamoDB_20120810.DescribeContinuousBackups",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeContinuousBackupsOutput>(
@@ -5570,15 +5570,15 @@ impl DynamoDb for DynamoDbClient {
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeEndpoints");
-        request.set_payload(Some(b"{}".to_vec()));
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeEndpointsResponse>(
@@ -5607,15 +5607,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeGlobalTable");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeGlobalTableOutput>(
@@ -5646,15 +5646,15 @@ impl DynamoDb for DynamoDbClient {
             "DynamoDB_20120810.DescribeGlobalTableSettings",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeGlobalTableSettingsOutput>(
@@ -5676,15 +5676,15 @@ impl DynamoDb for DynamoDbClient {
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeLimits");
-        request.set_payload(Some(b"{}".to_vec()));
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeLimitsOutput>(
@@ -5713,15 +5713,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeTable");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeTableOutput>(
@@ -5750,15 +5750,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeTimeToLive");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeTimeToLiveOutput>(
@@ -5784,15 +5784,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.GetItem");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<GetItemOutput>(
@@ -5821,15 +5821,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListBackups");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListBackupsOutput>(
@@ -5858,15 +5858,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListGlobalTables");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListGlobalTablesOutput>(
@@ -5895,15 +5895,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListTables");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListTablesOutput>(
@@ -5932,15 +5932,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListTagsOfResource");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListTagsOfResourceOutput>(
@@ -5966,15 +5966,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.PutItem");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<PutItemOutput>(
@@ -6000,15 +6000,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.Query");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<QueryOutput>(
@@ -6037,15 +6037,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.RestoreTableFromBackup");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RestoreTableFromBackupOutput>(
@@ -6076,15 +6076,15 @@ impl DynamoDb for DynamoDbClient {
             "DynamoDB_20120810.RestoreTableToPointInTime",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RestoreTableToPointInTimeOutput>(
@@ -6107,15 +6107,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.Scan");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ScanOutput>(
@@ -6141,7 +6141,7 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -6167,15 +6167,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.TransactGetItems");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<TransactGetItemsOutput>(
@@ -6204,15 +6204,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.TransactWriteItems");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<TransactWriteItemsOutput>(
@@ -6238,7 +6238,7 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -6264,15 +6264,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateContinuousBackups");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateContinuousBackupsOutput>(
@@ -6298,15 +6298,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateGlobalTable");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateGlobalTableOutput>(
@@ -6338,15 +6338,15 @@ impl DynamoDb for DynamoDbClient {
             "DynamoDB_20120810.UpdateGlobalTableSettings",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateGlobalTableSettingsOutput>(
@@ -6372,15 +6372,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateItem");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateItemOutput>(
@@ -6409,15 +6409,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateTable");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateTableOutput>(
@@ -6446,15 +6446,15 @@ impl DynamoDb for DynamoDbClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateTimeToLive");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateTimeToLiveOutput>(

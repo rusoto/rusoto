@@ -969,7 +969,7 @@ pub enum CancelJobError {
 impl CancelJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1076,7 +1076,7 @@ pub enum CreateJobError {
 impl CreateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1225,7 +1225,7 @@ pub enum GetShippingLabelError {
 impl GetShippingLabelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetShippingLabelError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1316,7 +1316,7 @@ pub enum GetStatusError {
 impl GetStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStatusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1391,7 +1391,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1484,7 +1484,7 @@ pub enum UpdateJobError {
 impl UpdateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1696,9 +1696,7 @@ impl ImportExport for ImportExportClient {
         params.put("Action", "CancelJob");
         params.put("Version", "2010-06-01");
         CancelJobInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1718,7 +1716,7 @@ impl ImportExport for ImportExportClient {
                     result = CancelJobOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1749,9 +1747,7 @@ impl ImportExport for ImportExportClient {
         params.put("Action", "CreateJob");
         params.put("Version", "2010-06-01");
         CreateJobInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1771,7 +1767,7 @@ impl ImportExport for ImportExportClient {
                     result = CreateJobOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1805,9 +1801,7 @@ impl ImportExport for ImportExportClient {
         params.put("Action", "GetShippingLabel");
         params.put("Version", "2010-06-01");
         GetShippingLabelInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1827,7 +1821,7 @@ impl ImportExport for ImportExportClient {
                     result = GetShippingLabelOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1860,9 +1854,7 @@ impl ImportExport for ImportExportClient {
         params.put("Action", "GetStatus");
         params.put("Version", "2010-06-01");
         GetStatusInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1882,7 +1874,7 @@ impl ImportExport for ImportExportClient {
                     result = GetStatusOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1909,9 +1901,7 @@ impl ImportExport for ImportExportClient {
         params.put("Action", "ListJobs");
         params.put("Version", "2010-06-01");
         ListJobsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1931,7 +1921,7 @@ impl ImportExport for ImportExportClient {
                     result = ListJobsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1961,9 +1951,7 @@ impl ImportExport for ImportExportClient {
         params.put("Action", "UpdateJob");
         params.put("Version", "2010-06-01");
         UpdateJobInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1983,7 +1971,7 @@ impl ImportExport for ImportExportClient {
                     result = UpdateJobOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

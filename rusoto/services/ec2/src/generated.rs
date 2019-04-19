@@ -2539,9 +2539,9 @@ impl BlobDeserializer {
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<u8>, XmlParseError> {
+    ) -> Result<bytes::Bytes, XmlParseError> {
         start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into_bytes();
+        let obj = characters(stack)?.into();
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -2549,7 +2549,7 @@ impl BlobDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct BlobAttributeValue {
-    pub value: Option<Vec<u8>>,
+    pub value: Option<bytes::Bytes>,
 }
 
 /// Serialize `BlobAttributeValue` contents to a `SignedRequest`.
@@ -25966,7 +25966,7 @@ pub struct ImportKeyPairRequest {
     /// <p>A unique name for the key pair.</p>
     pub key_name: String,
     /// <p>The public key. For API calls, the text must be base64-encoded. For command line tools, base64 encoding is performed for you.</p>
-    pub public_key_material: Vec<u8>,
+    pub public_key_material: bytes::Bytes,
 }
 
 /// Serialize `ImportKeyPairRequest` contents to a `SignedRequest`.
@@ -40765,7 +40765,7 @@ pub struct S3Storage {
     /// <p>The beginning of the file name of the AMI.</p>
     pub prefix: Option<String>,
     /// <p>An Amazon S3 upload policy that gives Amazon EC2 permission to upload items into Amazon S3 on your behalf.</p>
-    pub upload_policy: Option<Vec<u8>>,
+    pub upload_policy: Option<bytes::Bytes>,
     /// <p>The signature of the JSON document.</p>
     pub upload_policy_signature: Option<String>,
 }
@@ -49918,7 +49918,7 @@ impl AcceptReservedInstancesExchangeQuoteError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptReservedInstancesExchangeQuoteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -49958,7 +49958,7 @@ impl AcceptTransitGatewayVpcAttachmentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptTransitGatewayVpcAttachmentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -49998,7 +49998,7 @@ impl AcceptVpcEndpointConnectionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptVpcEndpointConnectionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50038,7 +50038,7 @@ impl AcceptVpcPeeringConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptVpcPeeringConnectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50076,7 +50076,7 @@ pub enum AdvertiseByoipCidrError {}
 impl AdvertiseByoipCidrError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdvertiseByoipCidrError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50114,7 +50114,7 @@ pub enum AllocateAddressError {}
 impl AllocateAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AllocateAddressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50152,7 +50152,7 @@ pub enum AllocateHostsError {}
 impl AllocateHostsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AllocateHostsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50192,7 +50192,7 @@ impl ApplySecurityGroupsToClientVpnTargetNetworkError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ApplySecurityGroupsToClientVpnTargetNetworkError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50230,7 +50230,7 @@ pub enum AssignIpv6AddressesError {}
 impl AssignIpv6AddressesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssignIpv6AddressesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50268,7 +50268,7 @@ pub enum AssignPrivateIpAddressesError {}
 impl AssignPrivateIpAddressesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssignPrivateIpAddressesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50306,7 +50306,7 @@ pub enum AssociateAddressError {}
 impl AssociateAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateAddressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50346,7 +50346,7 @@ impl AssociateClientVpnTargetNetworkError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateClientVpnTargetNetworkError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50384,7 +50384,7 @@ pub enum AssociateDhcpOptionsError {}
 impl AssociateDhcpOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateDhcpOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50424,7 +50424,7 @@ impl AssociateIamInstanceProfileError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateIamInstanceProfileError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50462,7 +50462,7 @@ pub enum AssociateRouteTableError {}
 impl AssociateRouteTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateRouteTableError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50500,7 +50500,7 @@ pub enum AssociateSubnetCidrBlockError {}
 impl AssociateSubnetCidrBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateSubnetCidrBlockError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50540,7 +50540,7 @@ impl AssociateTransitGatewayRouteTableError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateTransitGatewayRouteTableError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50578,7 +50578,7 @@ pub enum AssociateVpcCidrBlockError {}
 impl AssociateVpcCidrBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateVpcCidrBlockError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50616,7 +50616,7 @@ pub enum AttachClassicLinkVpcError {}
 impl AttachClassicLinkVpcError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachClassicLinkVpcError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50654,7 +50654,7 @@ pub enum AttachInternetGatewayError {}
 impl AttachInternetGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachInternetGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50692,7 +50692,7 @@ pub enum AttachNetworkInterfaceError {}
 impl AttachNetworkInterfaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachNetworkInterfaceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50730,7 +50730,7 @@ pub enum AttachVolumeError {}
 impl AttachVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachVolumeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50768,7 +50768,7 @@ pub enum AttachVpnGatewayError {}
 impl AttachVpnGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachVpnGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50806,7 +50806,7 @@ pub enum AuthorizeClientVpnIngressError {}
 impl AuthorizeClientVpnIngressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AuthorizeClientVpnIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50846,7 +50846,7 @@ impl AuthorizeSecurityGroupEgressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AuthorizeSecurityGroupEgressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50886,7 +50886,7 @@ impl AuthorizeSecurityGroupIngressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AuthorizeSecurityGroupIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50924,7 +50924,7 @@ pub enum BundleInstanceError {}
 impl BundleInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BundleInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -50962,7 +50962,7 @@ pub enum CancelBundleTaskError {}
 impl CancelBundleTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelBundleTaskError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51000,7 +51000,7 @@ pub enum CancelCapacityReservationError {}
 impl CancelCapacityReservationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelCapacityReservationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51038,7 +51038,7 @@ pub enum CancelConversionTaskError {}
 impl CancelConversionTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelConversionTaskError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51076,7 +51076,7 @@ pub enum CancelExportTaskError {}
 impl CancelExportTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelExportTaskError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51114,7 +51114,7 @@ pub enum CancelImportTaskError {}
 impl CancelImportTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelImportTaskError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51154,7 +51154,7 @@ impl CancelReservedInstancesListingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelReservedInstancesListingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51194,7 +51194,7 @@ impl EC2CancelSpotFleetRequestsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EC2CancelSpotFleetRequestsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51234,7 +51234,7 @@ impl CancelSpotInstanceRequestsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelSpotInstanceRequestsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51272,7 +51272,7 @@ pub enum ConfirmProductInstanceError {}
 impl ConfirmProductInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmProductInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51310,7 +51310,7 @@ pub enum CopyFpgaImageError {}
 impl CopyFpgaImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyFpgaImageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51348,7 +51348,7 @@ pub enum CopyImageError {}
 impl CopyImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyImageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51386,7 +51386,7 @@ pub enum CopySnapshotError {}
 impl CopySnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopySnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51424,7 +51424,7 @@ pub enum CreateCapacityReservationError {}
 impl CreateCapacityReservationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCapacityReservationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51462,7 +51462,7 @@ pub enum CreateClientVpnEndpointError {}
 impl CreateClientVpnEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClientVpnEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51500,7 +51500,7 @@ pub enum CreateClientVpnRouteError {}
 impl CreateClientVpnRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClientVpnRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51538,7 +51538,7 @@ pub enum CreateCustomerGatewayError {}
 impl CreateCustomerGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomerGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51576,7 +51576,7 @@ pub enum CreateDefaultSubnetError {}
 impl CreateDefaultSubnetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDefaultSubnetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51614,7 +51614,7 @@ pub enum CreateDefaultVpcError {}
 impl CreateDefaultVpcError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDefaultVpcError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51652,7 +51652,7 @@ pub enum CreateDhcpOptionsError {}
 impl CreateDhcpOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDhcpOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51692,7 +51692,7 @@ impl CreateEgressOnlyInternetGatewayError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateEgressOnlyInternetGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51730,7 +51730,7 @@ pub enum CreateFleetError {}
 impl CreateFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFleetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51768,7 +51768,7 @@ pub enum CreateFlowLogsError {}
 impl CreateFlowLogsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFlowLogsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51806,7 +51806,7 @@ pub enum CreateFpgaImageError {}
 impl CreateFpgaImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFpgaImageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51844,7 +51844,7 @@ pub enum CreateImageError {}
 impl CreateImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51882,7 +51882,7 @@ pub enum CreateInstanceExportTaskError {}
 impl CreateInstanceExportTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstanceExportTaskError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51920,7 +51920,7 @@ pub enum CreateInternetGatewayError {}
 impl CreateInternetGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInternetGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51958,7 +51958,7 @@ pub enum CreateKeyPairError {}
 impl CreateKeyPairError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateKeyPairError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -51996,7 +51996,7 @@ pub enum CreateLaunchTemplateError {}
 impl CreateLaunchTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLaunchTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52036,7 +52036,7 @@ impl CreateLaunchTemplateVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateLaunchTemplateVersionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52074,7 +52074,7 @@ pub enum CreateNatGatewayError {}
 impl CreateNatGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNatGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52112,7 +52112,7 @@ pub enum CreateNetworkAclError {}
 impl CreateNetworkAclError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNetworkAclError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52150,7 +52150,7 @@ pub enum CreateNetworkAclEntryError {}
 impl CreateNetworkAclEntryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNetworkAclEntryError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52188,7 +52188,7 @@ pub enum CreateNetworkInterfaceError {}
 impl CreateNetworkInterfaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNetworkInterfaceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52228,7 +52228,7 @@ impl CreateNetworkInterfacePermissionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateNetworkInterfacePermissionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52266,7 +52266,7 @@ pub enum CreatePlacementGroupError {}
 impl CreatePlacementGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePlacementGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52306,7 +52306,7 @@ impl CreateReservedInstancesListingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateReservedInstancesListingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52344,7 +52344,7 @@ pub enum CreateRouteError {}
 impl CreateRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52382,7 +52382,7 @@ pub enum CreateRouteTableError {}
 impl CreateRouteTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRouteTableError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52420,7 +52420,7 @@ pub enum CreateSecurityGroupError {}
 impl CreateSecurityGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSecurityGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52458,7 +52458,7 @@ pub enum CreateSnapshotError {}
 impl CreateSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52498,7 +52498,7 @@ impl CreateSpotDatafeedSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSpotDatafeedSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52536,7 +52536,7 @@ pub enum CreateSubnetError {}
 impl CreateSubnetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSubnetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52574,7 +52574,7 @@ pub enum CreateTagsError {}
 impl CreateTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52612,7 +52612,7 @@ pub enum CreateTransitGatewayError {}
 impl CreateTransitGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTransitGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52650,7 +52650,7 @@ pub enum CreateTransitGatewayRouteError {}
 impl CreateTransitGatewayRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTransitGatewayRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52690,7 +52690,7 @@ impl CreateTransitGatewayRouteTableError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateTransitGatewayRouteTableError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52730,7 +52730,7 @@ impl CreateTransitGatewayVpcAttachmentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateTransitGatewayVpcAttachmentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52768,7 +52768,7 @@ pub enum CreateVolumeError {}
 impl CreateVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVolumeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52806,7 +52806,7 @@ pub enum CreateVpcError {}
 impl CreateVpcError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVpcError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52844,7 +52844,7 @@ pub enum CreateVpcEndpointError {}
 impl CreateVpcEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVpcEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52884,7 +52884,7 @@ impl CreateVpcEndpointConnectionNotificationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateVpcEndpointConnectionNotificationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52924,7 +52924,7 @@ impl CreateVpcEndpointServiceConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateVpcEndpointServiceConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -52964,7 +52964,7 @@ impl CreateVpcPeeringConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateVpcPeeringConnectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53002,7 +53002,7 @@ pub enum CreateVpnConnectionError {}
 impl CreateVpnConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVpnConnectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53040,7 +53040,7 @@ pub enum CreateVpnConnectionRouteError {}
 impl CreateVpnConnectionRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVpnConnectionRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53078,7 +53078,7 @@ pub enum CreateVpnGatewayError {}
 impl CreateVpnGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVpnGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53116,7 +53116,7 @@ pub enum DeleteClientVpnEndpointError {}
 impl DeleteClientVpnEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClientVpnEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53154,7 +53154,7 @@ pub enum DeleteClientVpnRouteError {}
 impl DeleteClientVpnRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClientVpnRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53192,7 +53192,7 @@ pub enum DeleteCustomerGatewayError {}
 impl DeleteCustomerGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomerGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53230,7 +53230,7 @@ pub enum DeleteDhcpOptionsError {}
 impl DeleteDhcpOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDhcpOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53270,7 +53270,7 @@ impl DeleteEgressOnlyInternetGatewayError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteEgressOnlyInternetGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53308,7 +53308,7 @@ pub enum DeleteFleetsError {}
 impl DeleteFleetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFleetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53346,7 +53346,7 @@ pub enum DeleteFlowLogsError {}
 impl DeleteFlowLogsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFlowLogsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53384,7 +53384,7 @@ pub enum DeleteFpgaImageError {}
 impl DeleteFpgaImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFpgaImageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53422,7 +53422,7 @@ pub enum DeleteInternetGatewayError {}
 impl DeleteInternetGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInternetGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53460,7 +53460,7 @@ pub enum DeleteKeyPairError {}
 impl DeleteKeyPairError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteKeyPairError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53498,7 +53498,7 @@ pub enum DeleteLaunchTemplateError {}
 impl DeleteLaunchTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLaunchTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53538,7 +53538,7 @@ impl DeleteLaunchTemplateVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteLaunchTemplateVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53576,7 +53576,7 @@ pub enum DeleteNatGatewayError {}
 impl DeleteNatGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNatGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53614,7 +53614,7 @@ pub enum DeleteNetworkAclError {}
 impl DeleteNetworkAclError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNetworkAclError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53652,7 +53652,7 @@ pub enum DeleteNetworkAclEntryError {}
 impl DeleteNetworkAclEntryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNetworkAclEntryError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53690,7 +53690,7 @@ pub enum DeleteNetworkInterfaceError {}
 impl DeleteNetworkInterfaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNetworkInterfaceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53730,7 +53730,7 @@ impl DeleteNetworkInterfacePermissionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteNetworkInterfacePermissionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53768,7 +53768,7 @@ pub enum DeletePlacementGroupError {}
 impl DeletePlacementGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePlacementGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53806,7 +53806,7 @@ pub enum DeleteRouteError {}
 impl DeleteRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53844,7 +53844,7 @@ pub enum DeleteRouteTableError {}
 impl DeleteRouteTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRouteTableError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53882,7 +53882,7 @@ pub enum DeleteSecurityGroupError {}
 impl DeleteSecurityGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSecurityGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53920,7 +53920,7 @@ pub enum DeleteSnapshotError {}
 impl DeleteSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53960,7 +53960,7 @@ impl DeleteSpotDatafeedSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteSpotDatafeedSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -53998,7 +53998,7 @@ pub enum DeleteSubnetError {}
 impl DeleteSubnetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubnetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54036,7 +54036,7 @@ pub enum DeleteTagsError {}
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54074,7 +54074,7 @@ pub enum DeleteTransitGatewayError {}
 impl DeleteTransitGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTransitGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54112,7 +54112,7 @@ pub enum DeleteTransitGatewayRouteError {}
 impl DeleteTransitGatewayRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTransitGatewayRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54152,7 +54152,7 @@ impl DeleteTransitGatewayRouteTableError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteTransitGatewayRouteTableError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54192,7 +54192,7 @@ impl DeleteTransitGatewayVpcAttachmentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteTransitGatewayVpcAttachmentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54230,7 +54230,7 @@ pub enum DeleteVolumeError {}
 impl DeleteVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVolumeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54268,7 +54268,7 @@ pub enum DeleteVpcError {}
 impl DeleteVpcError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVpcError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54308,7 +54308,7 @@ impl DeleteVpcEndpointConnectionNotificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVpcEndpointConnectionNotificationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54348,7 +54348,7 @@ impl DeleteVpcEndpointServiceConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVpcEndpointServiceConfigurationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54386,7 +54386,7 @@ pub enum DeleteVpcEndpointsError {}
 impl DeleteVpcEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVpcEndpointsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54426,7 +54426,7 @@ impl DeleteVpcPeeringConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVpcPeeringConnectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54464,7 +54464,7 @@ pub enum DeleteVpnConnectionError {}
 impl DeleteVpnConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVpnConnectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54502,7 +54502,7 @@ pub enum DeleteVpnConnectionRouteError {}
 impl DeleteVpnConnectionRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVpnConnectionRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54540,7 +54540,7 @@ pub enum DeleteVpnGatewayError {}
 impl DeleteVpnGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVpnGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54578,7 +54578,7 @@ pub enum DeprovisionByoipCidrError {}
 impl DeprovisionByoipCidrError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprovisionByoipCidrError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54616,7 +54616,7 @@ pub enum DeregisterImageError {}
 impl DeregisterImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterImageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54654,7 +54654,7 @@ pub enum DescribeAccountAttributesError {}
 impl DescribeAccountAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54692,7 +54692,7 @@ pub enum DescribeAddressesError {}
 impl DescribeAddressesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddressesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54730,7 +54730,7 @@ pub enum DescribeAggregateIdFormatError {}
 impl DescribeAggregateIdFormatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAggregateIdFormatError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54768,7 +54768,7 @@ pub enum DescribeAvailabilityZonesError {}
 impl DescribeAvailabilityZonesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAvailabilityZonesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54806,7 +54806,7 @@ pub enum DescribeBundleTasksError {}
 impl DescribeBundleTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBundleTasksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54844,7 +54844,7 @@ pub enum DescribeByoipCidrsError {}
 impl DescribeByoipCidrsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeByoipCidrsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54884,7 +54884,7 @@ impl DescribeCapacityReservationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCapacityReservationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54924,7 +54924,7 @@ impl DescribeClassicLinkInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeClassicLinkInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -54964,7 +54964,7 @@ impl DescribeClientVpnAuthorizationRulesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeClientVpnAuthorizationRulesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55004,7 +55004,7 @@ impl DescribeClientVpnConnectionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeClientVpnConnectionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55044,7 +55044,7 @@ impl DescribeClientVpnEndpointsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeClientVpnEndpointsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55082,7 +55082,7 @@ pub enum DescribeClientVpnRoutesError {}
 impl DescribeClientVpnRoutesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClientVpnRoutesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55122,7 +55122,7 @@ impl DescribeClientVpnTargetNetworksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeClientVpnTargetNetworksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55160,7 +55160,7 @@ pub enum DescribeConversionTasksError {}
 impl DescribeConversionTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConversionTasksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55198,7 +55198,7 @@ pub enum DescribeCustomerGatewaysError {}
 impl DescribeCustomerGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCustomerGatewaysError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55236,7 +55236,7 @@ pub enum DescribeDhcpOptionsError {}
 impl DescribeDhcpOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDhcpOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55276,7 +55276,7 @@ impl DescribeEgressOnlyInternetGatewaysError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEgressOnlyInternetGatewaysError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55314,7 +55314,7 @@ pub enum DescribeElasticGpusError {}
 impl DescribeElasticGpusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeElasticGpusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55352,7 +55352,7 @@ pub enum DescribeExportTasksError {}
 impl DescribeExportTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExportTasksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55390,7 +55390,7 @@ pub enum DescribeFleetHistoryError {}
 impl DescribeFleetHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetHistoryError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55428,7 +55428,7 @@ pub enum DescribeFleetInstancesError {}
 impl DescribeFleetInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55466,7 +55466,7 @@ pub enum DescribeFleetsError {}
 impl DescribeFleetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55504,7 +55504,7 @@ pub enum DescribeFlowLogsError {}
 impl DescribeFlowLogsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFlowLogsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55544,7 +55544,7 @@ impl DescribeFpgaImageAttributeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeFpgaImageAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55582,7 +55582,7 @@ pub enum DescribeFpgaImagesError {}
 impl DescribeFpgaImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFpgaImagesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55622,7 +55622,7 @@ impl DescribeHostReservationOfferingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeHostReservationOfferingsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55660,7 +55660,7 @@ pub enum DescribeHostReservationsError {}
 impl DescribeHostReservationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHostReservationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55698,7 +55698,7 @@ pub enum DescribeHostsError {}
 impl DescribeHostsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHostsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55738,7 +55738,7 @@ impl DescribeIamInstanceProfileAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeIamInstanceProfileAssociationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55776,7 +55776,7 @@ pub enum DescribeIdFormatError {}
 impl DescribeIdFormatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdFormatError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55814,7 +55814,7 @@ pub enum DescribeIdentityIdFormatError {}
 impl DescribeIdentityIdFormatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityIdFormatError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55852,7 +55852,7 @@ pub enum DescribeImageAttributeError {}
 impl DescribeImageAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55890,7 +55890,7 @@ pub enum DescribeImagesError {}
 impl DescribeImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImagesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55928,7 +55928,7 @@ pub enum DescribeImportImageTasksError {}
 impl DescribeImportImageTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImportImageTasksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -55968,7 +55968,7 @@ impl DescribeImportSnapshotTasksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeImportSnapshotTasksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56006,7 +56006,7 @@ pub enum DescribeInstanceAttributeError {}
 impl DescribeInstanceAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstanceAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56046,7 +56046,7 @@ impl DescribeInstanceCreditSpecificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInstanceCreditSpecificationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56084,7 +56084,7 @@ pub enum DescribeInstanceStatusError {}
 impl DescribeInstanceStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstanceStatusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56122,7 +56122,7 @@ pub enum DescribeInstancesError {}
 impl DescribeInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56160,7 +56160,7 @@ pub enum DescribeInternetGatewaysError {}
 impl DescribeInternetGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInternetGatewaysError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56198,7 +56198,7 @@ pub enum DescribeKeyPairsError {}
 impl DescribeKeyPairsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeKeyPairsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56238,7 +56238,7 @@ impl DescribeLaunchTemplateVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLaunchTemplateVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56276,7 +56276,7 @@ pub enum DescribeLaunchTemplatesError {}
 impl DescribeLaunchTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLaunchTemplatesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56314,7 +56314,7 @@ pub enum DescribeMovingAddressesError {}
 impl DescribeMovingAddressesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMovingAddressesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56352,7 +56352,7 @@ pub enum DescribeNatGatewaysError {}
 impl DescribeNatGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNatGatewaysError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56390,7 +56390,7 @@ pub enum DescribeNetworkAclsError {}
 impl DescribeNetworkAclsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNetworkAclsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56430,7 +56430,7 @@ impl DescribeNetworkInterfaceAttributeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeNetworkInterfaceAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56470,7 +56470,7 @@ impl DescribeNetworkInterfacePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeNetworkInterfacePermissionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56508,7 +56508,7 @@ pub enum DescribeNetworkInterfacesError {}
 impl DescribeNetworkInterfacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNetworkInterfacesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56546,7 +56546,7 @@ pub enum DescribePlacementGroupsError {}
 impl DescribePlacementGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePlacementGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56584,7 +56584,7 @@ pub enum DescribePrefixListsError {}
 impl DescribePrefixListsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePrefixListsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56622,7 +56622,7 @@ pub enum DescribePrincipalIdFormatError {}
 impl DescribePrincipalIdFormatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePrincipalIdFormatError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56660,7 +56660,7 @@ pub enum DescribePublicIpv4PoolsError {}
 impl DescribePublicIpv4PoolsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePublicIpv4PoolsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56698,7 +56698,7 @@ pub enum DescribeRegionsError {}
 impl DescribeRegionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRegionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56736,7 +56736,7 @@ pub enum DescribeReservedInstancesError {}
 impl DescribeReservedInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReservedInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56776,7 +56776,7 @@ impl DescribeReservedInstancesListingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedInstancesListingsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56816,7 +56816,7 @@ impl DescribeReservedInstancesModificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedInstancesModificationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56856,7 +56856,7 @@ impl DescribeReservedInstancesOfferingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedInstancesOfferingsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56894,7 +56894,7 @@ pub enum DescribeRouteTablesError {}
 impl DescribeRouteTablesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRouteTablesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56934,7 +56934,7 @@ impl DescribeScheduledInstanceAvailabilityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeScheduledInstanceAvailabilityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -56974,7 +56974,7 @@ impl DescribeScheduledInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeScheduledInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57014,7 +57014,7 @@ impl DescribeSecurityGroupReferencesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSecurityGroupReferencesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57052,7 +57052,7 @@ pub enum DescribeSecurityGroupsError {}
 impl DescribeSecurityGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSecurityGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57090,7 +57090,7 @@ pub enum DescribeSnapshotAttributeError {}
 impl DescribeSnapshotAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSnapshotAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57128,7 +57128,7 @@ pub enum DescribeSnapshotsError {}
 impl DescribeSnapshotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSnapshotsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57168,7 +57168,7 @@ impl DescribeSpotDatafeedSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSpotDatafeedSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57208,7 +57208,7 @@ impl DescribeSpotFleetInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSpotFleetInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57248,7 +57248,7 @@ impl DescribeSpotFleetRequestHistoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSpotFleetRequestHistoryError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57286,7 +57286,7 @@ pub enum DescribeSpotFleetRequestsError {}
 impl DescribeSpotFleetRequestsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSpotFleetRequestsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57326,7 +57326,7 @@ impl DescribeSpotInstanceRequestsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSpotInstanceRequestsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57364,7 +57364,7 @@ pub enum DescribeSpotPriceHistoryError {}
 impl DescribeSpotPriceHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSpotPriceHistoryError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57404,7 +57404,7 @@ impl DescribeStaleSecurityGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeStaleSecurityGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57442,7 +57442,7 @@ pub enum DescribeSubnetsError {}
 impl DescribeSubnetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSubnetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57480,7 +57480,7 @@ pub enum DescribeTagsError {}
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57520,7 +57520,7 @@ impl DescribeTransitGatewayAttachmentsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTransitGatewayAttachmentsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57560,7 +57560,7 @@ impl DescribeTransitGatewayRouteTablesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTransitGatewayRouteTablesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57600,7 +57600,7 @@ impl DescribeTransitGatewayVpcAttachmentsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTransitGatewayVpcAttachmentsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57638,7 +57638,7 @@ pub enum DescribeTransitGatewaysError {}
 impl DescribeTransitGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTransitGatewaysError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57676,7 +57676,7 @@ pub enum DescribeVolumeAttributeError {}
 impl DescribeVolumeAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVolumeAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57714,7 +57714,7 @@ pub enum DescribeVolumeStatusError {}
 impl DescribeVolumeStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVolumeStatusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57752,7 +57752,7 @@ pub enum DescribeVolumesError {}
 impl DescribeVolumesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVolumesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57792,7 +57792,7 @@ impl DescribeVolumesModificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVolumesModificationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57830,7 +57830,7 @@ pub enum DescribeVpcAttributeError {}
 impl DescribeVpcAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVpcAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57868,7 +57868,7 @@ pub enum DescribeVpcClassicLinkError {}
 impl DescribeVpcClassicLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVpcClassicLinkError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57908,7 +57908,7 @@ impl DescribeVpcClassicLinkDnsSupportError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVpcClassicLinkDnsSupportError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57948,7 +57948,7 @@ impl DescribeVpcEndpointConnectionNotificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVpcEndpointConnectionNotificationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -57988,7 +57988,7 @@ impl DescribeVpcEndpointConnectionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVpcEndpointConnectionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58028,7 +58028,7 @@ impl DescribeVpcEndpointServiceConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVpcEndpointServiceConfigurationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58068,7 +58068,7 @@ impl DescribeVpcEndpointServicePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVpcEndpointServicePermissionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58108,7 +58108,7 @@ impl DescribeVpcEndpointServicesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVpcEndpointServicesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58146,7 +58146,7 @@ pub enum DescribeVpcEndpointsError {}
 impl DescribeVpcEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVpcEndpointsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58186,7 +58186,7 @@ impl DescribeVpcPeeringConnectionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVpcPeeringConnectionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58224,7 +58224,7 @@ pub enum DescribeVpcsError {}
 impl DescribeVpcsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVpcsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58262,7 +58262,7 @@ pub enum DescribeVpnConnectionsError {}
 impl DescribeVpnConnectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVpnConnectionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58300,7 +58300,7 @@ pub enum DescribeVpnGatewaysError {}
 impl DescribeVpnGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVpnGatewaysError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58338,7 +58338,7 @@ pub enum DetachClassicLinkVpcError {}
 impl DetachClassicLinkVpcError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachClassicLinkVpcError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58376,7 +58376,7 @@ pub enum DetachInternetGatewayError {}
 impl DetachInternetGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachInternetGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58414,7 +58414,7 @@ pub enum DetachNetworkInterfaceError {}
 impl DetachNetworkInterfaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachNetworkInterfaceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58452,7 +58452,7 @@ pub enum DetachVolumeError {}
 impl DetachVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachVolumeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58490,7 +58490,7 @@ pub enum DetachVpnGatewayError {}
 impl DetachVpnGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachVpnGatewayError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58530,7 +58530,7 @@ impl DisableTransitGatewayRouteTablePropagationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableTransitGatewayRouteTablePropagationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58570,7 +58570,7 @@ impl DisableVgwRoutePropagationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableVgwRoutePropagationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58608,7 +58608,7 @@ pub enum DisableVpcClassicLinkError {}
 impl DisableVpcClassicLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableVpcClassicLinkError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58648,7 +58648,7 @@ impl DisableVpcClassicLinkDnsSupportError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableVpcClassicLinkDnsSupportError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58686,7 +58686,7 @@ pub enum DisassociateAddressError {}
 impl DisassociateAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateAddressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58726,7 +58726,7 @@ impl DisassociateClientVpnTargetNetworkError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateClientVpnTargetNetworkError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58766,7 +58766,7 @@ impl DisassociateIamInstanceProfileError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateIamInstanceProfileError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58804,7 +58804,7 @@ pub enum DisassociateRouteTableError {}
 impl DisassociateRouteTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateRouteTableError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58844,7 +58844,7 @@ impl DisassociateSubnetCidrBlockError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateSubnetCidrBlockError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58884,7 +58884,7 @@ impl DisassociateTransitGatewayRouteTableError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateTransitGatewayRouteTableError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58922,7 +58922,7 @@ pub enum DisassociateVpcCidrBlockError {}
 impl DisassociateVpcCidrBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateVpcCidrBlockError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -58962,7 +58962,7 @@ impl EnableTransitGatewayRouteTablePropagationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableTransitGatewayRouteTablePropagationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59000,7 +59000,7 @@ pub enum EnableVgwRoutePropagationError {}
 impl EnableVgwRoutePropagationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableVgwRoutePropagationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59038,7 +59038,7 @@ pub enum EnableVolumeIOError {}
 impl EnableVolumeIOError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableVolumeIOError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59076,7 +59076,7 @@ pub enum EnableVpcClassicLinkError {}
 impl EnableVpcClassicLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableVpcClassicLinkError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59116,7 +59116,7 @@ impl EnableVpcClassicLinkDnsSupportError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableVpcClassicLinkDnsSupportError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59156,7 +59156,7 @@ impl ExportClientVpnClientCertificateRevocationListError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ExportClientVpnClientCertificateRevocationListError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59196,7 +59196,7 @@ impl ExportClientVpnClientConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ExportClientVpnClientConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59236,7 +59236,7 @@ impl ExportTransitGatewayRoutesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ExportTransitGatewayRoutesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59274,7 +59274,7 @@ pub enum GetConsoleOutputError {}
 impl GetConsoleOutputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConsoleOutputError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59312,7 +59312,7 @@ pub enum GetConsoleScreenshotError {}
 impl GetConsoleScreenshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConsoleScreenshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59352,7 +59352,7 @@ impl GetHostReservationPurchasePreviewError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetHostReservationPurchasePreviewError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59390,7 +59390,7 @@ pub enum GetLaunchTemplateDataError {}
 impl GetLaunchTemplateDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLaunchTemplateDataError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59428,7 +59428,7 @@ pub enum GetPasswordDataError {}
 impl GetPasswordDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPasswordDataError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59468,7 +59468,7 @@ impl GetReservedInstancesExchangeQuoteError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetReservedInstancesExchangeQuoteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59508,7 +59508,7 @@ impl GetTransitGatewayAttachmentPropagationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetTransitGatewayAttachmentPropagationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59548,7 +59548,7 @@ impl GetTransitGatewayRouteTableAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetTransitGatewayRouteTableAssociationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59588,7 +59588,7 @@ impl GetTransitGatewayRouteTablePropagationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetTransitGatewayRouteTablePropagationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59628,7 +59628,7 @@ impl ImportClientVpnClientCertificateRevocationListError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ImportClientVpnClientCertificateRevocationListError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59666,7 +59666,7 @@ pub enum ImportImageError {}
 impl ImportImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportImageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59704,7 +59704,7 @@ pub enum ImportInstanceError {}
 impl ImportInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59742,7 +59742,7 @@ pub enum ImportKeyPairError {}
 impl ImportKeyPairError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportKeyPairError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59780,7 +59780,7 @@ pub enum ImportSnapshotError {}
 impl ImportSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59818,7 +59818,7 @@ pub enum ImportVolumeError {}
 impl ImportVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportVolumeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59856,7 +59856,7 @@ pub enum ModifyCapacityReservationError {}
 impl ModifyCapacityReservationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyCapacityReservationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59894,7 +59894,7 @@ pub enum ModifyClientVpnEndpointError {}
 impl ModifyClientVpnEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClientVpnEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59932,7 +59932,7 @@ pub enum ModifyFleetError {}
 impl ModifyFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyFleetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -59970,7 +59970,7 @@ pub enum ModifyFpgaImageAttributeError {}
 impl ModifyFpgaImageAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyFpgaImageAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60008,7 +60008,7 @@ pub enum ModifyHostsError {}
 impl ModifyHostsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyHostsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60046,7 +60046,7 @@ pub enum ModifyIdFormatError {}
 impl ModifyIdFormatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyIdFormatError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60084,7 +60084,7 @@ pub enum ModifyIdentityIdFormatError {}
 impl ModifyIdentityIdFormatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyIdentityIdFormatError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60122,7 +60122,7 @@ pub enum ModifyImageAttributeError {}
 impl ModifyImageAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyImageAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60160,7 +60160,7 @@ pub enum ModifyInstanceAttributeError {}
 impl ModifyInstanceAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyInstanceAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60200,7 +60200,7 @@ impl ModifyInstanceCapacityReservationAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyInstanceCapacityReservationAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60240,7 +60240,7 @@ impl ModifyInstanceCreditSpecificationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyInstanceCreditSpecificationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60278,7 +60278,7 @@ pub enum ModifyInstancePlacementError {}
 impl ModifyInstancePlacementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyInstancePlacementError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60316,7 +60316,7 @@ pub enum ModifyLaunchTemplateError {}
 impl ModifyLaunchTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyLaunchTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60356,7 +60356,7 @@ impl ModifyNetworkInterfaceAttributeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyNetworkInterfaceAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60394,7 +60394,7 @@ pub enum ModifyReservedInstancesError {}
 impl ModifyReservedInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyReservedInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60432,7 +60432,7 @@ pub enum ModifySnapshotAttributeError {}
 impl ModifySnapshotAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifySnapshotAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60470,7 +60470,7 @@ pub enum ModifySpotFleetRequestError {}
 impl ModifySpotFleetRequestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifySpotFleetRequestError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60508,7 +60508,7 @@ pub enum ModifySubnetAttributeError {}
 impl ModifySubnetAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifySubnetAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60548,7 +60548,7 @@ impl ModifyTransitGatewayVpcAttachmentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyTransitGatewayVpcAttachmentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60586,7 +60586,7 @@ pub enum ModifyVolumeError {}
 impl ModifyVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyVolumeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60624,7 +60624,7 @@ pub enum ModifyVolumeAttributeError {}
 impl ModifyVolumeAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyVolumeAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60662,7 +60662,7 @@ pub enum ModifyVpcAttributeError {}
 impl ModifyVpcAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyVpcAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60700,7 +60700,7 @@ pub enum ModifyVpcEndpointError {}
 impl ModifyVpcEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyVpcEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60740,7 +60740,7 @@ impl ModifyVpcEndpointConnectionNotificationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyVpcEndpointConnectionNotificationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60780,7 +60780,7 @@ impl ModifyVpcEndpointServiceConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyVpcEndpointServiceConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60820,7 +60820,7 @@ impl ModifyVpcEndpointServicePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyVpcEndpointServicePermissionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60860,7 +60860,7 @@ impl ModifyVpcPeeringConnectionOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyVpcPeeringConnectionOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60898,7 +60898,7 @@ pub enum ModifyVpcTenancyError {}
 impl ModifyVpcTenancyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyVpcTenancyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60936,7 +60936,7 @@ pub enum MonitorInstancesError {}
 impl MonitorInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MonitorInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -60974,7 +60974,7 @@ pub enum MoveAddressToVpcError {}
 impl MoveAddressToVpcError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MoveAddressToVpcError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61012,7 +61012,7 @@ pub enum ProvisionByoipCidrError {}
 impl ProvisionByoipCidrError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ProvisionByoipCidrError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61050,7 +61050,7 @@ pub enum PurchaseHostReservationError {}
 impl PurchaseHostReservationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurchaseHostReservationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61090,7 +61090,7 @@ impl PurchaseReservedInstancesOfferingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PurchaseReservedInstancesOfferingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61130,7 +61130,7 @@ impl PurchaseScheduledInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PurchaseScheduledInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61168,7 +61168,7 @@ pub enum RebootInstancesError {}
 impl RebootInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61206,7 +61206,7 @@ pub enum RegisterImageError {}
 impl RegisterImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterImageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61246,7 +61246,7 @@ impl RejectTransitGatewayVpcAttachmentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RejectTransitGatewayVpcAttachmentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61286,7 +61286,7 @@ impl RejectVpcEndpointConnectionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RejectVpcEndpointConnectionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61326,7 +61326,7 @@ impl RejectVpcPeeringConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RejectVpcPeeringConnectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61364,7 +61364,7 @@ pub enum ReleaseAddressError {}
 impl ReleaseAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReleaseAddressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61402,7 +61402,7 @@ pub enum ReleaseHostsError {}
 impl ReleaseHostsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReleaseHostsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61442,7 +61442,7 @@ impl ReplaceIamInstanceProfileAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ReplaceIamInstanceProfileAssociationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61482,7 +61482,7 @@ impl ReplaceNetworkAclAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ReplaceNetworkAclAssociationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61520,7 +61520,7 @@ pub enum ReplaceNetworkAclEntryError {}
 impl ReplaceNetworkAclEntryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReplaceNetworkAclEntryError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61558,7 +61558,7 @@ pub enum ReplaceRouteError {}
 impl ReplaceRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReplaceRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61598,7 +61598,7 @@ impl ReplaceRouteTableAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ReplaceRouteTableAssociationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61638,7 +61638,7 @@ impl ReplaceTransitGatewayRouteError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ReplaceTransitGatewayRouteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61676,7 +61676,7 @@ pub enum ReportInstanceStatusError {}
 impl ReportInstanceStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReportInstanceStatusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61714,7 +61714,7 @@ pub enum RequestSpotFleetError {}
 impl RequestSpotFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RequestSpotFleetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61752,7 +61752,7 @@ pub enum RequestSpotInstancesError {}
 impl RequestSpotInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RequestSpotInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61790,7 +61790,7 @@ pub enum ResetFpgaImageAttributeError {}
 impl ResetFpgaImageAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetFpgaImageAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61828,7 +61828,7 @@ pub enum ResetImageAttributeError {}
 impl ResetImageAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetImageAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61866,7 +61866,7 @@ pub enum ResetInstanceAttributeError {}
 impl ResetInstanceAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetInstanceAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61906,7 +61906,7 @@ impl ResetNetworkInterfaceAttributeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ResetNetworkInterfaceAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61944,7 +61944,7 @@ pub enum ResetSnapshotAttributeError {}
 impl ResetSnapshotAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetSnapshotAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -61982,7 +61982,7 @@ pub enum RestoreAddressToClassicError {}
 impl RestoreAddressToClassicError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreAddressToClassicError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62020,7 +62020,7 @@ pub enum RevokeClientVpnIngressError {}
 impl RevokeClientVpnIngressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeClientVpnIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62058,7 +62058,7 @@ pub enum RevokeSecurityGroupEgressError {}
 impl RevokeSecurityGroupEgressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeSecurityGroupEgressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62098,7 +62098,7 @@ impl RevokeSecurityGroupIngressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RevokeSecurityGroupIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62136,7 +62136,7 @@ pub enum RunInstancesError {}
 impl RunInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RunInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62174,7 +62174,7 @@ pub enum RunScheduledInstancesError {}
 impl RunScheduledInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RunScheduledInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62214,7 +62214,7 @@ impl SearchTransitGatewayRoutesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SearchTransitGatewayRoutesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62252,7 +62252,7 @@ pub enum StartInstancesError {}
 impl StartInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62290,7 +62290,7 @@ pub enum StopInstancesError {}
 impl StopInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62330,7 +62330,7 @@ impl TerminateClientVpnConnectionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<TerminateClientVpnConnectionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62368,7 +62368,7 @@ pub enum TerminateInstancesError {}
 impl TerminateInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62406,7 +62406,7 @@ pub enum UnassignIpv6AddressesError {}
 impl UnassignIpv6AddressesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnassignIpv6AddressesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62446,7 +62446,7 @@ impl UnassignPrivateIpAddressesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UnassignPrivateIpAddressesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62484,7 +62484,7 @@ pub enum UnmonitorInstancesError {}
 impl UnmonitorInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnmonitorInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62524,7 +62524,7 @@ impl UpdateSecurityGroupRuleDescriptionsEgressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateSecurityGroupRuleDescriptionsEgressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62564,7 +62564,7 @@ impl UpdateSecurityGroupRuleDescriptionsIngressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateSecurityGroupRuleDescriptionsIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -62602,7 +62602,7 @@ pub enum WithdrawByoipCidrError {}
 impl WithdrawByoipCidrError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<WithdrawByoipCidrError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -64732,9 +64732,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AcceptReservedInstancesExchangeQuote");
         params.put("Version", "2016-11-15");
         AcceptReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -64753,7 +64751,7 @@ impl Ec2 for Ec2Client {
                     result = AcceptReservedInstancesExchangeQuoteResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64782,9 +64780,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AcceptTransitGatewayVpcAttachment");
         params.put("Version", "2016-11-15");
         AcceptTransitGatewayVpcAttachmentRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -64803,7 +64799,7 @@ impl Ec2 for Ec2Client {
                     result = AcceptTransitGatewayVpcAttachmentResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64831,9 +64827,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AcceptVpcEndpointConnections");
         params.put("Version", "2016-11-15");
         AcceptVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -64850,7 +64844,7 @@ impl Ec2 for Ec2Client {
                     result = AcceptVpcEndpointConnectionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64878,9 +64872,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AcceptVpcPeeringConnection");
         params.put("Version", "2016-11-15");
         AcceptVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -64897,7 +64889,7 @@ impl Ec2 for Ec2Client {
                     result = AcceptVpcPeeringConnectionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64925,9 +64917,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AdvertiseByoipCidr");
         params.put("Version", "2016-11-15");
         AdvertiseByoipCidrRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -64947,7 +64937,7 @@ impl Ec2 for Ec2Client {
                     result = AdvertiseByoipCidrResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64975,9 +64965,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AllocateAddress");
         params.put("Version", "2016-11-15");
         AllocateAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -64997,7 +64985,7 @@ impl Ec2 for Ec2Client {
                     result = AllocateAddressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65025,9 +65013,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AllocateHosts");
         params.put("Version", "2016-11-15");
         AllocateHostsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65047,7 +65033,7 @@ impl Ec2 for Ec2Client {
                     result = AllocateHostsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65080,9 +65066,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65099,7 +65083,7 @@ impl Ec2 for Ec2Client {
                     result = ApplySecurityGroupsToClientVpnTargetNetworkResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65128,9 +65112,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssignIpv6Addresses");
         params.put("Version", "2016-11-15");
         AssignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65149,7 +65131,7 @@ impl Ec2 for Ec2Client {
                     result = AssignIpv6AddressesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65177,9 +65159,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssignPrivateIpAddresses");
         params.put("Version", "2016-11-15");
         AssignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65204,9 +65184,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateAddress");
         params.put("Version", "2016-11-15");
         AssociateAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65226,7 +65204,7 @@ impl Ec2 for Ec2Client {
                     result = AssociateAddressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65255,9 +65233,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateClientVpnTargetNetwork");
         params.put("Version", "2016-11-15");
         AssociateClientVpnTargetNetworkRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65276,7 +65252,7 @@ impl Ec2 for Ec2Client {
                     result = AssociateClientVpnTargetNetworkResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65304,9 +65280,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateDhcpOptions");
         params.put("Version", "2016-11-15");
         AssociateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65333,9 +65307,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateIamInstanceProfile");
         params.put("Version", "2016-11-15");
         AssociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65352,7 +65324,7 @@ impl Ec2 for Ec2Client {
                     result = AssociateIamInstanceProfileResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65380,9 +65352,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateRouteTable");
         params.put("Version", "2016-11-15");
         AssociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65401,7 +65371,7 @@ impl Ec2 for Ec2Client {
                     result = AssociateRouteTableResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65429,9 +65399,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateSubnetCidrBlock");
         params.put("Version", "2016-11-15");
         AssociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65448,7 +65416,7 @@ impl Ec2 for Ec2Client {
                     result = AssociateSubnetCidrBlockResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65477,9 +65445,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateTransitGatewayRouteTable");
         params.put("Version", "2016-11-15");
         AssociateTransitGatewayRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65498,7 +65464,7 @@ impl Ec2 for Ec2Client {
                     result = AssociateTransitGatewayRouteTableResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65526,9 +65492,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateVpcCidrBlock");
         params.put("Version", "2016-11-15");
         AssociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65545,7 +65509,7 @@ impl Ec2 for Ec2Client {
                     result = AssociateVpcCidrBlockResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65573,9 +65537,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachClassicLinkVpc");
         params.put("Version", "2016-11-15");
         AttachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65594,7 +65556,7 @@ impl Ec2 for Ec2Client {
                     result = AttachClassicLinkVpcResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65622,9 +65584,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachInternetGateway");
         params.put("Version", "2016-11-15");
         AttachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65649,9 +65609,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachNetworkInterface");
         params.put("Version", "2016-11-15");
         AttachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65668,7 +65626,7 @@ impl Ec2 for Ec2Client {
                     result = AttachNetworkInterfaceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65696,9 +65654,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachVolume");
         params.put("Version", "2016-11-15");
         AttachVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65718,7 +65674,7 @@ impl Ec2 for Ec2Client {
                     result = VolumeAttachment::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65744,9 +65700,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachVpnGateway");
         params.put("Version", "2016-11-15");
         AttachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65766,7 +65720,7 @@ impl Ec2 for Ec2Client {
                     result = AttachVpnGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65794,9 +65748,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AuthorizeClientVpnIngress");
         params.put("Version", "2016-11-15");
         AuthorizeClientVpnIngressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65813,7 +65765,7 @@ impl Ec2 for Ec2Client {
                     result = AuthorizeClientVpnIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65841,9 +65793,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AuthorizeSecurityGroupEgress");
         params.put("Version", "2016-11-15");
         AuthorizeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65868,9 +65818,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AuthorizeSecurityGroupIngress");
         params.put("Version", "2016-11-15");
         AuthorizeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65895,9 +65843,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "BundleInstance");
         params.put("Version", "2016-11-15");
         BundleInstanceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65917,7 +65863,7 @@ impl Ec2 for Ec2Client {
                     result = BundleInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65945,9 +65891,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelBundleTask");
         params.put("Version", "2016-11-15");
         CancelBundleTaskRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -65967,7 +65911,7 @@ impl Ec2 for Ec2Client {
                     result = CancelBundleTaskResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65995,9 +65939,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelCapacityReservation");
         params.put("Version", "2016-11-15");
         CancelCapacityReservationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66014,7 +65956,7 @@ impl Ec2 for Ec2Client {
                     result = CancelCapacityReservationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66042,9 +65984,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelConversionTask");
         params.put("Version", "2016-11-15");
         CancelConversionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66071,9 +66011,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelExportTask");
         params.put("Version", "2016-11-15");
         CancelExportTaskRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66101,9 +66039,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelImportTask");
         params.put("Version", "2016-11-15");
         CancelImportTaskRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66123,7 +66059,7 @@ impl Ec2 for Ec2Client {
                     result = CancelImportTaskResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66152,9 +66088,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelReservedInstancesListing");
         params.put("Version", "2016-11-15");
         CancelReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66171,7 +66105,7 @@ impl Ec2 for Ec2Client {
                     result = CancelReservedInstancesListingResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66199,9 +66133,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelSpotFleetRequests");
         params.put("Version", "2016-11-15");
         CancelSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66218,7 +66150,7 @@ impl Ec2 for Ec2Client {
                     result = CancelSpotFleetRequestsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66246,9 +66178,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelSpotInstanceRequests");
         params.put("Version", "2016-11-15");
         CancelSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66265,7 +66195,7 @@ impl Ec2 for Ec2Client {
                     result = CancelSpotInstanceRequestsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66293,9 +66223,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ConfirmProductInstance");
         params.put("Version", "2016-11-15");
         ConfirmProductInstanceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66312,7 +66240,7 @@ impl Ec2 for Ec2Client {
                     result = ConfirmProductInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66340,9 +66268,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CopyFpgaImage");
         params.put("Version", "2016-11-15");
         CopyFpgaImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66362,7 +66288,7 @@ impl Ec2 for Ec2Client {
                     result = CopyFpgaImageResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66385,9 +66311,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CopyImage");
         params.put("Version", "2016-11-15");
         CopyImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66407,7 +66331,7 @@ impl Ec2 for Ec2Client {
                     result = CopyImageResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66433,9 +66357,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CopySnapshot");
         params.put("Version", "2016-11-15");
         CopySnapshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66455,7 +66377,7 @@ impl Ec2 for Ec2Client {
                     result = CopySnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66481,9 +66403,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateCapacityReservation");
         params.put("Version", "2016-11-15");
         CreateCapacityReservationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66500,7 +66420,7 @@ impl Ec2 for Ec2Client {
                     result = CreateCapacityReservationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66528,9 +66448,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateClientVpnEndpoint");
         params.put("Version", "2016-11-15");
         CreateClientVpnEndpointRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66547,7 +66465,7 @@ impl Ec2 for Ec2Client {
                     result = CreateClientVpnEndpointResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66575,9 +66493,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateClientVpnRoute");
         params.put("Version", "2016-11-15");
         CreateClientVpnRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66596,7 +66512,7 @@ impl Ec2 for Ec2Client {
                     result = CreateClientVpnRouteResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66624,9 +66540,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateCustomerGateway");
         params.put("Version", "2016-11-15");
         CreateCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66643,7 +66557,7 @@ impl Ec2 for Ec2Client {
                     result = CreateCustomerGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66671,9 +66585,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateDefaultSubnet");
         params.put("Version", "2016-11-15");
         CreateDefaultSubnetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66692,7 +66604,7 @@ impl Ec2 for Ec2Client {
                     result = CreateDefaultSubnetResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66720,9 +66632,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateDefaultVpc");
         params.put("Version", "2016-11-15");
         CreateDefaultVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66742,7 +66652,7 @@ impl Ec2 for Ec2Client {
                     result = CreateDefaultVpcResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66770,9 +66680,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateDhcpOptions");
         params.put("Version", "2016-11-15");
         CreateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66792,7 +66700,7 @@ impl Ec2 for Ec2Client {
                     result = CreateDhcpOptionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66821,9 +66729,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateEgressOnlyInternetGateway");
         params.put("Version", "2016-11-15");
         CreateEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66842,7 +66748,7 @@ impl Ec2 for Ec2Client {
                     result = CreateEgressOnlyInternetGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66870,9 +66776,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateFleet");
         params.put("Version", "2016-11-15");
         CreateFleetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66892,7 +66796,7 @@ impl Ec2 for Ec2Client {
                     result = CreateFleetResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66918,9 +66822,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateFlowLogs");
         params.put("Version", "2016-11-15");
         CreateFlowLogsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66940,7 +66842,7 @@ impl Ec2 for Ec2Client {
                     result = CreateFlowLogsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -66968,9 +66870,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateFpgaImage");
         params.put("Version", "2016-11-15");
         CreateFpgaImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -66990,7 +66890,7 @@ impl Ec2 for Ec2Client {
                     result = CreateFpgaImageResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67018,9 +66918,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateImage");
         params.put("Version", "2016-11-15");
         CreateImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67040,7 +66938,7 @@ impl Ec2 for Ec2Client {
                     result = CreateImageResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67066,9 +66964,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateInstanceExportTask");
         params.put("Version", "2016-11-15");
         CreateInstanceExportTaskRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67085,7 +66981,7 @@ impl Ec2 for Ec2Client {
                     result = CreateInstanceExportTaskResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67113,9 +67009,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateInternetGateway");
         params.put("Version", "2016-11-15");
         CreateInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67132,7 +67026,7 @@ impl Ec2 for Ec2Client {
                     result = CreateInternetGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67160,9 +67054,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateKeyPair");
         params.put("Version", "2016-11-15");
         CreateKeyPairRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67182,7 +67074,7 @@ impl Ec2 for Ec2Client {
                     result = KeyPair::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67207,9 +67099,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateLaunchTemplate");
         params.put("Version", "2016-11-15");
         CreateLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67228,7 +67118,7 @@ impl Ec2 for Ec2Client {
                     result = CreateLaunchTemplateResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67256,9 +67146,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateLaunchTemplateVersion");
         params.put("Version", "2016-11-15");
         CreateLaunchTemplateVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67275,7 +67163,7 @@ impl Ec2 for Ec2Client {
                     result = CreateLaunchTemplateVersionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67303,9 +67191,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNatGateway");
         params.put("Version", "2016-11-15");
         CreateNatGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67325,7 +67211,7 @@ impl Ec2 for Ec2Client {
                     result = CreateNatGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67353,9 +67239,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNetworkAcl");
         params.put("Version", "2016-11-15");
         CreateNetworkAclRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67375,7 +67259,7 @@ impl Ec2 for Ec2Client {
                     result = CreateNetworkAclResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67403,9 +67287,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNetworkAclEntry");
         params.put("Version", "2016-11-15");
         CreateNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67430,9 +67312,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNetworkInterface");
         params.put("Version", "2016-11-15");
         CreateNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67449,7 +67329,7 @@ impl Ec2 for Ec2Client {
                     result = CreateNetworkInterfaceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67478,9 +67358,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNetworkInterfacePermission");
         params.put("Version", "2016-11-15");
         CreateNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67499,7 +67377,7 @@ impl Ec2 for Ec2Client {
                     result = CreateNetworkInterfacePermissionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67527,9 +67405,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreatePlacementGroup");
         params.put("Version", "2016-11-15");
         CreatePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67557,9 +67433,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateReservedInstancesListing");
         params.put("Version", "2016-11-15");
         CreateReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67576,7 +67450,7 @@ impl Ec2 for Ec2Client {
                     result = CreateReservedInstancesListingResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67604,9 +67478,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateRoute");
         params.put("Version", "2016-11-15");
         CreateRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67626,7 +67498,7 @@ impl Ec2 for Ec2Client {
                     result = CreateRouteResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67652,9 +67524,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateRouteTable");
         params.put("Version", "2016-11-15");
         CreateRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67674,7 +67544,7 @@ impl Ec2 for Ec2Client {
                     result = CreateRouteTableResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67702,9 +67572,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateSecurityGroup");
         params.put("Version", "2016-11-15");
         CreateSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67723,7 +67591,7 @@ impl Ec2 for Ec2Client {
                     result = CreateSecurityGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67751,9 +67619,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateSnapshot");
         params.put("Version", "2016-11-15");
         CreateSnapshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67773,7 +67639,7 @@ impl Ec2 for Ec2Client {
                     result = Snapshot::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67799,9 +67665,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateSpotDatafeedSubscription");
         params.put("Version", "2016-11-15");
         CreateSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67818,7 +67682,7 @@ impl Ec2 for Ec2Client {
                     result = CreateSpotDatafeedSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67846,9 +67710,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateSubnet");
         params.put("Version", "2016-11-15");
         CreateSubnetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67868,7 +67730,7 @@ impl Ec2 for Ec2Client {
                     result = CreateSubnetResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67891,9 +67753,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateTags");
         params.put("Version", "2016-11-15");
         CreateTagsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67921,9 +67781,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateTransitGateway");
         params.put("Version", "2016-11-15");
         CreateTransitGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67942,7 +67800,7 @@ impl Ec2 for Ec2Client {
                     result = CreateTransitGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -67970,9 +67828,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateTransitGatewayRoute");
         params.put("Version", "2016-11-15");
         CreateTransitGatewayRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -67989,7 +67845,7 @@ impl Ec2 for Ec2Client {
                     result = CreateTransitGatewayRouteResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68018,9 +67874,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateTransitGatewayRouteTable");
         params.put("Version", "2016-11-15");
         CreateTransitGatewayRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68037,7 +67891,7 @@ impl Ec2 for Ec2Client {
                     result = CreateTransitGatewayRouteTableResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68066,9 +67920,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateTransitGatewayVpcAttachment");
         params.put("Version", "2016-11-15");
         CreateTransitGatewayVpcAttachmentRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68087,7 +67939,7 @@ impl Ec2 for Ec2Client {
                     result = CreateTransitGatewayVpcAttachmentResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68112,9 +67964,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVolume");
         params.put("Version", "2016-11-15");
         CreateVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68134,7 +67984,7 @@ impl Ec2 for Ec2Client {
                     result = Volume::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68156,9 +68006,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpc");
         params.put("Version", "2016-11-15");
         CreateVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68178,7 +68026,7 @@ impl Ec2 for Ec2Client {
                     result = CreateVpcResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68204,9 +68052,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpcEndpoint");
         params.put("Version", "2016-11-15");
         CreateVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68226,7 +68072,7 @@ impl Ec2 for Ec2Client {
                     result = CreateVpcEndpointResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68261,9 +68107,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68282,7 +68126,7 @@ impl Ec2 for Ec2Client {
                     result = CreateVpcEndpointConnectionNotificationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68314,9 +68158,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpcEndpointServiceConfiguration");
         params.put("Version", "2016-11-15");
         CreateVpcEndpointServiceConfigurationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68335,7 +68177,7 @@ impl Ec2 for Ec2Client {
                     result = CreateVpcEndpointServiceConfigurationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68363,9 +68205,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpcPeeringConnection");
         params.put("Version", "2016-11-15");
         CreateVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68382,7 +68222,7 @@ impl Ec2 for Ec2Client {
                     result = CreateVpcPeeringConnectionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68410,9 +68250,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpnConnection");
         params.put("Version", "2016-11-15");
         CreateVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68431,7 +68269,7 @@ impl Ec2 for Ec2Client {
                     result = CreateVpnConnectionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68459,9 +68297,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpnConnectionRoute");
         params.put("Version", "2016-11-15");
         CreateVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68486,9 +68322,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpnGateway");
         params.put("Version", "2016-11-15");
         CreateVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68508,7 +68342,7 @@ impl Ec2 for Ec2Client {
                     result = CreateVpnGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68536,9 +68370,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteClientVpnEndpoint");
         params.put("Version", "2016-11-15");
         DeleteClientVpnEndpointRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68555,7 +68387,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteClientVpnEndpointResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68583,9 +68415,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteClientVpnRoute");
         params.put("Version", "2016-11-15");
         DeleteClientVpnRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68604,7 +68434,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteClientVpnRouteResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68632,9 +68462,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteCustomerGateway");
         params.put("Version", "2016-11-15");
         DeleteCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68659,9 +68487,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteDhcpOptions");
         params.put("Version", "2016-11-15");
         DeleteDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68690,9 +68516,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteEgressOnlyInternetGateway");
         params.put("Version", "2016-11-15");
         DeleteEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68711,7 +68535,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteEgressOnlyInternetGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68739,9 +68563,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteFleets");
         params.put("Version", "2016-11-15");
         DeleteFleetsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68761,7 +68583,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteFleetsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68787,9 +68609,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteFlowLogs");
         params.put("Version", "2016-11-15");
         DeleteFlowLogsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68809,7 +68629,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteFlowLogsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68837,9 +68657,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteFpgaImage");
         params.put("Version", "2016-11-15");
         DeleteFpgaImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68859,7 +68677,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteFpgaImageResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68887,9 +68705,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteInternetGateway");
         params.put("Version", "2016-11-15");
         DeleteInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68911,9 +68727,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteKeyPair");
         params.put("Version", "2016-11-15");
         DeleteKeyPairRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68941,9 +68755,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteLaunchTemplate");
         params.put("Version", "2016-11-15");
         DeleteLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -68962,7 +68774,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteLaunchTemplateResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -68990,9 +68802,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteLaunchTemplateVersions");
         params.put("Version", "2016-11-15");
         DeleteLaunchTemplateVersionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69009,7 +68819,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteLaunchTemplateVersionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69037,9 +68847,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNatGateway");
         params.put("Version", "2016-11-15");
         DeleteNatGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69059,7 +68867,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteNatGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69087,9 +68895,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNetworkAcl");
         params.put("Version", "2016-11-15");
         DeleteNetworkAclRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69117,9 +68923,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNetworkAclEntry");
         params.put("Version", "2016-11-15");
         DeleteNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69144,9 +68948,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNetworkInterface");
         params.put("Version", "2016-11-15");
         DeleteNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69172,9 +68974,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNetworkInterfacePermission");
         params.put("Version", "2016-11-15");
         DeleteNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69193,7 +68993,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteNetworkInterfacePermissionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69221,9 +69021,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeletePlacementGroup");
         params.put("Version", "2016-11-15");
         DeletePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69247,9 +69045,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteRoute");
         params.put("Version", "2016-11-15");
         DeleteRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69277,9 +69073,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteRouteTable");
         params.put("Version", "2016-11-15");
         DeleteRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69307,9 +69101,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteSecurityGroup");
         params.put("Version", "2016-11-15");
         DeleteSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69336,9 +69128,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteSnapshot");
         params.put("Version", "2016-11-15");
         DeleteSnapshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69366,9 +69156,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteSpotDatafeedSubscription");
         params.put("Version", "2016-11-15");
         DeleteSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69390,9 +69178,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteSubnet");
         params.put("Version", "2016-11-15");
         DeleteSubnetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69417,9 +69203,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteTags");
         params.put("Version", "2016-11-15");
         DeleteTagsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69447,9 +69231,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteTransitGateway");
         params.put("Version", "2016-11-15");
         DeleteTransitGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69468,7 +69250,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteTransitGatewayResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69496,9 +69278,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteTransitGatewayRoute");
         params.put("Version", "2016-11-15");
         DeleteTransitGatewayRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69515,7 +69295,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteTransitGatewayRouteResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69544,9 +69324,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteTransitGatewayRouteTable");
         params.put("Version", "2016-11-15");
         DeleteTransitGatewayRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69563,7 +69341,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteTransitGatewayRouteTableResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69592,9 +69370,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteTransitGatewayVpcAttachment");
         params.put("Version", "2016-11-15");
         DeleteTransitGatewayVpcAttachmentRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69613,7 +69389,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteTransitGatewayVpcAttachmentResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69638,9 +69414,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVolume");
         params.put("Version", "2016-11-15");
         DeleteVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69665,9 +69439,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpc");
         params.put("Version", "2016-11-15");
         DeleteVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69702,9 +69474,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69721,7 +69491,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteVpcEndpointConnectionNotificationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69753,9 +69523,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpcEndpointServiceConfigurations");
         params.put("Version", "2016-11-15");
         DeleteVpcEndpointServiceConfigurationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69774,7 +69542,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteVpcEndpointServiceConfigurationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69802,9 +69570,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpcEndpoints");
         params.put("Version", "2016-11-15");
         DeleteVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69824,7 +69590,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteVpcEndpointsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69852,9 +69618,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpcPeeringConnection");
         params.put("Version", "2016-11-15");
         DeleteVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69871,7 +69635,7 @@ impl Ec2 for Ec2Client {
                     result = DeleteVpcPeeringConnectionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -69899,9 +69663,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpnConnection");
         params.put("Version", "2016-11-15");
         DeleteVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69928,9 +69690,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpnConnectionRoute");
         params.put("Version", "2016-11-15");
         DeleteVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69955,9 +69715,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpnGateway");
         params.put("Version", "2016-11-15");
         DeleteVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -69985,9 +69743,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeprovisionByoipCidr");
         params.put("Version", "2016-11-15");
         DeprovisionByoipCidrRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70006,7 +69762,7 @@ impl Ec2 for Ec2Client {
                     result = DeprovisionByoipCidrResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70034,9 +69790,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeregisterImage");
         params.put("Version", "2016-11-15");
         DeregisterImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70064,9 +69818,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2016-11-15");
         DescribeAccountAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70083,7 +69835,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeAccountAttributesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70111,9 +69863,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeAddresses");
         params.put("Version", "2016-11-15");
         DescribeAddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70133,7 +69883,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeAddressesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70161,9 +69911,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeAggregateIdFormat");
         params.put("Version", "2016-11-15");
         DescribeAggregateIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70180,7 +69928,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeAggregateIdFormatResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70208,9 +69956,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeAvailabilityZones");
         params.put("Version", "2016-11-15");
         DescribeAvailabilityZonesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70227,7 +69973,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeAvailabilityZonesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70255,9 +70001,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeBundleTasks");
         params.put("Version", "2016-11-15");
         DescribeBundleTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70276,7 +70020,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeBundleTasksResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70304,9 +70048,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeByoipCidrs");
         params.put("Version", "2016-11-15");
         DescribeByoipCidrsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70326,7 +70068,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeByoipCidrsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70354,9 +70096,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeCapacityReservations");
         params.put("Version", "2016-11-15");
         DescribeCapacityReservationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70373,7 +70113,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeCapacityReservationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70401,9 +70141,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeClassicLinkInstances");
         params.put("Version", "2016-11-15");
         DescribeClassicLinkInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70420,7 +70158,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeClassicLinkInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70451,9 +70189,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeClientVpnAuthorizationRules");
         params.put("Version", "2016-11-15");
         DescribeClientVpnAuthorizationRulesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70472,7 +70208,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeClientVpnAuthorizationRulesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70500,9 +70236,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeClientVpnConnections");
         params.put("Version", "2016-11-15");
         DescribeClientVpnConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70519,7 +70253,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeClientVpnConnectionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70547,9 +70281,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeClientVpnEndpoints");
         params.put("Version", "2016-11-15");
         DescribeClientVpnEndpointsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70566,7 +70298,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeClientVpnEndpointsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70594,9 +70326,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeClientVpnRoutes");
         params.put("Version", "2016-11-15");
         DescribeClientVpnRoutesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70613,7 +70343,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeClientVpnRoutesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70642,9 +70372,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeClientVpnTargetNetworks");
         params.put("Version", "2016-11-15");
         DescribeClientVpnTargetNetworksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70663,7 +70391,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeClientVpnTargetNetworksResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70691,9 +70419,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeConversionTasks");
         params.put("Version", "2016-11-15");
         DescribeConversionTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70710,7 +70436,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeConversionTasksResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70738,9 +70464,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeCustomerGateways");
         params.put("Version", "2016-11-15");
         DescribeCustomerGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70757,7 +70481,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeCustomerGatewaysResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70785,9 +70509,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeDhcpOptions");
         params.put("Version", "2016-11-15");
         DescribeDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70806,7 +70528,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeDhcpOptionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70837,9 +70559,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeEgressOnlyInternetGateways");
         params.put("Version", "2016-11-15");
         DescribeEgressOnlyInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70858,7 +70578,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeEgressOnlyInternetGatewaysResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70886,9 +70606,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeElasticGpus");
         params.put("Version", "2016-11-15");
         DescribeElasticGpusRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70907,7 +70625,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeElasticGpusResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70935,9 +70653,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeExportTasks");
         params.put("Version", "2016-11-15");
         DescribeExportTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -70956,7 +70672,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeExportTasksResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -70984,9 +70700,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeFleetHistory");
         params.put("Version", "2016-11-15");
         DescribeFleetHistoryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71005,7 +70719,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeFleetHistoryResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71033,9 +70747,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeFleetInstances");
         params.put("Version", "2016-11-15");
         DescribeFleetInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71052,7 +70764,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeFleetInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71080,9 +70792,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeFleets");
         params.put("Version", "2016-11-15");
         DescribeFleetsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71102,7 +70812,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeFleetsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71130,9 +70840,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeFlowLogs");
         params.put("Version", "2016-11-15");
         DescribeFlowLogsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71152,7 +70860,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeFlowLogsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71180,9 +70888,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeFpgaImageAttribute");
         params.put("Version", "2016-11-15");
         DescribeFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71199,7 +70905,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeFpgaImageAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71227,9 +70933,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeFpgaImages");
         params.put("Version", "2016-11-15");
         DescribeFpgaImagesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71249,7 +70953,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeFpgaImagesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71278,9 +70982,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeHostReservationOfferings");
         params.put("Version", "2016-11-15");
         DescribeHostReservationOfferingsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71299,7 +71001,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeHostReservationOfferingsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71327,9 +71029,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeHostReservations");
         params.put("Version", "2016-11-15");
         DescribeHostReservationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71346,7 +71046,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeHostReservationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71374,9 +71074,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeHosts");
         params.put("Version", "2016-11-15");
         DescribeHostsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71396,7 +71094,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeHostsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71425,9 +71123,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeIamInstanceProfileAssociations");
         params.put("Version", "2016-11-15");
         DescribeIamInstanceProfileAssociationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71446,7 +71142,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeIamInstanceProfileAssociationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71474,9 +71170,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeIdFormat");
         params.put("Version", "2016-11-15");
         DescribeIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71496,7 +71190,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeIdFormatResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71524,9 +71218,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeIdentityIdFormat");
         params.put("Version", "2016-11-15");
         DescribeIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71543,7 +71235,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeIdentityIdFormatResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71571,9 +71263,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeImageAttribute");
         params.put("Version", "2016-11-15");
         DescribeImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71590,7 +71280,7 @@ impl Ec2 for Ec2Client {
                     result = ImageAttribute::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71615,9 +71305,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeImages");
         params.put("Version", "2016-11-15");
         DescribeImagesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71637,7 +71325,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeImagesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71665,9 +71353,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeImportImageTasks");
         params.put("Version", "2016-11-15");
         DescribeImportImageTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71684,7 +71370,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeImportImageTasksResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71712,9 +71398,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeImportSnapshotTasks");
         params.put("Version", "2016-11-15");
         DescribeImportSnapshotTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71731,7 +71415,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeImportSnapshotTasksResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71759,9 +71443,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInstanceAttribute");
         params.put("Version", "2016-11-15");
         DescribeInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71778,7 +71460,7 @@ impl Ec2 for Ec2Client {
                     result = InstanceAttribute::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71807,9 +71489,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInstanceCreditSpecifications");
         params.put("Version", "2016-11-15");
         DescribeInstanceCreditSpecificationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71828,7 +71508,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeInstanceCreditSpecificationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71856,9 +71536,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInstanceStatus");
         params.put("Version", "2016-11-15");
         DescribeInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71875,7 +71553,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeInstanceStatusResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71903,9 +71581,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInstances");
         params.put("Version", "2016-11-15");
         DescribeInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71925,7 +71601,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -71953,9 +71629,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInternetGateways");
         params.put("Version", "2016-11-15");
         DescribeInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -71972,7 +71646,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeInternetGatewaysResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72000,9 +71674,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeKeyPairs");
         params.put("Version", "2016-11-15");
         DescribeKeyPairsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72022,7 +71694,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeKeyPairsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72051,9 +71723,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeLaunchTemplateVersions");
         params.put("Version", "2016-11-15");
         DescribeLaunchTemplateVersionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72070,7 +71740,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeLaunchTemplateVersionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72098,9 +71768,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeLaunchTemplates");
         params.put("Version", "2016-11-15");
         DescribeLaunchTemplatesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72117,7 +71785,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeLaunchTemplatesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72145,9 +71813,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeMovingAddresses");
         params.put("Version", "2016-11-15");
         DescribeMovingAddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72164,7 +71830,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeMovingAddressesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72192,9 +71858,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNatGateways");
         params.put("Version", "2016-11-15");
         DescribeNatGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72213,7 +71877,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeNatGatewaysResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72241,9 +71905,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNetworkAcls");
         params.put("Version", "2016-11-15");
         DescribeNetworkAclsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72262,7 +71924,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeNetworkAclsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72291,9 +71953,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNetworkInterfaceAttribute");
         params.put("Version", "2016-11-15");
         DescribeNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72312,7 +71972,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeNetworkInterfaceAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72343,9 +72003,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNetworkInterfacePermissions");
         params.put("Version", "2016-11-15");
         DescribeNetworkInterfacePermissionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72364,7 +72022,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeNetworkInterfacePermissionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72392,9 +72050,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNetworkInterfaces");
         params.put("Version", "2016-11-15");
         DescribeNetworkInterfacesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72411,7 +72067,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeNetworkInterfacesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72439,9 +72095,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribePlacementGroups");
         params.put("Version", "2016-11-15");
         DescribePlacementGroupsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72458,7 +72112,7 @@ impl Ec2 for Ec2Client {
                     result = DescribePlacementGroupsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72486,9 +72140,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribePrefixLists");
         params.put("Version", "2016-11-15");
         DescribePrefixListsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72507,7 +72159,7 @@ impl Ec2 for Ec2Client {
                     result = DescribePrefixListsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72535,9 +72187,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribePrincipalIdFormat");
         params.put("Version", "2016-11-15");
         DescribePrincipalIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72554,7 +72204,7 @@ impl Ec2 for Ec2Client {
                     result = DescribePrincipalIdFormatResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72582,9 +72232,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribePublicIpv4Pools");
         params.put("Version", "2016-11-15");
         DescribePublicIpv4PoolsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72601,7 +72249,7 @@ impl Ec2 for Ec2Client {
                     result = DescribePublicIpv4PoolsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72629,9 +72277,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeRegions");
         params.put("Version", "2016-11-15");
         DescribeRegionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72651,7 +72297,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeRegionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72679,9 +72325,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeReservedInstances");
         params.put("Version", "2016-11-15");
         DescribeReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72698,7 +72342,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeReservedInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72727,9 +72371,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeReservedInstancesListings");
         params.put("Version", "2016-11-15");
         DescribeReservedInstancesListingsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72748,7 +72390,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeReservedInstancesListingsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72779,9 +72421,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeReservedInstancesModifications");
         params.put("Version", "2016-11-15");
         DescribeReservedInstancesModificationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72800,7 +72440,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeReservedInstancesModificationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72831,9 +72471,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeReservedInstancesOfferings");
         params.put("Version", "2016-11-15");
         DescribeReservedInstancesOfferingsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72852,7 +72490,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeReservedInstancesOfferingsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72880,9 +72518,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeRouteTables");
         params.put("Version", "2016-11-15");
         DescribeRouteTablesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72901,7 +72537,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeRouteTablesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72932,9 +72568,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeScheduledInstanceAvailability");
         params.put("Version", "2016-11-15");
         DescribeScheduledInstanceAvailabilityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -72953,7 +72587,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeScheduledInstanceAvailabilityResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -72981,9 +72615,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeScheduledInstances");
         params.put("Version", "2016-11-15");
         DescribeScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73000,7 +72632,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeScheduledInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73029,9 +72661,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSecurityGroupReferences");
         params.put("Version", "2016-11-15");
         DescribeSecurityGroupReferencesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73050,7 +72680,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSecurityGroupReferencesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73078,9 +72708,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSecurityGroups");
         params.put("Version", "2016-11-15");
         DescribeSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73097,7 +72725,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSecurityGroupsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73125,9 +72753,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSnapshotAttribute");
         params.put("Version", "2016-11-15");
         DescribeSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73144,7 +72770,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSnapshotAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73172,9 +72798,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSnapshots");
         params.put("Version", "2016-11-15");
         DescribeSnapshotsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73194,7 +72818,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSnapshotsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73223,9 +72847,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotDatafeedSubscription");
         params.put("Version", "2016-11-15");
         DescribeSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73244,7 +72866,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSpotDatafeedSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73272,9 +72894,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotFleetInstances");
         params.put("Version", "2016-11-15");
         DescribeSpotFleetInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73291,7 +72911,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSpotFleetInstancesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73320,9 +72940,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotFleetRequestHistory");
         params.put("Version", "2016-11-15");
         DescribeSpotFleetRequestHistoryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73341,7 +72959,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSpotFleetRequestHistoryResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73369,9 +72987,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotFleetRequests");
         params.put("Version", "2016-11-15");
         DescribeSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73388,7 +73004,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSpotFleetRequestsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73416,9 +73032,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotInstanceRequests");
         params.put("Version", "2016-11-15");
         DescribeSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73435,7 +73049,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSpotInstanceRequestsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73463,9 +73077,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotPriceHistory");
         params.put("Version", "2016-11-15");
         DescribeSpotPriceHistoryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73482,7 +73094,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSpotPriceHistoryResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73510,9 +73122,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeStaleSecurityGroups");
         params.put("Version", "2016-11-15");
         DescribeStaleSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73529,7 +73139,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeStaleSecurityGroupsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73557,9 +73167,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSubnets");
         params.put("Version", "2016-11-15");
         DescribeSubnetsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73579,7 +73187,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeSubnetsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73607,9 +73215,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeTags");
         params.put("Version", "2016-11-15");
         DescribeTagsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73629,7 +73235,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeTagsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73656,9 +73262,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeTransitGatewayAttachments");
         params.put("Version", "2016-11-15");
         DescribeTransitGatewayAttachmentsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73677,7 +73281,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeTransitGatewayAttachmentsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73706,9 +73310,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeTransitGatewayRouteTables");
         params.put("Version", "2016-11-15");
         DescribeTransitGatewayRouteTablesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73727,7 +73329,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeTransitGatewayRouteTablesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73758,9 +73360,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeTransitGatewayVpcAttachments");
         params.put("Version", "2016-11-15");
         DescribeTransitGatewayVpcAttachmentsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73779,7 +73379,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeTransitGatewayVpcAttachmentsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73807,9 +73407,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeTransitGateways");
         params.put("Version", "2016-11-15");
         DescribeTransitGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73826,7 +73424,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeTransitGatewaysResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73854,9 +73452,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVolumeAttribute");
         params.put("Version", "2016-11-15");
         DescribeVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73873,7 +73469,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVolumeAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73901,9 +73497,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVolumeStatus");
         params.put("Version", "2016-11-15");
         DescribeVolumeStatusRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73922,7 +73516,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVolumeStatusResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -73950,9 +73544,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVolumes");
         params.put("Version", "2016-11-15");
         DescribeVolumesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -73972,7 +73564,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVolumesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74000,9 +73592,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVolumesModifications");
         params.put("Version", "2016-11-15");
         DescribeVolumesModificationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74019,7 +73609,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVolumesModificationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74047,9 +73637,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcAttribute");
         params.put("Version", "2016-11-15");
         DescribeVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74068,7 +73656,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74096,9 +73684,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcClassicLink");
         params.put("Version", "2016-11-15");
         DescribeVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74115,7 +73701,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcClassicLinkResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74144,9 +73730,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcClassicLinkDnsSupport");
         params.put("Version", "2016-11-15");
         DescribeVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74165,7 +73749,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcClassicLinkDnsSupportResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74200,9 +73784,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74219,7 +73801,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcEndpointConnectionNotificationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74249,9 +73831,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcEndpointConnections");
         params.put("Version", "2016-11-15");
         DescribeVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74268,7 +73848,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcEndpointConnectionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74303,9 +73883,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74322,7 +73900,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcEndpointServiceConfigurationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74354,9 +73932,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcEndpointServicePermissions");
         params.put("Version", "2016-11-15");
         DescribeVpcEndpointServicePermissionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74375,7 +73951,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcEndpointServicePermissionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74403,9 +73979,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcEndpointServices");
         params.put("Version", "2016-11-15");
         DescribeVpcEndpointServicesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74422,7 +73996,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcEndpointServicesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74450,9 +74024,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcEndpoints");
         params.put("Version", "2016-11-15");
         DescribeVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74471,7 +74043,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcEndpointsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74499,9 +74071,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcPeeringConnections");
         params.put("Version", "2016-11-15");
         DescribeVpcPeeringConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74518,7 +74088,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcPeeringConnectionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74546,9 +74116,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcs");
         params.put("Version", "2016-11-15");
         DescribeVpcsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74568,7 +74136,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpcsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74594,9 +74162,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpnConnections");
         params.put("Version", "2016-11-15");
         DescribeVpnConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74613,7 +74179,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpnConnectionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74641,9 +74207,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpnGateways");
         params.put("Version", "2016-11-15");
         DescribeVpnGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74662,7 +74226,7 @@ impl Ec2 for Ec2Client {
                     result = DescribeVpnGatewaysResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74690,9 +74254,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachClassicLinkVpc");
         params.put("Version", "2016-11-15");
         DetachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74711,7 +74273,7 @@ impl Ec2 for Ec2Client {
                     result = DetachClassicLinkVpcResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74739,9 +74301,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachInternetGateway");
         params.put("Version", "2016-11-15");
         DetachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74766,9 +74326,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachNetworkInterface");
         params.put("Version", "2016-11-15");
         DetachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74793,9 +74351,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachVolume");
         params.put("Version", "2016-11-15");
         DetachVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74815,7 +74371,7 @@ impl Ec2 for Ec2Client {
                     result = VolumeAttachment::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74841,9 +74397,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachVpnGateway");
         params.put("Version", "2016-11-15");
         DetachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74878,9 +74432,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74897,7 +74449,7 @@ impl Ec2 for Ec2Client {
                     result = DisableTransitGatewayRouteTablePropagationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -74926,9 +74478,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisableVgwRoutePropagation");
         params.put("Version", "2016-11-15");
         DisableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74953,9 +74503,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisableVpcClassicLink");
         params.put("Version", "2016-11-15");
         DisableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -74972,7 +74520,7 @@ impl Ec2 for Ec2Client {
                     result = DisableVpcClassicLinkResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75001,9 +74549,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisableVpcClassicLinkDnsSupport");
         params.put("Version", "2016-11-15");
         DisableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75022,7 +74568,7 @@ impl Ec2 for Ec2Client {
                     result = DisableVpcClassicLinkDnsSupportResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75050,9 +74596,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateAddress");
         params.put("Version", "2016-11-15");
         DisassociateAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75082,9 +74626,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateClientVpnTargetNetwork");
         params.put("Version", "2016-11-15");
         DisassociateClientVpnTargetNetworkRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75103,7 +74645,7 @@ impl Ec2 for Ec2Client {
                     result = DisassociateClientVpnTargetNetworkResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75132,9 +74674,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateIamInstanceProfile");
         params.put("Version", "2016-11-15");
         DisassociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75151,7 +74691,7 @@ impl Ec2 for Ec2Client {
                     result = DisassociateIamInstanceProfileResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75179,9 +74719,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateRouteTable");
         params.put("Version", "2016-11-15");
         DisassociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75206,9 +74744,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateSubnetCidrBlock");
         params.put("Version", "2016-11-15");
         DisassociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75225,7 +74761,7 @@ impl Ec2 for Ec2Client {
                     result = DisassociateSubnetCidrBlockResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75256,9 +74792,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateTransitGatewayRouteTable");
         params.put("Version", "2016-11-15");
         DisassociateTransitGatewayRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75277,7 +74811,7 @@ impl Ec2 for Ec2Client {
                     result = DisassociateTransitGatewayRouteTableResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75305,9 +74839,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateVpcCidrBlock");
         params.put("Version", "2016-11-15");
         DisassociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75324,7 +74856,7 @@ impl Ec2 for Ec2Client {
                     result = DisassociateVpcCidrBlockResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75359,9 +74891,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75378,7 +74908,7 @@ impl Ec2 for Ec2Client {
                     result = EnableTransitGatewayRouteTablePropagationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75407,9 +74937,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "EnableVgwRoutePropagation");
         params.put("Version", "2016-11-15");
         EnableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75434,9 +74962,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "EnableVolumeIO");
         params.put("Version", "2016-11-15");
         EnableVolumeIORequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75464,9 +74990,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "EnableVpcClassicLink");
         params.put("Version", "2016-11-15");
         EnableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75485,7 +75009,7 @@ impl Ec2 for Ec2Client {
                     result = EnableVpcClassicLinkResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75514,9 +75038,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "EnableVpcClassicLinkDnsSupport");
         params.put("Version", "2016-11-15");
         EnableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75533,7 +75055,7 @@ impl Ec2 for Ec2Client {
                     result = EnableVpcClassicLinkDnsSupportResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75568,9 +75090,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75587,7 +75107,7 @@ impl Ec2 for Ec2Client {
                 result = ExportClientVpnClientCertificateRevocationListResult::default();
             } else {
                 let reader = EventReader::new_with_config(
-                    response.body.as_slice(),
+                    response.body.as_ref(),
                     ParserConfig::new().trim_whitespace(true)
                 );
                 let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75615,9 +75135,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ExportClientVpnClientConfiguration");
         params.put("Version", "2016-11-15");
         ExportClientVpnClientConfigurationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75636,7 +75154,7 @@ impl Ec2 for Ec2Client {
                     result = ExportClientVpnClientConfigurationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75664,9 +75182,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ExportTransitGatewayRoutes");
         params.put("Version", "2016-11-15");
         ExportTransitGatewayRoutesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75683,7 +75199,7 @@ impl Ec2 for Ec2Client {
                     result = ExportTransitGatewayRoutesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75711,9 +75227,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetConsoleOutput");
         params.put("Version", "2016-11-15");
         GetConsoleOutputRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75733,7 +75247,7 @@ impl Ec2 for Ec2Client {
                     result = GetConsoleOutputResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75761,9 +75275,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetConsoleScreenshot");
         params.put("Version", "2016-11-15");
         GetConsoleScreenshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75782,7 +75294,7 @@ impl Ec2 for Ec2Client {
                     result = GetConsoleScreenshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75811,9 +75323,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetHostReservationPurchasePreview");
         params.put("Version", "2016-11-15");
         GetHostReservationPurchasePreviewRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75832,7 +75342,7 @@ impl Ec2 for Ec2Client {
                     result = GetHostReservationPurchasePreviewResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75860,9 +75370,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetLaunchTemplateData");
         params.put("Version", "2016-11-15");
         GetLaunchTemplateDataRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75879,7 +75387,7 @@ impl Ec2 for Ec2Client {
                     result = GetLaunchTemplateDataResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75907,9 +75415,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetPasswordData");
         params.put("Version", "2016-11-15");
         GetPasswordDataRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75929,7 +75435,7 @@ impl Ec2 for Ec2Client {
                     result = GetPasswordDataResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -75958,9 +75464,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetReservedInstancesExchangeQuote");
         params.put("Version", "2016-11-15");
         GetReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -75979,7 +75483,7 @@ impl Ec2 for Ec2Client {
                     result = GetReservedInstancesExchangeQuoteResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76014,9 +75518,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76035,7 +75537,7 @@ impl Ec2 for Ec2Client {
                     result = GetTransitGatewayAttachmentPropagationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76071,9 +75573,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76092,7 +75592,7 @@ impl Ec2 for Ec2Client {
                     result = GetTransitGatewayRouteTableAssociationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76128,9 +75628,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76149,7 +75647,7 @@ impl Ec2 for Ec2Client {
                     result = GetTransitGatewayRouteTablePropagationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76185,9 +75683,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76204,7 +75700,7 @@ impl Ec2 for Ec2Client {
                 result = ImportClientVpnClientCertificateRevocationListResult::default();
             } else {
                 let reader = EventReader::new_with_config(
-                    response.body.as_slice(),
+                    response.body.as_ref(),
                     ParserConfig::new().trim_whitespace(true)
                 );
                 let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76229,9 +75725,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportImage");
         params.put("Version", "2016-11-15");
         ImportImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76251,7 +75745,7 @@ impl Ec2 for Ec2Client {
                     result = ImportImageResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76277,9 +75771,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportInstance");
         params.put("Version", "2016-11-15");
         ImportInstanceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76299,7 +75791,7 @@ impl Ec2 for Ec2Client {
                     result = ImportInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76327,9 +75819,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportKeyPair");
         params.put("Version", "2016-11-15");
         ImportKeyPairRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76349,7 +75839,7 @@ impl Ec2 for Ec2Client {
                     result = ImportKeyPairResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76375,9 +75865,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportSnapshot");
         params.put("Version", "2016-11-15");
         ImportSnapshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76397,7 +75885,7 @@ impl Ec2 for Ec2Client {
                     result = ImportSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76425,9 +75913,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportVolume");
         params.put("Version", "2016-11-15");
         ImportVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76447,7 +75933,7 @@ impl Ec2 for Ec2Client {
                     result = ImportVolumeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76473,9 +75959,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyCapacityReservation");
         params.put("Version", "2016-11-15");
         ModifyCapacityReservationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76492,7 +75976,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyCapacityReservationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76520,9 +76004,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyClientVpnEndpoint");
         params.put("Version", "2016-11-15");
         ModifyClientVpnEndpointRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76539,7 +76021,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyClientVpnEndpointResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76567,9 +76049,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyFleet");
         params.put("Version", "2016-11-15");
         ModifyFleetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76589,7 +76069,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyFleetResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76615,9 +76095,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyFpgaImageAttribute");
         params.put("Version", "2016-11-15");
         ModifyFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76634,7 +76112,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyFpgaImageAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76662,9 +76140,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyHosts");
         params.put("Version", "2016-11-15");
         ModifyHostsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76684,7 +76160,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyHostsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76710,9 +76186,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyIdFormat");
         params.put("Version", "2016-11-15");
         ModifyIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76740,9 +76214,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyIdentityIdFormat");
         params.put("Version", "2016-11-15");
         ModifyIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76767,9 +76239,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyImageAttribute");
         params.put("Version", "2016-11-15");
         ModifyImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76796,9 +76266,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyInstanceAttribute");
         params.put("Version", "2016-11-15");
         ModifyInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76830,9 +76298,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76849,7 +76315,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyInstanceCapacityReservationAttributesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76879,9 +76345,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyInstanceCreditSpecification");
         params.put("Version", "2016-11-15");
         ModifyInstanceCreditSpecificationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76900,7 +76364,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyInstanceCreditSpecificationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76928,9 +76392,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyInstancePlacement");
         params.put("Version", "2016-11-15");
         ModifyInstancePlacementRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76947,7 +76409,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyInstancePlacementResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -76975,9 +76437,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyLaunchTemplate");
         params.put("Version", "2016-11-15");
         ModifyLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -76996,7 +76456,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyLaunchTemplateResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77024,9 +76484,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyNetworkInterfaceAttribute");
         params.put("Version", "2016-11-15");
         ModifyNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77053,9 +76511,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyReservedInstances");
         params.put("Version", "2016-11-15");
         ModifyReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77072,7 +76528,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyReservedInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77100,9 +76556,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifySnapshotAttribute");
         params.put("Version", "2016-11-15");
         ModifySnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77127,9 +76581,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifySpotFleetRequest");
         params.put("Version", "2016-11-15");
         ModifySpotFleetRequestRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77146,7 +76598,7 @@ impl Ec2 for Ec2Client {
                     result = ModifySpotFleetRequestResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77174,9 +76626,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifySubnetAttribute");
         params.put("Version", "2016-11-15");
         ModifySubnetAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77202,9 +76652,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyTransitGatewayVpcAttachment");
         params.put("Version", "2016-11-15");
         ModifyTransitGatewayVpcAttachmentRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77223,7 +76671,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyTransitGatewayVpcAttachmentResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77251,9 +76699,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVolume");
         params.put("Version", "2016-11-15");
         ModifyVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77273,7 +76719,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyVolumeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77299,9 +76745,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVolumeAttribute");
         params.put("Version", "2016-11-15");
         ModifyVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77326,9 +76770,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcAttribute");
         params.put("Version", "2016-11-15");
         ModifyVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77356,9 +76798,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcEndpoint");
         params.put("Version", "2016-11-15");
         ModifyVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77378,7 +76818,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyVpcEndpointResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77413,9 +76853,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77434,7 +76872,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyVpcEndpointConnectionNotificationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77466,9 +76904,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcEndpointServiceConfiguration");
         params.put("Version", "2016-11-15");
         ModifyVpcEndpointServiceConfigurationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77487,7 +76923,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyVpcEndpointServiceConfigurationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77518,9 +76954,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcEndpointServicePermissions");
         params.put("Version", "2016-11-15");
         ModifyVpcEndpointServicePermissionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77539,7 +76973,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyVpcEndpointServicePermissionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77568,9 +77002,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcPeeringConnectionOptions");
         params.put("Version", "2016-11-15");
         ModifyVpcPeeringConnectionOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77589,7 +77021,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyVpcPeeringConnectionOptionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77617,9 +77049,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcTenancy");
         params.put("Version", "2016-11-15");
         ModifyVpcTenancyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77639,7 +77069,7 @@ impl Ec2 for Ec2Client {
                     result = ModifyVpcTenancyResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77667,9 +77097,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "MonitorInstances");
         params.put("Version", "2016-11-15");
         MonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77689,7 +77117,7 @@ impl Ec2 for Ec2Client {
                     result = MonitorInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77717,9 +77145,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "MoveAddressToVpc");
         params.put("Version", "2016-11-15");
         MoveAddressToVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77739,7 +77165,7 @@ impl Ec2 for Ec2Client {
                     result = MoveAddressToVpcResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77767,9 +77193,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ProvisionByoipCidr");
         params.put("Version", "2016-11-15");
         ProvisionByoipCidrRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77789,7 +77213,7 @@ impl Ec2 for Ec2Client {
                     result = ProvisionByoipCidrResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77817,9 +77241,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "PurchaseHostReservation");
         params.put("Version", "2016-11-15");
         PurchaseHostReservationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77836,7 +77258,7 @@ impl Ec2 for Ec2Client {
                     result = PurchaseHostReservationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77865,9 +77287,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "PurchaseReservedInstancesOffering");
         params.put("Version", "2016-11-15");
         PurchaseReservedInstancesOfferingRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77886,7 +77306,7 @@ impl Ec2 for Ec2Client {
                     result = PurchaseReservedInstancesOfferingResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77914,9 +77334,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "PurchaseScheduledInstances");
         params.put("Version", "2016-11-15");
         PurchaseScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77933,7 +77351,7 @@ impl Ec2 for Ec2Client {
                     result = PurchaseScheduledInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -77961,9 +77379,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RebootInstances");
         params.put("Version", "2016-11-15");
         RebootInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -77991,9 +77407,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RegisterImage");
         params.put("Version", "2016-11-15");
         RegisterImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78013,7 +77427,7 @@ impl Ec2 for Ec2Client {
                     result = RegisterImageResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78040,9 +77454,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RejectTransitGatewayVpcAttachment");
         params.put("Version", "2016-11-15");
         RejectTransitGatewayVpcAttachmentRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78061,7 +77473,7 @@ impl Ec2 for Ec2Client {
                     result = RejectTransitGatewayVpcAttachmentResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78089,9 +77501,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RejectVpcEndpointConnections");
         params.put("Version", "2016-11-15");
         RejectVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78108,7 +77518,7 @@ impl Ec2 for Ec2Client {
                     result = RejectVpcEndpointConnectionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78136,9 +77546,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RejectVpcPeeringConnection");
         params.put("Version", "2016-11-15");
         RejectVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78155,7 +77563,7 @@ impl Ec2 for Ec2Client {
                     result = RejectVpcPeeringConnectionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78183,9 +77591,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReleaseAddress");
         params.put("Version", "2016-11-15");
         ReleaseAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78213,9 +77619,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReleaseHosts");
         params.put("Version", "2016-11-15");
         ReleaseHostsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78235,7 +77639,7 @@ impl Ec2 for Ec2Client {
                     result = ReleaseHostsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78264,9 +77668,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceIamInstanceProfileAssociation");
         params.put("Version", "2016-11-15");
         ReplaceIamInstanceProfileAssociationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78285,7 +77687,7 @@ impl Ec2 for Ec2Client {
                     result = ReplaceIamInstanceProfileAssociationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78313,9 +77715,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceNetworkAclAssociation");
         params.put("Version", "2016-11-15");
         ReplaceNetworkAclAssociationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78332,7 +77732,7 @@ impl Ec2 for Ec2Client {
                     result = ReplaceNetworkAclAssociationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78360,9 +77760,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceNetworkAclEntry");
         params.put("Version", "2016-11-15");
         ReplaceNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78384,9 +77782,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceRoute");
         params.put("Version", "2016-11-15");
         ReplaceRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78414,9 +77810,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceRouteTableAssociation");
         params.put("Version", "2016-11-15");
         ReplaceRouteTableAssociationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78433,7 +77827,7 @@ impl Ec2 for Ec2Client {
                     result = ReplaceRouteTableAssociationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78461,9 +77855,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceTransitGatewayRoute");
         params.put("Version", "2016-11-15");
         ReplaceTransitGatewayRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78480,7 +77872,7 @@ impl Ec2 for Ec2Client {
                     result = ReplaceTransitGatewayRouteResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78508,9 +77900,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReportInstanceStatus");
         params.put("Version", "2016-11-15");
         ReportInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78537,9 +77927,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RequestSpotFleet");
         params.put("Version", "2016-11-15");
         RequestSpotFleetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78559,7 +77947,7 @@ impl Ec2 for Ec2Client {
                     result = RequestSpotFleetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78587,9 +77975,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RequestSpotInstances");
         params.put("Version", "2016-11-15");
         RequestSpotInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78608,7 +77994,7 @@ impl Ec2 for Ec2Client {
                     result = RequestSpotInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78636,9 +78022,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetFpgaImageAttribute");
         params.put("Version", "2016-11-15");
         ResetFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78655,7 +78039,7 @@ impl Ec2 for Ec2Client {
                     result = ResetFpgaImageAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78683,9 +78067,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetImageAttribute");
         params.put("Version", "2016-11-15");
         ResetImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78712,9 +78094,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetInstanceAttribute");
         params.put("Version", "2016-11-15");
         ResetInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78739,9 +78119,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetNetworkInterfaceAttribute");
         params.put("Version", "2016-11-15");
         ResetNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78766,9 +78144,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetSnapshotAttribute");
         params.put("Version", "2016-11-15");
         ResetSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78793,9 +78169,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RestoreAddressToClassic");
         params.put("Version", "2016-11-15");
         RestoreAddressToClassicRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78812,7 +78186,7 @@ impl Ec2 for Ec2Client {
                     result = RestoreAddressToClassicResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78840,9 +78214,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RevokeClientVpnIngress");
         params.put("Version", "2016-11-15");
         RevokeClientVpnIngressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78859,7 +78231,7 @@ impl Ec2 for Ec2Client {
                     result = RevokeClientVpnIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78887,9 +78259,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RevokeSecurityGroupEgress");
         params.put("Version", "2016-11-15");
         RevokeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78914,9 +78284,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RevokeSecurityGroupIngress");
         params.put("Version", "2016-11-15");
         RevokeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78941,9 +78309,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RunInstances");
         params.put("Version", "2016-11-15");
         RunInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -78963,7 +78329,7 @@ impl Ec2 for Ec2Client {
                     result = Reservation::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -78988,9 +78354,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RunScheduledInstances");
         params.put("Version", "2016-11-15");
         RunScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79007,7 +78371,7 @@ impl Ec2 for Ec2Client {
                     result = RunScheduledInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79035,9 +78399,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "SearchTransitGatewayRoutes");
         params.put("Version", "2016-11-15");
         SearchTransitGatewayRoutesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79054,7 +78416,7 @@ impl Ec2 for Ec2Client {
                     result = SearchTransitGatewayRoutesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79082,9 +78444,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "StartInstances");
         params.put("Version", "2016-11-15");
         StartInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79104,7 +78464,7 @@ impl Ec2 for Ec2Client {
                     result = StartInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79132,9 +78492,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "StopInstances");
         params.put("Version", "2016-11-15");
         StopInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79154,7 +78512,7 @@ impl Ec2 for Ec2Client {
                     result = StopInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79180,9 +78538,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "TerminateClientVpnConnections");
         params.put("Version", "2016-11-15");
         TerminateClientVpnConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79199,7 +78555,7 @@ impl Ec2 for Ec2Client {
                     result = TerminateClientVpnConnectionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79227,9 +78583,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "TerminateInstances");
         params.put("Version", "2016-11-15");
         TerminateInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79249,7 +78603,7 @@ impl Ec2 for Ec2Client {
                     result = TerminateInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79277,9 +78631,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "UnassignIpv6Addresses");
         params.put("Version", "2016-11-15");
         UnassignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79296,7 +78648,7 @@ impl Ec2 for Ec2Client {
                     result = UnassignIpv6AddressesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79324,9 +78676,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "UnassignPrivateIpAddresses");
         params.put("Version", "2016-11-15");
         UnassignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79351,9 +78701,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "UnmonitorInstances");
         params.put("Version", "2016-11-15");
         UnmonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79373,7 +78721,7 @@ impl Ec2 for Ec2Client {
                     result = UnmonitorInstancesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79408,9 +78756,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79427,7 +78773,7 @@ impl Ec2 for Ec2Client {
                     result = UpdateSecurityGroupRuleDescriptionsEgressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79463,9 +78809,7 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79482,7 +78826,7 @@ impl Ec2 for Ec2Client {
                     result = UpdateSecurityGroupRuleDescriptionsIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -79511,9 +78855,7 @@ impl Ec2 for Ec2Client {
         params.put("Action", "WithdrawByoipCidr");
         params.put("Version", "2016-11-15");
         WithdrawByoipCidrRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -79533,7 +78875,7 @@ impl Ec2 for Ec2Client {
                     result = WithdrawByoipCidrResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

@@ -7233,7 +7233,7 @@ pub enum AttachInstancesError {
 impl AttachInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7292,7 +7292,7 @@ impl AttachLoadBalancerTargetGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AttachLoadBalancerTargetGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7351,7 +7351,7 @@ pub enum AttachLoadBalancersError {
 impl AttachLoadBalancersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachLoadBalancersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7410,7 +7410,7 @@ impl BatchDeleteScheduledActionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDeleteScheduledActionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7465,7 +7465,7 @@ impl BatchPutScheduledUpdateGroupActionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchPutScheduledUpdateGroupActionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7530,7 +7530,7 @@ pub enum CompleteLifecycleActionError {
 impl CompleteLifecycleActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteLifecycleActionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7585,7 +7585,7 @@ pub enum CreateAutoScalingGroupError {
 impl CreateAutoScalingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAutoScalingGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7662,7 +7662,7 @@ pub enum CreateLaunchConfigurationError {
 impl CreateLaunchConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLaunchConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7733,7 +7733,7 @@ pub enum CreateOrUpdateTagsError {
 impl CreateOrUpdateTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOrUpdateTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7804,7 +7804,7 @@ pub enum DeleteAutoScalingGroupError {
 impl DeleteAutoScalingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAutoScalingGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7871,7 +7871,7 @@ pub enum DeleteLaunchConfigurationError {
 impl DeleteLaunchConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLaunchConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7928,7 +7928,7 @@ pub enum DeleteLifecycleHookError {
 impl DeleteLifecycleHookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLifecycleHookError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7979,7 +7979,7 @@ impl DeleteNotificationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteNotificationConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8030,7 +8030,7 @@ pub enum DeletePolicyError {
 impl DeletePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8083,7 +8083,7 @@ pub enum DeleteScheduledActionError {
 impl DeleteScheduledActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScheduledActionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8134,7 +8134,7 @@ pub enum DeleteTagsError {
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8187,7 +8187,7 @@ pub enum DescribeAccountLimitsError {
 impl DescribeAccountLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountLimitsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8236,7 +8236,7 @@ pub enum DescribeAdjustmentTypesError {
 impl DescribeAdjustmentTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAdjustmentTypesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8287,7 +8287,7 @@ pub enum DescribeAutoScalingGroupsError {
 impl DescribeAutoScalingGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAutoScalingGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8348,7 +8348,7 @@ impl DescribeAutoScalingInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAutoScalingInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8407,7 +8407,7 @@ impl DescribeAutoScalingNotificationTypesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAutoScalingNotificationTypesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8460,7 +8460,7 @@ impl DescribeLaunchConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLaunchConfigurationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8519,7 +8519,7 @@ impl DescribeLifecycleHookTypesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLifecycleHookTypesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8568,7 +8568,7 @@ pub enum DescribeLifecycleHooksError {
 impl DescribeLifecycleHooksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLifecycleHooksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8619,7 +8619,7 @@ impl DescribeLoadBalancerTargetGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLoadBalancerTargetGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8668,7 +8668,7 @@ pub enum DescribeLoadBalancersError {
 impl DescribeLoadBalancersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoadBalancersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8719,7 +8719,7 @@ impl DescribeMetricCollectionTypesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMetricCollectionTypesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8772,7 +8772,7 @@ impl DescribeNotificationConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeNotificationConfigurationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8833,7 +8833,7 @@ pub enum DescribePoliciesError {
 impl DescribePoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePoliciesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8898,7 +8898,7 @@ pub enum DescribeScalingActivitiesError {
 impl DescribeScalingActivitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingActivitiesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8957,7 +8957,7 @@ impl DescribeScalingProcessTypesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeScalingProcessTypesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9008,7 +9008,7 @@ pub enum DescribeScheduledActionsError {
 impl DescribeScheduledActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScheduledActionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9067,7 +9067,7 @@ pub enum DescribeTagsError {
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9122,7 +9122,7 @@ impl DescribeTerminationPolicyTypesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTerminationPolicyTypesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9171,7 +9171,7 @@ pub enum DetachInstancesError {
 impl DetachInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9220,7 +9220,7 @@ impl DetachLoadBalancerTargetGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DetachLoadBalancerTargetGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9269,7 +9269,7 @@ pub enum DetachLoadBalancersError {
 impl DetachLoadBalancersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachLoadBalancersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9318,7 +9318,7 @@ pub enum DisableMetricsCollectionError {
 impl DisableMetricsCollectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableMetricsCollectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9367,7 +9367,7 @@ pub enum EnableMetricsCollectionError {
 impl EnableMetricsCollectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableMetricsCollectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9416,7 +9416,7 @@ pub enum EnterStandbyError {
 impl EnterStandbyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnterStandbyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9465,7 +9465,7 @@ pub enum ExecutePolicyError {
 impl ExecutePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecutePolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9520,7 +9520,7 @@ pub enum ExitStandbyError {
 impl ExitStandbyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExitStandbyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9569,7 +9569,7 @@ pub enum PutLifecycleHookError {
 impl PutLifecycleHookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLifecycleHookError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9630,7 +9630,7 @@ impl PutNotificationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutNotificationConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9699,7 +9699,7 @@ pub enum PutScalingPolicyError {
 impl PutScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutScalingPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9768,7 +9768,7 @@ impl PutScheduledUpdateGroupActionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutScheduledUpdateGroupActionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9835,7 +9835,7 @@ impl RecordLifecycleActionHeartbeatError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RecordLifecycleActionHeartbeatError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9886,7 +9886,7 @@ pub enum ResumeProcessesError {
 impl ResumeProcessesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResumeProcessesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9941,7 +9941,7 @@ pub enum SetDesiredCapacityError {
 impl SetDesiredCapacityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetDesiredCapacityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9998,7 +9998,7 @@ pub enum SetInstanceHealthError {
 impl SetInstanceHealthError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetInstanceHealthError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10049,7 +10049,7 @@ pub enum SetInstanceProtectionError {
 impl SetInstanceProtectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetInstanceProtectionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10108,7 +10108,7 @@ pub enum SuspendProcessesError {
 impl SuspendProcessesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SuspendProcessesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10167,7 +10167,7 @@ impl TerminateInstanceInAutoScalingGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<TerminateInstanceInAutoScalingGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10228,7 +10228,7 @@ pub enum UpdateAutoScalingGroupError {
 impl UpdateAutoScalingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAutoScalingGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10647,9 +10647,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "AttachInstances");
         params.put("Version", "2011-01-01");
         AttachInstancesQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10678,9 +10676,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "AttachLoadBalancerTargetGroups");
         params.put("Version", "2011-01-01");
         AttachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10697,7 +10693,7 @@ impl Autoscaling for AutoscalingClient {
                     result = AttachLoadBalancerTargetGroupsResultType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10728,9 +10724,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "AttachLoadBalancers");
         params.put("Version", "2011-01-01");
         AttachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10749,7 +10743,7 @@ impl Autoscaling for AutoscalingClient {
                     result = AttachLoadBalancersResultType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10780,9 +10774,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "BatchDeleteScheduledAction");
         params.put("Version", "2011-01-01");
         BatchDeleteScheduledActionTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10799,7 +10791,7 @@ impl Autoscaling for AutoscalingClient {
                     result = BatchDeleteScheduledActionAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10833,9 +10825,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "BatchPutScheduledUpdateGroupAction");
         params.put("Version", "2011-01-01");
         BatchPutScheduledUpdateGroupActionTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10854,7 +10844,7 @@ impl Autoscaling for AutoscalingClient {
                     result = BatchPutScheduledUpdateGroupActionAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10885,9 +10875,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "CompleteLifecycleAction");
         params.put("Version", "2011-01-01");
         CompleteLifecycleActionTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10904,7 +10892,7 @@ impl Autoscaling for AutoscalingClient {
                     result = CompleteLifecycleActionAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10935,9 +10923,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "CreateAutoScalingGroup");
         params.put("Version", "2011-01-01");
         CreateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10962,9 +10948,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "CreateLaunchConfiguration");
         params.put("Version", "2011-01-01");
         CreateLaunchConfigurationTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10989,9 +10973,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "CreateOrUpdateTags");
         params.put("Version", "2011-01-01");
         CreateOrUpdateTagsTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11019,9 +11001,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DeleteAutoScalingGroup");
         params.put("Version", "2011-01-01");
         DeleteAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11046,9 +11026,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DeleteLaunchConfiguration");
         params.put("Version", "2011-01-01");
         LaunchConfigurationNameTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11073,9 +11051,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DeleteLifecycleHook");
         params.put("Version", "2011-01-01");
         DeleteLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11094,7 +11070,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DeleteLifecycleHookAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11125,9 +11101,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DeleteNotificationConfiguration");
         params.put("Version", "2011-01-01");
         DeleteNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11151,9 +11125,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DeletePolicy");
         params.put("Version", "2011-01-01");
         DeletePolicyTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11181,9 +11153,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DeleteScheduledAction");
         params.put("Version", "2011-01-01");
         DeleteScheduledActionTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11205,9 +11175,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DeleteTags");
         params.put("Version", "2011-01-01");
         DeleteTagsTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11234,9 +11202,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeAccountLimits");
         params.put("Version", "2011-01-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11253,7 +11219,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeAccountLimitsAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11283,9 +11249,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeAdjustmentTypes");
         params.put("Version", "2011-01-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11302,7 +11266,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeAdjustmentTypesAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11333,9 +11297,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeAutoScalingGroups");
         params.put("Version", "2011-01-01");
         AutoScalingGroupNamesTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11352,7 +11314,7 @@ impl Autoscaling for AutoscalingClient {
                     result = AutoScalingGroupsType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11383,9 +11345,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeAutoScalingInstances");
         params.put("Version", "2011-01-01");
         DescribeAutoScalingInstancesTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11402,7 +11362,7 @@ impl Autoscaling for AutoscalingClient {
                     result = AutoScalingInstancesType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11435,9 +11395,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeAutoScalingNotificationTypes");
         params.put("Version", "2011-01-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11456,7 +11414,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeAutoScalingNotificationTypesAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11487,9 +11445,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeLaunchConfigurations");
         params.put("Version", "2011-01-01");
         LaunchConfigurationNamesTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11506,7 +11462,7 @@ impl Autoscaling for AutoscalingClient {
                     result = LaunchConfigurationsType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11536,9 +11492,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeLifecycleHookTypes");
         params.put("Version", "2011-01-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11555,7 +11509,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeLifecycleHookTypesAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11586,9 +11540,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeLifecycleHooks");
         params.put("Version", "2011-01-01");
         DescribeLifecycleHooksTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11605,7 +11557,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeLifecycleHooksAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11637,9 +11589,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeLoadBalancerTargetGroups");
         params.put("Version", "2011-01-01");
         DescribeLoadBalancerTargetGroupsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11658,7 +11608,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeLoadBalancerTargetGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11689,9 +11639,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeLoadBalancers");
         params.put("Version", "2011-01-01");
         DescribeLoadBalancersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11708,7 +11656,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeLoadBalancersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11738,9 +11686,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeMetricCollectionTypes");
         params.put("Version", "2011-01-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11757,7 +11703,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeMetricCollectionTypesAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11791,9 +11737,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeNotificationConfigurations");
         params.put("Version", "2011-01-01");
         DescribeNotificationConfigurationsTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11812,7 +11756,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeNotificationConfigurationsAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11843,9 +11787,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribePolicies");
         params.put("Version", "2011-01-01");
         DescribePoliciesTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11865,7 +11807,7 @@ impl Autoscaling for AutoscalingClient {
                     result = PoliciesType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11896,9 +11838,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeScalingActivities");
         params.put("Version", "2011-01-01");
         DescribeScalingActivitiesTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11915,7 +11855,7 @@ impl Autoscaling for AutoscalingClient {
                     result = ActivitiesType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11945,9 +11885,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeScalingProcessTypes");
         params.put("Version", "2011-01-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11964,7 +11902,7 @@ impl Autoscaling for AutoscalingClient {
                     result = ProcessesType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11995,9 +11933,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeScheduledActions");
         params.put("Version", "2011-01-01");
         DescribeScheduledActionsTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12014,7 +11950,7 @@ impl Autoscaling for AutoscalingClient {
                     result = ScheduledActionsType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12042,9 +11978,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeTags");
         params.put("Version", "2011-01-01");
         DescribeTagsTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12064,7 +11998,7 @@ impl Autoscaling for AutoscalingClient {
                     result = TagsType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12092,9 +12026,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DescribeTerminationPolicyTypes");
         params.put("Version", "2011-01-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12111,7 +12043,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DescribeTerminationPolicyTypesAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12142,9 +12074,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DetachInstances");
         params.put("Version", "2011-01-01");
         DetachInstancesQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12164,7 +12094,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DetachInstancesAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12196,9 +12126,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DetachLoadBalancerTargetGroups");
         params.put("Version", "2011-01-01");
         DetachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12215,7 +12143,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DetachLoadBalancerTargetGroupsResultType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12246,9 +12174,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DetachLoadBalancers");
         params.put("Version", "2011-01-01");
         DetachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12267,7 +12193,7 @@ impl Autoscaling for AutoscalingClient {
                     result = DetachLoadBalancersResultType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12298,9 +12224,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "DisableMetricsCollection");
         params.put("Version", "2011-01-01");
         DisableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12325,9 +12249,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "EnableMetricsCollection");
         params.put("Version", "2011-01-01");
         EnableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12352,9 +12274,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "EnterStandby");
         params.put("Version", "2011-01-01");
         EnterStandbyQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12374,7 +12294,7 @@ impl Autoscaling for AutoscalingClient {
                     result = EnterStandbyAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12402,9 +12322,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "ExecutePolicy");
         params.put("Version", "2011-01-01");
         ExecutePolicyTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12432,9 +12350,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "ExitStandby");
         params.put("Version", "2011-01-01");
         ExitStandbyQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12454,7 +12370,7 @@ impl Autoscaling for AutoscalingClient {
                     result = ExitStandbyAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12485,9 +12401,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "PutLifecycleHook");
         params.put("Version", "2011-01-01");
         PutLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12507,7 +12421,7 @@ impl Autoscaling for AutoscalingClient {
                     result = PutLifecycleHookAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12538,9 +12452,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "PutNotificationConfiguration");
         params.put("Version", "2011-01-01");
         PutNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12565,9 +12477,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "PutScalingPolicy");
         params.put("Version", "2011-01-01");
         PutScalingPolicyTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12587,7 +12497,7 @@ impl Autoscaling for AutoscalingClient {
                     result = PolicyARNType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12618,9 +12528,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "PutScheduledUpdateGroupAction");
         params.put("Version", "2011-01-01");
         PutScheduledUpdateGroupActionTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12646,9 +12554,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "RecordLifecycleActionHeartbeat");
         params.put("Version", "2011-01-01");
         RecordLifecycleActionHeartbeatTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12665,7 +12571,7 @@ impl Autoscaling for AutoscalingClient {
                     result = RecordLifecycleActionHeartbeatAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12696,9 +12602,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "ResumeProcesses");
         params.put("Version", "2011-01-01");
         ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12726,9 +12630,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "SetDesiredCapacity");
         params.put("Version", "2011-01-01");
         SetDesiredCapacityTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12756,9 +12658,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "SetInstanceHealth");
         params.put("Version", "2011-01-01");
         SetInstanceHealthQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12786,9 +12686,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "SetInstanceProtection");
         params.put("Version", "2011-01-01");
         SetInstanceProtectionQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12805,7 +12703,7 @@ impl Autoscaling for AutoscalingClient {
                     result = SetInstanceProtectionAnswer::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12836,9 +12734,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "SuspendProcesses");
         params.put("Version", "2011-01-01");
         ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12866,9 +12762,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "TerminateInstanceInAutoScalingGroup");
         params.put("Version", "2011-01-01");
         TerminateInstanceInAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12887,7 +12781,7 @@ impl Autoscaling for AutoscalingClient {
                     result = ActivityType::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12918,9 +12812,7 @@ impl Autoscaling for AutoscalingClient {
         params.put("Action", "UpdateAutoScalingGroup");
         params.put("Version", "2011-01-01");
         UpdateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {

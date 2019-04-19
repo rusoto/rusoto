@@ -5903,7 +5903,7 @@ impl CreateCloudFrontOriginAccessIdentityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCloudFrontOriginAccessIdentityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6027,7 +6027,7 @@ pub enum CreateDistributionError {
 impl CreateDistributionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDistributionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6440,7 +6440,7 @@ impl CreateDistributionWithTagsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDistributionWithTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6815,7 +6815,7 @@ pub enum CreateInvalidationError {
 impl CreateInvalidationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInvalidationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6926,7 +6926,7 @@ impl CreateStreamingDistributionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateStreamingDistributionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7091,7 +7091,7 @@ impl CreateStreamingDistributionWithTagsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateStreamingDistributionWithTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7163,7 +7163,7 @@ impl DeleteCloudFrontOriginAccessIdentityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteCloudFrontOriginAccessIdentityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7221,7 +7221,7 @@ pub enum DeleteDistributionError {
 impl DeleteDistributionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDistributionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7302,7 +7302,7 @@ pub enum DeleteServiceLinkedRoleError {
 impl DeleteServiceLinkedRoleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServiceLinkedRoleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7377,7 +7377,7 @@ impl DeleteStreamingDistributionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteStreamingDistributionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7462,7 +7462,7 @@ impl GetCloudFrontOriginAccessIdentityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCloudFrontOriginAccessIdentityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7511,7 +7511,7 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCloudFrontOriginAccessIdentityConfigError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7558,7 +7558,7 @@ pub enum GetDistributionError {
 impl GetDistributionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDistributionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7613,7 +7613,7 @@ pub enum GetDistributionConfigError {
 impl GetDistributionConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDistributionConfigError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7672,7 +7672,7 @@ pub enum GetInvalidationError {
 impl GetInvalidationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInvalidationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7733,7 +7733,7 @@ pub enum GetStreamingDistributionError {
 impl GetStreamingDistributionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStreamingDistributionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7792,7 +7792,7 @@ impl GetStreamingDistributionConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetStreamingDistributionConfigError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7851,7 +7851,7 @@ impl ListCloudFrontOriginAccessIdentitiesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCloudFrontOriginAccessIdentitiesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7900,7 +7900,7 @@ pub enum ListDistributionsError {
 impl ListDistributionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDistributionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7951,7 +7951,7 @@ impl ListDistributionsByWebACLIdError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDistributionsByWebACLIdError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8012,7 +8012,7 @@ pub enum ListInvalidationsError {
 impl ListInvalidationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInvalidationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8073,7 +8073,7 @@ impl ListStreamingDistributionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListStreamingDistributionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8128,7 +8128,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8199,7 +8199,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8270,7 +8270,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8351,7 +8351,7 @@ impl UpdateCloudFrontOriginAccessIdentityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateCloudFrontOriginAccessIdentityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8480,7 +8480,7 @@ pub enum UpdateDistributionError {
 impl UpdateDistributionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDistributionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8835,7 +8835,7 @@ impl UpdateStreamingDistributionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateStreamingDistributionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9222,7 +9222,7 @@ impl CloudFront for CloudFrontClient {
                     result = CreateCloudFrontOriginAccessIdentityResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9281,7 +9281,7 @@ impl CloudFront for CloudFrontClient {
                     result = CreateDistributionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9340,7 +9340,7 @@ impl CloudFront for CloudFrontClient {
                     result = CreateDistributionWithTagsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9402,7 +9402,7 @@ impl CloudFront for CloudFrontClient {
                     result = CreateInvalidationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9454,7 +9454,7 @@ impl CloudFront for CloudFrontClient {
                     result = CreateStreamingDistributionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9518,7 +9518,7 @@ impl CloudFront for CloudFrontClient {
                     result = CreateStreamingDistributionWithTagsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9678,7 +9678,7 @@ impl CloudFront for CloudFrontClient {
                     result = GetCloudFrontOriginAccessIdentityResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9730,7 +9730,7 @@ impl CloudFront for CloudFrontClient {
                     result = GetCloudFrontOriginAccessIdentityConfigResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9778,7 +9778,7 @@ impl CloudFront for CloudFrontClient {
                     result = GetDistributionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9822,7 +9822,7 @@ impl CloudFront for CloudFrontClient {
                     result = GetDistributionConfigResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9873,7 +9873,7 @@ impl CloudFront for CloudFrontClient {
                     result = GetInvalidationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9914,7 +9914,7 @@ impl CloudFront for CloudFrontClient {
                     result = GetStreamingDistributionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9962,7 +9962,7 @@ impl CloudFront for CloudFrontClient {
                     result = GetStreamingDistributionConfigResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10020,7 +10020,7 @@ impl CloudFront for CloudFrontClient {
                     result = ListCloudFrontOriginAccessIdentitiesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10073,7 +10073,7 @@ impl CloudFront for CloudFrontClient {
                     result = ListDistributionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10126,7 +10126,7 @@ impl CloudFront for CloudFrontClient {
                     result = ListDistributionsByWebACLIdResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10182,7 +10182,7 @@ impl CloudFront for CloudFrontClient {
                     result = ListInvalidationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10232,7 +10232,7 @@ impl CloudFront for CloudFrontClient {
                     result = ListStreamingDistributionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10279,7 +10279,7 @@ impl CloudFront for CloudFrontClient {
                     result = ListTagsForResourceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10398,7 +10398,7 @@ impl CloudFront for CloudFrontClient {
                     result = UpdateCloudFrontOriginAccessIdentityResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10457,7 +10457,7 @@ impl CloudFront for CloudFrontClient {
                     result = UpdateDistributionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10516,7 +10516,7 @@ impl CloudFront for CloudFrontClient {
                     result = UpdateStreamingDistributionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

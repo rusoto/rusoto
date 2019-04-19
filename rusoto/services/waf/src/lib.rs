@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [WafClient](struct.WafClient.html) and [Waf](trait.Waf.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [Cloud9Client](struct.Cloud9Client.html) and [Cloud9](trait.Cloud9.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

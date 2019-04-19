@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [Iot1ClickProjectsClient](struct.Iot1ClickProjectsClient.html) and [Iot1ClickProjects](trait.Iot1ClickProjects.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

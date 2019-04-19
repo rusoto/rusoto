@@ -1261,7 +1261,7 @@ impl MessageAttributeMapSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MessageAttributeValue {
     /// <p>Binary type attributes can store any binary data, for example, compressed data, encrypted data, or images.</p>
-    pub binary_value: Option<Vec<u8>>,
+    pub binary_value: Option<bytes::Bytes>,
     /// <p>Amazon SNS supports the following logical data types: String, String.Array, Number, and Binary. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMessageAttributes.html#SNSMessageAttributes.DataTypes">Message Attribute Data Types</a>.</p>
     pub data_type: String,
     /// <p>Strings are Unicode with UTF8 binary encoding. For a list of code values, see <a href="http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters">http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters</a>.</p>
@@ -2048,7 +2048,7 @@ pub enum AddPermissionError {
 impl AddPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddPermissionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2121,7 +2121,7 @@ impl CheckIfPhoneNumberIsOptedOutError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CheckIfPhoneNumberIsOptedOutError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2200,7 +2200,7 @@ pub enum ConfirmSubscriptionError {
 impl ConfirmSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2277,7 +2277,7 @@ pub enum CreatePlatformApplicationError {
 impl CreatePlatformApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePlatformApplicationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2346,7 +2346,7 @@ pub enum CreatePlatformEndpointError {
 impl CreatePlatformEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePlatformEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2421,7 +2421,7 @@ pub enum CreateTopicError {
 impl CreateTopicError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTopicError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2496,7 +2496,7 @@ pub enum DeleteEndpointError {
 impl DeleteEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2559,7 +2559,7 @@ pub enum DeletePlatformApplicationError {
 impl DeletePlatformApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePlatformApplicationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2628,7 +2628,7 @@ pub enum DeleteTopicError {
 impl DeleteTopicError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTopicError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2699,7 +2699,7 @@ pub enum GetEndpointAttributesError {
 impl GetEndpointAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEndpointAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2774,7 +2774,7 @@ impl GetPlatformApplicationAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetPlatformApplicationAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2853,7 +2853,7 @@ pub enum GetSMSAttributesError {
 impl GetSMSAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSMSAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2924,7 +2924,7 @@ pub enum GetSubscriptionAttributesError {
 impl GetSubscriptionAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSubscriptionAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3001,7 +3001,7 @@ pub enum GetTopicAttributesError {
 impl GetTopicAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTopicAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3080,7 +3080,7 @@ impl ListEndpointsByPlatformApplicationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListEndpointsByPlatformApplicationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3159,7 +3159,7 @@ pub enum ListPhoneNumbersOptedOutError {
 impl ListPhoneNumbersOptedOutError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPhoneNumbersOptedOutError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3232,7 +3232,7 @@ pub enum ListPlatformApplicationsError {
 impl ListPlatformApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPlatformApplicationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3299,7 +3299,7 @@ pub enum ListSubscriptionsError {
 impl ListSubscriptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSubscriptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3364,7 +3364,7 @@ pub enum ListSubscriptionsByTopicError {
 impl ListSubscriptionsByTopicError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSubscriptionsByTopicError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3437,7 +3437,7 @@ pub enum ListTopicsError {
 impl ListTopicsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTopicsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3502,7 +3502,7 @@ pub enum OptInPhoneNumberError {
 impl OptInPhoneNumberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<OptInPhoneNumberError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3593,7 +3593,7 @@ pub enum PublishError {
 impl PublishError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3724,7 +3724,7 @@ pub enum RemovePermissionError {
 impl RemovePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemovePermissionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3795,7 +3795,7 @@ pub enum SetEndpointAttributesError {
 impl SetEndpointAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetEndpointAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3870,7 +3870,7 @@ impl SetPlatformApplicationAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SetPlatformApplicationAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3949,7 +3949,7 @@ pub enum SetSMSAttributesError {
 impl SetSMSAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetSMSAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4022,7 +4022,7 @@ pub enum SetSubscriptionAttributesError {
 impl SetSubscriptionAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetSubscriptionAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4107,7 +4107,7 @@ pub enum SetTopicAttributesError {
 impl SetTopicAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetTopicAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4190,7 +4190,7 @@ pub enum SubscribeError {
 impl SubscribeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubscribeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4281,7 +4281,7 @@ pub enum UnsubscribeError {
 impl UnsubscribeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnsubscribeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4554,9 +4554,7 @@ impl Sns for SnsClient {
         params.put("Action", "AddPermission");
         params.put("Version", "2010-03-31");
         AddPermissionInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4584,9 +4582,7 @@ impl Sns for SnsClient {
         params.put("Action", "CheckIfPhoneNumberIsOptedOut");
         params.put("Version", "2010-03-31");
         CheckIfPhoneNumberIsOptedOutInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4603,7 +4599,7 @@ impl Sns for SnsClient {
                     result = CheckIfPhoneNumberIsOptedOutResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4634,9 +4630,7 @@ impl Sns for SnsClient {
         params.put("Action", "ConfirmSubscription");
         params.put("Version", "2010-03-31");
         ConfirmSubscriptionInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4655,7 +4649,7 @@ impl Sns for SnsClient {
                     result = ConfirmSubscriptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4686,9 +4680,7 @@ impl Sns for SnsClient {
         params.put("Action", "CreatePlatformApplication");
         params.put("Version", "2010-03-31");
         CreatePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4705,7 +4697,7 @@ impl Sns for SnsClient {
                     result = CreatePlatformApplicationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4736,9 +4728,7 @@ impl Sns for SnsClient {
         params.put("Action", "CreatePlatformEndpoint");
         params.put("Version", "2010-03-31");
         CreatePlatformEndpointInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4755,7 +4745,7 @@ impl Sns for SnsClient {
                     result = CreateEndpointResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4786,9 +4776,7 @@ impl Sns for SnsClient {
         params.put("Action", "CreateTopic");
         params.put("Version", "2010-03-31");
         CreateTopicInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4808,7 +4796,7 @@ impl Sns for SnsClient {
                     result = CreateTopicResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4836,9 +4824,7 @@ impl Sns for SnsClient {
         params.put("Action", "DeleteEndpoint");
         params.put("Version", "2010-03-31");
         DeleteEndpointInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4866,9 +4852,7 @@ impl Sns for SnsClient {
         params.put("Action", "DeletePlatformApplication");
         params.put("Version", "2010-03-31");
         DeletePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4890,9 +4874,7 @@ impl Sns for SnsClient {
         params.put("Action", "DeleteTopic");
         params.put("Version", "2010-03-31");
         DeleteTopicInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4920,9 +4902,7 @@ impl Sns for SnsClient {
         params.put("Action", "GetEndpointAttributes");
         params.put("Version", "2010-03-31");
         GetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4939,7 +4919,7 @@ impl Sns for SnsClient {
                     result = GetEndpointAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4971,9 +4951,7 @@ impl Sns for SnsClient {
         params.put("Action", "GetPlatformApplicationAttributes");
         params.put("Version", "2010-03-31");
         GetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4992,7 +4970,7 @@ impl Sns for SnsClient {
                     result = GetPlatformApplicationAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5023,9 +5001,7 @@ impl Sns for SnsClient {
         params.put("Action", "GetSMSAttributes");
         params.put("Version", "2010-03-31");
         GetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5045,7 +5021,7 @@ impl Sns for SnsClient {
                     result = GetSMSAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5076,9 +5052,7 @@ impl Sns for SnsClient {
         params.put("Action", "GetSubscriptionAttributes");
         params.put("Version", "2010-03-31");
         GetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5095,7 +5069,7 @@ impl Sns for SnsClient {
                     result = GetSubscriptionAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5126,9 +5100,7 @@ impl Sns for SnsClient {
         params.put("Action", "GetTopicAttributes");
         params.put("Version", "2010-03-31");
         GetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5148,7 +5120,7 @@ impl Sns for SnsClient {
                     result = GetTopicAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5182,9 +5154,7 @@ impl Sns for SnsClient {
         params.put("Action", "ListEndpointsByPlatformApplication");
         params.put("Version", "2010-03-31");
         ListEndpointsByPlatformApplicationInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5203,7 +5173,7 @@ impl Sns for SnsClient {
                     result = ListEndpointsByPlatformApplicationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5234,9 +5204,7 @@ impl Sns for SnsClient {
         params.put("Action", "ListPhoneNumbersOptedOut");
         params.put("Version", "2010-03-31");
         ListPhoneNumbersOptedOutInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5253,7 +5221,7 @@ impl Sns for SnsClient {
                     result = ListPhoneNumbersOptedOutResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5284,9 +5252,7 @@ impl Sns for SnsClient {
         params.put("Action", "ListPlatformApplications");
         params.put("Version", "2010-03-31");
         ListPlatformApplicationsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5303,7 +5269,7 @@ impl Sns for SnsClient {
                     result = ListPlatformApplicationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5334,9 +5300,7 @@ impl Sns for SnsClient {
         params.put("Action", "ListSubscriptions");
         params.put("Version", "2010-03-31");
         ListSubscriptionsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5356,7 +5320,7 @@ impl Sns for SnsClient {
                     result = ListSubscriptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5387,9 +5351,7 @@ impl Sns for SnsClient {
         params.put("Action", "ListSubscriptionsByTopic");
         params.put("Version", "2010-03-31");
         ListSubscriptionsByTopicInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5406,7 +5368,7 @@ impl Sns for SnsClient {
                     result = ListSubscriptionsByTopicResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5437,9 +5399,7 @@ impl Sns for SnsClient {
         params.put("Action", "ListTopics");
         params.put("Version", "2010-03-31");
         ListTopicsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5459,7 +5419,7 @@ impl Sns for SnsClient {
                     result = ListTopicsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5490,9 +5450,7 @@ impl Sns for SnsClient {
         params.put("Action", "OptInPhoneNumber");
         params.put("Version", "2010-03-31");
         OptInPhoneNumberInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5512,7 +5470,7 @@ impl Sns for SnsClient {
                     result = OptInPhoneNumberResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5540,9 +5498,7 @@ impl Sns for SnsClient {
         params.put("Action", "Publish");
         params.put("Version", "2010-03-31");
         PublishInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5562,7 +5518,7 @@ impl Sns for SnsClient {
                     result = PublishResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5590,9 +5546,7 @@ impl Sns for SnsClient {
         params.put("Action", "RemovePermission");
         params.put("Version", "2010-03-31");
         RemovePermissionInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5620,9 +5574,7 @@ impl Sns for SnsClient {
         params.put("Action", "SetEndpointAttributes");
         params.put("Version", "2010-03-31");
         SetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5647,9 +5599,7 @@ impl Sns for SnsClient {
         params.put("Action", "SetPlatformApplicationAttributes");
         params.put("Version", "2010-03-31");
         SetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5676,9 +5626,7 @@ impl Sns for SnsClient {
         params.put("Action", "SetSMSAttributes");
         params.put("Version", "2010-03-31");
         SetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5698,7 +5646,7 @@ impl Sns for SnsClient {
                     result = SetSMSAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5729,9 +5677,7 @@ impl Sns for SnsClient {
         params.put("Action", "SetSubscriptionAttributes");
         params.put("Version", "2010-03-31");
         SetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5756,9 +5702,7 @@ impl Sns for SnsClient {
         params.put("Action", "SetTopicAttributes");
         params.put("Version", "2010-03-31");
         SetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5783,9 +5727,7 @@ impl Sns for SnsClient {
         params.put("Action", "Subscribe");
         params.put("Version", "2010-03-31");
         SubscribeInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5805,7 +5747,7 @@ impl Sns for SnsClient {
                     result = SubscribeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5831,9 +5773,7 @@ impl Sns for SnsClient {
         params.put("Action", "Unsubscribe");
         params.put("Version", "2010-03-31");
         UnsubscribeInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {

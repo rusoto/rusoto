@@ -8051,7 +8051,7 @@ impl AssociateVPCWithHostedZoneError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateVPCWithHostedZoneError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8152,7 +8152,7 @@ pub enum ChangeResourceRecordSetsError {
 impl ChangeResourceRecordSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangeResourceRecordSetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8239,7 +8239,7 @@ pub enum ChangeTagsForResourceError {
 impl ChangeTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangeTagsForResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8316,7 +8316,7 @@ pub enum CreateHealthCheckError {
 impl CreateHealthCheckError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHealthCheckError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8393,7 +8393,7 @@ pub enum CreateHostedZoneError {
 impl CreateHostedZoneError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHostedZoneError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8506,7 +8506,7 @@ pub enum CreateQueryLoggingConfigError {
 impl CreateQueryLoggingConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateQueryLoggingConfigError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8609,7 +8609,7 @@ impl CreateReusableDelegationSetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateReusableDelegationSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8712,7 +8712,7 @@ pub enum CreateTrafficPolicyError {
 impl CreateTrafficPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrafficPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8793,7 +8793,7 @@ impl CreateTrafficPolicyInstanceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateTrafficPolicyInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8886,7 +8886,7 @@ impl CreateTrafficPolicyVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateTrafficPolicyVersionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8944,7 +8944,7 @@ impl CreateVPCAssociationAuthorizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateVPCAssociationAuthorizationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9029,7 +9029,7 @@ pub enum DeleteHealthCheckError {
 impl DeleteHealthCheckError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHealthCheckError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9096,7 +9096,7 @@ pub enum DeleteHostedZoneError {
 impl DeleteHostedZoneError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHostedZoneError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9173,7 +9173,7 @@ pub enum DeleteQueryLoggingConfigError {
 impl DeleteQueryLoggingConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQueryLoggingConfigError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9244,7 +9244,7 @@ impl DeleteReusableDelegationSetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteReusableDelegationSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9323,7 +9323,7 @@ pub enum DeleteTrafficPolicyError {
 impl DeleteTrafficPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrafficPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9396,7 +9396,7 @@ impl DeleteTrafficPolicyInstanceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteTrafficPolicyInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9471,7 +9471,7 @@ impl DeleteVPCAssociationAuthorizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVPCAssociationAuthorizationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9562,7 +9562,7 @@ impl DisassociateVPCFromHostedZoneError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateVPCFromHostedZoneError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9643,7 +9643,7 @@ pub enum GetAccountLimitError {
 impl GetAccountLimitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountLimitError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9692,7 +9692,7 @@ pub enum GetChangeError {
 impl GetChangeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChangeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9742,7 +9742,7 @@ pub enum GetCheckerIpRangesError {}
 impl GetCheckerIpRangesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCheckerIpRangesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9784,7 +9784,7 @@ pub enum GetGeoLocationError {
 impl GetGeoLocationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGeoLocationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9841,7 +9841,7 @@ pub enum GetHealthCheckError {
 impl GetHealthCheckError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHealthCheckError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9897,7 +9897,7 @@ pub enum GetHealthCheckCountError {}
 impl GetHealthCheckCountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHealthCheckCountError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9941,7 +9941,7 @@ impl GetHealthCheckLastFailureReasonError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetHealthCheckLastFailureReasonError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10000,7 +10000,7 @@ pub enum GetHealthCheckStatusError {
 impl GetHealthCheckStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHealthCheckStatusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10055,7 +10055,7 @@ pub enum GetHostedZoneError {
 impl GetHostedZoneError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHostedZoneError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10108,7 +10108,7 @@ pub enum GetHostedZoneCountError {
 impl GetHostedZoneCountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHostedZoneCountError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10159,7 +10159,7 @@ pub enum GetHostedZoneLimitError {
 impl GetHostedZoneLimitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHostedZoneLimitError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10220,7 +10220,7 @@ pub enum GetQueryLoggingConfigError {
 impl GetQueryLoggingConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueryLoggingConfigError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10279,7 +10279,7 @@ pub enum GetReusableDelegationSetError {
 impl GetReusableDelegationSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReusableDelegationSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10346,7 +10346,7 @@ impl GetReusableDelegationSetLimitError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetReusableDelegationSetLimitError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10405,7 +10405,7 @@ pub enum GetTrafficPolicyError {
 impl GetTrafficPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTrafficPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10460,7 +10460,7 @@ pub enum GetTrafficPolicyInstanceError {
 impl GetTrafficPolicyInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTrafficPolicyInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10514,7 +10514,7 @@ impl GetTrafficPolicyInstanceCountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetTrafficPolicyInstanceCountError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10554,7 +10554,7 @@ pub enum ListGeoLocationsError {
 impl ListGeoLocationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGeoLocationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10603,7 +10603,7 @@ pub enum ListHealthChecksError {
 impl ListHealthChecksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHealthChecksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10660,7 +10660,7 @@ pub enum ListHostedZonesError {
 impl ListHostedZonesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHostedZonesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10723,7 +10723,7 @@ pub enum ListHostedZonesByNameError {
 impl ListHostedZonesByNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHostedZonesByNameError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10780,7 +10780,7 @@ pub enum ListQueryLoggingConfigsError {
 impl ListQueryLoggingConfigsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueryLoggingConfigsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10845,7 +10845,7 @@ pub enum ListResourceRecordSetsError {
 impl ListResourceRecordSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceRecordSetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10900,7 +10900,7 @@ impl ListReusableDelegationSetsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListReusableDelegationSetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10955,7 +10955,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11036,7 +11036,7 @@ pub enum ListTagsForResourcesError {
 impl ListTagsForResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourcesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11109,7 +11109,7 @@ pub enum ListTrafficPoliciesError {
 impl ListTrafficPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrafficPoliciesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11160,7 +11160,7 @@ impl ListTrafficPolicyInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTrafficPolicyInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11221,7 +11221,7 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTrafficPolicyInstancesByHostedZoneError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11292,7 +11292,7 @@ impl ListTrafficPolicyInstancesByPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTrafficPolicyInstancesByPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11361,7 +11361,7 @@ pub enum ListTrafficPolicyVersionsError {
 impl ListTrafficPolicyVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrafficPolicyVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11422,7 +11422,7 @@ impl ListVPCAssociationAuthorizationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListVPCAssociationAuthorizationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11489,7 +11489,7 @@ pub enum TestDNSAnswerError {
 impl TestDNSAnswerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestDNSAnswerError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11546,7 +11546,7 @@ pub enum UpdateHealthCheckError {
 impl UpdateHealthCheckError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateHealthCheckError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11609,7 +11609,7 @@ pub enum UpdateHostedZoneCommentError {
 impl UpdateHostedZoneCommentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateHostedZoneCommentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11670,7 +11670,7 @@ impl UpdateTrafficPolicyCommentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateTrafficPolicyCommentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11743,7 +11743,7 @@ impl UpdateTrafficPolicyInstanceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateTrafficPolicyInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12240,7 +12240,7 @@ impl Route53 for Route53Client {
                     result = AssociateVPCWithHostedZoneResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12296,7 +12296,7 @@ impl Route53 for Route53Client {
                     result = ChangeResourceRecordSetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12352,7 +12352,7 @@ impl Route53 for Route53Client {
                     result = ChangeTagsForResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12405,7 +12405,7 @@ impl Route53 for Route53Client {
                     result = CreateHealthCheckResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12459,7 +12459,7 @@ impl Route53 for Route53Client {
                     result = CreateHostedZoneResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12510,7 +12510,7 @@ impl Route53 for Route53Client {
                     result = CreateQueryLoggingConfigResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12561,7 +12561,7 @@ impl Route53 for Route53Client {
                     result = CreateReusableDelegationSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12614,7 +12614,7 @@ impl Route53 for Route53Client {
                     result = CreateTrafficPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12665,7 +12665,7 @@ impl Route53 for Route53Client {
                     result = CreateTrafficPolicyInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12718,7 +12718,7 @@ impl Route53 for Route53Client {
                     result = CreateTrafficPolicyVersionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12779,7 +12779,7 @@ impl Route53 for Route53Client {
                     result = CreateVPCAssociationAuthorizationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12828,7 +12828,7 @@ impl Route53 for Route53Client {
                     result = DeleteHealthCheckResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12874,7 +12874,7 @@ impl Route53 for Route53Client {
                     result = DeleteHostedZoneResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12917,7 +12917,7 @@ impl Route53 for Route53Client {
                     result = DeleteQueryLoggingConfigResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12960,7 +12960,7 @@ impl Route53 for Route53Client {
                     result = DeleteReusableDelegationSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13009,7 +13009,7 @@ impl Route53 for Route53Client {
                     result = DeleteTrafficPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13052,7 +13052,7 @@ impl Route53 for Route53Client {
                     result = DeleteTrafficPolicyInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13112,7 +13112,7 @@ impl Route53 for Route53Client {
                     result = DeleteVPCAssociationAuthorizationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13168,7 +13168,7 @@ impl Route53 for Route53Client {
                     result = DisassociateVPCFromHostedZoneResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13214,7 +13214,7 @@ impl Route53 for Route53Client {
                     result = GetAccountLimitResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13260,7 +13260,7 @@ impl Route53 for Route53Client {
                     result = GetChangeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13302,7 +13302,7 @@ impl Route53 for Route53Client {
                     result = GetCheckerIpRangesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13358,7 +13358,7 @@ impl Route53 for Route53Client {
                     result = GetGeoLocationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13407,7 +13407,7 @@ impl Route53 for Route53Client {
                     result = GetHealthCheckResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13450,7 +13450,7 @@ impl Route53 for Route53Client {
                     result = GetHealthCheckCountResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13499,7 +13499,7 @@ impl Route53 for Route53Client {
                     result = GetHealthCheckLastFailureReasonResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13547,7 +13547,7 @@ impl Route53 for Route53Client {
                     result = GetHealthCheckStatusResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13593,7 +13593,7 @@ impl Route53 for Route53Client {
                     result = GetHostedZoneResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13637,7 +13637,7 @@ impl Route53 for Route53Client {
                     result = GetHostedZoneCountResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13681,7 +13681,7 @@ impl Route53 for Route53Client {
                     result = GetHostedZoneLimitResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13724,7 +13724,7 @@ impl Route53 for Route53Client {
                     result = GetQueryLoggingConfigResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13767,7 +13767,7 @@ impl Route53 for Route53Client {
                     result = GetReusableDelegationSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13809,7 +13809,7 @@ impl Route53 for Route53Client {
                     result = GetReusableDelegationSetLimitResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13859,7 +13859,7 @@ impl Route53 for Route53Client {
                     result = GetTrafficPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13902,7 +13902,7 @@ impl Route53 for Route53Client {
                     result = GetTrafficPolicyInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13944,7 +13944,7 @@ impl Route53 for Route53Client {
                     result = GetTrafficPolicyInstanceCountResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14003,7 +14003,7 @@ impl Route53 for Route53Client {
                     result = ListGeoLocationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14056,7 +14056,7 @@ impl Route53 for Route53Client {
                     result = ListHealthChecksResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14112,7 +14112,7 @@ impl Route53 for Route53Client {
                     result = ListHostedZonesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14165,7 +14165,7 @@ impl Route53 for Route53Client {
                     result = ListHostedZonesByNameResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14218,7 +14218,7 @@ impl Route53 for Route53Client {
                     result = ListQueryLoggingConfigsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14279,7 +14279,7 @@ impl Route53 for Route53Client {
                     result = ListResourceRecordSetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14329,7 +14329,7 @@ impl Route53 for Route53Client {
                     result = ListReusableDelegationSetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14378,7 +14378,7 @@ impl Route53 for Route53Client {
                     result = ListTagsForResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14435,7 +14435,7 @@ impl Route53 for Route53Client {
                     result = ListTagsForResourcesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14487,7 +14487,7 @@ impl Route53 for Route53Client {
                     result = ListTrafficPoliciesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14543,7 +14543,7 @@ impl Route53 for Route53Client {
                     result = ListTrafficPolicyInstancesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14602,7 +14602,7 @@ impl Route53 for Route53Client {
                     result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14666,7 +14666,7 @@ impl Route53 for Route53Client {
                     result = ListTrafficPolicyInstancesByPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14718,7 +14718,7 @@ impl Route53 for Route53Client {
                     result = ListTrafficPolicyVersionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14776,7 +14776,7 @@ impl Route53 for Route53Client {
                     result = ListVPCAssociationAuthorizationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14835,7 +14835,7 @@ impl Route53 for Route53Client {
                     result = TestDNSAnswerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14893,7 +14893,7 @@ impl Route53 for Route53Client {
                     result = UpdateHealthCheckResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14945,7 +14945,7 @@ impl Route53 for Route53Client {
                     result = UpdateHostedZoneCommentResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15001,7 +15001,7 @@ impl Route53 for Route53Client {
                     result = UpdateTrafficPolicyCommentResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15053,7 +15053,7 @@ impl Route53 for Route53Client {
                     result = UpdateTrafficPolicyInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

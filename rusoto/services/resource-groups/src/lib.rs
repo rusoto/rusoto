@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [ResourceGroupsClient](struct.ResourceGroupsClient.html) and [ResourceGroups](trait.ResourceGroups.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [S3Client](struct.S3Client.html) and [S3](trait.S3.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate xml;

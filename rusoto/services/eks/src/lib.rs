@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [EksClient](struct.EksClient.html) and [Eks](trait.Eks.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

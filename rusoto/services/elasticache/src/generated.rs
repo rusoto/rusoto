@@ -6294,7 +6294,7 @@ pub enum AddTagsToResourceError {
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6373,7 +6373,7 @@ impl AuthorizeCacheSecurityGroupIngressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AuthorizeCacheSecurityGroupIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6437,7 +6437,7 @@ pub enum CopySnapshotError {
 impl CopySnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopySnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6542,7 +6542,7 @@ pub enum CreateCacheClusterError {
 impl CreateCacheClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCacheClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6703,7 +6703,7 @@ pub enum CreateCacheParameterGroupError {
 impl CreateCacheParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCacheParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6796,7 +6796,7 @@ pub enum CreateCacheSecurityGroupError {
 impl CreateCacheSecurityGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCacheSecurityGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6875,7 +6875,7 @@ pub enum CreateCacheSubnetGroupError {
 impl CreateCacheSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCacheSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6974,7 +6974,7 @@ pub enum CreateReplicationGroupError {
 impl CreateReplicationGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReplicationGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7048,7 +7048,7 @@ pub enum CreateSnapshotError {
 impl CreateSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7181,7 +7181,7 @@ pub enum DecreaseReplicaCountError {
 impl DecreaseReplicaCountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DecreaseReplicaCountError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7328,7 +7328,7 @@ pub enum DeleteCacheClusterError {
 impl DeleteCacheClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCacheClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7431,7 +7431,7 @@ pub enum DeleteCacheParameterGroupError {
 impl DeleteCacheParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCacheParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7512,7 +7512,7 @@ pub enum DeleteCacheSecurityGroupError {
 impl DeleteCacheSecurityGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCacheSecurityGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7587,7 +7587,7 @@ pub enum DeleteCacheSubnetGroupError {
 impl DeleteCacheSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCacheSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7656,7 +7656,7 @@ pub enum DeleteReplicationGroupError {
 impl DeleteReplicationGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReplicationGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7759,7 +7759,7 @@ pub enum DeleteSnapshotError {
 impl DeleteSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7832,7 +7832,7 @@ pub enum DescribeCacheClustersError {
 impl DescribeCacheClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCacheClustersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7896,7 +7896,7 @@ impl DescribeCacheEngineVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCacheEngineVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7942,7 +7942,7 @@ impl DescribeCacheParameterGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCacheParameterGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8011,7 +8011,7 @@ pub enum DescribeCacheParametersError {
 impl DescribeCacheParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCacheParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8082,7 +8082,7 @@ impl DescribeCacheSecurityGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCacheSecurityGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8147,7 +8147,7 @@ pub enum DescribeCacheSubnetGroupsError {
 impl DescribeCacheSubnetGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCacheSubnetGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8200,7 +8200,7 @@ impl DescribeEngineDefaultParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEngineDefaultParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8259,7 +8259,7 @@ pub enum DescribeEventsError {
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8318,7 +8318,7 @@ pub enum DescribeReplicationGroupsError {
 impl DescribeReplicationGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReplicationGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8389,7 +8389,7 @@ impl DescribeReservedCacheNodesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedCacheNodesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8460,7 +8460,7 @@ impl DescribeReservedCacheNodesOfferingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedCacheNodesOfferingsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8514,7 +8514,7 @@ pub enum DescribeSnapshotsError {
 impl DescribeSnapshotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSnapshotsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8603,7 +8603,7 @@ pub enum IncreaseReplicaCountError {
 impl IncreaseReplicaCountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IncreaseReplicaCountError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8738,7 +8738,7 @@ impl ListAllowedNodeTypeModificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAllowedNodeTypeModificationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8817,7 +8817,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8900,7 +8900,7 @@ pub enum ModifyCacheClusterError {
 impl ModifyCacheClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyCacheClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9035,7 +9035,7 @@ pub enum ModifyCacheParameterGroupError {
 impl ModifyCacheParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyCacheParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9116,7 +9116,7 @@ pub enum ModifyCacheSubnetGroupError {
 impl ModifyCacheSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyCacheSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9209,7 +9209,7 @@ pub enum ModifyReplicationGroupError {
 impl ModifyReplicationGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyReplicationGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9372,7 +9372,7 @@ impl ModifyReplicationGroupShardConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyReplicationGroupShardConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9432,7 +9432,7 @@ impl PurchaseReservedCacheNodesOfferingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PurchaseReservedCacheNodesOfferingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9488,7 +9488,7 @@ pub enum RebootCacheClusterError {
 impl RebootCacheClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootCacheClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9551,7 +9551,7 @@ pub enum RemoveTagsFromResourceError {
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9626,7 +9626,7 @@ pub enum ResetCacheParameterGroupError {
 impl ResetCacheParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetCacheParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9709,7 +9709,7 @@ impl RevokeCacheSecurityGroupIngressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RevokeCacheSecurityGroupIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9806,7 +9806,7 @@ pub enum TestFailoverError {
 impl TestFailoverError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestFailoverError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10208,9 +10208,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "AddTagsToResource");
         params.put("Version", "2015-02-02");
         AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10230,7 +10228,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = TagListMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10264,9 +10262,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "AuthorizeCacheSecurityGroupIngress");
         params.put("Version", "2015-02-02");
         AuthorizeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10285,7 +10281,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = AuthorizeCacheSecurityGroupIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10316,9 +10312,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "CopySnapshot");
         params.put("Version", "2015-02-02");
         CopySnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10338,7 +10332,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CopySnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10369,9 +10363,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "CreateCacheCluster");
         params.put("Version", "2015-02-02");
         CreateCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10391,7 +10383,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CreateCacheClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10422,9 +10414,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "CreateCacheParameterGroup");
         params.put("Version", "2015-02-02");
         CreateCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10441,7 +10431,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CreateCacheParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10472,9 +10462,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "CreateCacheSecurityGroup");
         params.put("Version", "2015-02-02");
         CreateCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10491,7 +10479,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CreateCacheSecurityGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10522,9 +10510,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "CreateCacheSubnetGroup");
         params.put("Version", "2015-02-02");
         CreateCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10541,7 +10527,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CreateCacheSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10572,9 +10558,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "CreateReplicationGroup");
         params.put("Version", "2015-02-02");
         CreateReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10591,7 +10575,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CreateReplicationGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10622,9 +10606,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "CreateSnapshot");
         params.put("Version", "2015-02-02");
         CreateSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10644,7 +10626,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CreateSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10675,9 +10657,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DecreaseReplicaCount");
         params.put("Version", "2015-02-02");
         DecreaseReplicaCountMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10696,7 +10676,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = DecreaseReplicaCountResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10727,9 +10707,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DeleteCacheCluster");
         params.put("Version", "2015-02-02");
         DeleteCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10749,7 +10727,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = DeleteCacheClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10780,9 +10758,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DeleteCacheParameterGroup");
         params.put("Version", "2015-02-02");
         DeleteCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10807,9 +10783,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DeleteCacheSecurityGroup");
         params.put("Version", "2015-02-02");
         DeleteCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10834,9 +10808,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DeleteCacheSubnetGroup");
         params.put("Version", "2015-02-02");
         DeleteCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10861,9 +10833,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DeleteReplicationGroup");
         params.put("Version", "2015-02-02");
         DeleteReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10880,7 +10850,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = DeleteReplicationGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10911,9 +10881,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DeleteSnapshot");
         params.put("Version", "2015-02-02");
         DeleteSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10933,7 +10901,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = DeleteSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10964,9 +10932,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeCacheClusters");
         params.put("Version", "2015-02-02");
         DescribeCacheClustersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10983,7 +10949,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CacheClusterMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11014,9 +10980,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeCacheEngineVersions");
         params.put("Version", "2015-02-02");
         DescribeCacheEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11033,7 +10997,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CacheEngineVersionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11064,9 +11028,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeCacheParameterGroups");
         params.put("Version", "2015-02-02");
         DescribeCacheParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11083,7 +11045,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CacheParameterGroupsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11114,9 +11076,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeCacheParameters");
         params.put("Version", "2015-02-02");
         DescribeCacheParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11133,7 +11093,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CacheParameterGroupDetails::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11164,9 +11124,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeCacheSecurityGroups");
         params.put("Version", "2015-02-02");
         DescribeCacheSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11183,7 +11141,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CacheSecurityGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11214,9 +11172,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeCacheSubnetGroups");
         params.put("Version", "2015-02-02");
         DescribeCacheSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11233,7 +11189,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CacheSubnetGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11265,9 +11221,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeEngineDefaultParameters");
         params.put("Version", "2015-02-02");
         DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11286,7 +11240,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = DescribeEngineDefaultParametersResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11317,9 +11271,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeEvents");
         params.put("Version", "2015-02-02");
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11339,7 +11291,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = EventsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11368,9 +11320,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeReplicationGroups");
         params.put("Version", "2015-02-02");
         DescribeReplicationGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11387,7 +11337,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = ReplicationGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11418,9 +11368,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeReservedCacheNodes");
         params.put("Version", "2015-02-02");
         DescribeReservedCacheNodesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11437,7 +11385,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = ReservedCacheNodeMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11469,9 +11417,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeReservedCacheNodesOfferings");
         params.put("Version", "2015-02-02");
         DescribeReservedCacheNodesOfferingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11490,7 +11436,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = ReservedCacheNodesOfferingMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11521,9 +11467,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "DescribeSnapshots");
         params.put("Version", "2015-02-02");
         DescribeSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11543,7 +11487,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = DescribeSnapshotsListMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11574,9 +11518,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "IncreaseReplicaCount");
         params.put("Version", "2015-02-02");
         IncreaseReplicaCountMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11595,7 +11537,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = IncreaseReplicaCountResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11627,9 +11569,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "ListAllowedNodeTypeModifications");
         params.put("Version", "2015-02-02");
         ListAllowedNodeTypeModificationsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11648,7 +11588,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = AllowedNodeTypeModificationsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11679,9 +11619,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2015-02-02");
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11700,7 +11638,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = TagListMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11731,9 +11669,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "ModifyCacheCluster");
         params.put("Version", "2015-02-02");
         ModifyCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11753,7 +11689,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = ModifyCacheClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11784,9 +11720,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "ModifyCacheParameterGroup");
         params.put("Version", "2015-02-02");
         ModifyCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11803,7 +11737,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CacheParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11834,9 +11768,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "ModifyCacheSubnetGroup");
         params.put("Version", "2015-02-02");
         ModifyCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11853,7 +11785,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = ModifyCacheSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11884,9 +11816,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "ModifyReplicationGroup");
         params.put("Version", "2015-02-02");
         ModifyReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11903,7 +11833,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = ModifyReplicationGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11941,9 +11871,7 @@ impl ElastiCache for ElastiCacheClient {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11960,7 +11888,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = ModifyReplicationGroupShardConfigurationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11995,9 +11923,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "PurchaseReservedCacheNodesOffering");
         params.put("Version", "2015-02-02");
         PurchaseReservedCacheNodesOfferingMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12016,7 +11942,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = PurchaseReservedCacheNodesOfferingResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12047,9 +11973,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "RebootCacheCluster");
         params.put("Version", "2015-02-02");
         RebootCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12069,7 +11993,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = RebootCacheClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12100,9 +12024,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "RemoveTagsFromResource");
         params.put("Version", "2015-02-02");
         RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12119,7 +12041,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = TagListMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12150,9 +12072,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "ResetCacheParameterGroup");
         params.put("Version", "2015-02-02");
         ResetCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12169,7 +12089,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = CacheParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12201,9 +12121,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "RevokeCacheSecurityGroupIngress");
         params.put("Version", "2015-02-02");
         RevokeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12222,7 +12140,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = RevokeCacheSecurityGroupIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12253,9 +12171,7 @@ impl ElastiCache for ElastiCacheClient {
         params.put("Action", "TestFailover");
         params.put("Version", "2015-02-02");
         TestFailoverMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12275,7 +12191,7 @@ impl ElastiCache for ElastiCacheClient {
                     result = TestFailoverResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

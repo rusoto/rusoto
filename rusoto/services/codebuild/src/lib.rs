@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [CodeBuildClient](struct.CodeBuildClient.html) and [CodeBuild](trait.CodeBuild.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

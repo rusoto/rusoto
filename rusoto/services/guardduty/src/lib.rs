@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [GuardDutyClient](struct.GuardDutyClient.html) and [GuardDuty](trait.GuardDuty.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

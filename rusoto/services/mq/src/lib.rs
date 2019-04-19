@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [MQClient](struct.MQClient.html) and [MQ](trait.MQ.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

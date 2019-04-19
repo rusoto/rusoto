@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [WorkspacesClient](struct.WorkspacesClient.html) and [Workspaces](trait.Workspaces.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

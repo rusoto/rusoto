@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [IamClient](struct.IamClient.html) and [Iam](trait.Iam.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde_urlencoded;

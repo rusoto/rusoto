@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [Route53Client](struct.Route53Client.html) and [Route53](trait.Route53.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate xml;

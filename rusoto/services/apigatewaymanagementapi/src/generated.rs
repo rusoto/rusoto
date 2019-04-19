@@ -37,7 +37,7 @@ pub struct PostToConnectionRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
-    pub data: Vec<u8>,
+    pub data: bytes::Bytes,
 }
 
 /// Errors returned by PostToConnection

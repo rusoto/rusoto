@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [Ec2Client](struct.Ec2Client.html) and [Ec2](trait.Ec2.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde_urlencoded;

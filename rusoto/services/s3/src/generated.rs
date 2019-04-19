@@ -976,9 +976,9 @@ impl BodyDeserializer {
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<u8>, XmlParseError> {
+    ) -> Result<bytes::Bytes, XmlParseError> {
         start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into_bytes();
+        let obj = characters(stack)?.into();
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -991,7 +991,7 @@ impl BodySerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &Vec<u8>,
+        obj: &bytes::Bytes,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
@@ -11405,7 +11405,7 @@ impl RecordDelimiterSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RecordsEvent {
     /// <p>The byte array of partial, one or more result records.</p>
-    pub payload: Option<Vec<u8>>,
+    pub payload: Option<bytes::Bytes>,
 }
 
 struct RecordsEventDeserializer;
@@ -15065,7 +15065,7 @@ pub enum AbortMultipartUploadError {
 impl AbortMultipartUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AbortMultipartUploadError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15108,7 +15108,7 @@ pub enum CompleteMultipartUploadError {}
 impl CompleteMultipartUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteMultipartUploadError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15147,7 +15147,7 @@ pub enum CopyObjectError {
 impl CopyObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyObjectError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15195,7 +15195,7 @@ pub enum CreateBucketError {
 impl CreateBucketError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBucketError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15244,7 +15244,7 @@ pub enum CreateMultipartUploadError {}
 impl CreateMultipartUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMultipartUploadError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15280,7 +15280,7 @@ pub enum DeleteBucketError {}
 impl DeleteBucketError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15318,7 +15318,7 @@ impl DeleteBucketAnalyticsConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteBucketAnalyticsConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15354,7 +15354,7 @@ pub enum DeleteBucketCorsError {}
 impl DeleteBucketCorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketCorsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15390,7 +15390,7 @@ pub enum DeleteBucketEncryptionError {}
 impl DeleteBucketEncryptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketEncryptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15428,7 +15428,7 @@ impl DeleteBucketInventoryConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteBucketInventoryConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15464,7 +15464,7 @@ pub enum DeleteBucketLifecycleError {}
 impl DeleteBucketLifecycleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketLifecycleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15502,7 +15502,7 @@ impl DeleteBucketMetricsConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteBucketMetricsConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15538,7 +15538,7 @@ pub enum DeleteBucketPolicyError {}
 impl DeleteBucketPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15574,7 +15574,7 @@ pub enum DeleteBucketReplicationError {}
 impl DeleteBucketReplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketReplicationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15610,7 +15610,7 @@ pub enum DeleteBucketTaggingError {}
 impl DeleteBucketTaggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketTaggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15646,7 +15646,7 @@ pub enum DeleteBucketWebsiteError {}
 impl DeleteBucketWebsiteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketWebsiteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15682,7 +15682,7 @@ pub enum DeleteObjectError {}
 impl DeleteObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteObjectError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15718,7 +15718,7 @@ pub enum DeleteObjectTaggingError {}
 impl DeleteObjectTaggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteObjectTaggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15754,7 +15754,7 @@ pub enum DeleteObjectsError {}
 impl DeleteObjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteObjectsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15790,7 +15790,7 @@ pub enum DeletePublicAccessBlockError {}
 impl DeletePublicAccessBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePublicAccessBlockError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15828,7 +15828,7 @@ impl GetBucketAccelerateConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBucketAccelerateConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15864,7 +15864,7 @@ pub enum GetBucketAclError {}
 impl GetBucketAclError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketAclError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15902,7 +15902,7 @@ impl GetBucketAnalyticsConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBucketAnalyticsConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15938,7 +15938,7 @@ pub enum GetBucketCorsError {}
 impl GetBucketCorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketCorsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -15974,7 +15974,7 @@ pub enum GetBucketEncryptionError {}
 impl GetBucketEncryptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketEncryptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16012,7 +16012,7 @@ impl GetBucketInventoryConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBucketInventoryConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16048,7 +16048,7 @@ pub enum GetBucketLifecycleError {}
 impl GetBucketLifecycleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketLifecycleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16086,7 +16086,7 @@ impl GetBucketLifecycleConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBucketLifecycleConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16122,7 +16122,7 @@ pub enum GetBucketLocationError {}
 impl GetBucketLocationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketLocationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16158,7 +16158,7 @@ pub enum GetBucketLoggingError {}
 impl GetBucketLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketLoggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16196,7 +16196,7 @@ impl GetBucketMetricsConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBucketMetricsConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16232,7 +16232,7 @@ pub enum GetBucketNotificationError {}
 impl GetBucketNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketNotificationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16270,7 +16270,7 @@ impl GetBucketNotificationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBucketNotificationConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16306,7 +16306,7 @@ pub enum GetBucketPolicyError {}
 impl GetBucketPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16342,7 +16342,7 @@ pub enum GetBucketPolicyStatusError {}
 impl GetBucketPolicyStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketPolicyStatusError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16378,7 +16378,7 @@ pub enum GetBucketReplicationError {}
 impl GetBucketReplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketReplicationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16414,7 +16414,7 @@ pub enum GetBucketRequestPaymentError {}
 impl GetBucketRequestPaymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketRequestPaymentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16450,7 +16450,7 @@ pub enum GetBucketTaggingError {}
 impl GetBucketTaggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketTaggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16486,7 +16486,7 @@ pub enum GetBucketVersioningError {}
 impl GetBucketVersioningError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketVersioningError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16522,7 +16522,7 @@ pub enum GetBucketWebsiteError {}
 impl GetBucketWebsiteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketWebsiteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16561,7 +16561,7 @@ pub enum GetObjectError {
 impl GetObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16607,7 +16607,7 @@ pub enum GetObjectAclError {
 impl GetObjectAclError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectAclError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16650,7 +16650,7 @@ pub enum GetObjectLegalHoldError {}
 impl GetObjectLegalHoldError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectLegalHoldError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16688,7 +16688,7 @@ impl GetObjectLockConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetObjectLockConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16724,7 +16724,7 @@ pub enum GetObjectRetentionError {}
 impl GetObjectRetentionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectRetentionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16760,7 +16760,7 @@ pub enum GetObjectTaggingError {}
 impl GetObjectTaggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectTaggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16796,7 +16796,7 @@ pub enum GetObjectTorrentError {}
 impl GetObjectTorrentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectTorrentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16832,7 +16832,7 @@ pub enum GetPublicAccessBlockError {}
 impl GetPublicAccessBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPublicAccessBlockError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16871,7 +16871,7 @@ pub enum HeadBucketError {
 impl HeadBucketError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<HeadBucketError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16917,7 +16917,7 @@ pub enum HeadObjectError {
 impl HeadObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<HeadObjectError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16962,7 +16962,7 @@ impl ListBucketAnalyticsConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListBucketAnalyticsConfigurationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17000,7 +17000,7 @@ impl ListBucketInventoryConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListBucketInventoryConfigurationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17038,7 +17038,7 @@ impl ListBucketMetricsConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListBucketMetricsConfigurationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17074,7 +17074,7 @@ pub enum ListBucketsError {}
 impl ListBucketsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBucketsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17110,7 +17110,7 @@ pub enum ListMultipartUploadsError {}
 impl ListMultipartUploadsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMultipartUploadsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17146,7 +17146,7 @@ pub enum ListObjectVersionsError {}
 impl ListObjectVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17185,7 +17185,7 @@ pub enum ListObjectsError {
 impl ListObjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17231,7 +17231,7 @@ pub enum ListObjectsV2Error {
 impl ListObjectsV2Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectsV2Error> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17274,7 +17274,7 @@ pub enum ListPartsError {}
 impl ListPartsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPartsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17312,7 +17312,7 @@ impl PutBucketAccelerateConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutBucketAccelerateConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17348,7 +17348,7 @@ pub enum PutBucketAclError {}
 impl PutBucketAclError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketAclError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17386,7 +17386,7 @@ impl PutBucketAnalyticsConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutBucketAnalyticsConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17422,7 +17422,7 @@ pub enum PutBucketCorsError {}
 impl PutBucketCorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketCorsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17458,7 +17458,7 @@ pub enum PutBucketEncryptionError {}
 impl PutBucketEncryptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketEncryptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17496,7 +17496,7 @@ impl PutBucketInventoryConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutBucketInventoryConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17532,7 +17532,7 @@ pub enum PutBucketLifecycleError {}
 impl PutBucketLifecycleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketLifecycleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17570,7 +17570,7 @@ impl PutBucketLifecycleConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutBucketLifecycleConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17606,7 +17606,7 @@ pub enum PutBucketLoggingError {}
 impl PutBucketLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketLoggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17644,7 +17644,7 @@ impl PutBucketMetricsConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutBucketMetricsConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17680,7 +17680,7 @@ pub enum PutBucketNotificationError {}
 impl PutBucketNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketNotificationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17718,7 +17718,7 @@ impl PutBucketNotificationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutBucketNotificationConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17754,7 +17754,7 @@ pub enum PutBucketPolicyError {}
 impl PutBucketPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17790,7 +17790,7 @@ pub enum PutBucketReplicationError {}
 impl PutBucketReplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketReplicationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17826,7 +17826,7 @@ pub enum PutBucketRequestPaymentError {}
 impl PutBucketRequestPaymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketRequestPaymentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17862,7 +17862,7 @@ pub enum PutBucketTaggingError {}
 impl PutBucketTaggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketTaggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17898,7 +17898,7 @@ pub enum PutBucketVersioningError {}
 impl PutBucketVersioningError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketVersioningError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17934,7 +17934,7 @@ pub enum PutBucketWebsiteError {}
 impl PutBucketWebsiteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketWebsiteError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17970,7 +17970,7 @@ pub enum PutObjectError {}
 impl PutObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18009,7 +18009,7 @@ pub enum PutObjectAclError {
 impl PutObjectAclError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectAclError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18052,7 +18052,7 @@ pub enum PutObjectLegalHoldError {}
 impl PutObjectLegalHoldError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectLegalHoldError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18090,7 +18090,7 @@ impl PutObjectLockConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutObjectLockConfigurationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18126,7 +18126,7 @@ pub enum PutObjectRetentionError {}
 impl PutObjectRetentionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectRetentionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18162,7 +18162,7 @@ pub enum PutObjectTaggingError {}
 impl PutObjectTaggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectTaggingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18198,7 +18198,7 @@ pub enum PutPublicAccessBlockError {}
 impl PutPublicAccessBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPublicAccessBlockError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18237,7 +18237,7 @@ pub enum RestoreObjectError {
 impl RestoreObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreObjectError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18282,7 +18282,7 @@ pub enum SelectObjectContentError {}
 impl SelectObjectContentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SelectObjectContentError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18318,7 +18318,7 @@ pub enum UploadPartError {}
 impl UploadPartError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadPartError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18354,7 +18354,7 @@ pub enum UploadPartCopyError {}
 impl UploadPartCopyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadPartCopyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18959,7 +18959,7 @@ impl S3 for S3Client {
                     result = AbortMultipartUploadOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19021,7 +19021,7 @@ impl S3 for S3Client {
                     result = CompleteMultipartUploadOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19272,7 +19272,7 @@ impl S3 for S3Client {
                     result = CopyObjectOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19401,7 +19401,7 @@ impl S3 for S3Client {
                     result = CreateBucketOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19569,7 +19569,7 @@ impl S3 for S3Client {
                     result = CreateMultipartUploadOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19961,7 +19961,7 @@ impl S3 for S3Client {
                     result = DeleteObjectOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20020,7 +20020,7 @@ impl S3 for S3Client {
                     result = DeleteObjectTaggingOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20089,7 +20089,7 @@ impl S3 for S3Client {
                     result = DeleteObjectsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20163,7 +20163,7 @@ impl S3 for S3Client {
                     result = GetBucketAccelerateConfigurationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20211,7 +20211,7 @@ impl S3 for S3Client {
                     result = GetBucketAclOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20258,7 +20258,7 @@ impl S3 for S3Client {
                     result = GetBucketAnalyticsConfigurationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20306,7 +20306,7 @@ impl S3 for S3Client {
                     result = GetBucketCorsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20351,7 +20351,7 @@ impl S3 for S3Client {
                     result = GetBucketEncryptionOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20400,7 +20400,7 @@ impl S3 for S3Client {
                     result = GetBucketInventoryConfigurationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20448,7 +20448,7 @@ impl S3 for S3Client {
                     result = GetBucketLifecycleOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20496,7 +20496,7 @@ impl S3 for S3Client {
                     result = GetBucketLifecycleConfigurationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20544,7 +20544,7 @@ impl S3 for S3Client {
                     result = GetBucketLocationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20592,7 +20592,7 @@ impl S3 for S3Client {
                     result = GetBucketLoggingOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20638,7 +20638,7 @@ impl S3 for S3Client {
                     result = GetBucketMetricsConfigurationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20683,7 +20683,7 @@ impl S3 for S3Client {
                     result = NotificationConfigurationDeprecated::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20730,7 +20730,7 @@ impl S3 for S3Client {
                     result = NotificationConfiguration::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20808,7 +20808,7 @@ impl S3 for S3Client {
                     result = GetBucketPolicyStatusOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20855,7 +20855,7 @@ impl S3 for S3Client {
                     result = GetBucketReplicationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20900,7 +20900,7 @@ impl S3 for S3Client {
                     result = GetBucketRequestPaymentOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20948,7 +20948,7 @@ impl S3 for S3Client {
                     result = GetBucketTaggingOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20995,7 +20995,7 @@ impl S3 for S3Client {
                     result = GetBucketVersioningOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21043,7 +21043,7 @@ impl S3 for S3Client {
                     result = GetBucketWebsiteOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21331,7 +21331,7 @@ impl S3 for S3Client {
                     result = GetObjectAclOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21386,7 +21386,7 @@ impl S3 for S3Client {
                     result = GetObjectLegalHoldOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21431,7 +21431,7 @@ impl S3 for S3Client {
                     result = GetObjectLockConfigurationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21485,7 +21485,7 @@ impl S3 for S3Client {
                     result = GetObjectRetentionOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21536,7 +21536,7 @@ impl S3 for S3Client {
                     result = GetObjectTaggingOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21623,7 +21623,7 @@ impl S3 for S3Client {
                     result = GetPublicAccessBlockOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21741,7 +21741,7 @@ impl S3 for S3Client {
                     result = HeadObjectOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21921,7 +21921,7 @@ impl S3 for S3Client {
                     result = ListBucketAnalyticsConfigurationsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21972,7 +21972,7 @@ impl S3 for S3Client {
                     result = ListBucketInventoryConfigurationsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22023,7 +22023,7 @@ impl S3 for S3Client {
                     result = ListBucketMetricsConfigurationsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22064,7 +22064,7 @@ impl S3 for S3Client {
                     result = ListBucketsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22127,7 +22127,7 @@ impl S3 for S3Client {
                     result = ListMultipartUploadsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22193,7 +22193,7 @@ impl S3 for S3Client {
                     result = ListObjectVersionsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22258,7 +22258,7 @@ impl S3 for S3Client {
                     result = ListObjectsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22328,7 +22328,7 @@ impl S3 for S3Client {
                     result = ListObjectsV2Output::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22380,7 +22380,7 @@ impl S3 for S3Client {
                     result = ListPartsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23256,7 +23256,7 @@ impl S3 for S3Client {
                     result = PutObjectOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23389,7 +23389,7 @@ impl S3 for S3Client {
                     result = PutObjectAclOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23459,7 +23459,7 @@ impl S3 for S3Client {
                     result = PutObjectLegalHoldOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23529,7 +23529,7 @@ impl S3 for S3Client {
                     result = PutObjectLockConfigurationOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23608,7 +23608,7 @@ impl S3 for S3Client {
                     result = PutObjectRetentionOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23668,7 +23668,7 @@ impl S3 for S3Client {
                     result = PutObjectTaggingOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23773,7 +23773,7 @@ impl S3 for S3Client {
                     result = RestoreObjectOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23854,7 +23854,7 @@ impl S3 for S3Client {
                     result = SelectObjectContentOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23938,7 +23938,7 @@ impl S3 for S3Client {
                     result = UploadPartOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24100,7 +24100,7 @@ impl S3 for S3Client {
                     result = UploadPartCopyOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
