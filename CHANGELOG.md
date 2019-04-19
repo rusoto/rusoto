@@ -4,6 +4,7 @@
 (Please put notes here)
 
 - Fix de/serialization of DynamoDB binary set attribute values
+- Change type for blob values from `Vec<u8>` to `Bytes`
 
 ## [0.38.0] - 2019-04-17
 
