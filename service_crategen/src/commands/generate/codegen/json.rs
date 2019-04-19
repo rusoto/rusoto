@@ -136,11 +136,11 @@ fn generate_payload(service: &Service, operation: &Operation) -> String {
             .unwrap_or(false)
     {
         "let encoded = serde_json::to_string(&input).unwrap();
-         request.set_payload(Some(encoded.into_bytes()));
+         request.set_payload(Some(encoded));
          "
         .to_owned()
     } else {
-        "request.set_payload(Some(b\"{}\".to_vec()));
+        "request.set_payload(Some(bytes::Bytes::from_static(b\"{}\")));
         "
         .to_owned()
     }
@@ -158,8 +158,8 @@ fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
         format!("Box::new(response.buffer().from_err().map(|response| {{
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b\"null\" {{
-                        body = b\"{{}}\".to_vec();
+                    if body.is_empty() || body.as_ref() == b\"null\" {{
+                        body = bytes::Bytes::from_static(b\"{{}}\");
                     }}
 
                     serde_json::from_str::<{}>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()

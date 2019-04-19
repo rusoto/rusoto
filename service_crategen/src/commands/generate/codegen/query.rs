@@ -137,7 +137,7 @@ fn generate_set_input_params(operation: &Operation) -> String {
     if operation.http.method != "POST" {
         panic!("query protocol supports only POST method: {:?}", operation);
     }
-    "request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap().into_bytes()));
+    "request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
     request.set_content_type(\"application/x-www-form-urlencoded\".to_owned());"
         .to_owned()
 }
