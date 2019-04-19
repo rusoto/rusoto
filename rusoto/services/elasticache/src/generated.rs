@@ -1474,7 +1474,7 @@ impl ConfigureShardSerializer {
 
         params.put(
             &format!("{}{}", prefix, "NewReplicaCount"),
-            &obj.new_replica_count.to_string(),
+            &obj.new_replica_count,
         );
         params.put(&format!("{}{}", prefix, "NodeGroupId"), &obj.node_group_id);
         if let Some(ref field_value) = obj.preferred_availability_zones {
@@ -1613,7 +1613,7 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(
@@ -1655,13 +1655,10 @@ impl CreateCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.num_cache_nodes {
-            params.put(
-                &format!("{}{}", prefix, "NumCacheNodes"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NumCacheNodes"), &field_value);
         }
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
         if let Some(ref field_value) = obj.preferred_availability_zone {
             params.put(
@@ -1705,7 +1702,7 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
                 &format!("{}{}", prefix, "SnapshotRetentionLimit"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
@@ -2006,7 +2003,7 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.at_rest_encryption_enabled {
             params.put(
                 &format!("{}{}", prefix, "AtRestEncryptionEnabled"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.auth_token {
@@ -2015,13 +2012,13 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.automatic_failover_enabled {
             params.put(
                 &format!("{}{}", prefix, "AutomaticFailoverEnabled"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.cache_node_type {
@@ -2066,19 +2063,13 @@ impl CreateReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.num_cache_clusters {
-            params.put(
-                &format!("{}{}", prefix, "NumCacheClusters"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NumCacheClusters"), &field_value);
         }
         if let Some(ref field_value) = obj.num_node_groups {
-            params.put(
-                &format!("{}{}", prefix, "NumNodeGroups"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NumNodeGroups"), &field_value);
         }
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
         if let Some(ref field_value) = obj.preferred_cache_cluster_a_zs {
             AvailabilityZonesListSerializer::serialize(
@@ -2099,7 +2090,7 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.replicas_per_node_group {
             params.put(
                 &format!("{}{}", prefix, "ReplicasPerNodeGroup"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(
@@ -2130,7 +2121,7 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
                 &format!("{}{}", prefix, "SnapshotRetentionLimit"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
@@ -2142,7 +2133,7 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.transit_encryption_enabled {
             params.put(
                 &format!("{}{}", prefix, "TransitEncryptionEnabled"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
     }
@@ -2256,13 +2247,10 @@ impl DecreaseReplicaCountMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplyImmediately"),
-            &obj.apply_immediately.to_string(),
+            &obj.apply_immediately,
         );
         if let Some(ref field_value) = obj.new_replica_count {
-            params.put(
-                &format!("{}{}", prefix, "NewReplicaCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NewReplicaCount"), &field_value);
         }
         if let Some(ref field_value) = obj.replica_configuration {
             ReplicaConfigurationListSerializer::serialize(
@@ -2478,7 +2466,7 @@ impl DeleteReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.retain_primary_cluster {
             params.put(
                 &format!("{}{}", prefix, "RetainPrimaryCluster"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
     }
@@ -2588,22 +2576,16 @@ impl DescribeCacheClustersMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.show_cache_clusters_not_in_replication_groups {
             params.put(
                 &format!("{}{}", prefix, "ShowCacheClustersNotInReplicationGroups"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.show_cache_node_info {
-            params.put(
-                &format!("{}{}", prefix, "ShowCacheNodeInfo"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ShowCacheNodeInfo"), &field_value);
         }
     }
 }
@@ -2641,10 +2623,7 @@ impl DescribeCacheEngineVersionsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.default_only {
-            params.put(
-                &format!("{}{}", prefix, "DefaultOnly"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultOnly"), &field_value);
         }
         if let Some(ref field_value) = obj.engine {
             params.put(&format!("{}{}", prefix, "Engine"), &field_value);
@@ -2656,10 +2635,7 @@ impl DescribeCacheEngineVersionsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
     }
 }
@@ -2694,10 +2670,7 @@ impl DescribeCacheParameterGroupsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
     }
 }
@@ -2732,10 +2705,7 @@ impl DescribeCacheParametersMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.source {
             params.put(&format!("{}{}", prefix, "Source"), &field_value);
@@ -2773,10 +2743,7 @@ impl DescribeCacheSecurityGroupsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
     }
 }
@@ -2811,10 +2778,7 @@ impl DescribeCacheSubnetGroupsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
     }
 }
@@ -2847,10 +2811,7 @@ impl DescribeEngineDefaultParametersMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
     }
 }
@@ -2914,10 +2875,7 @@ impl DescribeEventsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.duration {
-            params.put(
-                &format!("{}{}", prefix, "Duration"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
         }
         if let Some(ref field_value) = obj.end_time {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
@@ -2926,10 +2884,7 @@ impl DescribeEventsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.source_identifier {
             params.put(&format!("{}{}", prefix, "SourceIdentifier"), &field_value);
@@ -2967,10 +2922,7 @@ impl DescribeReplicationGroupsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.replication_group_id {
             params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
@@ -3018,10 +2970,7 @@ impl DescribeReservedCacheNodesMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.offering_type {
             params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
@@ -3086,10 +3035,7 @@ impl DescribeReservedCacheNodesOfferingsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.offering_type {
             params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
@@ -3177,10 +3123,7 @@ impl DescribeSnapshotsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.replication_group_id {
             params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
@@ -3188,7 +3131,7 @@ impl DescribeSnapshotsMessageSerializer {
         if let Some(ref field_value) = obj.show_node_group_config {
             params.put(
                 &format!("{}{}", prefix, "ShowNodeGroupConfig"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.snapshot_name {
@@ -3471,13 +3414,10 @@ impl IncreaseReplicaCountMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplyImmediately"),
-            &obj.apply_immediately.to_string(),
+            &obj.apply_immediately,
         );
         if let Some(ref field_value) = obj.new_replica_count {
-            params.put(
-                &format!("{}{}", prefix, "NewReplicaCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NewReplicaCount"), &field_value);
         }
         if let Some(ref field_value) = obj.replica_configuration {
             ReplicaConfigurationListSerializer::serialize(
@@ -3662,15 +3602,12 @@ impl ModifyCacheClusterMessageSerializer {
             params.put(&format!("{}{}", prefix, "AZMode"), &field_value);
         }
         if let Some(ref field_value) = obj.apply_immediately {
-            params.put(
-                &format!("{}{}", prefix, "ApplyImmediately"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(
@@ -3723,10 +3660,7 @@ impl ModifyCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.num_cache_nodes {
-            params.put(
-                &format!("{}{}", prefix, "NumCacheNodes"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NumCacheNodes"), &field_value);
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
@@ -3744,7 +3678,7 @@ impl ModifyCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
                 &format!("{}{}", prefix, "SnapshotRetentionLimit"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
@@ -3932,21 +3866,18 @@ impl ModifyReplicationGroupMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.apply_immediately {
-            params.put(
-                &format!("{}{}", prefix, "ApplyImmediately"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.automatic_failover_enabled {
             params.put(
                 &format!("{}{}", prefix, "AutomaticFailoverEnabled"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.cache_node_type {
@@ -4010,7 +3941,7 @@ impl ModifyReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
                 &format!("{}{}", prefix, "SnapshotRetentionLimit"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
@@ -4087,11 +4018,11 @@ impl ModifyReplicationGroupShardConfigurationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplyImmediately"),
-            &obj.apply_immediately.to_string(),
+            &obj.apply_immediately,
         );
         params.put(
             &format!("{}{}", prefix, "NodeGroupCount"),
-            &obj.node_group_count.to_string(),
+            &obj.node_group_count,
         );
         if let Some(ref field_value) = obj.node_groups_to_remove {
             NodeGroupsToRemoveListSerializer::serialize(
@@ -4286,10 +4217,7 @@ impl NodeGroupConfigurationSerializer {
             );
         }
         if let Some(ref field_value) = obj.replica_count {
-            params.put(
-                &format!("{}{}", prefix, "ReplicaCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReplicaCount"), &field_value);
         }
         if let Some(ref field_value) = obj.slots {
             params.put(&format!("{}{}", prefix, "Slots"), &field_value);
@@ -4781,10 +4709,7 @@ impl PurchaseReservedCacheNodesOfferingMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_node_count {
-            params.put(
-                &format!("{}{}", prefix, "CacheNodeCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "CacheNodeCount"), &field_value);
         }
         if let Some(ref field_value) = obj.reserved_cache_node_id {
             params.put(
@@ -5564,10 +5489,7 @@ impl ResetCacheParameterGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.reset_all_parameters {
-            params.put(
-                &format!("{}{}", prefix, "ResetAllParameters"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ResetAllParameters"), &field_value);
         }
     }
 }

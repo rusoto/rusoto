@@ -59,7 +59,7 @@ impl AcceptReservedInstancesExchangeQuoteRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ReservedInstanceIdSetSerializer::serialize(
             params,
@@ -124,7 +124,7 @@ impl AcceptTransitGatewayVpcAttachmentRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayAttachmentId"),
@@ -185,7 +185,7 @@ impl AcceptVpcEndpointConnectionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "ServiceId"), &obj.service_id);
         ValueStringListSerializer::serialize(
@@ -244,7 +244,7 @@ impl AcceptVpcPeeringConnectionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.vpc_peering_connection_id {
             params.put(
@@ -593,7 +593,7 @@ impl AdvertiseByoipCidrRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Cidr"), &obj.cidr);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -655,7 +655,7 @@ impl AllocateAddressRequestSerializer {
             params.put(&format!("{}{}", prefix, "Domain"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.public_ipv_4_pool {
             params.put(&format!("{}{}", prefix, "PublicIpv4Pool"), &field_value);
@@ -740,10 +740,7 @@ impl AllocateHostsRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceType"), &obj.instance_type);
-        params.put(
-            &format!("{}{}", prefix, "Quantity"),
-            &obj.quantity.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "Quantity"), &obj.quantity);
         if let Some(ref field_value) = obj.tag_specifications {
             TagSpecificationListSerializer::serialize(
                 params,
@@ -901,7 +898,7 @@ impl ApplySecurityGroupsToClientVpnTargetNetworkRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ClientVpnSecurityGroupIdSetSerializer::serialize(
             params,
@@ -979,10 +976,7 @@ impl AssignIpv6AddressesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.ipv_6_address_count {
-            params.put(
-                &format!("{}{}", prefix, "Ipv6AddressCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Ipv6AddressCount"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_addresses {
             Ipv6AddressListSerializer::serialize(
@@ -1062,10 +1056,7 @@ impl AssignPrivateIpAddressesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.allow_reassignment {
-            params.put(
-                &format!("{}{}", prefix, "AllowReassignment"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "AllowReassignment"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "NetworkInterfaceId"),
@@ -1081,7 +1072,7 @@ impl AssignPrivateIpAddressesRequestSerializer {
         if let Some(ref field_value) = obj.secondary_private_ip_address_count {
             params.put(
                 &format!("{}{}", prefix, "SecondaryPrivateIpAddressCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
     }
@@ -1118,13 +1109,10 @@ impl AssociateAddressRequestSerializer {
             params.put(&format!("{}{}", prefix, "AllocationId"), &field_value);
         }
         if let Some(ref field_value) = obj.allow_reassociation {
-            params.put(
-                &format!("{}{}", prefix, "AllowReassociation"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "AllowReassociation"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_id {
             params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
@@ -1190,7 +1178,7 @@ impl AssociateClientVpnTargetNetworkRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "SubnetId"), &obj.subnet_id);
     }
@@ -1255,7 +1243,7 @@ impl AssociateDhcpOptionsRequestSerializer {
             &obj.dhcp_options_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
     }
@@ -1339,7 +1327,7 @@ impl AssociateRouteTableRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "RouteTableId"),
@@ -1460,7 +1448,7 @@ impl AssociateTransitGatewayRouteTableRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayAttachmentId"),
@@ -1526,7 +1514,7 @@ impl AssociateVpcCidrBlockRequestSerializer {
         if let Some(ref field_value) = obj.amazon_provided_ipv_6_cidr_block {
             params.put(
                 &format!("{}{}", prefix, "AmazonProvidedIpv6CidrBlock"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.cidr_block {
@@ -1670,7 +1658,7 @@ impl AttachClassicLinkVpcRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         GroupIdStringListSerializer::serialize(
             params,
@@ -1730,7 +1718,7 @@ impl AttachInternetGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "InternetGatewayId"),
@@ -1762,12 +1750,9 @@ impl AttachNetworkInterfaceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DeviceIndex"),
-            &obj.device_index.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "DeviceIndex"), &obj.device_index);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
         params.put(
@@ -1831,7 +1816,7 @@ impl AttachVolumeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Device"), &obj.device);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
         params.put(&format!("{}{}", prefix, "VolumeId"), &obj.volume_id);
@@ -1859,7 +1844,7 @@ impl AttachVpnGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
         params.put(
@@ -1945,7 +1930,7 @@ impl AttributeBooleanValueSerializer {
         }
 
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
     }
 }
@@ -2093,10 +2078,7 @@ impl AuthorizeClientVpnIngressRequestSerializer {
             params.put(&format!("{}{}", prefix, "AccessGroupId"), &field_value);
         }
         if let Some(ref field_value) = obj.authorize_all_groups {
-            params.put(
-                &format!("{}{}", prefix, "AuthorizeAllGroups"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "AuthorizeAllGroups"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ClientVpnEndpointId"),
@@ -2106,7 +2088,7 @@ impl AuthorizeClientVpnIngressRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetNetworkCidr"),
@@ -2181,13 +2163,10 @@ impl AuthorizeSecurityGroupEgressRequestSerializer {
             params.put(&format!("{}{}", prefix, "CidrIp"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.from_port {
-            params.put(
-                &format!("{}{}", prefix, "FromPort"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FromPort"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "GroupId"), &obj.group_id);
         if let Some(ref field_value) = obj.ip_permissions {
@@ -2213,7 +2192,7 @@ impl AuthorizeSecurityGroupEgressRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.to_port {
-            params.put(&format!("{}{}", prefix, "ToPort"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "ToPort"), &field_value);
         }
     }
 }
@@ -2255,13 +2234,10 @@ impl AuthorizeSecurityGroupIngressRequestSerializer {
             params.put(&format!("{}{}", prefix, "CidrIp"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.from_port {
-            params.put(
-                &format!("{}{}", prefix, "FromPort"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FromPort"), &field_value);
         }
         if let Some(ref field_value) = obj.group_id {
             params.put(&format!("{}{}", prefix, "GroupId"), &field_value);
@@ -2292,7 +2268,7 @@ impl AuthorizeSecurityGroupIngressRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.to_port {
-            params.put(&format!("{}{}", prefix, "ToPort"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "ToPort"), &field_value);
         }
     }
 }
@@ -2726,7 +2702,7 @@ impl BundleInstanceRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
         StorageSerializer::serialize(params, &format!("{}{}", prefix, "Storage"), &obj.storage);
@@ -2989,7 +2965,7 @@ impl CancelBundleTaskRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "BundleId"), &obj.bundle_id);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -3044,7 +3020,7 @@ impl CancelCapacityReservationRequestSerializer {
             &obj.capacity_reservation_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -3102,7 +3078,7 @@ impl CancelConversionRequestSerializer {
             &obj.conversion_task_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.reason_message {
             params.put(&format!("{}{}", prefix, "ReasonMessage"), &field_value);
@@ -3157,7 +3133,7 @@ impl CancelImportTaskRequestSerializer {
             params.put(&format!("{}{}", prefix, "CancelReason"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.import_task_id {
             params.put(&format!("{}{}", prefix, "ImportTaskId"), &field_value);
@@ -3374,7 +3350,7 @@ impl CancelSpotFleetRequestsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ValueStringListSerializer::serialize(
             params,
@@ -3383,7 +3359,7 @@ impl CancelSpotFleetRequestsRequestSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "TerminateInstances"),
-            &obj.terminate_instances.to_string(),
+            &obj.terminate_instances,
         );
     }
 }
@@ -3534,7 +3510,7 @@ impl CancelSpotInstanceRequestsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         SpotInstanceRequestIdListSerializer::serialize(
             params,
@@ -4418,10 +4394,7 @@ impl ClientDataSerializer {
             params.put(&format!("{}{}", prefix, "UploadEnd"), &field_value);
         }
         if let Some(ref field_value) = obj.upload_size {
-            params.put(
-                &format!("{}{}", prefix, "UploadSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "UploadSize"), &field_value);
         }
         if let Some(ref field_value) = obj.upload_start {
             params.put(&format!("{}{}", prefix, "UploadStart"), &field_value);
@@ -5127,7 +5100,7 @@ impl ConfirmProductInstanceRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
         params.put(&format!("{}{}", prefix, "ProductCode"), &obj.product_code);
@@ -5197,10 +5170,7 @@ impl ConnectionLogOptionsSerializer {
             );
         }
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
     }
 }
@@ -5509,7 +5479,7 @@ impl CopyFpgaImageRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.name {
             params.put(&format!("{}{}", prefix, "Name"), &field_value);
@@ -5584,13 +5554,10 @@ impl CopyImageRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
@@ -5666,13 +5633,10 @@ impl CopySnapshotRequestSerializer {
             params.put(&format!("{}{}", prefix, "DestinationRegion"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
@@ -5763,16 +5727,10 @@ impl CpuOptionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.core_count {
-            params.put(
-                &format!("{}{}", prefix, "CoreCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "CoreCount"), &field_value);
         }
         if let Some(ref field_value) = obj.threads_per_core {
-            params.put(
-                &format!("{}{}", prefix, "ThreadsPerCore"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ThreadsPerCore"), &field_value);
         }
     }
 }
@@ -5824,13 +5782,10 @@ impl CreateCapacityReservationRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.ebs_optimized {
-            params.put(
-                &format!("{}{}", prefix, "EbsOptimized"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EbsOptimized"), &field_value);
         }
         if let Some(ref field_value) = obj.end_date {
             params.put(&format!("{}{}", prefix, "EndDate"), &field_value);
@@ -5839,14 +5794,11 @@ impl CreateCapacityReservationRequestSerializer {
             params.put(&format!("{}{}", prefix, "EndDateType"), &field_value);
         }
         if let Some(ref field_value) = obj.ephemeral_storage {
-            params.put(
-                &format!("{}{}", prefix, "EphemeralStorage"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EphemeralStorage"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "InstanceCount"),
-            &obj.instance_count.to_string(),
+            &obj.instance_count,
         );
         if let Some(ref field_value) = obj.instance_match_criteria {
             params.put(
@@ -5965,7 +5917,7 @@ impl CreateClientVpnEndpointRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ServerCertificateArn"),
@@ -6062,7 +6014,7 @@ impl CreateClientVpnRouteRequestSerializer {
             &obj.destination_cidr_block,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetVpcSubnetId"),
@@ -6123,9 +6075,9 @@ impl CreateCustomerGatewayRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "BgpAsn"), &obj.bgp_asn.to_string());
+        params.put(&format!("{}{}", prefix, "BgpAsn"), &obj.bgp_asn);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "IpAddress"), &obj.public_ip);
         params.put(&format!("{}{}", prefix, "Type"), &obj.type_);
@@ -6186,7 +6138,7 @@ impl CreateDefaultSubnetRequestSerializer {
             &obj.availability_zone,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -6235,7 +6187,7 @@ impl CreateDefaultVpcRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -6287,7 +6239,7 @@ impl CreateDhcpOptionsRequestSerializer {
             &obj.dhcp_configurations,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -6344,7 +6296,7 @@ impl CreateEgressOnlyInternetGatewayRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
     }
@@ -6571,7 +6523,7 @@ impl CreateFleetRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.excess_capacity_termination_policy {
             params.put(
@@ -6594,7 +6546,7 @@ impl CreateFleetRequestSerializer {
         if let Some(ref field_value) = obj.replace_unhealthy_instances {
             params.put(
                 &format!("{}{}", prefix, "ReplaceUnhealthyInstances"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.spot_options {
@@ -6619,7 +6571,7 @@ impl CreateFleetRequestSerializer {
         if let Some(ref field_value) = obj.terminate_instances_with_expiration {
             params.put(
                 &format!("{}{}", prefix, "TerminateInstancesWithExpiration"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.type_ {
@@ -6717,7 +6669,7 @@ impl CreateFlowLogsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.log_destination {
             params.put(&format!("{}{}", prefix, "LogDestination"), &field_value);
@@ -6808,7 +6760,7 @@ impl CreateFpgaImageRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         StorageLocationSerializer::serialize(
             params,
@@ -6896,15 +6848,12 @@ impl CreateImageRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.no_reboot {
-            params.put(
-                &format!("{}{}", prefix, "NoReboot"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NoReboot"), &field_value);
         }
     }
 }
@@ -7019,7 +6968,7 @@ impl CreateInternetGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -7073,7 +7022,7 @@ impl CreateKeyPairRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "KeyName"), &obj.key_name);
     }
@@ -7106,7 +7055,7 @@ impl CreateLaunchTemplateRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         RequestLaunchTemplateDataSerializer::serialize(
             params,
@@ -7185,7 +7134,7 @@ impl CreateLaunchTemplateVersionRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         RequestLaunchTemplateDataSerializer::serialize(
             params,
@@ -7333,9 +7282,9 @@ impl CreateNetworkAclEntryRequestSerializer {
             params.put(&format!("{}{}", prefix, "CidrBlock"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "Egress"), &obj.egress.to_string());
+        params.put(&format!("{}{}", prefix, "Egress"), &obj.egress);
         if let Some(ref field_value) = obj.icmp_type_code {
             IcmpTypeCodeSerializer::serialize(
                 params,
@@ -7359,10 +7308,7 @@ impl CreateNetworkAclEntryRequestSerializer {
         }
         params.put(&format!("{}{}", prefix, "Protocol"), &obj.protocol);
         params.put(&format!("{}{}", prefix, "RuleAction"), &obj.rule_action);
-        params.put(
-            &format!("{}{}", prefix, "RuleNumber"),
-            &obj.rule_number.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "RuleNumber"), &obj.rule_number);
     }
 }
 
@@ -7384,7 +7330,7 @@ impl CreateNetworkAclRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
     }
@@ -7446,7 +7392,7 @@ impl CreateNetworkInterfacePermissionRequestSerializer {
             params.put(&format!("{}{}", prefix, "AwsService"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "NetworkInterfaceId"),
@@ -7525,7 +7471,7 @@ impl CreateNetworkInterfaceRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.groups {
             SecurityGroupIdStringListSerializer::serialize(
@@ -7535,10 +7481,7 @@ impl CreateNetworkInterfaceRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.ipv_6_address_count {
-            params.put(
-                &format!("{}{}", prefix, "Ipv6AddressCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Ipv6AddressCount"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_addresses {
             InstanceIpv6AddressListSerializer::serialize(
@@ -7560,7 +7503,7 @@ impl CreateNetworkInterfaceRequestSerializer {
         if let Some(ref field_value) = obj.secondary_private_ip_address_count {
             params.put(
                 &format!("{}{}", prefix, "SecondaryPrivateIpAddressCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(&format!("{}{}", prefix, "SubnetId"), &obj.subnet_id);
@@ -7621,16 +7564,13 @@ impl CreatePlacementGroupRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.group_name {
             params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
         }
         if let Some(ref field_value) = obj.partition_count {
-            params.put(
-                &format!("{}{}", prefix, "PartitionCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PartitionCount"), &field_value);
         }
         if let Some(ref field_value) = obj.strategy {
             params.put(&format!("{}{}", prefix, "Strategy"), &field_value);
@@ -7663,7 +7603,7 @@ impl CreateReservedInstancesListingRequestSerializer {
         params.put(&format!("{}{}", prefix, "ClientToken"), &obj.client_token);
         params.put(
             &format!("{}{}", prefix, "InstanceCount"),
-            &obj.instance_count.to_string(),
+            &obj.instance_count,
         );
         PriceScheduleSpecificationListSerializer::serialize(
             params,
@@ -7759,7 +7699,7 @@ impl CreateRouteRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.egress_only_internet_gateway_id {
             params.put(
@@ -7837,7 +7777,7 @@ impl CreateRouteTableRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
     }
@@ -7894,7 +7834,7 @@ impl CreateSecurityGroupRequestSerializer {
             &obj.description,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.vpc_id {
@@ -7957,7 +7897,7 @@ impl CreateSnapshotRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.tag_specifications {
             TagSpecificationListSerializer::serialize(
@@ -7992,7 +7932,7 @@ impl CreateSpotDatafeedSubscriptionRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Bucket"), &obj.bucket);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.prefix {
             params.put(&format!("{}{}", prefix, "Prefix"), &field_value);
@@ -8066,7 +8006,7 @@ impl CreateSubnetRequestSerializer {
         }
         params.put(&format!("{}{}", prefix, "CidrBlock"), &obj.cidr_block);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_cidr_block {
             params.put(&format!("{}{}", prefix, "Ipv6CidrBlock"), &field_value);
@@ -8119,7 +8059,7 @@ impl CreateTagsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ResourceIdListSerializer::serialize(
             params,
@@ -8155,7 +8095,7 @@ impl CreateTransitGatewayRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.options {
             TransitGatewayRequestOptionsSerializer::serialize(
@@ -8229,17 +8169,14 @@ impl CreateTransitGatewayRouteRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.blackhole {
-            params.put(
-                &format!("{}{}", prefix, "Blackhole"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Blackhole"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "DestinationCidrBlock"),
             &obj.destination_cidr_block,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.transit_gateway_attachment_id {
             params.put(
@@ -8304,7 +8241,7 @@ impl CreateTransitGatewayRouteTableRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.tag_specifications {
             TagSpecificationListSerializer::serialize(
@@ -8378,7 +8315,7 @@ impl CreateTransitGatewayVpcAttachmentRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.options {
             CreateTransitGatewayVpcAttachmentRequestOptionsSerializer::serialize(
@@ -8622,22 +8559,19 @@ impl CreateVolumeRequestSerializer {
             &obj.availability_zone,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.iops {
-            params.put(&format!("{}{}", prefix, "Iops"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Iops"), &field_value);
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
         }
         if let Some(ref field_value) = obj.size {
-            params.put(&format!("{}{}", prefix, "Size"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Size"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_id {
             params.put(&format!("{}{}", prefix, "SnapshotId"), &field_value);
@@ -8697,7 +8631,7 @@ impl CreateVpcEndpointConnectionNotificationRequestSerializer {
             &obj.connection_notification_arn,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.service_id {
             params.put(&format!("{}{}", prefix, "ServiceId"), &field_value);
@@ -8784,16 +8718,13 @@ impl CreateVpcEndpointRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.policy_document {
             params.put(&format!("{}{}", prefix, "PolicyDocument"), &field_value);
         }
         if let Some(ref field_value) = obj.private_dns_enabled {
-            params.put(
-                &format!("{}{}", prefix, "PrivateDnsEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PrivateDnsEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.route_table_ids {
             ValueStringListSerializer::serialize(
@@ -8886,16 +8817,13 @@ impl CreateVpcEndpointServiceConfigurationRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.acceptance_required {
-            params.put(
-                &format!("{}{}", prefix, "AcceptanceRequired"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "AcceptanceRequired"), &field_value);
         }
         if let Some(ref field_value) = obj.client_token {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ValueStringListSerializer::serialize(
             params,
@@ -8967,7 +8895,7 @@ impl CreateVpcPeeringConnectionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.peer_owner_id {
             params.put(&format!("{}{}", prefix, "PeerOwnerId"), &field_value);
@@ -9040,12 +8968,12 @@ impl CreateVpcRequestSerializer {
         if let Some(ref field_value) = obj.amazon_provided_ipv_6_cidr_block {
             params.put(
                 &format!("{}{}", prefix, "AmazonProvidedIpv6CidrBlock"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(&format!("{}{}", prefix, "CidrBlock"), &obj.cidr_block);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_tenancy {
             params.put(&format!("{}{}", prefix, "InstanceTenancy"), &field_value);
@@ -9108,7 +9036,7 @@ impl CreateVpnConnectionRequestSerializer {
             &obj.customer_gateway_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.options {
             VpnConnectionOptionsSpecificationSerializer::serialize(
@@ -9211,16 +9139,13 @@ impl CreateVpnGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.amazon_side_asn {
-            params.put(
-                &format!("{}{}", prefix, "AmazonSideAsn"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "AmazonSideAsn"), &field_value);
         }
         if let Some(ref field_value) = obj.availability_zone {
             params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "Type"), &obj.type_);
     }
@@ -9485,7 +9410,7 @@ impl DeleteClientVpnEndpointRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -9550,7 +9475,7 @@ impl DeleteClientVpnRouteRequestSerializer {
             &obj.destination_cidr_block,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.target_vpc_subnet_id {
             params.put(&format!("{}{}", prefix, "TargetVpcSubnetId"), &field_value);
@@ -9611,7 +9536,7 @@ impl DeleteCustomerGatewayRequestSerializer {
             &obj.customer_gateway_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -9638,7 +9563,7 @@ impl DeleteDhcpOptionsRequestSerializer {
             &obj.dhcp_options_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -9661,7 +9586,7 @@ impl DeleteEgressOnlyInternetGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "EgressOnlyInternetGatewayId"),
@@ -9876,7 +9801,7 @@ impl DeleteFleetsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         FleetIdSetSerializer::serialize(
             params,
@@ -9885,7 +9810,7 @@ impl DeleteFleetsRequestSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "TerminateInstances"),
-            &obj.terminate_instances.to_string(),
+            &obj.terminate_instances,
         );
     }
 }
@@ -9947,7 +9872,7 @@ impl DeleteFlowLogsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ValueStringListSerializer::serialize(
             params,
@@ -10001,7 +9926,7 @@ impl DeleteFpgaImageRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "FpgaImageId"), &obj.fpga_image_id);
     }
@@ -10049,7 +9974,7 @@ impl DeleteInternetGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "InternetGatewayId"),
@@ -10076,7 +10001,7 @@ impl DeleteKeyPairRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "KeyName"), &obj.key_name);
     }
@@ -10102,7 +10027,7 @@ impl DeleteLaunchTemplateRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.launch_template_id {
             params.put(&format!("{}{}", prefix, "LaunchTemplateId"), &field_value);
@@ -10166,7 +10091,7 @@ impl DeleteLaunchTemplateVersionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.launch_template_id {
             params.put(&format!("{}{}", prefix, "LaunchTemplateId"), &field_value);
@@ -10428,17 +10353,14 @@ impl DeleteNetworkAclEntryRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "Egress"), &obj.egress.to_string());
+        params.put(&format!("{}{}", prefix, "Egress"), &obj.egress);
         params.put(
             &format!("{}{}", prefix, "NetworkAclId"),
             &obj.network_acl_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "RuleNumber"),
-            &obj.rule_number.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "RuleNumber"), &obj.rule_number);
     }
 }
 
@@ -10460,7 +10382,7 @@ impl DeleteNetworkAclRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "NetworkAclId"),
@@ -10490,10 +10412,10 @@ impl DeleteNetworkInterfacePermissionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.force {
-            params.put(&format!("{}{}", prefix, "Force"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Force"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "NetworkInterfacePermissionId"),
@@ -10550,7 +10472,7 @@ impl DeleteNetworkInterfaceRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "NetworkInterfaceId"),
@@ -10577,7 +10499,7 @@ impl DeletePlacementGroupRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
     }
@@ -10617,7 +10539,7 @@ impl DeleteRouteRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "RouteTableId"),
@@ -10644,7 +10566,7 @@ impl DeleteRouteTableRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "RouteTableId"),
@@ -10673,7 +10595,7 @@ impl DeleteSecurityGroupRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.group_id {
             params.put(&format!("{}{}", prefix, "GroupId"), &field_value);
@@ -10703,7 +10625,7 @@ impl DeleteSnapshotRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "SnapshotId"), &obj.snapshot_id);
     }
@@ -10726,7 +10648,7 @@ impl DeleteSpotDatafeedSubscriptionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -10749,7 +10671,7 @@ impl DeleteSubnetRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "SubnetId"), &obj.subnet_id);
     }
@@ -10775,7 +10697,7 @@ impl DeleteTagsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ResourceIdListSerializer::serialize(
             params,
@@ -10806,7 +10728,7 @@ impl DeleteTransitGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayId"),
@@ -10870,7 +10792,7 @@ impl DeleteTransitGatewayRouteRequestSerializer {
             &obj.destination_cidr_block,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayRouteTableId"),
@@ -10927,7 +10849,7 @@ impl DeleteTransitGatewayRouteTableRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayRouteTableId"),
@@ -10986,7 +10908,7 @@ impl DeleteTransitGatewayVpcAttachmentRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayAttachmentId"),
@@ -11046,7 +10968,7 @@ impl DeleteVolumeRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VolumeId"), &obj.volume_id);
     }
@@ -11079,7 +11001,7 @@ impl DeleteVpcEndpointConnectionNotificationsRequestSerializer {
             &obj.connection_notification_ids,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -11136,7 +11058,7 @@ impl DeleteVpcEndpointServiceConfigurationsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ValueStringListSerializer::serialize(
             params,
@@ -11195,7 +11117,7 @@ impl DeleteVpcEndpointsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ValueStringListSerializer::serialize(
             params,
@@ -11254,7 +11176,7 @@ impl DeleteVpcPeeringConnectionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "VpcPeeringConnectionId"),
@@ -11309,7 +11231,7 @@ impl DeleteVpcRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
     }
@@ -11334,7 +11256,7 @@ impl DeleteVpnConnectionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "VpnConnectionId"),
@@ -11391,7 +11313,7 @@ impl DeleteVpnGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "VpnGatewayId"),
@@ -11419,7 +11341,7 @@ impl DeprovisionByoipCidrRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Cidr"), &obj.cidr);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -11472,7 +11394,7 @@ impl DeregisterImageRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "ImageId"), &obj.image_id);
     }
@@ -11503,7 +11425,7 @@ impl DescribeAccountAttributesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -11570,7 +11492,7 @@ impl DescribeAddressesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -11635,7 +11557,7 @@ impl DescribeAggregateIdFormatRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -11700,7 +11622,7 @@ impl DescribeAvailabilityZonesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -11787,7 +11709,7 @@ impl DescribeBundleTasksRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -11853,12 +11775,9 @@ impl DescribeByoipCidrsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "MaxResults"),
-            &obj.max_results.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "MaxResults"), &obj.max_results);
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
@@ -11931,7 +11850,7 @@ impl DescribeCapacityReservationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -11941,10 +11860,7 @@ impl DescribeCapacityReservationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -12014,7 +11930,7 @@ impl DescribeClassicLinkInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -12031,10 +11947,7 @@ impl DescribeClassicLinkInstancesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -12112,7 +12025,7 @@ impl DescribeClientVpnAuthorizationRulesRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -12122,10 +12035,7 @@ impl DescribeClientVpnAuthorizationRulesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -12200,7 +12110,7 @@ impl DescribeClientVpnConnectionsRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -12210,10 +12120,7 @@ impl DescribeClientVpnConnectionsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -12288,7 +12195,7 @@ impl DescribeClientVpnEndpointsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -12298,10 +12205,7 @@ impl DescribeClientVpnEndpointsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -12373,7 +12277,7 @@ impl DescribeClientVpnRoutesRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -12383,10 +12287,7 @@ impl DescribeClientVpnRoutesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -12467,7 +12368,7 @@ impl DescribeClientVpnTargetNetworksRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -12477,10 +12378,7 @@ impl DescribeClientVpnTargetNetworksRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -12570,7 +12468,7 @@ impl DescribeConversionTasksRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -12637,7 +12535,7 @@ impl DescribeCustomerGatewaysRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -12710,7 +12608,7 @@ impl DescribeDhcpOptionsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -12774,7 +12672,7 @@ impl DescribeEgressOnlyInternetGatewaysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.egress_only_internet_gateway_ids {
             EgressOnlyInternetGatewayIdListSerializer::serialize(
@@ -12784,10 +12682,7 @@ impl DescribeEgressOnlyInternetGatewaysRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -12857,7 +12752,7 @@ impl DescribeElasticGpusRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.elastic_gpu_ids {
             ElasticGpuIdSetSerializer::serialize(
@@ -12874,10 +12769,7 @@ impl DescribeElasticGpusRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -13057,17 +12949,14 @@ impl DescribeFleetHistoryRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.event_type {
             params.put(&format!("{}{}", prefix, "EventType"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "FleetId"), &obj.fleet_id);
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -13155,7 +13044,7 @@ impl DescribeFleetInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -13166,10 +13055,7 @@ impl DescribeFleetInstancesRequestSerializer {
         }
         params.put(&format!("{}{}", prefix, "FleetId"), &obj.fleet_id);
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -13340,7 +13226,7 @@ impl DescribeFleetsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -13357,10 +13243,7 @@ impl DescribeFleetsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -13423,7 +13306,7 @@ impl DescribeFlowLogsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filter {
             FilterListSerializer::serialize(
@@ -13440,10 +13323,7 @@ impl DescribeFlowLogsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -13503,7 +13383,7 @@ impl DescribeFpgaImageAttributeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "FpgaImageId"), &obj.fpga_image_id);
     }
@@ -13567,7 +13447,7 @@ impl DescribeFpgaImagesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -13584,10 +13464,7 @@ impl DescribeFpgaImagesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -13671,22 +13548,13 @@ impl DescribeHostReservationOfferingsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_duration {
-            params.put(
-                &format!("{}{}", prefix, "MaxDuration"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxDuration"), &field_value);
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.min_duration {
-            params.put(
-                &format!("{}{}", prefix, "MinDuration"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MinDuration"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -13768,10 +13636,7 @@ impl DescribeHostReservationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -13853,10 +13718,7 @@ impl DescribeHostsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -13935,10 +13797,7 @@ impl DescribeIamInstanceProfileAssociationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -14108,7 +13967,7 @@ impl DescribeImageAttributeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "ImageId"), &obj.image_id);
     }
@@ -14139,7 +13998,7 @@ impl DescribeImagesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.executable_users {
             ExecutableByStringListSerializer::serialize(
@@ -14224,7 +14083,7 @@ impl DescribeImportImageTasksRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -14241,10 +14100,7 @@ impl DescribeImportImageTasksRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -14316,7 +14172,7 @@ impl DescribeImportSnapshotTasksRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -14333,10 +14189,7 @@ impl DescribeImportSnapshotTasksRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -14404,7 +14257,7 @@ impl DescribeInstanceAttributeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
     }
@@ -14438,7 +14291,7 @@ impl DescribeInstanceCreditSpecificationsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -14455,10 +14308,7 @@ impl DescribeInstanceCreditSpecificationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -14530,7 +14380,7 @@ impl DescribeInstanceStatusRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -14542,7 +14392,7 @@ impl DescribeInstanceStatusRequestSerializer {
         if let Some(ref field_value) = obj.include_all_instances {
             params.put(
                 &format!("{}{}", prefix, "IncludeAllInstances"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.instance_ids {
@@ -14553,10 +14403,7 @@ impl DescribeInstanceStatusRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -14626,7 +14473,7 @@ impl DescribeInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -14643,10 +14490,7 @@ impl DescribeInstancesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -14709,7 +14553,7 @@ impl DescribeInternetGatewaysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -14781,7 +14625,7 @@ impl DescribeKeyPairsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -14858,7 +14702,7 @@ impl DescribeLaunchTemplateVersionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -14874,10 +14718,7 @@ impl DescribeLaunchTemplateVersionsRequestSerializer {
             params.put(&format!("{}{}", prefix, "LaunchTemplateName"), &field_value);
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.max_version {
             params.put(&format!("{}{}", prefix, "MaxVersion"), &field_value);
@@ -14962,7 +14803,7 @@ impl DescribeLaunchTemplatesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -14986,10 +14827,7 @@ impl DescribeLaunchTemplatesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -15056,7 +14894,7 @@ impl DescribeMovingAddressesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -15066,10 +14904,7 @@ impl DescribeMovingAddressesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -15151,10 +14986,7 @@ impl DescribeNatGatewaysRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.nat_gateway_ids {
             ValueStringListSerializer::serialize(
@@ -15224,7 +15056,7 @@ impl DescribeNetworkAclsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -15297,7 +15129,7 @@ impl DescribeNetworkInterfaceAttributeRequestSerializer {
             params.put(&format!("{}{}", prefix, "Attribute"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "NetworkInterfaceId"),
@@ -15404,10 +15236,7 @@ impl DescribeNetworkInterfacePermissionsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.network_interface_permission_ids {
             NetworkInterfacePermissionIdListSerializer::serialize(
@@ -15486,7 +15315,7 @@ impl DescribeNetworkInterfacesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -15496,10 +15325,7 @@ impl DescribeNetworkInterfacesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.network_interface_ids {
             NetworkInterfaceIdListSerializer::serialize(
@@ -15573,7 +15399,7 @@ impl DescribePlacementGroupsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -15649,7 +15475,7 @@ impl DescribePrefixListsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -15659,10 +15485,7 @@ impl DescribePrefixListsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -15734,13 +15557,10 @@ impl DescribePrincipalIdFormatRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -15810,10 +15630,7 @@ impl DescribePublicIpv4PoolsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -15883,7 +15700,7 @@ impl DescribeRegionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -16135,7 +15952,7 @@ impl DescribeReservedInstancesOfferingsRequestSerializer {
             params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -16145,10 +15962,7 @@ impl DescribeReservedInstancesOfferingsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.include_marketplace {
-            params.put(
-                &format!("{}{}", prefix, "IncludeMarketplace"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "IncludeMarketplace"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_tenancy {
             params.put(&format!("{}{}", prefix, "InstanceTenancy"), &field_value);
@@ -16157,28 +15971,16 @@ impl DescribeReservedInstancesOfferingsRequestSerializer {
             params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
         }
         if let Some(ref field_value) = obj.max_duration {
-            params.put(
-                &format!("{}{}", prefix, "MaxDuration"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxDuration"), &field_value);
         }
         if let Some(ref field_value) = obj.max_instance_count {
-            params.put(
-                &format!("{}{}", prefix, "MaxInstanceCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxInstanceCount"), &field_value);
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.min_duration {
-            params.put(
-                &format!("{}{}", prefix, "MinDuration"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MinDuration"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -16266,7 +16068,7 @@ impl DescribeReservedInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -16349,7 +16151,7 @@ impl DescribeRouteTablesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -16359,10 +16161,7 @@ impl DescribeRouteTablesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -16448,7 +16247,7 @@ impl DescribeScheduledInstanceAvailabilityRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -16463,21 +16262,18 @@ impl DescribeScheduledInstanceAvailabilityRequestSerializer {
             &obj.first_slot_start_time_range,
         );
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.max_slot_duration_in_hours {
             params.put(
                 &format!("{}{}", prefix, "MaxSlotDurationInHours"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.min_slot_duration_in_hours {
             params.put(
                 &format!("{}{}", prefix, "MinSlotDurationInHours"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.next_token {
@@ -16557,7 +16353,7 @@ impl DescribeScheduledInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -16567,10 +16363,7 @@ impl DescribeScheduledInstancesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -16649,7 +16442,7 @@ impl DescribeSecurityGroupReferencesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         GroupIdsSerializer::serialize(params, &format!("{}{}", prefix, "GroupId"), &obj.group_id);
     }
@@ -16714,7 +16507,7 @@ impl DescribeSecurityGroupsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -16738,10 +16531,7 @@ impl DescribeSecurityGroupsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -16806,7 +16596,7 @@ impl DescribeSnapshotAttributeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "SnapshotId"), &obj.snapshot_id);
     }
@@ -16888,7 +16678,7 @@ impl DescribeSnapshotsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -16898,10 +16688,7 @@ impl DescribeSnapshotsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -16983,7 +16770,7 @@ impl DescribeSpotDatafeedSubscriptionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -17044,13 +16831,10 @@ impl DescribeSpotFleetInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -17133,16 +16917,13 @@ impl DescribeSpotFleetRequestHistoryRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.event_type {
             params.put(&format!("{}{}", prefix, "EventType"), &field_value);
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -17236,13 +17017,10 @@ impl DescribeSpotFleetRequestsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -17321,7 +17099,7 @@ impl DescribeSpotInstanceRequestsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -17331,10 +17109,7 @@ impl DescribeSpotInstanceRequestsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -17424,7 +17199,7 @@ impl DescribeSpotPriceHistoryRequestSerializer {
             params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.end_time {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
@@ -17444,10 +17219,7 @@ impl DescribeSpotPriceHistoryRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -17526,13 +17298,10 @@ impl DescribeStaleSecurityGroupsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -17599,7 +17368,7 @@ impl DescribeSubnetsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -17666,7 +17435,7 @@ impl DescribeTagsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -17676,10 +17445,7 @@ impl DescribeTagsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -17742,7 +17508,7 @@ impl DescribeTransitGatewayAttachmentsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -17752,10 +17518,7 @@ impl DescribeTransitGatewayAttachmentsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -17832,7 +17595,7 @@ impl DescribeTransitGatewayRouteTablesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -17842,10 +17605,7 @@ impl DescribeTransitGatewayRouteTablesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -17926,7 +17686,7 @@ impl DescribeTransitGatewayVpcAttachmentsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -17936,10 +17696,7 @@ impl DescribeTransitGatewayVpcAttachmentsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -18016,7 +17773,7 @@ impl DescribeTransitGatewaysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -18026,10 +17783,7 @@ impl DescribeTransitGatewaysRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -18104,7 +17858,7 @@ impl DescribeVolumeAttributeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VolumeId"), &obj.volume_id);
     }
@@ -18179,7 +17933,7 @@ impl DescribeVolumeStatusRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -18189,10 +17943,7 @@ impl DescribeVolumeStatusRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -18267,7 +18018,7 @@ impl DescribeVolumesModificationsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -18277,10 +18028,7 @@ impl DescribeVolumesModificationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -18358,7 +18106,7 @@ impl DescribeVolumesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -18368,10 +18116,7 @@ impl DescribeVolumesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -18439,7 +18184,7 @@ impl DescribeVpcAttributeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
     }
@@ -18511,10 +18256,7 @@ impl DescribeVpcClassicLinkDnsSupportRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -18585,7 +18327,7 @@ impl DescribeVpcClassicLinkRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -18668,7 +18410,7 @@ impl DescribeVpcEndpointConnectionNotificationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -18678,10 +18420,7 @@ impl DescribeVpcEndpointConnectionNotificationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -18749,7 +18488,7 @@ impl DescribeVpcEndpointConnectionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -18759,10 +18498,7 @@ impl DescribeVpcEndpointConnectionsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -18836,7 +18572,7 @@ impl DescribeVpcEndpointServiceConfigurationsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -18846,10 +18582,7 @@ impl DescribeVpcEndpointServiceConfigurationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -18930,7 +18663,7 @@ impl DescribeVpcEndpointServicePermissionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -18940,10 +18673,7 @@ impl DescribeVpcEndpointServicePermissionsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -19015,7 +18745,7 @@ impl DescribeVpcEndpointServicesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -19025,10 +18755,7 @@ impl DescribeVpcEndpointServicesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -19111,7 +18838,7 @@ impl DescribeVpcEndpointsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -19121,10 +18848,7 @@ impl DescribeVpcEndpointsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -19199,7 +18923,7 @@ impl DescribeVpcPeeringConnectionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -19209,10 +18933,7 @@ impl DescribeVpcPeeringConnectionsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -19285,7 +19006,7 @@ impl DescribeVpcsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -19351,7 +19072,7 @@ impl DescribeVpnConnectionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -19422,7 +19143,7 @@ impl DescribeVpnGatewaysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -19492,7 +19213,7 @@ impl DetachClassicLinkVpcRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
@@ -19547,7 +19268,7 @@ impl DetachInternetGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "InternetGatewayId"),
@@ -19579,10 +19300,10 @@ impl DetachNetworkInterfaceRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "AttachmentId"), &obj.attachment_id);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.force {
-            params.put(&format!("{}{}", prefix, "Force"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Force"), &field_value);
         }
     }
 }
@@ -19615,10 +19336,10 @@ impl DetachVolumeRequestSerializer {
             params.put(&format!("{}{}", prefix, "Device"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.force {
-            params.put(&format!("{}{}", prefix, "Force"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Force"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_id {
             params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
@@ -19648,7 +19369,7 @@ impl DetachVpnGatewayRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
         params.put(
@@ -19891,7 +19612,7 @@ impl DisableTransitGatewayRouteTablePropagationRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayAttachmentId"),
@@ -20028,7 +19749,7 @@ impl DisableVpcClassicLinkRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
     }
@@ -20085,7 +19806,7 @@ impl DisassociateAddressRequestSerializer {
             params.put(&format!("{}{}", prefix, "AssociationId"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.public_ip {
             params.put(&format!("{}{}", prefix, "PublicIp"), &field_value);
@@ -20121,7 +19842,7 @@ impl DisassociateClientVpnTargetNetworkRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -20237,7 +19958,7 @@ impl DisassociateRouteTableRequestSerializer {
             &obj.association_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -20325,7 +20046,7 @@ impl DisassociateTransitGatewayRouteTableRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayAttachmentId"),
@@ -20538,7 +20259,7 @@ impl DiskImageDetailSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Bytes"), &obj.bytes.to_string());
+        params.put(&format!("{}{}", prefix, "Bytes"), &obj.bytes);
         params.put(&format!("{}{}", prefix, "Format"), &obj.format);
         params.put(
             &format!("{}{}", prefix, "ImportManifestUrl"),
@@ -20681,10 +20402,7 @@ impl DnsServersOptionsModifyStructureSerializer {
             );
         }
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
     }
 }
@@ -20803,17 +20521,14 @@ impl EbsBlockDeviceSerializer {
         if let Some(ref field_value) = obj.delete_on_termination {
             params.put(
                 &format!("{}{}", prefix, "DeleteOnTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.iops {
-            params.put(&format!("{}{}", prefix, "Iops"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Iops"), &field_value);
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
@@ -20822,10 +20537,7 @@ impl EbsBlockDeviceSerializer {
             params.put(&format!("{}{}", prefix, "SnapshotId"), &field_value);
         }
         if let Some(ref field_value) = obj.volume_size {
-            params.put(
-                &format!("{}{}", prefix, "VolumeSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "VolumeSize"), &field_value);
         }
         if let Some(ref field_value) = obj.volume_type {
             params.put(&format!("{}{}", prefix, "VolumeType"), &field_value);
@@ -20897,7 +20609,7 @@ impl EbsInstanceBlockDeviceSpecificationSerializer {
         if let Some(ref field_value) = obj.delete_on_termination {
             params.put(
                 &format!("{}{}", prefix, "DeleteOnTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.volume_id {
@@ -21430,7 +21142,7 @@ impl EnableTransitGatewayRouteTablePropagationRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayAttachmentId"),
@@ -21519,7 +21231,7 @@ impl EnableVolumeIORequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VolumeId"), &obj.volume_id);
     }
@@ -21592,7 +21304,7 @@ impl EnableVpcClassicLinkRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
     }
@@ -21774,7 +21486,7 @@ impl ExportClientVpnClientCertificateRevocationListRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -21841,7 +21553,7 @@ impl ExportClientVpnClientConfigurationRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -22096,7 +21808,7 @@ impl ExportTransitGatewayRoutesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -22669,19 +22381,13 @@ impl FleetLaunchTemplateOverridesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.priority {
-            params.put(
-                &format!("{}{}", prefix, "Priority"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Priority"), &field_value);
         }
         if let Some(ref field_value) = obj.subnet_id {
             params.put(&format!("{}{}", prefix, "SubnetId"), &field_value);
         }
         if let Some(ref field_value) = obj.weighted_capacity {
-            params.put(
-                &format!("{}{}", prefix, "WeightedCapacity"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "WeightedCapacity"), &field_value);
         }
     }
 }
@@ -23218,11 +22924,11 @@ impl GetConsoleOutputRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
         if let Some(ref field_value) = obj.latest {
-            params.put(&format!("{}{}", prefix, "Latest"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Latest"), &field_value);
         }
     }
 }
@@ -23281,11 +22987,11 @@ impl GetConsoleScreenshotRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
         if let Some(ref field_value) = obj.wake_up {
-            params.put(&format!("{}{}", prefix, "WakeUp"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "WakeUp"), &field_value);
         }
     }
 }
@@ -23418,7 +23124,7 @@ impl GetLaunchTemplateDataRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
     }
@@ -23474,7 +23180,7 @@ impl GetPasswordDataRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
     }
@@ -23536,7 +23242,7 @@ impl GetReservedInstancesExchangeQuoteRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         ReservedInstanceIdSetSerializer::serialize(
             params,
@@ -23680,7 +23386,7 @@ impl GetTransitGatewayAttachmentPropagationsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -23690,10 +23396,7 @@ impl GetTransitGatewayAttachmentPropagationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -23773,7 +23476,7 @@ impl GetTransitGatewayRouteTableAssociationsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -23783,10 +23486,7 @@ impl GetTransitGatewayRouteTableAssociationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -23864,7 +23564,7 @@ impl GetTransitGatewayRouteTablePropagationsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -23874,10 +23574,7 @@ impl GetTransitGatewayRouteTablePropagationsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -24120,10 +23817,7 @@ impl HibernationOptionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.configured {
-            params.put(
-                &format!("{}{}", prefix, "Configured"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Configured"), &field_value);
         }
     }
 }
@@ -24877,10 +24571,10 @@ impl IcmpTypeCodeSerializer {
         }
 
         if let Some(ref field_value) = obj.code {
-            params.put(&format!("{}{}", prefix, "Code"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Code"), &field_value);
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Type"), &field_value);
         }
     }
 }
@@ -25334,7 +25028,7 @@ impl ImportClientVpnClientCertificateRevocationListRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -25429,13 +25123,10 @@ impl ImportImageRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.hypervisor {
             params.put(&format!("{}{}", prefix, "Hypervisor"), &field_value);
@@ -25718,10 +25409,7 @@ impl ImportInstanceLaunchSpecificationSerializer {
             params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
         }
         if let Some(ref field_value) = obj.monitoring {
-            params.put(
-                &format!("{}{}", prefix, "Monitoring"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Monitoring"), &field_value);
         }
         if let Some(ref field_value) = obj.placement {
             PlacementSerializer::serialize(
@@ -25781,7 +25469,7 @@ impl ImportInstanceRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.launch_specification {
             ImportInstanceLaunchSpecificationSerializer::serialize(
@@ -25979,7 +25667,7 @@ impl ImportKeyPairRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "KeyName"), &obj.key_name);
         params.put(
@@ -26070,13 +25758,10 @@ impl ImportSnapshotRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
@@ -26226,7 +25911,7 @@ impl ImportVolumeRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         DiskImageDetailSerializer::serialize(params, &format!("{}{}", prefix, "Image"), &obj.image);
         VolumeDetailSerializer::serialize(params, &format!("{}{}", prefix, "Volume"), &obj.volume);
@@ -27808,23 +27493,20 @@ impl InstanceNetworkInterfaceSpecificationSerializer {
         if let Some(ref field_value) = obj.associate_public_ip_address {
             params.put(
                 &format!("{}{}", prefix, "AssociatePublicIpAddress"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.delete_on_termination {
             params.put(
                 &format!("{}{}", prefix, "DeleteOnTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.description {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.device_index {
-            params.put(
-                &format!("{}{}", prefix, "DeviceIndex"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DeviceIndex"), &field_value);
         }
         if let Some(ref field_value) = obj.groups {
             SecurityGroupIdStringListSerializer::serialize(
@@ -27834,10 +27516,7 @@ impl InstanceNetworkInterfaceSpecificationSerializer {
             );
         }
         if let Some(ref field_value) = obj.ipv_6_address_count {
-            params.put(
-                &format!("{}{}", prefix, "Ipv6AddressCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Ipv6AddressCount"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_addresses {
             InstanceIpv6AddressListSerializer::serialize(
@@ -27862,7 +27541,7 @@ impl InstanceNetworkInterfaceSpecificationSerializer {
         if let Some(ref field_value) = obj.secondary_private_ip_address_count {
             params.put(
                 &format!("{}{}", prefix, "SecondaryPrivateIpAddressCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.subnet_id {
@@ -28548,10 +28227,7 @@ impl IpPermissionSerializer {
         }
 
         if let Some(ref field_value) = obj.from_port {
-            params.put(
-                &format!("{}{}", prefix, "FromPort"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FromPort"), &field_value);
         }
         if let Some(ref field_value) = obj.ip_protocol {
             params.put(&format!("{}{}", prefix, "IpProtocol"), &field_value);
@@ -28578,7 +28254,7 @@ impl IpPermissionSerializer {
             );
         }
         if let Some(ref field_value) = obj.to_port {
-            params.put(&format!("{}{}", prefix, "ToPort"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "ToPort"), &field_value);
         }
         if let Some(ref field_value) = obj.user_id_group_pairs {
             UserIdGroupPairListSerializer::serialize(
@@ -29696,16 +29372,10 @@ impl LaunchTemplateCpuOptionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.core_count {
-            params.put(
-                &format!("{}{}", prefix, "CoreCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "CoreCount"), &field_value);
         }
         if let Some(ref field_value) = obj.threads_per_core {
-            params.put(
-                &format!("{}{}", prefix, "ThreadsPerCore"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ThreadsPerCore"), &field_value);
         }
     }
 }
@@ -29806,17 +29476,14 @@ impl LaunchTemplateEbsBlockDeviceRequestSerializer {
         if let Some(ref field_value) = obj.delete_on_termination {
             params.put(
                 &format!("{}{}", prefix, "DeleteOnTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.iops {
-            params.put(&format!("{}{}", prefix, "Iops"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Iops"), &field_value);
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
@@ -29825,10 +29492,7 @@ impl LaunchTemplateEbsBlockDeviceRequestSerializer {
             params.put(&format!("{}{}", prefix, "SnapshotId"), &field_value);
         }
         if let Some(ref field_value) = obj.volume_size {
-            params.put(
-                &format!("{}{}", prefix, "VolumeSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "VolumeSize"), &field_value);
         }
         if let Some(ref field_value) = obj.volume_type {
             params.put(&format!("{}{}", prefix, "VolumeType"), &field_value);
@@ -29982,10 +29646,7 @@ impl LaunchTemplateHibernationOptionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.configured {
-            params.put(
-                &format!("{}{}", prefix, "Configured"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Configured"), &field_value);
         }
     }
 }
@@ -30308,23 +29969,20 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationRequestSerializer {
         if let Some(ref field_value) = obj.associate_public_ip_address {
             params.put(
                 &format!("{}{}", prefix, "AssociatePublicIpAddress"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.delete_on_termination {
             params.put(
                 &format!("{}{}", prefix, "DeleteOnTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.description {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.device_index {
-            params.put(
-                &format!("{}{}", prefix, "DeviceIndex"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DeviceIndex"), &field_value);
         }
         if let Some(ref field_value) = obj.groups {
             SecurityGroupIdStringListSerializer::serialize(
@@ -30334,10 +29992,7 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.ipv_6_address_count {
-            params.put(
-                &format!("{}{}", prefix, "Ipv6AddressCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Ipv6AddressCount"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_addresses {
             InstanceIpv6AddressListRequestSerializer::serialize(
@@ -30362,7 +30017,7 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationRequestSerializer {
         if let Some(ref field_value) = obj.secondary_private_ip_address_count {
             params.put(
                 &format!("{}{}", prefix, "SecondaryPrivateIpAddressCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.subnet_id {
@@ -30582,10 +30237,7 @@ impl LaunchTemplateOverridesSerializer {
             params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
         }
         if let Some(ref field_value) = obj.priority {
-            params.put(
-                &format!("{}{}", prefix, "Priority"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Priority"), &field_value);
         }
         if let Some(ref field_value) = obj.spot_price {
             params.put(&format!("{}{}", prefix, "SpotPrice"), &field_value);
@@ -30594,10 +30246,7 @@ impl LaunchTemplateOverridesSerializer {
             params.put(&format!("{}{}", prefix, "SubnetId"), &field_value);
         }
         if let Some(ref field_value) = obj.weighted_capacity {
-            params.put(
-                &format!("{}{}", prefix, "WeightedCapacity"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "WeightedCapacity"), &field_value);
         }
     }
 }
@@ -30872,7 +30521,7 @@ impl LaunchTemplateSpotMarketOptionsRequestSerializer {
         if let Some(ref field_value) = obj.block_duration_minutes {
             params.put(
                 &format!("{}{}", prefix, "BlockDurationMinutes"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.instance_interruption_behavior {
@@ -31131,10 +30780,7 @@ impl LaunchTemplatesMonitoringRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
     }
 }
@@ -31506,7 +31152,7 @@ impl ModifyCapacityReservationRequestSerializer {
             &obj.capacity_reservation_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.end_date {
             params.put(&format!("{}{}", prefix, "EndDate"), &field_value);
@@ -31515,10 +31161,7 @@ impl ModifyCapacityReservationRequestSerializer {
             params.put(&format!("{}{}", prefix, "EndDateType"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_count {
-            params.put(
-                &format!("{}{}", prefix, "InstanceCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "InstanceCount"), &field_value);
         }
     }
 }
@@ -31598,7 +31241,7 @@ impl ModifyClientVpnEndpointRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.server_certificate_arn {
             params.put(
@@ -31659,7 +31302,7 @@ impl ModifyFleetRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.excess_capacity_termination_policy {
             params.put(
@@ -31740,7 +31383,7 @@ impl ModifyFpgaImageAttributeRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "FpgaImageId"), &obj.fpga_image_id);
         if let Some(ref field_value) = obj.load_permission {
@@ -31892,10 +31535,7 @@ impl ModifyIdFormatRequestSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "Resource"), &obj.resource);
-        params.put(
-            &format!("{}{}", prefix, "UseLongIds"),
-            &obj.use_long_ids.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "UseLongIds"), &obj.use_long_ids);
     }
 }
 
@@ -31920,10 +31560,7 @@ impl ModifyIdentityIdFormatRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "PrincipalArn"), &obj.principal_arn);
         params.put(&format!("{}{}", prefix, "Resource"), &obj.resource);
-        params.put(
-            &format!("{}{}", prefix, "UseLongIds"),
-            &obj.use_long_ids.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "UseLongIds"), &obj.use_long_ids);
     }
 }
 
@@ -31972,7 +31609,7 @@ impl ModifyImageAttributeRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "ImageId"), &obj.image_id);
         if let Some(ref field_value) = obj.launch_permission {
@@ -32075,7 +31712,7 @@ impl ModifyInstanceAttributeRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.ebs_optimized {
             AttributeBooleanValueSerializer::serialize(
@@ -32183,7 +31820,7 @@ impl ModifyInstanceCapacityReservationAttributesRequestSerializer {
             &obj.capacity_reservation_specification,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
     }
@@ -32240,7 +31877,7 @@ impl ModifyInstanceCreditSpecificationRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         InstanceCreditSpecificationListRequestSerializer::serialize(
             params,
@@ -32330,10 +31967,7 @@ impl ModifyInstancePlacementRequestSerializer {
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
         if let Some(ref field_value) = obj.partition_number {
-            params.put(
-                &format!("{}{}", prefix, "PartitionNumber"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PartitionNumber"), &field_value);
         }
         if let Some(ref field_value) = obj.tenancy {
             params.put(&format!("{}{}", prefix, "Tenancy"), &field_value);
@@ -32399,7 +32033,7 @@ impl ModifyLaunchTemplateRequestSerializer {
             params.put(&format!("{}{}", prefix, "SetDefaultVersion"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.launch_template_id {
             params.put(&format!("{}{}", prefix, "LaunchTemplateId"), &field_value);
@@ -32482,7 +32116,7 @@ impl ModifyNetworkInterfaceAttributeRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.groups {
             SecurityGroupIdStringListSerializer::serialize(
@@ -32613,7 +32247,7 @@ impl ModifySnapshotAttributeRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.group_names {
             GroupNameStringListSerializer::serialize(
@@ -32667,10 +32301,7 @@ impl ModifySpotFleetRequestRequestSerializer {
             &obj.spot_fleet_request_id,
         );
         if let Some(ref field_value) = obj.target_capacity {
-            params.put(
-                &format!("{}{}", prefix, "TargetCapacity"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "TargetCapacity"), &field_value);
         }
     }
 }
@@ -32772,7 +32403,7 @@ impl ModifyTransitGatewayVpcAttachmentRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.options {
             ModifyTransitGatewayVpcAttachmentRequestOptionsSerializer::serialize(
@@ -32886,7 +32517,7 @@ impl ModifyVolumeAttributeRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VolumeId"), &obj.volume_id);
     }
@@ -32916,13 +32547,13 @@ impl ModifyVolumeRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.iops {
-            params.put(&format!("{}{}", prefix, "Iops"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Iops"), &field_value);
         }
         if let Some(ref field_value) = obj.size {
-            params.put(&format!("{}{}", prefix, "Size"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Size"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VolumeId"), &obj.volume_id);
         if let Some(ref field_value) = obj.volume_type {
@@ -33038,7 +32669,7 @@ impl ModifyVpcEndpointConnectionNotificationRequestSerializer {
             &obj.connection_notification_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -33129,16 +32760,13 @@ impl ModifyVpcEndpointRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.policy_document {
             params.put(&format!("{}{}", prefix, "PolicyDocument"), &field_value);
         }
         if let Some(ref field_value) = obj.private_dns_enabled {
-            params.put(
-                &format!("{}{}", prefix, "PrivateDnsEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PrivateDnsEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.remove_route_table_ids {
             ValueStringListSerializer::serialize(
@@ -33162,10 +32790,7 @@ impl ModifyVpcEndpointRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.reset_policy {
-            params.put(
-                &format!("{}{}", prefix, "ResetPolicy"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ResetPolicy"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "VpcEndpointId"),
@@ -33230,10 +32855,7 @@ impl ModifyVpcEndpointServiceConfigurationRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.acceptance_required {
-            params.put(
-                &format!("{}{}", prefix, "AcceptanceRequired"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "AcceptanceRequired"), &field_value);
         }
         if let Some(ref field_value) = obj.add_network_load_balancer_arns {
             ValueStringListSerializer::serialize(
@@ -33243,7 +32865,7 @@ impl ModifyVpcEndpointServiceConfigurationRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.remove_network_load_balancer_arns {
             ValueStringListSerializer::serialize(
@@ -33317,7 +32939,7 @@ impl ModifyVpcEndpointServicePermissionsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.remove_allowed_principals {
             ValueStringListSerializer::serialize(
@@ -33387,7 +33009,7 @@ impl ModifyVpcPeeringConnectionOptionsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.requester_peering_connection_options {
             PeeringConnectionOptionsRequestSerializer::serialize(
@@ -33464,7 +33086,7 @@ impl ModifyVpcTenancyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "InstanceTenancy"),
@@ -33516,7 +33138,7 @@ impl MonitorInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         InstanceIdStringListSerializer::serialize(
             params,
@@ -33609,7 +33231,7 @@ impl MoveAddressToVpcRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "PublicIp"), &obj.public_ip);
     }
@@ -34407,7 +34029,7 @@ impl NetworkInterfaceAttachmentChangesSerializer {
         if let Some(ref field_value) = obj.delete_on_termination {
             params.put(
                 &format!("{}{}", prefix, "DeleteOnTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
     }
@@ -34799,7 +34421,7 @@ impl OccurrenceDayRequestSetSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<i64>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
-            params.put(&key, &obj.to_string());
+            params.put(&key, &obj);
         }
     }
 }
@@ -34942,22 +34564,16 @@ impl OnDemandOptionsRequestSerializer {
             params.put(&format!("{}{}", prefix, "AllocationStrategy"), &field_value);
         }
         if let Some(ref field_value) = obj.min_target_capacity {
-            params.put(
-                &format!("{}{}", prefix, "MinTargetCapacity"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MinTargetCapacity"), &field_value);
         }
         if let Some(ref field_value) = obj.single_availability_zone {
             params.put(
                 &format!("{}{}", prefix, "SingleAvailabilityZone"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.single_instance_type {
-            params.put(
-                &format!("{}{}", prefix, "SingleInstanceType"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SingleInstanceType"), &field_value);
         }
     }
 }
@@ -35102,19 +34718,19 @@ impl PeeringConnectionOptionsRequestSerializer {
         if let Some(ref field_value) = obj.allow_dns_resolution_from_remote_vpc {
             params.put(
                 &format!("{}{}", prefix, "AllowDnsResolutionFromRemoteVpc"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.allow_egress_from_local_classic_link_to_remote_vpc {
             params.put(
                 &format!("{}{}", prefix, "AllowEgressFromLocalClassicLinkToRemoteVpc"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.allow_egress_from_local_vpc_to_remote_classic_link {
             params.put(
                 &format!("{}{}", prefix, "AllowEgressFromLocalVpcToRemoteClassicLink"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
     }
@@ -35215,10 +34831,7 @@ impl PlacementSerializer {
             params.put(&format!("{}{}", prefix, "HostId"), &field_value);
         }
         if let Some(ref field_value) = obj.partition_number {
-            params.put(
-                &format!("{}{}", prefix, "PartitionNumber"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PartitionNumber"), &field_value);
         }
         if let Some(ref field_value) = obj.spread_domain {
             params.put(&format!("{}{}", prefix, "SpreadDomain"), &field_value);
@@ -35411,10 +35024,10 @@ impl PortRangeSerializer {
         }
 
         if let Some(ref field_value) = obj.from {
-            params.put(&format!("{}{}", prefix, "From"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "From"), &field_value);
         }
         if let Some(ref field_value) = obj.to {
-            params.put(&format!("{}{}", prefix, "To"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "To"), &field_value);
         }
     }
 }
@@ -35655,10 +35268,10 @@ impl PriceScheduleSpecificationSerializer {
             params.put(&format!("{}{}", prefix, "CurrencyCode"), &field_value);
         }
         if let Some(ref field_value) = obj.price {
-            params.put(&format!("{}{}", prefix, "Price"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Price"), &field_value);
         }
         if let Some(ref field_value) = obj.term {
-            params.put(&format!("{}{}", prefix, "Term"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Term"), &field_value);
         }
     }
 }
@@ -35846,10 +35459,7 @@ impl PrivateIpAddressSpecificationSerializer {
         }
 
         if let Some(ref field_value) = obj.primary {
-            params.put(
-                &format!("{}{}", prefix, "Primary"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Primary"), &field_value);
         }
         if let Some(ref field_value) = obj.private_ip_address {
             params.put(&format!("{}{}", prefix, "PrivateIpAddress"), &field_value);
@@ -36061,7 +35671,7 @@ impl ProvisionByoipCidrRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }
@@ -36477,7 +36087,7 @@ impl PurchaseRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceCount"),
-            &obj.instance_count.to_string(),
+            &obj.instance_count,
         );
         params.put(
             &format!("{}{}", prefix, "PurchaseToken"),
@@ -36520,11 +36130,11 @@ impl PurchaseReservedInstancesOfferingRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "InstanceCount"),
-            &obj.instance_count.to_string(),
+            &obj.instance_count,
         );
         if let Some(ref field_value) = obj.limit_price {
             ReservedInstanceLimitPriceSerializer::serialize(
@@ -36596,7 +36206,7 @@ impl PurchaseScheduledInstancesRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         PurchaseRequestSetSerializer::serialize(
             params,
@@ -36718,7 +36328,7 @@ impl RebootInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         InstanceIdStringListSerializer::serialize(
             params,
@@ -36912,13 +36522,10 @@ impl RegisterImageRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.ena_support {
-            params.put(
-                &format!("{}{}", prefix, "EnaSupport"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EnaSupport"), &field_value);
         }
         if let Some(ref field_value) = obj.image_location {
             params.put(&format!("{}{}", prefix, "ImageLocation"), &field_value);
@@ -36985,7 +36592,7 @@ impl RejectTransitGatewayVpcAttachmentRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayAttachmentId"),
@@ -37046,7 +36653,7 @@ impl RejectVpcEndpointConnectionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "ServiceId"), &obj.service_id);
         ValueStringListSerializer::serialize(
@@ -37105,7 +36712,7 @@ impl RejectVpcPeeringConnectionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "VpcPeeringConnectionId"),
@@ -37165,7 +36772,7 @@ impl ReleaseAddressRequestSerializer {
             params.put(&format!("{}{}", prefix, "AllocationId"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.public_ip {
             params.put(&format!("{}{}", prefix, "PublicIp"), &field_value);
@@ -37318,7 +36925,7 @@ impl ReplaceNetworkAclAssociationRequestSerializer {
             &obj.association_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "NetworkAclId"),
@@ -37393,9 +37000,9 @@ impl ReplaceNetworkAclEntryRequestSerializer {
             params.put(&format!("{}{}", prefix, "CidrBlock"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "Egress"), &obj.egress.to_string());
+        params.put(&format!("{}{}", prefix, "Egress"), &obj.egress);
         if let Some(ref field_value) = obj.icmp_type_code {
             IcmpTypeCodeSerializer::serialize(
                 params,
@@ -37419,10 +37026,7 @@ impl ReplaceNetworkAclEntryRequestSerializer {
         }
         params.put(&format!("{}{}", prefix, "Protocol"), &obj.protocol);
         params.put(&format!("{}{}", prefix, "RuleAction"), &obj.rule_action);
-        params.put(
-            &format!("{}{}", prefix, "RuleNumber"),
-            &obj.rule_number.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "RuleNumber"), &obj.rule_number);
     }
 }
 
@@ -37474,7 +37078,7 @@ impl ReplaceRouteRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.egress_only_internet_gateway_id {
             params.put(
@@ -37534,7 +37138,7 @@ impl ReplaceRouteTableAssociationRequestSerializer {
             &obj.association_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "RouteTableId"),
@@ -37596,17 +37200,14 @@ impl ReplaceTransitGatewayRouteRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.blackhole {
-            params.put(
-                &format!("{}{}", prefix, "Blackhole"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Blackhole"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "DestinationCidrBlock"),
             &obj.destination_cidr_block,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.transit_gateway_attachment_id {
             params.put(
@@ -37682,7 +37283,7 @@ impl ReportInstanceStatusRequestSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.end_time {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
@@ -37822,14 +37423,11 @@ impl RequestLaunchTemplateDataSerializer {
         if let Some(ref field_value) = obj.disable_api_termination {
             params.put(
                 &format!("{}{}", prefix, "DisableApiTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.ebs_optimized {
-            params.put(
-                &format!("{}{}", prefix, "EbsOptimized"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EbsOptimized"), &field_value);
         }
         if let Some(ref field_value) = obj.elastic_gpu_specifications {
             ElasticGpuSpecificationListSerializer::serialize(
@@ -37961,7 +37559,7 @@ impl RequestSpotFleetRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         SpotFleetRequestConfigDataSerializer::serialize(
             params,
@@ -38050,20 +37648,17 @@ impl RequestSpotInstancesRequestSerializer {
         if let Some(ref field_value) = obj.block_duration_minutes {
             params.put(
                 &format!("{}{}", prefix, "BlockDurationMinutes"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.client_token {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_count {
-            params.put(
-                &format!("{}{}", prefix, "InstanceCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "InstanceCount"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_interruption_behavior {
             params.put(
@@ -38187,10 +37782,7 @@ impl RequestSpotLaunchSpecificationSerializer {
             );
         }
         if let Some(ref field_value) = obj.ebs_optimized {
-            params.put(
-                &format!("{}{}", prefix, "EbsOptimized"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EbsOptimized"), &field_value);
         }
         if let Some(ref field_value) = obj.iam_instance_profile {
             IamInstanceProfileSpecificationSerializer::serialize(
@@ -38411,7 +38003,7 @@ impl ReservedInstanceLimitPriceSerializer {
         }
 
         if let Some(ref field_value) = obj.amount {
-            params.put(&format!("{}{}", prefix, "Amount"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Amount"), &field_value);
         }
         if let Some(ref field_value) = obj.currency_code {
             params.put(&format!("{}{}", prefix, "CurrencyCode"), &field_value);
@@ -38697,10 +38289,7 @@ impl ReservedInstancesConfigurationSerializer {
             params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_count {
-            params.put(
-                &format!("{}{}", prefix, "InstanceCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "InstanceCount"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_type {
             params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
@@ -39274,7 +38863,7 @@ impl ResetFpgaImageAttributeRequestSerializer {
             params.put(&format!("{}{}", prefix, "Attribute"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "FpgaImageId"), &obj.fpga_image_id);
     }
@@ -39330,7 +38919,7 @@ impl ResetImageAttributeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "ImageId"), &obj.image_id);
     }
@@ -39357,7 +38946,7 @@ impl ResetInstanceAttributeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
     }
@@ -39384,7 +38973,7 @@ impl ResetNetworkInterfaceAttributeRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "NetworkInterfaceId"),
@@ -39418,7 +39007,7 @@ impl ResetSnapshotAttributeRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "SnapshotId"), &obj.snapshot_id);
     }
@@ -39774,7 +39363,7 @@ impl RestoreAddressToClassicRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "PublicIp"), &obj.public_ip);
     }
@@ -39844,13 +39433,10 @@ impl RevokeClientVpnIngressRequestSerializer {
             &obj.client_vpn_endpoint_id,
         );
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.revoke_all_groups {
-            params.put(
-                &format!("{}{}", prefix, "RevokeAllGroups"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "RevokeAllGroups"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetNetworkCidr"),
@@ -39925,13 +39511,10 @@ impl RevokeSecurityGroupEgressRequestSerializer {
             params.put(&format!("{}{}", prefix, "CidrIp"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.from_port {
-            params.put(
-                &format!("{}{}", prefix, "FromPort"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FromPort"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "GroupId"), &obj.group_id);
         if let Some(ref field_value) = obj.ip_permissions {
@@ -39957,7 +39540,7 @@ impl RevokeSecurityGroupEgressRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.to_port {
-            params.put(&format!("{}{}", prefix, "ToPort"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "ToPort"), &field_value);
         }
     }
 }
@@ -39999,13 +39582,10 @@ impl RevokeSecurityGroupIngressRequestSerializer {
             params.put(&format!("{}{}", prefix, "CidrIp"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.from_port {
-            params.put(
-                &format!("{}{}", prefix, "FromPort"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FromPort"), &field_value);
         }
         if let Some(ref field_value) = obj.group_id {
             params.put(&format!("{}{}", prefix, "GroupId"), &field_value);
@@ -40036,7 +39616,7 @@ impl RevokeSecurityGroupIngressRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.to_port {
-            params.put(&format!("{}{}", prefix, "ToPort"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "ToPort"), &field_value);
         }
     }
 }
@@ -40392,10 +39972,7 @@ impl RunInstancesMonitoringEnabledSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
     }
 }
 
@@ -40519,17 +40096,14 @@ impl RunInstancesRequestSerializer {
         if let Some(ref field_value) = obj.disable_api_termination {
             params.put(
                 &format!("{}{}", prefix, "DisableApiTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.ebs_optimized {
-            params.put(
-                &format!("{}{}", prefix, "EbsOptimized"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EbsOptimized"), &field_value);
         }
         if let Some(ref field_value) = obj.elastic_gpu_specification {
             ElasticGpuSpecificationsSerializer::serialize(
@@ -40579,10 +40153,7 @@ impl RunInstancesRequestSerializer {
             params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_address_count {
-            params.put(
-                &format!("{}{}", prefix, "Ipv6AddressCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Ipv6AddressCount"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_addresses {
             InstanceIpv6AddressListSerializer::serialize(
@@ -40611,14 +40182,8 @@ impl RunInstancesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "MaxCount"),
-            &obj.max_count.to_string(),
-        );
-        params.put(
-            &format!("{}{}", prefix, "MinCount"),
-            &obj.min_count.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "MaxCount"), &obj.max_count);
+        params.put(&format!("{}{}", prefix, "MinCount"), &obj.min_count);
         if let Some(ref field_value) = obj.monitoring {
             RunInstancesMonitoringEnabledSerializer::serialize(
                 params,
@@ -40704,13 +40269,10 @@ impl RunScheduledInstancesRequestSerializer {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.instance_count {
-            params.put(
-                &format!("{}{}", prefix, "InstanceCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "InstanceCount"), &field_value);
         }
         ScheduledInstancesLaunchSpecificationSerializer::serialize(
             params,
@@ -41186,10 +40748,7 @@ impl ScheduledInstanceRecurrenceRequestSerializer {
             params.put(&format!("{}{}", prefix, "Frequency"), &field_value);
         }
         if let Some(ref field_value) = obj.interval {
-            params.put(
-                &format!("{}{}", prefix, "Interval"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Interval"), &field_value);
         }
         if let Some(ref field_value) = obj.occurrence_days {
             OccurrenceDayRequestSetSerializer::serialize(
@@ -41201,7 +40760,7 @@ impl ScheduledInstanceRecurrenceRequestSerializer {
         if let Some(ref field_value) = obj.occurrence_relative_to_end {
             params.put(
                 &format!("{}{}", prefix, "OccurrenceRelativeToEnd"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.occurrence_unit {
@@ -41308,26 +40867,20 @@ impl ScheduledInstancesEbsSerializer {
         if let Some(ref field_value) = obj.delete_on_termination {
             params.put(
                 &format!("{}{}", prefix, "DeleteOnTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.iops {
-            params.put(&format!("{}{}", prefix, "Iops"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Iops"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_id {
             params.put(&format!("{}{}", prefix, "SnapshotId"), &field_value);
         }
         if let Some(ref field_value) = obj.volume_size {
-            params.put(
-                &format!("{}{}", prefix, "VolumeSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "VolumeSize"), &field_value);
         }
         if let Some(ref field_value) = obj.volume_type {
             params.put(&format!("{}{}", prefix, "VolumeType"), &field_value);
@@ -41445,10 +40998,7 @@ impl ScheduledInstancesLaunchSpecificationSerializer {
             );
         }
         if let Some(ref field_value) = obj.ebs_optimized {
-            params.put(
-                &format!("{}{}", prefix, "EbsOptimized"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EbsOptimized"), &field_value);
         }
         if let Some(ref field_value) = obj.iam_instance_profile {
             ScheduledInstancesIamInstanceProfileSerializer::serialize(
@@ -41524,10 +41074,7 @@ impl ScheduledInstancesMonitoringSerializer {
         }
 
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
     }
 }
@@ -41573,23 +41120,20 @@ impl ScheduledInstancesNetworkInterfaceSerializer {
         if let Some(ref field_value) = obj.associate_public_ip_address {
             params.put(
                 &format!("{}{}", prefix, "AssociatePublicIpAddress"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.delete_on_termination {
             params.put(
                 &format!("{}{}", prefix, "DeleteOnTermination"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.description {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.device_index {
-            params.put(
-                &format!("{}{}", prefix, "DeviceIndex"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DeviceIndex"), &field_value);
         }
         if let Some(ref field_value) = obj.groups {
             ScheduledInstancesSecurityGroupIdSetSerializer::serialize(
@@ -41599,10 +41143,7 @@ impl ScheduledInstancesNetworkInterfaceSerializer {
             );
         }
         if let Some(ref field_value) = obj.ipv_6_address_count {
-            params.put(
-                &format!("{}{}", prefix, "Ipv6AddressCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Ipv6AddressCount"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_addresses {
             ScheduledInstancesIpv6AddressListSerializer::serialize(
@@ -41627,7 +41168,7 @@ impl ScheduledInstancesNetworkInterfaceSerializer {
         if let Some(ref field_value) = obj.secondary_private_ip_address_count {
             params.put(
                 &format!("{}{}", prefix, "SecondaryPrivateIpAddressCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.subnet_id {
@@ -41693,10 +41234,7 @@ impl ScheduledInstancesPrivateIpAddressConfigSerializer {
         }
 
         if let Some(ref field_value) = obj.primary {
-            params.put(
-                &format!("{}{}", prefix, "Primary"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Primary"), &field_value);
         }
         if let Some(ref field_value) = obj.private_ip_address {
             params.put(&format!("{}{}", prefix, "PrivateIpAddress"), &field_value);
@@ -41751,14 +41289,11 @@ impl SearchTransitGatewayRoutesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         FilterListSerializer::serialize(params, &format!("{}{}", prefix, "Filter"), &obj.filters);
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TransitGatewayRouteTableId"),
@@ -42933,10 +42468,7 @@ impl SpotFleetLaunchSpecificationSerializer {
             );
         }
         if let Some(ref field_value) = obj.ebs_optimized {
-            params.put(
-                &format!("{}{}", prefix, "EbsOptimized"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EbsOptimized"), &field_value);
         }
         if let Some(ref field_value) = obj.iam_instance_profile {
             IamInstanceProfileSpecificationSerializer::serialize(
@@ -43005,10 +42537,7 @@ impl SpotFleetLaunchSpecificationSerializer {
             params.put(&format!("{}{}", prefix, "UserData"), &field_value);
         }
         if let Some(ref field_value) = obj.weighted_capacity {
-            params.put(
-                &format!("{}{}", prefix, "WeightedCapacity"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "WeightedCapacity"), &field_value);
         }
     }
 }
@@ -43049,10 +42578,7 @@ impl SpotFleetMonitoringSerializer {
         }
 
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
     }
 }
@@ -43314,10 +42840,7 @@ impl SpotFleetRequestConfigDataSerializer {
             );
         }
         if let Some(ref field_value) = obj.fulfilled_capacity {
-            params.put(
-                &format!("{}{}", prefix, "FulfilledCapacity"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FulfilledCapacity"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "IamFleetRole"),
@@ -43332,7 +42855,7 @@ impl SpotFleetRequestConfigDataSerializer {
         if let Some(ref field_value) = obj.instance_pools_to_use_count {
             params.put(
                 &format!("{}{}", prefix, "InstancePoolsToUseCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.launch_specifications {
@@ -43365,19 +42888,19 @@ impl SpotFleetRequestConfigDataSerializer {
         if let Some(ref field_value) = obj.on_demand_fulfilled_capacity {
             params.put(
                 &format!("{}{}", prefix, "OnDemandFulfilledCapacity"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.on_demand_target_capacity {
             params.put(
                 &format!("{}{}", prefix, "OnDemandTargetCapacity"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.replace_unhealthy_instances {
             params.put(
                 &format!("{}{}", prefix, "ReplaceUnhealthyInstances"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.spot_price {
@@ -43385,12 +42908,12 @@ impl SpotFleetRequestConfigDataSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "TargetCapacity"),
-            &obj.target_capacity.to_string(),
+            &obj.target_capacity,
         );
         if let Some(ref field_value) = obj.terminate_instances_with_expiration {
             params.put(
                 &format!("{}{}", prefix, "TerminateInstancesWithExpiration"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.type_ {
@@ -43822,7 +43345,7 @@ impl SpotMarketOptionsSerializer {
         if let Some(ref field_value) = obj.block_duration_minutes {
             params.put(
                 &format!("{}{}", prefix, "BlockDurationMinutes"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.instance_interruption_behavior {
@@ -43951,26 +43474,20 @@ impl SpotOptionsRequestSerializer {
         if let Some(ref field_value) = obj.instance_pools_to_use_count {
             params.put(
                 &format!("{}{}", prefix, "InstancePoolsToUseCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.min_target_capacity {
-            params.put(
-                &format!("{}{}", prefix, "MinTargetCapacity"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MinTargetCapacity"), &field_value);
         }
         if let Some(ref field_value) = obj.single_availability_zone {
             params.put(
                 &format!("{}{}", prefix, "SingleAvailabilityZone"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.single_instance_type {
-            params.put(
-                &format!("{}{}", prefix, "SingleInstanceType"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SingleInstanceType"), &field_value);
         }
     }
 }
@@ -44272,7 +43789,7 @@ impl StartInstancesRequestSerializer {
             params.put(&format!("{}{}", prefix, "AdditionalInfo"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         InstanceIdStringListSerializer::serialize(
             params,
@@ -44416,16 +43933,13 @@ impl StopInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.force {
-            params.put(&format!("{}{}", prefix, "Force"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Force"), &field_value);
         }
         if let Some(ref field_value) = obj.hibernate {
-            params.put(
-                &format!("{}{}", prefix, "Hibernate"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Hibernate"), &field_value);
         }
         InstanceIdStringListSerializer::serialize(
             params,
@@ -45137,18 +44651,15 @@ impl TargetCapacitySpecificationRequestSerializer {
         if let Some(ref field_value) = obj.on_demand_target_capacity {
             params.put(
                 &format!("{}{}", prefix, "OnDemandTargetCapacity"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.spot_target_capacity {
-            params.put(
-                &format!("{}{}", prefix, "SpotTargetCapacity"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SpotTargetCapacity"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TotalTargetCapacity"),
-            &obj.total_target_capacity.to_string(),
+            &obj.total_target_capacity,
         );
     }
 }
@@ -45203,10 +44714,7 @@ impl TargetConfigurationRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.instance_count {
-            params.put(
-                &format!("{}{}", prefix, "InstanceCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "InstanceCount"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "OfferingId"), &obj.offering_id);
     }
@@ -45526,7 +45034,7 @@ impl TerminateClientVpnConnectionsRequestSerializer {
             params.put(&format!("{}{}", prefix, "ConnectionId"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.username {
             params.put(&format!("{}{}", prefix, "Username"), &field_value);
@@ -45665,7 +45173,7 @@ impl TerminateInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         InstanceIdStringListSerializer::serialize(
             params,
@@ -46340,10 +45848,7 @@ impl TransitGatewayRequestOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.amazon_side_asn {
-            params.put(
-                &format!("{}{}", prefix, "AmazonSideAsn"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "AmazonSideAsn"), &field_value);
         }
         if let Some(ref field_value) = obj.auto_accept_shared_attachments {
             params.put(
@@ -47106,7 +46611,7 @@ impl UnmonitorInstancesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         InstanceIdStringListSerializer::serialize(
             params,
@@ -47372,7 +46877,7 @@ impl UpdateSecurityGroupRuleDescriptionsEgressRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.group_id {
             params.put(&format!("{}{}", prefix, "GroupId"), &field_value);
@@ -47442,7 +46947,7 @@ impl UpdateSecurityGroupRuleDescriptionsIngressRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.group_id {
             params.put(&format!("{}{}", prefix, "GroupId"), &field_value);
@@ -48057,7 +47562,7 @@ impl VolumeDetailSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Size"), &obj.size.to_string());
+        params.put(&format!("{}{}", prefix, "Size"), &obj.size);
     }
 }
 
@@ -49587,10 +49092,7 @@ impl VpnConnectionOptionsSpecificationSerializer {
         }
 
         if let Some(ref field_value) = obj.static_routes_only {
-            params.put(
-                &format!("{}{}", prefix, "StaticRoutesOnly"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "StaticRoutesOnly"), &field_value);
         }
         if let Some(ref field_value) = obj.tunnel_options {
             TunnelOptionsListSerializer::serialize(
@@ -49852,7 +49354,7 @@ impl WithdrawByoipCidrRequestSerializer {
 
         params.put(&format!("{}{}", prefix, "Cidr"), &obj.cidr);
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
     }
 }

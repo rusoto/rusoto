@@ -139,7 +139,7 @@ impl ActionSerializer {
             );
         }
         if let Some(ref field_value) = obj.order {
-            params.put(&format!("{}{}", prefix, "Order"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Order"), &field_value);
         }
         if let Some(ref field_value) = obj.redirect_config {
             RedirectActionConfigSerializer::serialize(
@@ -533,10 +533,7 @@ impl AuthenticateCognitoActionConfigSerializer {
             params.put(&format!("{}{}", prefix, "SessionCookieName"), &field_value);
         }
         if let Some(ref field_value) = obj.session_timeout {
-            params.put(
-                &format!("{}{}", prefix, "SessionTimeout"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SessionTimeout"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "UserPoolArn"), &obj.user_pool_arn);
         params.put(
@@ -916,10 +913,7 @@ impl AuthenticateOidcActionConfigSerializer {
             params.put(&format!("{}{}", prefix, "SessionCookieName"), &field_value);
         }
         if let Some(ref field_value) = obj.session_timeout {
-            params.put(
-                &format!("{}{}", prefix, "SessionTimeout"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SessionTimeout"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TokenEndpoint"),
@@ -1134,10 +1128,7 @@ impl CertificateSerializer {
             params.put(&format!("{}{}", prefix, "CertificateArn"), &field_value);
         }
         if let Some(ref field_value) = obj.is_default {
-            params.put(
-                &format!("{}{}", prefix, "IsDefault"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "IsDefault"), &field_value);
         }
     }
 }
@@ -1316,7 +1307,7 @@ impl CreateListenerInputSerializer {
             &format!("{}{}", prefix, "LoadBalancerArn"),
             &obj.load_balancer_arn,
         );
-        params.put(&format!("{}{}", prefix, "Port"), &obj.port.to_string());
+        params.put(&format!("{}{}", prefix, "Port"), &obj.port);
         params.put(&format!("{}{}", prefix, "Protocol"), &obj.protocol);
         if let Some(ref field_value) = obj.ssl_policy {
             params.put(&format!("{}{}", prefix, "SslPolicy"), &field_value);
@@ -1470,10 +1461,7 @@ impl CreateRuleInputSerializer {
             &obj.conditions,
         );
         params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
-        params.put(
-            &format!("{}{}", prefix, "Priority"),
-            &obj.priority.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "Priority"), &obj.priority);
     }
 }
 
@@ -1545,15 +1533,12 @@ impl CreateTargetGroupInputSerializer {
         }
 
         if let Some(ref field_value) = obj.health_check_enabled {
-            params.put(
-                &format!("{}{}", prefix, "HealthCheckEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "HealthCheckEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.health_check_interval_seconds {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckIntervalSeconds"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.health_check_path {
@@ -1571,13 +1556,13 @@ impl CreateTargetGroupInputSerializer {
         if let Some(ref field_value) = obj.health_check_timeout_seconds {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckTimeoutSeconds"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.healthy_threshold_count {
             params.put(
                 &format!("{}{}", prefix, "HealthyThresholdCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.matcher {
@@ -1585,7 +1570,7 @@ impl CreateTargetGroupInputSerializer {
         }
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
         if let Some(ref field_value) = obj.protocol {
             params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
@@ -1596,7 +1581,7 @@ impl CreateTargetGroupInputSerializer {
         if let Some(ref field_value) = obj.unhealthy_threshold_count {
             params.put(
                 &format!("{}{}", prefix, "UnhealthyThresholdCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.vpc_id {
@@ -1904,10 +1889,7 @@ impl DescribeAccountLimitsInputSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.page_size {
-            params.put(
-                &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
         }
     }
 }
@@ -1972,10 +1954,7 @@ impl DescribeListenerCertificatesInputSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.page_size {
-            params.put(
-                &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
         }
     }
 }
@@ -2051,10 +2030,7 @@ impl DescribeListenersInputSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.page_size {
-            params.put(
-                &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
         }
     }
 }
@@ -2186,10 +2162,7 @@ impl DescribeLoadBalancersInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.page_size {
-            params.put(
-                &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
         }
     }
 }
@@ -2258,10 +2231,7 @@ impl DescribeRulesInputSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.page_size {
-            params.put(
-                &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
         }
         if let Some(ref field_value) = obj.rule_arns {
             RuleArnsSerializer::serialize(
@@ -2334,10 +2304,7 @@ impl DescribeSSLPoliciesInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.page_size {
-            params.put(
-                &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
         }
     }
 }
@@ -2516,10 +2483,7 @@ impl DescribeTargetGroupsInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.page_size {
-            params.put(
-                &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
         }
         if let Some(ref field_value) = obj.target_group_arns {
             TargetGroupArnsSerializer::serialize(
@@ -3600,7 +3564,7 @@ impl ModifyListenerInputSerializer {
         }
         params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
         if let Some(ref field_value) = obj.protocol {
             params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
@@ -3848,15 +3812,12 @@ impl ModifyTargetGroupInputSerializer {
         }
 
         if let Some(ref field_value) = obj.health_check_enabled {
-            params.put(
-                &format!("{}{}", prefix, "HealthCheckEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "HealthCheckEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.health_check_interval_seconds {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckIntervalSeconds"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.health_check_path {
@@ -3874,13 +3835,13 @@ impl ModifyTargetGroupInputSerializer {
         if let Some(ref field_value) = obj.health_check_timeout_seconds {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckTimeoutSeconds"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.healthy_threshold_count {
             params.put(
                 &format!("{}{}", prefix, "HealthyThresholdCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.matcher {
@@ -3893,7 +3854,7 @@ impl ModifyTargetGroupInputSerializer {
         if let Some(ref field_value) = obj.unhealthy_threshold_count {
             params.put(
                 &format!("{}{}", prefix, "UnhealthyThresholdCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
     }
@@ -4506,10 +4467,7 @@ impl RulePriorityPairSerializer {
         }
 
         if let Some(ref field_value) = obj.priority {
-            params.put(
-                &format!("{}{}", prefix, "Priority"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Priority"), &field_value);
         }
         if let Some(ref field_value) = obj.rule_arn {
             params.put(&format!("{}{}", prefix, "RuleArn"), &field_value);
@@ -5243,7 +5201,7 @@ impl TargetDescriptionSerializer {
         }
         params.put(&format!("{}{}", prefix, "Id"), &obj.id);
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
     }
 }

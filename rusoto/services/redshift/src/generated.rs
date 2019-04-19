@@ -583,12 +583,12 @@ impl BatchModifyClusterSnapshotsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.force {
-            params.put(&format!("{}{}", prefix, "Force"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Force"), &field_value);
         }
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         SnapshotIdentifierListSerializer::serialize(
@@ -2140,7 +2140,7 @@ impl CopyClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.source_snapshot_cluster_identifier {
@@ -2267,13 +2267,13 @@ impl CreateClusterMessageSerializer {
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AllowVersionUpgrade"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.automated_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "AutomatedSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.availability_zone {
@@ -2315,16 +2315,10 @@ impl CreateClusterMessageSerializer {
             params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.enhanced_vpc_routing {
-            params.put(
-                &format!("{}{}", prefix, "EnhancedVpcRouting"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EnhancedVpcRouting"), &field_value);
         }
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(
@@ -2357,7 +2351,7 @@ impl CreateClusterMessageSerializer {
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(
@@ -2370,13 +2364,10 @@ impl CreateClusterMessageSerializer {
         );
         params.put(&format!("{}{}", prefix, "NodeType"), &obj.node_type);
         if let Some(ref field_value) = obj.number_of_nodes {
-            params.put(
-                &format!("{}{}", prefix, "NumberOfNodes"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
         }
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
@@ -2385,10 +2376,7 @@ impl CreateClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.publicly_accessible {
-            params.put(
-                &format!("{}{}", prefix, "PubliclyAccessible"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PubliclyAccessible"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_schedule_identifier {
             params.put(
@@ -2591,7 +2579,7 @@ impl CreateClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(
@@ -2731,10 +2719,7 @@ impl CreateEventSubscriptionMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
@@ -3027,13 +3012,10 @@ impl CreateSnapshotScheduleMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.dry_run {
-            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
         if let Some(ref field_value) = obj.next_invocations {
-            params.put(
-                &format!("{}{}", prefix, "NextInvocations"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NextInvocations"), &field_value);
         }
         if let Some(ref field_value) = obj.schedule_definitions {
             ScheduleDefinitionListSerializer::serialize(
@@ -3342,13 +3324,13 @@ impl DeleteClusterMessageSerializer {
         if let Some(ref field_value) = obj.final_cluster_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "FinalClusterSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.skip_final_cluster_snapshot {
             params.put(
                 &format!("{}{}", prefix, "SkipFinalClusterSnapshot"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
     }
@@ -3703,10 +3685,7 @@ impl DescribeClusterDbRevisionsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
     }
 }
@@ -3739,10 +3718,7 @@ impl DescribeClusterParameterGroupsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.parameter_group_name {
             params.put(&format!("{}{}", prefix, "ParameterGroupName"), &field_value);
@@ -3790,10 +3766,7 @@ impl DescribeClusterParametersMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ParameterGroupName"),
@@ -3839,10 +3812,7 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
@@ -3899,10 +3869,7 @@ impl DescribeClusterSnapshotsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_exists {
-            params.put(
-                &format!("{}{}", prefix, "ClusterExists"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ClusterExists"), &field_value);
         }
         if let Some(ref field_value) = obj.cluster_identifier {
             params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
@@ -3914,10 +3881,7 @@ impl DescribeClusterSnapshotsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.owner_account {
             params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
@@ -3989,10 +3953,7 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
@@ -4040,10 +4001,7 @@ impl DescribeClusterTracksMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
     }
 }
@@ -4083,10 +4041,7 @@ impl DescribeClusterVersionsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
     }
 }
@@ -4122,10 +4077,7 @@ impl DescribeClustersMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
@@ -4168,10 +4120,7 @@ impl DescribeDefaultClusterParametersMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ParameterGroupFamily"),
@@ -4261,10 +4210,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.subscription_name {
             params.put(&format!("{}{}", prefix, "SubscriptionName"), &field_value);
@@ -4315,10 +4261,7 @@ impl DescribeEventsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.duration {
-            params.put(
-                &format!("{}{}", prefix, "Duration"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
         }
         if let Some(ref field_value) = obj.end_time {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
@@ -4327,10 +4270,7 @@ impl DescribeEventsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.source_identifier {
             params.put(&format!("{}{}", prefix, "SourceIdentifier"), &field_value);
@@ -4378,10 +4318,7 @@ impl DescribeHsmClientCertificatesMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
@@ -4434,10 +4371,7 @@ impl DescribeHsmConfigurationsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
@@ -4508,10 +4442,7 @@ impl DescribeOrderableClusterOptionsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.node_type {
             params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
@@ -4543,10 +4474,7 @@ impl DescribeReservedNodeOfferingsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.reserved_node_offering_id {
             params.put(
@@ -4581,10 +4509,7 @@ impl DescribeReservedNodesMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.reserved_node_id {
             params.put(&format!("{}{}", prefix, "ReservedNodeId"), &field_value);
@@ -4643,10 +4568,7 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_copy_grant_name {
             params.put(
@@ -4703,10 +4625,7 @@ impl DescribeSnapshotSchedulesMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.schedule_identifier {
             params.put(&format!("{}{}", prefix, "ScheduleIdentifier"), &field_value);
@@ -4795,10 +4714,7 @@ impl DescribeTableRestoreStatusMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.table_restore_request_id {
             params.put(
@@ -4839,10 +4755,7 @@ impl DescribeTagsMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_name {
             params.put(&format!("{}{}", prefix, "ResourceName"), &field_value);
@@ -5152,14 +5065,11 @@ impl EnableSnapshotCopyMessageSerializer {
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.retention_period {
-            params.put(
-                &format!("{}{}", prefix, "RetentionPeriod"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "RetentionPeriod"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_copy_grant_name {
             params.put(
@@ -5684,10 +5594,7 @@ impl GetClusterCredentialsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.auto_create {
-            params.put(
-                &format!("{}{}", prefix, "AutoCreate"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "AutoCreate"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
@@ -5705,10 +5612,7 @@ impl GetClusterCredentialsMessageSerializer {
         }
         params.put(&format!("{}{}", prefix, "DbUser"), &obj.db_user);
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(
-                &format!("{}{}", prefix, "DurationSeconds"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
     }
 }
@@ -5741,10 +5645,7 @@ impl GetReservedNodeExchangeOfferingsInputMessageSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ReservedNodeId"),
@@ -6474,15 +6375,12 @@ impl ModifyClusterMaintenanceMessageSerializer {
             &obj.cluster_identifier,
         );
         if let Some(ref field_value) = obj.defer_maintenance {
-            params.put(
-                &format!("{}{}", prefix, "DeferMaintenance"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DeferMaintenance"), &field_value);
         }
         if let Some(ref field_value) = obj.defer_maintenance_duration {
             params.put(
                 &format!("{}{}", prefix, "DeferMaintenanceDuration"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.defer_maintenance_end_time {
@@ -6594,13 +6492,13 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AllowVersionUpgrade"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.automated_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "AutomatedSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(
@@ -6630,16 +6528,10 @@ impl ModifyClusterMessageSerializer {
             params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
         }
         if let Some(ref field_value) = obj.encrypted {
-            params.put(
-                &format!("{}{}", prefix, "Encrypted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
         }
         if let Some(ref field_value) = obj.enhanced_vpc_routing {
-            params.put(
-                &format!("{}{}", prefix, "EnhancedVpcRouting"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EnhancedVpcRouting"), &field_value);
         }
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(
@@ -6665,7 +6557,7 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.master_user_password {
@@ -6681,10 +6573,7 @@ impl ModifyClusterMessageSerializer {
             params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
         }
         if let Some(ref field_value) = obj.number_of_nodes {
-            params.put(
-                &format!("{}{}", prefix, "NumberOfNodes"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
@@ -6693,10 +6582,7 @@ impl ModifyClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.publicly_accessible {
-            params.put(
-                &format!("{}{}", prefix, "PubliclyAccessible"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PubliclyAccessible"), &field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
@@ -6781,12 +6667,12 @@ impl ModifyClusterSnapshotMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.force {
-            params.put(&format!("{}{}", prefix, "Force"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Force"), &field_value);
         }
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(
@@ -6849,7 +6735,7 @@ impl ModifyClusterSnapshotScheduleMessageSerializer {
         if let Some(ref field_value) = obj.disassociate_schedule {
             params.put(
                 &format!("{}{}", prefix, "DisassociateSchedule"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.schedule_identifier {
@@ -6953,10 +6839,7 @@ impl ModifyEventSubscriptionMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
@@ -7043,11 +6926,11 @@ impl ModifySnapshotCopyRetentionPeriodMessageSerializer {
             &obj.cluster_identifier,
         );
         if let Some(ref field_value) = obj.manual {
-            params.put(&format!("{}{}", prefix, "Manual"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Manual"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "RetentionPeriod"),
-            &obj.retention_period.to_string(),
+            &obj.retention_period,
         );
     }
 }
@@ -7308,10 +7191,7 @@ impl ParameterSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.is_modifiable {
-            params.put(
-                &format!("{}{}", prefix, "IsModifiable"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "IsModifiable"), &field_value);
         }
         if let Some(ref field_value) = obj.minimum_engine_version {
             params.put(
@@ -7527,10 +7407,7 @@ impl PurchaseReservedNodeOfferingMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.node_count {
-            params.put(
-                &format!("{}{}", prefix, "NodeCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "NodeCount"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ReservedNodeOfferingId"),
@@ -7999,10 +7876,7 @@ impl ResetClusterParameterGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.reset_all_parameters {
-            params.put(
-                &format!("{}{}", prefix, "ResetAllParameters"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ResetAllParameters"), &field_value);
         }
     }
 }
@@ -8031,10 +7905,7 @@ impl ResizeClusterMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.classic {
-            params.put(
-                &format!("{}{}", prefix, "Classic"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Classic"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
@@ -8048,7 +7919,7 @@ impl ResizeClusterMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "NumberOfNodes"),
-            &obj.number_of_nodes.to_string(),
+            &obj.number_of_nodes,
         );
     }
 }
@@ -8329,13 +8200,13 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AllowVersionUpgrade"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.automated_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "AutomatedSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.availability_zone {
@@ -8368,10 +8239,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
             params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
         }
         if let Some(ref field_value) = obj.enhanced_vpc_routing {
-            params.put(
-                &format!("{}{}", prefix, "EnhancedVpcRouting"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "EnhancedVpcRouting"), &field_value);
         }
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(
@@ -8404,7 +8272,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.node_type {
@@ -8414,7 +8282,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
             params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
         }
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
@@ -8423,10 +8291,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.publicly_accessible {
-            params.put(
-                &format!("{}{}", prefix, "PubliclyAccessible"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "PubliclyAccessible"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_cluster_identifier {
             params.put(

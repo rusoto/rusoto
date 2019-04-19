@@ -2186,10 +2186,7 @@ impl EventDestinationSerializer {
             );
         }
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
         if let Some(ref field_value) = obj.kinesis_firehose_destination {
             KinesisFirehoseDestinationSerializer::serialize(
@@ -3325,10 +3322,7 @@ impl ListConfigurationSetsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.max_items {
-            params.put(
-                &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -3396,10 +3390,7 @@ impl ListCustomVerificationEmailTemplatesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.max_results {
-            params.put(
-                &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -3471,10 +3462,7 @@ impl ListIdentitiesRequestSerializer {
             params.put(&format!("{}{}", prefix, "IdentityType"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
-            params.put(
-                &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -3689,10 +3677,7 @@ impl ListTemplatesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.max_items {
-            params.put(
-                &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -4505,10 +4490,7 @@ impl ReceiptRuleSerializer {
             );
         }
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.recipients {
@@ -4519,10 +4501,7 @@ impl ReceiptRuleSerializer {
             );
         }
         if let Some(ref field_value) = obj.scan_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ScanEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ScanEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.tls_policy {
             params.put(&format!("{}{}", prefix, "TlsPolicy"), &field_value);
@@ -5726,10 +5705,7 @@ impl SetIdentityDkimEnabledRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DkimEnabled"),
-            &obj.dkim_enabled.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "DkimEnabled"), &obj.dkim_enabled);
         params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
     }
 }
@@ -5778,7 +5754,7 @@ impl SetIdentityFeedbackForwardingEnabledRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ForwardingEnabled"),
-            &obj.forwarding_enabled.to_string(),
+            &obj.forwarding_enabled,
         );
         params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
     }
@@ -5828,10 +5804,7 @@ impl SetIdentityHeadersInNotificationsEnabledRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
         params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
         params.put(
             &format!("{}{}", prefix, "NotificationType"),
@@ -6420,10 +6393,7 @@ impl UpdateAccountSendingEnabledRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.enabled {
-            params.put(
-                &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
     }
 }
@@ -6508,10 +6478,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledRequestSerializer {
             &format!("{}{}", prefix, "ConfigurationSetName"),
             &obj.configuration_set_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
     }
 }
 
@@ -6541,10 +6508,7 @@ impl UpdateConfigurationSetSendingEnabledRequestSerializer {
             &format!("{}{}", prefix, "ConfigurationSetName"),
             &obj.configuration_set_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
     }
 }
 

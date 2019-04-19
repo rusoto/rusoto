@@ -979,10 +979,7 @@ impl BuildConfigurationSerializer {
         }
         params.put(&format!("{}{}", prefix, "Image"), &obj.image);
         if let Some(ref field_value) = obj.timeout_in_minutes {
-            params.put(
-                &format!("{}{}", prefix, "TimeoutInMinutes"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "TimeoutInMinutes"), &field_value);
         }
     }
 }
@@ -1914,7 +1911,7 @@ impl CreateApplicationVersionMessageSerializer {
         if let Some(ref field_value) = obj.auto_create_application {
             params.put(
                 &format!("{}{}", prefix, "AutoCreateApplication"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.build_configuration {
@@ -1928,10 +1925,7 @@ impl CreateApplicationVersionMessageSerializer {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.process {
-            params.put(
-                &format!("{}{}", prefix, "Process"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Process"), &field_value);
         }
         if let Some(ref field_value) = obj.source_build_information {
             SourceBuildInformationSerializer::serialize(
@@ -2325,7 +2319,7 @@ impl DeleteApplicationMessageSerializer {
         if let Some(ref field_value) = obj.terminate_env_by_force {
             params.put(
                 &format!("{}{}", prefix, "TerminateEnvByForce"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
     }
@@ -2356,10 +2350,7 @@ impl DeleteApplicationVersionMessageSerializer {
             &obj.application_name,
         );
         if let Some(ref field_value) = obj.delete_source_bundle {
-            params.put(
-                &format!("{}{}", prefix, "DeleteSourceBundle"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DeleteSourceBundle"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "VersionLabel"), &obj.version_label);
     }
@@ -2590,10 +2581,7 @@ impl DescribeApplicationVersionsMessageSerializer {
             params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -2867,10 +2855,7 @@ impl DescribeEnvironmentManagedActionHistoryRequestSerializer {
             params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
-            params.put(
-                &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -3055,10 +3040,7 @@ impl DescribeEnvironmentsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.include_deleted {
-            params.put(
-                &format!("{}{}", prefix, "IncludeDeleted"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "IncludeDeleted"), &field_value);
         }
         if let Some(ref field_value) = obj.included_deleted_back_to {
             params.put(
@@ -3067,10 +3049,7 @@ impl DescribeEnvironmentsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -3132,10 +3111,7 @@ impl DescribeEventsMessageSerializer {
             params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -4629,10 +4605,7 @@ impl ListPlatformVersionsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -5086,20 +5059,11 @@ impl MaxAgeRuleSerializer {
         }
 
         if let Some(ref field_value) = obj.delete_source_from_s3 {
-            params.put(
-                &format!("{}{}", prefix, "DeleteSourceFromS3"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DeleteSourceFromS3"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
         if let Some(ref field_value) = obj.max_age_in_days {
-            params.put(
-                &format!("{}{}", prefix, "MaxAgeInDays"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxAgeInDays"), &field_value);
         }
     }
 }
@@ -5153,20 +5117,11 @@ impl MaxCountRuleSerializer {
         }
 
         if let Some(ref field_value) = obj.delete_source_from_s3 {
-            params.put(
-                &format!("{}{}", prefix, "DeleteSourceFromS3"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DeleteSourceFromS3"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
         if let Some(ref field_value) = obj.max_count {
-            params.put(
-                &format!("{}{}", prefix, "MaxCount"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxCount"), &field_value);
         }
     }
 }
@@ -7064,16 +7019,10 @@ impl TerminateEnvironmentMessageSerializer {
             params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.force_terminate {
-            params.put(
-                &format!("{}{}", prefix, "ForceTerminate"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ForceTerminate"), &field_value);
         }
         if let Some(ref field_value) = obj.terminate_resources {
-            params.put(
-                &format!("{}{}", prefix, "TerminateResources"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "TerminateResources"), &field_value);
         }
     }
 }

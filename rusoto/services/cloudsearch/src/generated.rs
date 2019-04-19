@@ -529,22 +529,13 @@ impl DateArrayOptionsSerializer {
             params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(
-                &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
             params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
@@ -621,28 +612,16 @@ impl DateOptionsSerializer {
             params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(
-                &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
             params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
@@ -1162,10 +1141,7 @@ impl DescribeAnalysisSchemesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.deployed {
-            params.put(
-                &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
@@ -1224,10 +1200,7 @@ impl DescribeAvailabilityOptionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(
-                &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
@@ -1345,10 +1318,7 @@ impl DescribeExpressionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(
-                &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.expression_names {
@@ -1415,10 +1385,7 @@ impl DescribeIndexFieldsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(
-                &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.field_names {
@@ -1533,10 +1500,7 @@ impl DescribeServiceAccessPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(
-                &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
@@ -1593,10 +1557,7 @@ impl DescribeSuggestersRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(
-                &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.suggester_names {
@@ -1960,28 +1921,16 @@ impl DoubleArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(
-                &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
             params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
@@ -2056,34 +2005,19 @@ impl DoubleOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(
-                &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
             params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
@@ -2668,28 +2602,16 @@ impl IntArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(
-                &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
             params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
@@ -2763,34 +2685,19 @@ impl IntOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(
-                &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
             params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
@@ -2867,28 +2774,16 @@ impl LatLonOptionsSerializer {
             params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(
-                &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
             params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
@@ -3028,22 +2923,13 @@ impl LiteralArrayOptionsSerializer {
             params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(
-                &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
             params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
@@ -3120,28 +3006,16 @@ impl LiteralOptionsSerializer {
             params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(
-                &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
             params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
@@ -3374,13 +3248,13 @@ impl ScalingParametersSerializer {
         if let Some(ref field_value) = obj.desired_partition_count {
             params.put(
                 &format!("{}{}", prefix, "DesiredPartitionCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.desired_replication_count {
             params.put(
                 &format!("{}{}", prefix, "DesiredReplicationCount"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
     }
@@ -3693,16 +3567,10 @@ impl TextArrayOptionsSerializer {
             params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.highlight_enabled {
-            params.put(
-                &format!("{}{}", prefix, "HighlightEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "HighlightEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
             params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
@@ -3782,22 +3650,13 @@ impl TextOptionsSerializer {
             params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.highlight_enabled {
-            params.put(
-                &format!("{}{}", prefix, "HighlightEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "HighlightEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(
-                &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
             params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
@@ -3837,10 +3696,7 @@ impl UpdateAvailabilityOptionsRequestSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
-        params.put(
-            &format!("{}{}", prefix, "MultiAZ"),
-            &obj.multi_az.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "MultiAZ"), &obj.multi_az);
     }
 }
 

@@ -1759,7 +1759,7 @@ impl SubscribeInputSerializer {
         if let Some(ref field_value) = obj.return_subscription_arn {
             params.put(
                 &format!("{}{}", prefix, "ReturnSubscriptionArn"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
