@@ -44,6 +44,11 @@ pub struct AttributeValue {
     pub bool: Option<bool>,
     /// <p>A Binary Set data type.</p>
     #[serde(rename = "BS")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlobList::deserialize_blob_list",
+        serialize_with = "::rusoto_core::serialization::SerdeBlobList::serialize_blob_list",
+        default
+    )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bs: Option<Vec<Vec<u8>>>,
     /// <p>A List data type.</p>

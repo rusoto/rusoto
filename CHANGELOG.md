@@ -3,6 +3,8 @@
 ## [Unreleased]
 (Please put notes here)
 
+- Fix de/serialization of DynamoDB binary set attribute values
+
 ## [0.38.0] - 2019-04-17
 
 - Add `RusotoError` enum as base error type for all services

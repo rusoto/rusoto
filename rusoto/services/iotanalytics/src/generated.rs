@@ -1257,6 +1257,11 @@ pub struct RetentionPeriod {
 pub struct RunPipelineActivityRequest {
     /// <p>The sample message payloads on which the pipeline activity is run.</p>
     #[serde(rename = "payloads")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlobList::deserialize_blob_list",
+        serialize_with = "::rusoto_core::serialization::SerdeBlobList::serialize_blob_list",
+        default
+    )]
     pub payloads: Vec<Vec<u8>>,
     /// <p>The pipeline activity that is run. This must not be a 'channel' activity or a 'datastore' activity because these activities are used in a pipeline only to load the original message and to store the (possibly) transformed message. If a 'lambda' activity is specified, only short-running Lambda functions (those with a timeout of less than 30 seconds or less) can be used.</p>
     #[serde(rename = "pipelineActivity")]
@@ -1272,6 +1277,11 @@ pub struct RunPipelineActivityResponse {
     pub log_result: Option<String>,
     /// <p>The enriched or transformed sample message payloads as base64-encoded strings. (The results of running the pipeline activity on each input sample message payload, encoded in base64.)</p>
     #[serde(rename = "payloads")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlobList::deserialize_blob_list",
+        serialize_with = "::rusoto_core::serialization::SerdeBlobList::serialize_blob_list",
+        default
+    )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payloads: Option<Vec<Vec<u8>>>,
 }
@@ -1300,6 +1310,11 @@ pub struct SampleChannelDataRequest {
 pub struct SampleChannelDataResponse {
     /// <p>The list of message samples. Each sample message is returned as a base64-encoded string.</p>
     #[serde(rename = "payloads")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlobList::deserialize_blob_list",
+        serialize_with = "::rusoto_core::serialization::SerdeBlobList::serialize_blob_list",
+        default
+    )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payloads: Option<Vec<Vec<u8>>>,
 }
