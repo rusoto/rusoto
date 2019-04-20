@@ -409,8 +409,8 @@ fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
         "
             let mut body = response.body;
 
-            if body == b\"null\" || body.is_empty() {{
-                body = b\"{{}}\".to_vec();
+            if body.as_ref() == b\"null\" || body.is_empty() {{
+                body = bytes::Bytes::from_static(b\"{{}}\");
             }}
 
             debug!(\"Response body: {{:?}}\", body);

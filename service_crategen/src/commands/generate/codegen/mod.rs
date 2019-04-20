@@ -220,7 +220,7 @@ pub fn get_rust_type(
 ) -> String {
     if !streaming {
         match shape.shape_type {
-            ShapeType::Blob => "Vec<u8>".into(),
+            ShapeType::Blob => "bytes::Bytes".into(),
             ShapeType::Boolean => "bool".into(),
             ShapeType::Double => "f64".into(),
             ShapeType::Float => "f32".into(),

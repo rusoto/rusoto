@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [ApiGatewayV2Client](struct.ApiGatewayV2Client.html) and [ApiGatewayV2](trait.ApiGatewayV2.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

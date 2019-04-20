@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [MediaTailorClient](struct.MediaTailorClient.html) and [MediaTailor](trait.MediaTailor.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

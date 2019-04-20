@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [AppStreamClient](struct.AppStreamClient.html) and [AppStream](trait.AppStream.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

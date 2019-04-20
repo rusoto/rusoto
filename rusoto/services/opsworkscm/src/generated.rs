@@ -1659,15 +1659,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.AssociateNode");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<AssociateNodeResponse>(
@@ -1696,15 +1696,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.CreateBackup");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateBackupResponse>(
@@ -1733,15 +1733,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.CreateServer");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateServerResponse>(
@@ -1770,15 +1770,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DeleteBackup");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteBackupResponse>(
@@ -1807,15 +1807,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DeleteServer");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteServerResponse>(
@@ -1845,15 +1845,15 @@ impl OpsWorksCM for OpsWorksCMClient {
             "x-amz-target",
             "OpsWorksCM_V2016_11_01.DescribeAccountAttributes",
         );
-        request.set_payload(Some(b"{}".to_vec()));
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeAccountAttributesResponse>(
@@ -1879,15 +1879,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DescribeBackups");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeBackupsResponse>(
@@ -1916,15 +1916,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DescribeEvents");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeEventsResponse>(
@@ -1957,15 +1957,15 @@ impl OpsWorksCM for OpsWorksCMClient {
             "OpsWorksCM_V2016_11_01.DescribeNodeAssociationStatus",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeNodeAssociationStatusResponse>(
@@ -1991,15 +1991,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DescribeServers");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeServersResponse>(
@@ -2028,15 +2028,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DisassociateNode");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DisassociateNodeResponse>(
@@ -2068,15 +2068,15 @@ impl OpsWorksCM for OpsWorksCMClient {
             "OpsWorksCM_V2016_11_01.ExportServerEngineAttribute",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ExportServerEngineAttributeResponse>(
@@ -2102,15 +2102,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.RestoreServer");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RestoreServerResponse>(
@@ -2139,15 +2139,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.StartMaintenance");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<StartMaintenanceResponse>(
@@ -2176,15 +2176,15 @@ impl OpsWorksCM for OpsWorksCMClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.UpdateServer");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateServerResponse>(
@@ -2216,15 +2216,15 @@ impl OpsWorksCM for OpsWorksCMClient {
             "OpsWorksCM_V2016_11_01.UpdateServerEngineAttributes",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateServerEngineAttributesResponse>(

@@ -4434,15 +4434,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.AddAttributesToFindings");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<AddAttributesToFindingsResponse>(
@@ -4468,15 +4468,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.CreateAssessmentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateAssessmentTargetResponse>(
@@ -4504,15 +4504,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.CreateAssessmentTemplate");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateAssessmentTemplateResponse>(
@@ -4538,15 +4538,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.CreateExclusionsPreview");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateExclusionsPreviewResponse>(
@@ -4572,15 +4572,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.CreateResourceGroup");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateResourceGroupResponse>(
@@ -4608,7 +4608,7 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DeleteAssessmentRun");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -4633,7 +4633,7 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DeleteAssessmentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -4658,7 +4658,7 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DeleteAssessmentTemplate");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -4681,15 +4681,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeAssessmentRuns");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeAssessmentRunsResponse>(
@@ -4717,15 +4717,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeAssessmentTargets");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeAssessmentTargetsResponse>(
@@ -4754,15 +4754,15 @@ impl Inspector for InspectorClient {
             "InspectorService.DescribeAssessmentTemplates",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeAssessmentTemplatesResponse>(
@@ -4790,15 +4790,15 @@ impl Inspector for InspectorClient {
             "x-amz-target",
             "InspectorService.DescribeCrossAccountAccessRole",
         );
-        request.set_payload(Some(b"{}".to_vec()));
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeCrossAccountAccessRoleResponse>(
@@ -4824,15 +4824,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeExclusions");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeExclusionsResponse>(
@@ -4861,15 +4861,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeFindings");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeFindingsResponse>(
@@ -4898,15 +4898,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeResourceGroups");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeResourceGroupsResponse>(
@@ -4934,15 +4934,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeRulesPackages");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeRulesPackagesResponse>(
@@ -4970,15 +4970,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.GetAssessmentReport");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<GetAssessmentReportResponse>(
@@ -5006,15 +5006,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.GetExclusionsPreview");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<GetExclusionsPreviewResponse>(
@@ -5042,15 +5042,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.GetTelemetryMetadata");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<GetTelemetryMetadataResponse>(
@@ -5078,15 +5078,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListAssessmentRunAgents");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListAssessmentRunAgentsResponse>(
@@ -5112,15 +5112,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListAssessmentRuns");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListAssessmentRunsResponse>(
@@ -5149,15 +5149,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListAssessmentTargets");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListAssessmentTargetsResponse>(
@@ -5185,15 +5185,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListAssessmentTemplates");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListAssessmentTemplatesResponse>(
@@ -5219,15 +5219,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListEventSubscriptions");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListEventSubscriptionsResponse>(
@@ -5255,15 +5255,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListExclusions");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListExclusionsResponse>(
@@ -5292,15 +5292,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListFindings");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListFindingsResponse>(
@@ -5329,15 +5329,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListRulesPackages");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListRulesPackagesResponse>(
@@ -5366,15 +5366,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListTagsForResourceResponse>(
@@ -5402,15 +5402,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.PreviewAgents");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<PreviewAgentsResponse>(
@@ -5442,7 +5442,7 @@ impl Inspector for InspectorClient {
             "InspectorService.RegisterCrossAccountAccessRole",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -5468,15 +5468,15 @@ impl Inspector for InspectorClient {
             "InspectorService.RemoveAttributesFromFindings",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RemoveAttributesFromFindingsResponse>(
@@ -5502,7 +5502,7 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.SetTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -5528,15 +5528,15 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.StartAssessmentRun");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<StartAssessmentRunResponse>(
@@ -5565,7 +5565,7 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.StopAssessmentRun");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -5591,7 +5591,7 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.SubscribeToEvent");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -5617,7 +5617,7 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.UnsubscribeFromEvent");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -5642,7 +5642,7 @@ impl Inspector for InspectorClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.UpdateAssessmentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {

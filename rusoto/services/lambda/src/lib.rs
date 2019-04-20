@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [LambdaClient](struct.LambdaClient.html) and [Lambda](trait.Lambda.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

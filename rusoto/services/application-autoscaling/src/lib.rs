@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [ApplicationAutoScalingClient](struct.ApplicationAutoScalingClient.html) and [ApplicationAutoScaling](trait.ApplicationAutoScaling.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

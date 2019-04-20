@@ -1666,7 +1666,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.DeleteRule");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -1688,15 +1688,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.DescribeEventBus");
-        request.set_payload(Some(b"{}".to_vec()));
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeEventBusResponse>(
@@ -1725,15 +1725,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.DescribeRule");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeRuleResponse>(
@@ -1759,7 +1759,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.DisableRule");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -1782,7 +1782,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.EnableRule");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -1808,15 +1808,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.ListRuleNamesByTarget");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListRuleNamesByTargetResponse>(
@@ -1844,15 +1844,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.ListRules");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListRulesResponse>(
@@ -1881,15 +1881,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.ListTargetsByRule");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListTargetsByRuleResponse>(
@@ -1918,15 +1918,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.PutEvents");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<PutEventsResponse>(
@@ -1952,7 +1952,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.PutPermission");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -1975,15 +1975,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.PutRule");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<PutRuleResponse>(
@@ -2012,15 +2012,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.PutTargets");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<PutTargetsResponse>(
@@ -2049,7 +2049,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.RemovePermission");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -2075,15 +2075,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.RemoveTargets");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RemoveTargetsResponse>(
@@ -2112,15 +2112,15 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.TestEventPattern");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<TestEventPatternResponse>(

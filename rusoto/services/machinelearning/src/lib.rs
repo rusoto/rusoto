@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [MachineLearningClient](struct.MachineLearningClient.html) and [MachineLearning](trait.MachineLearning.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

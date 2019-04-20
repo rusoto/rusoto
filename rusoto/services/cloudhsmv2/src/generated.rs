@@ -1598,15 +1598,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.CopyBackupToRegion");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CopyBackupToRegionResponse>(
@@ -1635,15 +1635,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.CreateCluster");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateClusterResponse>(
@@ -1672,15 +1672,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.CreateHsm");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateHsmResponse>(
@@ -1709,15 +1709,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DeleteBackup");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteBackupResponse>(
@@ -1746,15 +1746,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DeleteCluster");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteClusterResponse>(
@@ -1783,15 +1783,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DeleteHsm");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteHsmResponse>(
@@ -1820,15 +1820,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DescribeBackups");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeBackupsResponse>(
@@ -1857,15 +1857,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DescribeClusters");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeClustersResponse>(
@@ -1894,15 +1894,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.InitializeCluster");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<InitializeClusterResponse>(
@@ -1928,15 +1928,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.ListTags");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListTagsResponse>(
@@ -1965,15 +1965,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.RestoreBackup");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RestoreBackupResponse>(
@@ -2002,15 +2002,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<TagResourceResponse>(
@@ -2039,15 +2039,15 @@ impl CloudHsmv2 for CloudHsmv2Client {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UntagResourceResponse>(

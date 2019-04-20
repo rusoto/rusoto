@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [CodeCommitClient](struct.CodeCommitClient.html) and [CodeCommit](trait.CodeCommit.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

@@ -4030,7 +4030,7 @@ pub enum BuildSuggestersError {
 impl BuildSuggestersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BuildSuggestersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4093,7 +4093,7 @@ pub enum CreateDomainError {
 impl CreateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4160,7 +4160,7 @@ pub enum DefineAnalysisSchemeError {
 impl DefineAnalysisSchemeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DefineAnalysisSchemeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4239,7 +4239,7 @@ pub enum DefineExpressionError {
 impl DefineExpressionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DefineExpressionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4318,7 +4318,7 @@ pub enum DefineIndexFieldError {
 impl DefineIndexFieldError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DefineIndexFieldError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4397,7 +4397,7 @@ pub enum DefineSuggesterError {
 impl DefineSuggesterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DefineSuggesterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4474,7 +4474,7 @@ pub enum DeleteAnalysisSchemeError {
 impl DeleteAnalysisSchemeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnalysisSchemeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4541,7 +4541,7 @@ pub enum DeleteDomainError {
 impl DeleteDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4600,7 +4600,7 @@ pub enum DeleteExpressionError {
 impl DeleteExpressionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteExpressionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4671,7 +4671,7 @@ pub enum DeleteIndexFieldError {
 impl DeleteIndexFieldError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIndexFieldError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4742,7 +4742,7 @@ pub enum DeleteSuggesterError {
 impl DeleteSuggesterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSuggesterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4811,7 +4811,7 @@ pub enum DescribeAnalysisSchemesError {
 impl DescribeAnalysisSchemesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAnalysisSchemesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4884,7 +4884,7 @@ impl DescribeAvailabilityOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAvailabilityOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -4969,7 +4969,7 @@ pub enum DescribeDomainsError {
 impl DescribeDomainsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5026,7 +5026,7 @@ pub enum DescribeExpressionsError {
 impl DescribeExpressionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExpressionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5089,7 +5089,7 @@ pub enum DescribeIndexFieldsError {
 impl DescribeIndexFieldsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIndexFieldsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5152,7 +5152,7 @@ pub enum DescribeScalingParametersError {
 impl DescribeScalingParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5219,7 +5219,7 @@ impl DescribeServiceAccessPoliciesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeServiceAccessPoliciesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5284,7 +5284,7 @@ pub enum DescribeSuggestersError {
 impl DescribeSuggestersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSuggestersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5347,7 +5347,7 @@ pub enum IndexDocumentsError {
 impl IndexDocumentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IndexDocumentsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5406,7 +5406,7 @@ pub enum ListDomainNamesError {
 impl ListDomainNamesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainNamesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5463,7 +5463,7 @@ pub enum UpdateAvailabilityOptionsError {
 impl UpdateAvailabilityOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAvailabilityOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5552,7 +5552,7 @@ pub enum UpdateScalingParametersError {
 impl UpdateScalingParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateScalingParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5635,7 +5635,7 @@ impl UpdateServiceAccessPoliciesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateServiceAccessPoliciesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5891,9 +5891,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "BuildSuggesters");
         params.put("Version", "2013-01-01");
         BuildSuggestersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5913,7 +5911,7 @@ impl CloudSearch for CloudSearchClient {
                     result = BuildSuggestersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5944,9 +5942,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "CreateDomain");
         params.put("Version", "2013-01-01");
         CreateDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -5966,7 +5962,7 @@ impl CloudSearch for CloudSearchClient {
                     result = CreateDomainResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5997,9 +5993,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DefineAnalysisScheme");
         params.put("Version", "2013-01-01");
         DefineAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6018,7 +6012,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DefineAnalysisSchemeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6049,9 +6043,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DefineExpression");
         params.put("Version", "2013-01-01");
         DefineExpressionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6071,7 +6063,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DefineExpressionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6102,9 +6094,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DefineIndexField");
         params.put("Version", "2013-01-01");
         DefineIndexFieldRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6124,7 +6114,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DefineIndexFieldResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6155,9 +6145,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DefineSuggester");
         params.put("Version", "2013-01-01");
         DefineSuggesterRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6177,7 +6165,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DefineSuggesterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6208,9 +6196,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DeleteAnalysisScheme");
         params.put("Version", "2013-01-01");
         DeleteAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6229,7 +6215,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DeleteAnalysisSchemeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6260,9 +6246,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DeleteDomain");
         params.put("Version", "2013-01-01");
         DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6282,7 +6266,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DeleteDomainResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6313,9 +6297,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DeleteExpression");
         params.put("Version", "2013-01-01");
         DeleteExpressionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6335,7 +6317,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DeleteExpressionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6366,9 +6348,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DeleteIndexField");
         params.put("Version", "2013-01-01");
         DeleteIndexFieldRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6388,7 +6368,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DeleteIndexFieldResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6419,9 +6399,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DeleteSuggester");
         params.put("Version", "2013-01-01");
         DeleteSuggesterRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6441,7 +6419,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DeleteSuggesterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6472,9 +6450,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DescribeAnalysisSchemes");
         params.put("Version", "2013-01-01");
         DescribeAnalysisSchemesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6491,7 +6467,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DescribeAnalysisSchemesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6522,9 +6498,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DescribeAvailabilityOptions");
         params.put("Version", "2013-01-01");
         DescribeAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6541,7 +6515,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DescribeAvailabilityOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6572,9 +6546,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DescribeDomains");
         params.put("Version", "2013-01-01");
         DescribeDomainsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6594,7 +6566,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DescribeDomainsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6625,9 +6597,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DescribeExpressions");
         params.put("Version", "2013-01-01");
         DescribeExpressionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6646,7 +6616,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DescribeExpressionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6677,9 +6647,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DescribeIndexFields");
         params.put("Version", "2013-01-01");
         DescribeIndexFieldsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6698,7 +6666,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DescribeIndexFieldsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6729,9 +6697,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DescribeScalingParameters");
         params.put("Version", "2013-01-01");
         DescribeScalingParametersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6748,7 +6714,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DescribeScalingParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6780,9 +6746,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DescribeServiceAccessPolicies");
         params.put("Version", "2013-01-01");
         DescribeServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6799,7 +6763,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DescribeServiceAccessPoliciesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6830,9 +6794,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "DescribeSuggesters");
         params.put("Version", "2013-01-01");
         DescribeSuggestersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6852,7 +6814,7 @@ impl CloudSearch for CloudSearchClient {
                     result = DescribeSuggestersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6883,9 +6845,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "IndexDocuments");
         params.put("Version", "2013-01-01");
         IndexDocumentsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6905,7 +6865,7 @@ impl CloudSearch for CloudSearchClient {
                     result = IndexDocumentsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6933,9 +6893,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "ListDomainNames");
         params.put("Version", "2013-01-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -6955,7 +6913,7 @@ impl CloudSearch for CloudSearchClient {
                     result = ListDomainNamesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6986,9 +6944,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "UpdateAvailabilityOptions");
         params.put("Version", "2013-01-01");
         UpdateAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -7005,7 +6961,7 @@ impl CloudSearch for CloudSearchClient {
                     result = UpdateAvailabilityOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7036,9 +6992,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "UpdateScalingParameters");
         params.put("Version", "2013-01-01");
         UpdateScalingParametersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -7055,7 +7009,7 @@ impl CloudSearch for CloudSearchClient {
                     result = UpdateScalingParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7086,9 +7040,7 @@ impl CloudSearch for CloudSearchClient {
         params.put("Action", "UpdateServiceAccessPolicies");
         params.put("Version", "2013-01-01");
         UpdateServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -7105,7 +7057,7 @@ impl CloudSearch for CloudSearchClient {
                     result = UpdateServiceAccessPoliciesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

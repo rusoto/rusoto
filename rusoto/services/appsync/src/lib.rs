@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [AppSyncClient](struct.AppSyncClient.html) and [AppSync](trait.AppSync.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [AmplifyClient](struct.AmplifyClient.html) and [Amplify](trait.Amplify.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

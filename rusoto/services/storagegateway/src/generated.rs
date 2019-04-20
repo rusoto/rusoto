@@ -6847,15 +6847,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ActivateGateway");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ActivateGatewayOutput>(
@@ -6881,15 +6881,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddCache");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<AddCacheOutput>(
@@ -6918,15 +6918,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddTagsToResource");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<AddTagsToResourceOutput>(
@@ -6955,15 +6955,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddUploadBuffer");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<AddUploadBufferOutput>(
@@ -6992,15 +6992,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddWorkingStorage");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<AddWorkingStorageOutput>(
@@ -7029,15 +7029,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AttachVolume");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<AttachVolumeOutput>(
@@ -7066,15 +7066,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CancelArchival");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CancelArchivalOutput>(
@@ -7103,15 +7103,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CancelRetrieval");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CancelRetrievalOutput>(
@@ -7143,15 +7143,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.CreateCachediSCSIVolume",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateCachediSCSIVolumeOutput>(
@@ -7177,15 +7177,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateNFSFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateNFSFileShareOutput>(
@@ -7214,15 +7214,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateSMBFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateSMBFileShareOutput>(
@@ -7251,15 +7251,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateSnapshotOutput>(
@@ -7294,15 +7294,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.CreateSnapshotFromVolumeRecoveryPoint",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateSnapshotFromVolumeRecoveryPointOutput>(
@@ -7333,15 +7333,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.CreateStorediSCSIVolume",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateStorediSCSIVolumeOutput>(
@@ -7370,15 +7370,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.CreateTapeWithBarcode",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateTapeWithBarcodeOutput>(
@@ -7406,15 +7406,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateTapes");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<CreateTapesOutput>(
@@ -7446,15 +7446,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DeleteBandwidthRateLimit",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteBandwidthRateLimitOutput>(
@@ -7483,15 +7483,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DeleteChapCredentials",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteChapCredentialsOutput>(
@@ -7519,15 +7519,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteFileShareOutput>(
@@ -7556,15 +7556,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteGateway");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteGatewayOutput>(
@@ -7596,15 +7596,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DeleteSnapshotSchedule",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteSnapshotScheduleOutput>(
@@ -7632,15 +7632,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteTape");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteTapeOutput>(
@@ -7669,15 +7669,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteTapeArchive");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteTapeArchiveOutput>(
@@ -7706,15 +7706,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteVolume");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DeleteVolumeOutput>(
@@ -7746,15 +7746,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeBandwidthRateLimit",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeBandwidthRateLimitOutput>(
@@ -7780,15 +7780,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DescribeCache");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeCacheOutput>(
@@ -7820,15 +7820,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeCachediSCSIVolumes",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeCachediSCSIVolumesOutput>(
@@ -7857,15 +7857,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeChapCredentials",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeChapCredentialsOutput>(
@@ -7894,15 +7894,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeGatewayInformation",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeGatewayInformationOutput>(
@@ -7931,15 +7931,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeMaintenanceStartTime",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeMaintenanceStartTimeOutput>(
@@ -7968,15 +7968,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeNFSFileShares",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeNFSFileSharesOutput>(
@@ -8007,15 +8007,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeSMBFileShares",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeSMBFileSharesOutput>(
@@ -8046,15 +8046,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeSMBSettings",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeSMBSettingsOutput>(
@@ -8085,15 +8085,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeSnapshotSchedule",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeSnapshotScheduleOutput>(
@@ -8122,15 +8122,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeStorediSCSIVolumes",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeStorediSCSIVolumesOutput>(
@@ -8159,15 +8159,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeTapeArchives",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeTapeArchivesOutput>(
@@ -8198,15 +8198,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeTapeRecoveryPoints",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeTapeRecoveryPointsOutput>(
@@ -8232,15 +8232,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DescribeTapes");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeTapesOutput>(
@@ -8272,15 +8272,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeUploadBuffer",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeUploadBufferOutput>(
@@ -8308,15 +8308,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DescribeVTLDevices");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeVTLDevicesOutput>(
@@ -8348,15 +8348,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.DescribeWorkingStorage",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeWorkingStorageOutput>(
@@ -8384,15 +8384,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DetachVolume");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DetachVolumeOutput>(
@@ -8421,15 +8421,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DisableGateway");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DisableGatewayOutput>(
@@ -8458,15 +8458,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.JoinDomain");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<JoinDomainOutput>(
@@ -8495,15 +8495,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListFileShares");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListFileSharesOutput>(
@@ -8532,15 +8532,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListGateways");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListGatewaysOutput>(
@@ -8569,15 +8569,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListLocalDisks");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListLocalDisksOutput>(
@@ -8609,15 +8609,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.ListTagsForResource",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListTagsForResourceOutput>(
@@ -8642,15 +8642,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListTapes");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListTapesOutput>(
@@ -8682,15 +8682,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.ListVolumeInitiators",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListVolumeInitiatorsOutput>(
@@ -8721,15 +8721,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.ListVolumeRecoveryPoints",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListVolumeRecoveryPointsOutput>(
@@ -8755,15 +8755,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListVolumes");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListVolumesOutput>(
@@ -8792,15 +8792,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.NotifyWhenUploaded");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<NotifyWhenUploadedOutput>(
@@ -8829,15 +8829,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.RefreshCache");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RefreshCacheOutput>(
@@ -8869,15 +8869,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.RemoveTagsFromResource",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RemoveTagsFromResourceOutput>(
@@ -8905,15 +8905,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ResetCache");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ResetCacheOutput>(
@@ -8945,15 +8945,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.RetrieveTapeArchive",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RetrieveTapeArchiveOutput>(
@@ -8984,15 +8984,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.RetrieveTapeRecoveryPoint",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<RetrieveTapeRecoveryPointOutput>(
@@ -9021,15 +9021,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.SetLocalConsolePassword",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<SetLocalConsolePasswordOutput>(
@@ -9058,15 +9058,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.SetSMBGuestPassword",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<SetSMBGuestPasswordOutput>(
@@ -9094,15 +9094,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ShutdownGateway");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ShutdownGatewayOutput>(
@@ -9131,15 +9131,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.StartGateway");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<StartGatewayOutput>(
@@ -9171,15 +9171,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.UpdateBandwidthRateLimit",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateBandwidthRateLimitOutput>(
@@ -9208,15 +9208,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.UpdateChapCredentials",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateChapCredentialsOutput>(
@@ -9247,15 +9247,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.UpdateGatewayInformation",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateGatewayInformationOutput>(
@@ -9284,15 +9284,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.UpdateGatewaySoftwareNow",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateGatewaySoftwareNowOutput>(
@@ -9321,15 +9321,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.UpdateMaintenanceStartTime",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateMaintenanceStartTimeOutput>(
@@ -9355,15 +9355,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.UpdateNFSFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateNFSFileShareOutput>(
@@ -9392,15 +9392,15 @@ impl StorageGateway for StorageGatewayClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.UpdateSMBFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateSMBFileShareOutput>(
@@ -9432,15 +9432,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.UpdateSnapshotSchedule",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateSnapshotScheduleOutput>(
@@ -9471,15 +9471,15 @@ impl StorageGateway for StorageGatewayClient {
             "StorageGateway_20130630.UpdateVTLDeviceType",
         );
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<UpdateVTLDeviceTypeOutput>(

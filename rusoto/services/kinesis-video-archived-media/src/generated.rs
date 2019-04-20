@@ -126,7 +126,7 @@ pub struct GetMediaForFragmentListOutput {
     /// <p>The content type of the requested media.</p>
     pub content_type: Option<String>,
     /// <p><p>The payload that Kinesis Video Streams returns is a sequence of chunks from the specified stream. For information about the chunks, see <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_dataplane_PutMedia.html">PutMedia</a>. The chunks that Kinesis Video Streams returns in the <code>GetMediaForFragmentList</code> call also include the following additional Matroska (MKV) tags: </p> <ul> <li> <p>AWS<em>KINESISVIDEO</em>FRAGMENT<em>NUMBER - Fragment number returned in the chunk.</p> </li> <li> <p>AWS</em>KINESISVIDEO<em>SERVER</em>SIDE<em>TIMESTAMP - Server-side timestamp of the fragment.</p> </li> <li> <p>AWS</em>KINESISVIDEO<em>PRODUCER</em>SIDE<em>TIMESTAMP - Producer-side timestamp of the fragment.</p> </li> </ul> <p>The following tags will be included if an exception occurs:</p> <ul> <li> <p>AWS</em>KINESISVIDEO<em>FRAGMENT</em>NUMBER - The number of the fragment that threw the exception</p> </li> <li> <p>AWS<em>KINESISVIDEO</em>EXCEPTION<em>ERROR</em>CODE - The integer code of the exception</p> </li> <li> <p>AWS<em>KINESISVIDEO</em>EXCEPTION_MESSAGE - A text description of the exception</p> </li> </ul></p>
-    pub payload: Option<Vec<u8>>,
+    pub payload: Option<bytes::Bytes>,
 }
 
 /// <p>Contains the range of timestamps for the requested media, and the source of the timestamps.</p>
@@ -559,8 +559,8 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -630,8 +630,8 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);

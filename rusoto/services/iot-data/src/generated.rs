@@ -38,7 +38,7 @@ pub struct DeleteThingShadowRequest {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteThingShadowResponse {
     /// <p>The state information, in JSON format.</p>
-    pub payload: Vec<u8>,
+    pub payload: bytes::Bytes,
 }
 
 /// <p>The input for the GetThingShadow operation.</p>
@@ -53,7 +53,7 @@ pub struct GetThingShadowRequest {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetThingShadowResponse {
     /// <p>The state information, in JSON format.</p>
-    pub payload: Option<Vec<u8>>,
+    pub payload: Option<bytes::Bytes>,
 }
 
 /// <p>The input for the Publish operation.</p>
@@ -67,7 +67,7 @@ pub struct PublishRequest {
         default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payload: Option<Vec<u8>>,
+    pub payload: Option<bytes::Bytes>,
     /// <p>The Quality of Service (QoS) level.</p>
     #[serde(rename = "qos")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -87,7 +87,7 @@ pub struct UpdateThingShadowRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
-    pub payload: Vec<u8>,
+    pub payload: bytes::Bytes,
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
@@ -97,7 +97,7 @@ pub struct UpdateThingShadowRequest {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateThingShadowResponse {
     /// <p>The state information, in JSON format.</p>
-    pub payload: Option<Vec<u8>>,
+    pub payload: Option<bytes::Bytes>,
 }
 
 /// Errors returned by DeleteThingShadow

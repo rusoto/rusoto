@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [CostExplorerClient](struct.CostExplorerClient.html) and [CostExplorer](trait.CostExplorer.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

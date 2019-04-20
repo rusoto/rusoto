@@ -61,7 +61,7 @@ pub struct CreateProjectRequest {
         default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contents: Option<Vec<u8>>,
+    pub contents: Option<bytes::Bytes>,
     /// <p> Name of the project. </p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -330,7 +330,7 @@ pub struct UpdateProjectRequest {
         default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contents: Option<Vec<u8>>,
+    pub contents: Option<bytes::Bytes>,
     /// <p> Unique project identifier. </p>
     #[serde(rename = "projectId")]
     pub project_id: String,
@@ -1357,8 +1357,8 @@ impl Mobile for MobileClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -1396,8 +1396,8 @@ impl Mobile for MobileClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -1435,8 +1435,8 @@ impl Mobile for MobileClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -1481,8 +1481,8 @@ impl Mobile for MobileClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -1529,8 +1529,8 @@ impl Mobile for MobileClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -1568,8 +1568,8 @@ impl Mobile for MobileClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -1616,8 +1616,8 @@ impl Mobile for MobileClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -1664,8 +1664,8 @@ impl Mobile for MobileClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -1713,8 +1713,8 @@ impl Mobile for MobileClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);

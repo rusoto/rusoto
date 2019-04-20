@@ -37,7 +37,7 @@ pub struct AttributeValue {
         default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub b: Option<Vec<u8>>,
+    pub b: Option<bytes::Bytes>,
     /// <p>A Boolean data type.</p>
     #[serde(rename = "BOOL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -50,7 +50,7 @@ pub struct AttributeValue {
         default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bs: Option<Vec<Vec<u8>>>,
+    pub bs: Option<Vec<bytes::Bytes>>,
     /// <p>A List data type.</p>
     #[serde(rename = "L")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -691,15 +691,15 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.DescribeStream");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<DescribeStreamOutput>(
@@ -728,15 +728,15 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.GetRecords");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<GetRecordsOutput>(
@@ -765,15 +765,15 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.GetShardIterator");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<GetShardIteratorOutput>(
@@ -802,15 +802,15 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.ListStreams");
         let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body.is_empty() || body == b"null" {
-                        body = b"{}".to_vec();
+                    if body.is_empty() || body.as_ref() == b"null" {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     serde_json::from_str::<ListStreamsOutput>(

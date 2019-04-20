@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [ElastiCacheClient](struct.ElastiCacheClient.html) and [ElastiCache](trait.ElastiCache.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde_urlencoded;

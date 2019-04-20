@@ -12,6 +12,7 @@ use std::fmt;
 use std::str;
 use std::time::Duration;
 
+use bytes::Bytes;
 use base64;
 use hex;
 use hmac::{Hmac, Mac};
@@ -29,7 +30,7 @@ use stream::ByteStream;
 /// Possible payloads included in a `SignedRequest`.
 pub enum SignedRequestPayload {
     /// Transfer payload in a single chunk
-    Buffer(Vec<u8>),
+    Buffer(Bytes),
     /// Transfer payload in multiple chunks
     Stream(ByteStream),
 }
@@ -113,8 +114,8 @@ impl SignedRequest {
     }
 
     /// Sets the new body (payload)
-    pub fn set_payload(&mut self, payload: Option<Vec<u8>>) {
-        self.payload = payload.map(SignedRequestPayload::Buffer);
+    pub fn set_payload<B: Into<Bytes>>(&mut self, payload: Option<B>) {
+        self.payload = payload.map(|chunk| SignedRequestPayload::Buffer(chunk.into()));
     }
 
     /// Sets the new body (payload) as a stream

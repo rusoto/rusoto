@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [MarketplaceCommerceAnalyticsClient](struct.MarketplaceCommerceAnalyticsClient.html) and [MarketplaceCommerceAnalytics](trait.MarketplaceCommerceAnalytics.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

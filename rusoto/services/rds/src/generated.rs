@@ -16023,7 +16023,7 @@ pub enum AddRoleToDBClusterError {
 impl AddRoleToDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddRoleToDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16102,7 +16102,7 @@ pub enum AddRoleToDBInstanceError {
 impl AddRoleToDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddRoleToDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16179,7 +16179,7 @@ impl AddSourceIdentifierToSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AddSourceIdentifierToSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16240,7 +16240,7 @@ pub enum AddTagsToResourceError {
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16311,7 +16311,7 @@ impl ApplyPendingMaintenanceActionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ApplyPendingMaintenanceActionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16384,7 +16384,7 @@ impl AuthorizeDBSecurityGroupIngressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AuthorizeDBSecurityGroupIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16465,7 +16465,7 @@ pub enum BacktrackDBClusterError {
 impl BacktrackDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BacktrackDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16528,7 +16528,7 @@ impl CopyDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CopyDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16607,7 +16607,7 @@ pub enum CopyDBClusterSnapshotError {
 impl CopyDBClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyDBClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16700,7 +16700,7 @@ pub enum CopyDBParameterGroupError {
 impl CopyDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16773,7 +16773,7 @@ pub enum CopyDBSnapshotError {
 impl CopyDBSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyDBSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16854,7 +16854,7 @@ pub enum CopyOptionGroupError {
 impl CopyOptionGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyOptionGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -16951,7 +16951,7 @@ pub enum CreateDBClusterError {
 impl CreateDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17132,7 +17132,7 @@ pub enum CreateDBClusterEndpointError {
 impl CreateDBClusterEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBClusterEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17225,7 +17225,7 @@ impl CreateDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17294,7 +17294,7 @@ pub enum CreateDBClusterSnapshotError {
 impl CreateDBClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17411,7 +17411,7 @@ pub enum CreateDBInstanceError {
 impl CreateDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17634,7 +17634,7 @@ impl CreateDBInstanceReadReplicaError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDBInstanceReadReplicaError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17827,7 +17827,7 @@ pub enum CreateDBParameterGroupError {
 impl CreateDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17888,7 +17888,7 @@ pub enum CreateDBSecurityGroupError {
 impl CreateDBSecurityGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBSecurityGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -17959,7 +17959,7 @@ pub enum CreateDBSnapshotError {
 impl CreateDBSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18040,7 +18040,7 @@ pub enum CreateDBSubnetGroupError {
 impl CreateDBSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18131,7 +18131,7 @@ pub enum CreateEventSubscriptionError {
 impl CreateEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18234,7 +18234,7 @@ pub enum CreateGlobalClusterError {
 impl CreateGlobalClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGlobalClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18309,7 +18309,7 @@ pub enum CreateOptionGroupError {
 impl CreateOptionGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOptionGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18374,7 +18374,7 @@ pub enum DeleteDBClusterError {
 impl DeleteDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18457,7 +18457,7 @@ pub enum DeleteDBClusterEndpointError {
 impl DeleteDBClusterEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBClusterEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18526,7 +18526,7 @@ impl DeleteDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18587,7 +18587,7 @@ pub enum DeleteDBClusterSnapshotError {
 impl DeleteDBClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18654,7 +18654,7 @@ pub enum DeleteDBInstanceError {
 impl DeleteDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18747,7 +18747,7 @@ impl DeleteDBInstanceAutomatedBackupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDBInstanceAutomatedBackupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18796,7 +18796,7 @@ pub enum DeleteDBParameterGroupError {
 impl DeleteDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18855,7 +18855,7 @@ pub enum DeleteDBSecurityGroupError {
 impl DeleteDBSecurityGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBSecurityGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18914,7 +18914,7 @@ pub enum DeleteDBSnapshotError {
 impl DeleteDBSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -18975,7 +18975,7 @@ pub enum DeleteDBSubnetGroupError {
 impl DeleteDBSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19042,7 +19042,7 @@ pub enum DeleteEventSubscriptionError {
 impl DeleteEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19101,7 +19101,7 @@ pub enum DeleteGlobalClusterError {
 impl DeleteGlobalClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGlobalClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19160,7 +19160,7 @@ pub enum DeleteOptionGroupError {
 impl DeleteOptionGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOptionGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19214,7 +19214,7 @@ pub enum DescribeAccountAttributesError {}
 impl DescribeAccountAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19254,7 +19254,7 @@ pub enum DescribeCertificatesError {
 impl DescribeCertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificatesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19307,7 +19307,7 @@ impl DescribeDBClusterBacktracksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterBacktracksError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19366,7 +19366,7 @@ impl DescribeDBClusterEndpointsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterEndpointsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19417,7 +19417,7 @@ impl DescribeDBClusterParameterGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterParameterGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19470,7 +19470,7 @@ impl DescribeDBClusterParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19521,7 +19521,7 @@ impl DescribeDBClusterSnapshotAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterSnapshotAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19572,7 +19572,7 @@ impl DescribeDBClusterSnapshotsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterSnapshotsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19621,7 +19621,7 @@ pub enum DescribeDBClustersError {
 impl DescribeDBClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBClustersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19667,7 +19667,7 @@ pub enum DescribeDBEngineVersionsError {}
 impl DescribeDBEngineVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBEngineVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19709,7 +19709,7 @@ impl DescribeDBInstanceAutomatedBackupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBInstanceAutomatedBackupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19753,7 +19753,7 @@ pub enum DescribeDBInstancesError {
 impl DescribeDBInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19802,7 +19802,7 @@ pub enum DescribeDBLogFilesError {
 impl DescribeDBLogFilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBLogFilesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19851,7 +19851,7 @@ pub enum DescribeDBParameterGroupsError {
 impl DescribeDBParameterGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBParameterGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19900,7 +19900,7 @@ pub enum DescribeDBParametersError {
 impl DescribeDBParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -19949,7 +19949,7 @@ pub enum DescribeDBSecurityGroupsError {
 impl DescribeDBSecurityGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBSecurityGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20000,7 +20000,7 @@ impl DescribeDBSnapshotAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBSnapshotAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20049,7 +20049,7 @@ pub enum DescribeDBSnapshotsError {
 impl DescribeDBSnapshotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBSnapshotsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20098,7 +20098,7 @@ pub enum DescribeDBSubnetGroupsError {
 impl DescribeDBSubnetGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBSubnetGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20146,7 +20146,7 @@ impl DescribeEngineDefaultClusterParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEngineDefaultClusterParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20185,7 +20185,7 @@ impl DescribeEngineDefaultParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEngineDefaultParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20222,7 +20222,7 @@ pub enum DescribeEventCategoriesError {}
 impl DescribeEventCategoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventCategoriesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20264,7 +20264,7 @@ impl DescribeEventSubscriptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEventSubscriptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20310,7 +20310,7 @@ pub enum DescribeEventsError {}
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20350,7 +20350,7 @@ pub enum DescribeGlobalClustersError {
 impl DescribeGlobalClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGlobalClustersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20398,7 +20398,7 @@ impl DescribeOptionGroupOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOptionGroupOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20438,7 +20438,7 @@ pub enum DescribeOptionGroupsError {
 impl DescribeOptionGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOptionGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20486,7 +20486,7 @@ impl DescribeOrderableDBInstanceOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrderableDBInstanceOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20528,7 +20528,7 @@ impl DescribePendingMaintenanceActionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePendingMaintenanceActionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20579,7 +20579,7 @@ impl DescribeReservedDBInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedDBInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20630,7 +20630,7 @@ impl DescribeReservedDBInstancesOfferingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedDBInstancesOfferingsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20671,7 +20671,7 @@ pub enum DescribeSourceRegionsError {}
 impl DescribeSourceRegionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSourceRegionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20715,7 +20715,7 @@ impl DescribeValidDBInstanceModificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeValidDBInstanceModificationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20776,7 +20776,7 @@ pub enum DownloadDBLogFilePortionError {
 impl DownloadDBLogFilePortionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DownloadDBLogFilePortionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20837,7 +20837,7 @@ pub enum FailoverDBClusterError {
 impl FailoverDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<FailoverDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20906,7 +20906,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -20977,7 +20977,7 @@ impl ModifyCurrentDBClusterCapacityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyCurrentDBClusterCapacityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21062,7 +21062,7 @@ pub enum ModifyDBClusterError {
 impl ModifyDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21195,7 +21195,7 @@ pub enum ModifyDBClusterEndpointError {
 impl ModifyDBClusterEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBClusterEndpointError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21280,7 +21280,7 @@ impl ModifyDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21345,7 +21345,7 @@ impl ModifyDBClusterSnapshotAttributeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyDBClusterSnapshotAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21446,7 +21446,7 @@ pub enum ModifyDBInstanceError {
 impl ModifyDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21623,7 +21623,7 @@ pub enum ModifyDBParameterGroupError {
 impl ModifyDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21680,7 +21680,7 @@ pub enum ModifyDBSnapshotError {
 impl ModifyDBSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21733,7 +21733,7 @@ pub enum ModifyDBSnapshotAttributeError {
 impl ModifyDBSnapshotAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBSnapshotAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21806,7 +21806,7 @@ pub enum ModifyDBSubnetGroupError {
 impl ModifyDBSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21893,7 +21893,7 @@ pub enum ModifyEventSubscriptionError {
 impl ModifyEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEventSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -21984,7 +21984,7 @@ pub enum ModifyGlobalClusterError {
 impl ModifyGlobalClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyGlobalClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22043,7 +22043,7 @@ pub enum ModifyOptionGroupError {
 impl ModifyOptionGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyOptionGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22102,7 +22102,7 @@ pub enum PromoteReadReplicaError {
 impl PromoteReadReplicaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PromoteReadReplicaError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22163,7 +22163,7 @@ impl PromoteReadReplicaDBClusterError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PromoteReadReplicaDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22226,7 +22226,7 @@ impl PurchaseReservedDBInstancesOfferingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PurchaseReservedDBInstancesOfferingError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22278,7 +22278,7 @@ pub enum RebootDBInstanceError {
 impl RebootDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22339,7 +22339,7 @@ pub enum RemoveFromGlobalClusterError {
 impl RemoveFromGlobalClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFromGlobalClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22408,7 +22408,7 @@ pub enum RemoveRoleFromDBClusterError {
 impl RemoveRoleFromDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveRoleFromDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22477,7 +22477,7 @@ pub enum RemoveRoleFromDBInstanceError {
 impl RemoveRoleFromDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveRoleFromDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22546,7 +22546,7 @@ impl RemoveSourceIdentifierFromSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveSourceIdentifierFromSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22609,7 +22609,7 @@ pub enum RemoveTagsFromResourceError {
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22678,7 +22678,7 @@ impl ResetDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ResetDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22739,7 +22739,7 @@ pub enum ResetDBParameterGroupError {
 impl ResetDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22820,7 +22820,7 @@ pub enum RestoreDBClusterFromS3Error {
 impl RestoreDBClusterFromS3Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreDBClusterFromS3Error> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -22997,7 +22997,7 @@ impl RestoreDBClusterFromSnapshotError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreDBClusterFromSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -23206,7 +23206,7 @@ impl RestoreDBClusterToPointInTimeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreDBClusterToPointInTimeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -23427,7 +23427,7 @@ impl RestoreDBInstanceFromDBSnapshotError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreDBInstanceFromDBSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -23660,7 +23660,7 @@ pub enum RestoreDBInstanceFromS3Error {
 impl RestoreDBInstanceFromS3Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreDBInstanceFromS3Error> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -23879,7 +23879,7 @@ impl RestoreDBInstanceToPointInTimeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreDBInstanceToPointInTimeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -24106,7 +24106,7 @@ impl RevokeDBSecurityGroupIngressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RevokeDBSecurityGroupIngressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -24175,7 +24175,7 @@ pub enum StartDBClusterError {
 impl StartDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -24258,7 +24258,7 @@ pub enum StartDBInstanceError {
 impl StartDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -24385,7 +24385,7 @@ pub enum StopDBClusterError {
 impl StopDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -24456,7 +24456,7 @@ pub enum StopDBInstanceError {
 impl StopDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -25244,9 +25244,7 @@ impl Rds for RdsClient {
         params.put("Action", "AddRoleToDBCluster");
         params.put("Version", "2014-10-31");
         AddRoleToDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25274,9 +25272,7 @@ impl Rds for RdsClient {
         params.put("Action", "AddRoleToDBInstance");
         params.put("Version", "2014-10-31");
         AddRoleToDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25304,9 +25300,7 @@ impl Rds for RdsClient {
         params.put("Action", "AddSourceIdentifierToSubscription");
         params.put("Version", "2014-10-31");
         AddSourceIdentifierToSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25325,7 +25319,7 @@ impl Rds for RdsClient {
                     result = AddSourceIdentifierToSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25356,9 +25350,7 @@ impl Rds for RdsClient {
         params.put("Action", "AddTagsToResource");
         params.put("Version", "2014-10-31");
         AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25386,9 +25378,7 @@ impl Rds for RdsClient {
         params.put("Action", "ApplyPendingMaintenanceAction");
         params.put("Version", "2014-10-31");
         ApplyPendingMaintenanceActionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25405,7 +25395,7 @@ impl Rds for RdsClient {
                     result = ApplyPendingMaintenanceActionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25437,9 +25427,7 @@ impl Rds for RdsClient {
         params.put("Action", "AuthorizeDBSecurityGroupIngress");
         params.put("Version", "2014-10-31");
         AuthorizeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25458,7 +25446,7 @@ impl Rds for RdsClient {
                     result = AuthorizeDBSecurityGroupIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25489,9 +25477,7 @@ impl Rds for RdsClient {
         params.put("Action", "BacktrackDBCluster");
         params.put("Version", "2014-10-31");
         BacktrackDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25511,7 +25497,7 @@ impl Rds for RdsClient {
                     result = DBClusterBacktrack::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25542,9 +25528,7 @@ impl Rds for RdsClient {
         params.put("Action", "CopyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         CopyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25561,7 +25545,7 @@ impl Rds for RdsClient {
                     result = CopyDBClusterParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25592,9 +25576,7 @@ impl Rds for RdsClient {
         params.put("Action", "CopyDBClusterSnapshot");
         params.put("Version", "2014-10-31");
         CopyDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25611,7 +25593,7 @@ impl Rds for RdsClient {
                     result = CopyDBClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25642,9 +25624,7 @@ impl Rds for RdsClient {
         params.put("Action", "CopyDBParameterGroup");
         params.put("Version", "2014-10-31");
         CopyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25663,7 +25643,7 @@ impl Rds for RdsClient {
                     result = CopyDBParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25694,9 +25674,7 @@ impl Rds for RdsClient {
         params.put("Action", "CopyDBSnapshot");
         params.put("Version", "2014-10-31");
         CopyDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25716,7 +25694,7 @@ impl Rds for RdsClient {
                     result = CopyDBSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25747,9 +25725,7 @@ impl Rds for RdsClient {
         params.put("Action", "CopyOptionGroup");
         params.put("Version", "2014-10-31");
         CopyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25769,7 +25745,7 @@ impl Rds for RdsClient {
                     result = CopyOptionGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25800,9 +25776,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBCluster");
         params.put("Version", "2014-10-31");
         CreateDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25822,7 +25796,7 @@ impl Rds for RdsClient {
                     result = CreateDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25853,9 +25827,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBClusterEndpoint");
         params.put("Version", "2014-10-31");
         CreateDBClusterEndpointMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25872,7 +25844,7 @@ impl Rds for RdsClient {
                     result = DBClusterEndpoint::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25903,9 +25875,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         CreateDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25922,7 +25892,7 @@ impl Rds for RdsClient {
                     result = CreateDBClusterParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25953,9 +25923,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBClusterSnapshot");
         params.put("Version", "2014-10-31");
         CreateDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -25972,7 +25940,7 @@ impl Rds for RdsClient {
                     result = CreateDBClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26003,9 +25971,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBInstance");
         params.put("Version", "2014-10-31");
         CreateDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26025,7 +25991,7 @@ impl Rds for RdsClient {
                     result = CreateDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26056,9 +26022,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBInstanceReadReplica");
         params.put("Version", "2014-10-31");
         CreateDBInstanceReadReplicaMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26075,7 +26039,7 @@ impl Rds for RdsClient {
                     result = CreateDBInstanceReadReplicaResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26106,9 +26070,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBParameterGroup");
         params.put("Version", "2014-10-31");
         CreateDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26125,7 +26087,7 @@ impl Rds for RdsClient {
                     result = CreateDBParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26156,9 +26118,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBSecurityGroup");
         params.put("Version", "2014-10-31");
         CreateDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26175,7 +26135,7 @@ impl Rds for RdsClient {
                     result = CreateDBSecurityGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26206,9 +26166,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBSnapshot");
         params.put("Version", "2014-10-31");
         CreateDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26228,7 +26186,7 @@ impl Rds for RdsClient {
                     result = CreateDBSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26259,9 +26217,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateDBSubnetGroup");
         params.put("Version", "2014-10-31");
         CreateDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26280,7 +26236,7 @@ impl Rds for RdsClient {
                     result = CreateDBSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26311,9 +26267,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateEventSubscription");
         params.put("Version", "2014-10-31");
         CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26330,7 +26284,7 @@ impl Rds for RdsClient {
                     result = CreateEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26361,9 +26315,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateGlobalCluster");
         params.put("Version", "2014-10-31");
         CreateGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26382,7 +26334,7 @@ impl Rds for RdsClient {
                     result = CreateGlobalClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26413,9 +26365,7 @@ impl Rds for RdsClient {
         params.put("Action", "CreateOptionGroup");
         params.put("Version", "2014-10-31");
         CreateOptionGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26435,7 +26385,7 @@ impl Rds for RdsClient {
                     result = CreateOptionGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26466,9 +26416,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBCluster");
         params.put("Version", "2014-10-31");
         DeleteDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26488,7 +26436,7 @@ impl Rds for RdsClient {
                     result = DeleteDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26519,9 +26467,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBClusterEndpoint");
         params.put("Version", "2014-10-31");
         DeleteDBClusterEndpointMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26538,7 +26484,7 @@ impl Rds for RdsClient {
                     result = DBClusterEndpoint::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26569,9 +26515,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         DeleteDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26596,9 +26540,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBClusterSnapshot");
         params.put("Version", "2014-10-31");
         DeleteDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26615,7 +26557,7 @@ impl Rds for RdsClient {
                     result = DeleteDBClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26646,9 +26588,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBInstance");
         params.put("Version", "2014-10-31");
         DeleteDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26668,7 +26608,7 @@ impl Rds for RdsClient {
                     result = DeleteDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26700,9 +26640,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBInstanceAutomatedBackup");
         params.put("Version", "2014-10-31");
         DeleteDBInstanceAutomatedBackupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26721,7 +26659,7 @@ impl Rds for RdsClient {
                     result = DeleteDBInstanceAutomatedBackupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26752,9 +26690,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBParameterGroup");
         params.put("Version", "2014-10-31");
         DeleteDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26779,9 +26715,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBSecurityGroup");
         params.put("Version", "2014-10-31");
         DeleteDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26806,9 +26740,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBSnapshot");
         params.put("Version", "2014-10-31");
         DeleteDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26828,7 +26760,7 @@ impl Rds for RdsClient {
                     result = DeleteDBSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26859,9 +26791,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteDBSubnetGroup");
         params.put("Version", "2014-10-31");
         DeleteDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26888,9 +26818,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteEventSubscription");
         params.put("Version", "2014-10-31");
         DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26907,7 +26835,7 @@ impl Rds for RdsClient {
                     result = DeleteEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26938,9 +26866,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteGlobalCluster");
         params.put("Version", "2014-10-31");
         DeleteGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -26959,7 +26885,7 @@ impl Rds for RdsClient {
                     result = DeleteGlobalClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26990,9 +26916,7 @@ impl Rds for RdsClient {
         params.put("Action", "DeleteOptionGroup");
         params.put("Version", "2014-10-31");
         DeleteOptionGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27020,9 +26944,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2014-10-31");
         DescribeAccountAttributesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27039,7 +26961,7 @@ impl Rds for RdsClient {
                     result = AccountAttributesMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27070,9 +26992,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeCertificates");
         params.put("Version", "2014-10-31");
         DescribeCertificatesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27091,7 +27011,7 @@ impl Rds for RdsClient {
                     result = CertificateMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27122,9 +27042,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBClusterBacktracks");
         params.put("Version", "2014-10-31");
         DescribeDBClusterBacktracksMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27141,7 +27059,7 @@ impl Rds for RdsClient {
                     result = DBClusterBacktrackMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27172,9 +27090,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBClusterEndpoints");
         params.put("Version", "2014-10-31");
         DescribeDBClusterEndpointsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27191,7 +27107,7 @@ impl Rds for RdsClient {
                     result = DBClusterEndpointMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27222,9 +27138,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBClusterParameterGroups");
         params.put("Version", "2014-10-31");
         DescribeDBClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27243,7 +27157,7 @@ impl Rds for RdsClient {
                     result = DBClusterParameterGroupsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27274,9 +27188,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBClusterParameters");
         params.put("Version", "2014-10-31");
         DescribeDBClusterParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27293,7 +27205,7 @@ impl Rds for RdsClient {
                     result = DBClusterParameterGroupDetails::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27327,9 +27239,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBClusterSnapshotAttributes");
         params.put("Version", "2014-10-31");
         DescribeDBClusterSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27348,7 +27258,7 @@ impl Rds for RdsClient {
                     result = DescribeDBClusterSnapshotAttributesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27379,9 +27289,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBClusterSnapshots");
         params.put("Version", "2014-10-31");
         DescribeDBClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27398,7 +27306,7 @@ impl Rds for RdsClient {
                     result = DBClusterSnapshotMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27429,9 +27337,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBClusters");
         params.put("Version", "2014-10-31");
         DescribeDBClustersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27451,7 +27357,7 @@ impl Rds for RdsClient {
                     result = DBClusterMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27482,9 +27388,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBEngineVersions");
         params.put("Version", "2014-10-31");
         DescribeDBEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27501,7 +27405,7 @@ impl Rds for RdsClient {
                     result = DBEngineVersionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27533,9 +27437,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBInstanceAutomatedBackups");
         params.put("Version", "2014-10-31");
         DescribeDBInstanceAutomatedBackupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27554,7 +27456,7 @@ impl Rds for RdsClient {
                     result = DBInstanceAutomatedBackupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27585,9 +27487,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBInstances");
         params.put("Version", "2014-10-31");
         DescribeDBInstancesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27606,7 +27506,7 @@ impl Rds for RdsClient {
                     result = DBInstanceMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27637,9 +27537,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBLogFiles");
         params.put("Version", "2014-10-31");
         DescribeDBLogFilesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27659,7 +27557,7 @@ impl Rds for RdsClient {
                     result = DescribeDBLogFilesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27690,9 +27588,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBParameterGroups");
         params.put("Version", "2014-10-31");
         DescribeDBParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27709,7 +27605,7 @@ impl Rds for RdsClient {
                     result = DBParameterGroupsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27740,9 +27636,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBParameters");
         params.put("Version", "2014-10-31");
         DescribeDBParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27761,7 +27655,7 @@ impl Rds for RdsClient {
                     result = DBParameterGroupDetails::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27792,9 +27686,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBSecurityGroups");
         params.put("Version", "2014-10-31");
         DescribeDBSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27811,7 +27703,7 @@ impl Rds for RdsClient {
                     result = DBSecurityGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27842,9 +27734,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBSnapshotAttributes");
         params.put("Version", "2014-10-31");
         DescribeDBSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27861,7 +27751,7 @@ impl Rds for RdsClient {
                     result = DescribeDBSnapshotAttributesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27892,9 +27782,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBSnapshots");
         params.put("Version", "2014-10-31");
         DescribeDBSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27913,7 +27801,7 @@ impl Rds for RdsClient {
                     result = DBSnapshotMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27944,9 +27832,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeDBSubnetGroups");
         params.put("Version", "2014-10-31");
         DescribeDBSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27963,7 +27849,7 @@ impl Rds for RdsClient {
                     result = DBSubnetGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27997,9 +27883,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeEngineDefaultClusterParameters");
         params.put("Version", "2014-10-31");
         DescribeEngineDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28018,7 +27902,7 @@ impl Rds for RdsClient {
                     result = DescribeEngineDefaultClusterParametersResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28050,9 +27934,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeEngineDefaultParameters");
         params.put("Version", "2014-10-31");
         DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28071,7 +27953,7 @@ impl Rds for RdsClient {
                     result = DescribeEngineDefaultParametersResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28102,9 +27984,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeEventCategories");
         params.put("Version", "2014-10-31");
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28121,7 +28001,7 @@ impl Rds for RdsClient {
                     result = EventCategoriesMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28152,9 +28032,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeEventSubscriptions");
         params.put("Version", "2014-10-31");
         DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28171,7 +28049,7 @@ impl Rds for RdsClient {
                     result = EventSubscriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28202,9 +28080,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeEvents");
         params.put("Version", "2014-10-31");
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28224,7 +28100,7 @@ impl Rds for RdsClient {
                     result = EventsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28253,9 +28129,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeGlobalClusters");
         params.put("Version", "2014-10-31");
         DescribeGlobalClustersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28272,7 +28146,7 @@ impl Rds for RdsClient {
                     result = GlobalClustersMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28303,9 +28177,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeOptionGroupOptions");
         params.put("Version", "2014-10-31");
         DescribeOptionGroupOptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28322,7 +28194,7 @@ impl Rds for RdsClient {
                     result = OptionGroupOptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28353,9 +28225,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeOptionGroups");
         params.put("Version", "2014-10-31");
         DescribeOptionGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28374,7 +28244,7 @@ impl Rds for RdsClient {
                     result = OptionGroups::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28406,9 +28276,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeOrderableDBInstanceOptions");
         params.put("Version", "2014-10-31");
         DescribeOrderableDBInstanceOptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28427,7 +28295,7 @@ impl Rds for RdsClient {
                     result = OrderableDBInstanceOptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28459,9 +28327,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribePendingMaintenanceActions");
         params.put("Version", "2014-10-31");
         DescribePendingMaintenanceActionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28480,7 +28346,7 @@ impl Rds for RdsClient {
                     result = PendingMaintenanceActionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28511,9 +28377,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeReservedDBInstances");
         params.put("Version", "2014-10-31");
         DescribeReservedDBInstancesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28530,7 +28394,7 @@ impl Rds for RdsClient {
                     result = ReservedDBInstanceMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28562,9 +28426,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeReservedDBInstancesOfferings");
         params.put("Version", "2014-10-31");
         DescribeReservedDBInstancesOfferingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28583,7 +28445,7 @@ impl Rds for RdsClient {
                     result = ReservedDBInstancesOfferingMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28614,9 +28476,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeSourceRegions");
         params.put("Version", "2014-10-31");
         DescribeSourceRegionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28633,7 +28493,7 @@ impl Rds for RdsClient {
                     result = SourceRegionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28667,9 +28527,7 @@ impl Rds for RdsClient {
         params.put("Action", "DescribeValidDBInstanceModifications");
         params.put("Version", "2014-10-31");
         DescribeValidDBInstanceModificationsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28688,7 +28546,7 @@ impl Rds for RdsClient {
                     result = DescribeValidDBInstanceModificationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28719,9 +28577,7 @@ impl Rds for RdsClient {
         params.put("Action", "DownloadDBLogFilePortion");
         params.put("Version", "2014-10-31");
         DownloadDBLogFilePortionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28738,7 +28594,7 @@ impl Rds for RdsClient {
                     result = DownloadDBLogFilePortionDetails::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28769,9 +28625,7 @@ impl Rds for RdsClient {
         params.put("Action", "FailoverDBCluster");
         params.put("Version", "2014-10-31");
         FailoverDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28791,7 +28645,7 @@ impl Rds for RdsClient {
                     result = FailoverDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28822,9 +28676,7 @@ impl Rds for RdsClient {
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2014-10-31");
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28843,7 +28695,7 @@ impl Rds for RdsClient {
                     result = TagListMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28874,9 +28726,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyCurrentDBClusterCapacity");
         params.put("Version", "2014-10-31");
         ModifyCurrentDBClusterCapacityMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28893,7 +28743,7 @@ impl Rds for RdsClient {
                     result = DBClusterCapacityInfo::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28924,9 +28774,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyDBCluster");
         params.put("Version", "2014-10-31");
         ModifyDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28946,7 +28794,7 @@ impl Rds for RdsClient {
                     result = ModifyDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28977,9 +28825,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyDBClusterEndpoint");
         params.put("Version", "2014-10-31");
         ModifyDBClusterEndpointMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -28996,7 +28842,7 @@ impl Rds for RdsClient {
                     result = DBClusterEndpoint::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29027,9 +28873,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         ModifyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29046,7 +28890,7 @@ impl Rds for RdsClient {
                     result = DBClusterParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29078,9 +28922,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyDBClusterSnapshotAttribute");
         params.put("Version", "2014-10-31");
         ModifyDBClusterSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29099,7 +28941,7 @@ impl Rds for RdsClient {
                     result = ModifyDBClusterSnapshotAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29130,9 +28972,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyDBInstance");
         params.put("Version", "2014-10-31");
         ModifyDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29152,7 +28992,7 @@ impl Rds for RdsClient {
                     result = ModifyDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29183,9 +29023,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyDBParameterGroup");
         params.put("Version", "2014-10-31");
         ModifyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29202,7 +29040,7 @@ impl Rds for RdsClient {
                     result = DBParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29233,9 +29071,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyDBSnapshot");
         params.put("Version", "2014-10-31");
         ModifyDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29255,7 +29091,7 @@ impl Rds for RdsClient {
                     result = ModifyDBSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29286,9 +29122,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyDBSnapshotAttribute");
         params.put("Version", "2014-10-31");
         ModifyDBSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29305,7 +29139,7 @@ impl Rds for RdsClient {
                     result = ModifyDBSnapshotAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29336,9 +29170,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyDBSubnetGroup");
         params.put("Version", "2014-10-31");
         ModifyDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29357,7 +29189,7 @@ impl Rds for RdsClient {
                     result = ModifyDBSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29388,9 +29220,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyEventSubscription");
         params.put("Version", "2014-10-31");
         ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29407,7 +29237,7 @@ impl Rds for RdsClient {
                     result = ModifyEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29438,9 +29268,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyGlobalCluster");
         params.put("Version", "2014-10-31");
         ModifyGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29459,7 +29287,7 @@ impl Rds for RdsClient {
                     result = ModifyGlobalClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29490,9 +29318,7 @@ impl Rds for RdsClient {
         params.put("Action", "ModifyOptionGroup");
         params.put("Version", "2014-10-31");
         ModifyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29512,7 +29338,7 @@ impl Rds for RdsClient {
                     result = ModifyOptionGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29543,9 +29369,7 @@ impl Rds for RdsClient {
         params.put("Action", "PromoteReadReplica");
         params.put("Version", "2014-10-31");
         PromoteReadReplicaMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29565,7 +29389,7 @@ impl Rds for RdsClient {
                     result = PromoteReadReplicaResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29596,9 +29420,7 @@ impl Rds for RdsClient {
         params.put("Action", "PromoteReadReplicaDBCluster");
         params.put("Version", "2014-10-31");
         PromoteReadReplicaDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29615,7 +29437,7 @@ impl Rds for RdsClient {
                     result = PromoteReadReplicaDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29649,9 +29471,7 @@ impl Rds for RdsClient {
         params.put("Action", "PurchaseReservedDBInstancesOffering");
         params.put("Version", "2014-10-31");
         PurchaseReservedDBInstancesOfferingMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29670,7 +29490,7 @@ impl Rds for RdsClient {
                     result = PurchaseReservedDBInstancesOfferingResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29701,9 +29521,7 @@ impl Rds for RdsClient {
         params.put("Action", "RebootDBInstance");
         params.put("Version", "2014-10-31");
         RebootDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29723,7 +29541,7 @@ impl Rds for RdsClient {
                     result = RebootDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29754,9 +29572,7 @@ impl Rds for RdsClient {
         params.put("Action", "RemoveFromGlobalCluster");
         params.put("Version", "2014-10-31");
         RemoveFromGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29773,7 +29589,7 @@ impl Rds for RdsClient {
                     result = RemoveFromGlobalClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29804,9 +29620,7 @@ impl Rds for RdsClient {
         params.put("Action", "RemoveRoleFromDBCluster");
         params.put("Version", "2014-10-31");
         RemoveRoleFromDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29831,9 +29645,7 @@ impl Rds for RdsClient {
         params.put("Action", "RemoveRoleFromDBInstance");
         params.put("Version", "2014-10-31");
         RemoveRoleFromDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29861,9 +29673,7 @@ impl Rds for RdsClient {
         params.put("Action", "RemoveSourceIdentifierFromSubscription");
         params.put("Version", "2014-10-31");
         RemoveSourceIdentifierFromSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29882,7 +29692,7 @@ impl Rds for RdsClient {
                     result = RemoveSourceIdentifierFromSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29913,9 +29723,7 @@ impl Rds for RdsClient {
         params.put("Action", "RemoveTagsFromResource");
         params.put("Version", "2014-10-31");
         RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29940,9 +29748,7 @@ impl Rds for RdsClient {
         params.put("Action", "ResetDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         ResetDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -29959,7 +29765,7 @@ impl Rds for RdsClient {
                     result = DBClusterParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29990,9 +29796,7 @@ impl Rds for RdsClient {
         params.put("Action", "ResetDBParameterGroup");
         params.put("Version", "2014-10-31");
         ResetDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30009,7 +29813,7 @@ impl Rds for RdsClient {
                     result = DBParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30040,9 +29844,7 @@ impl Rds for RdsClient {
         params.put("Action", "RestoreDBClusterFromS3");
         params.put("Version", "2014-10-31");
         RestoreDBClusterFromS3MessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30059,7 +29861,7 @@ impl Rds for RdsClient {
                     result = RestoreDBClusterFromS3Result::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30090,9 +29892,7 @@ impl Rds for RdsClient {
         params.put("Action", "RestoreDBClusterFromSnapshot");
         params.put("Version", "2014-10-31");
         RestoreDBClusterFromSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30109,7 +29909,7 @@ impl Rds for RdsClient {
                     result = RestoreDBClusterFromSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30140,9 +29940,7 @@ impl Rds for RdsClient {
         params.put("Action", "RestoreDBClusterToPointInTime");
         params.put("Version", "2014-10-31");
         RestoreDBClusterToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30159,7 +29957,7 @@ impl Rds for RdsClient {
                     result = RestoreDBClusterToPointInTimeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30191,9 +29989,7 @@ impl Rds for RdsClient {
         params.put("Action", "RestoreDBInstanceFromDBSnapshot");
         params.put("Version", "2014-10-31");
         RestoreDBInstanceFromDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30212,7 +30008,7 @@ impl Rds for RdsClient {
                     result = RestoreDBInstanceFromDBSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30243,9 +30039,7 @@ impl Rds for RdsClient {
         params.put("Action", "RestoreDBInstanceFromS3");
         params.put("Version", "2014-10-31");
         RestoreDBInstanceFromS3MessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30262,7 +30056,7 @@ impl Rds for RdsClient {
                     result = RestoreDBInstanceFromS3Result::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30294,9 +30088,7 @@ impl Rds for RdsClient {
         params.put("Action", "RestoreDBInstanceToPointInTime");
         params.put("Version", "2014-10-31");
         RestoreDBInstanceToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30313,7 +30105,7 @@ impl Rds for RdsClient {
                     result = RestoreDBInstanceToPointInTimeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30344,9 +30136,7 @@ impl Rds for RdsClient {
         params.put("Action", "RevokeDBSecurityGroupIngress");
         params.put("Version", "2014-10-31");
         RevokeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30363,7 +30153,7 @@ impl Rds for RdsClient {
                     result = RevokeDBSecurityGroupIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30394,9 +30184,7 @@ impl Rds for RdsClient {
         params.put("Action", "StartDBCluster");
         params.put("Version", "2014-10-31");
         StartDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30416,7 +30204,7 @@ impl Rds for RdsClient {
                     result = StartDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30447,9 +30235,7 @@ impl Rds for RdsClient {
         params.put("Action", "StartDBInstance");
         params.put("Version", "2014-10-31");
         StartDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30469,7 +30255,7 @@ impl Rds for RdsClient {
                     result = StartDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30500,9 +30286,7 @@ impl Rds for RdsClient {
         params.put("Action", "StopDBCluster");
         params.put("Version", "2014-10-31");
         StopDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30522,7 +30306,7 @@ impl Rds for RdsClient {
                     result = StopDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30553,9 +30337,7 @@ impl Rds for RdsClient {
         params.put("Action", "StopDBInstance");
         params.put("Version", "2014-10-31");
         StopDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -30575,7 +30357,7 @@ impl Rds for RdsClient {
                     result = StopDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [KinesisVideoClient](struct.KinesisVideoClient.html) and [KinesisVideo](trait.KinesisVideo.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [ElasticBeanstalkClient](struct.ElasticBeanstalkClient.html) and [ElasticBeanstalk](trait.ElasticBeanstalk.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde_urlencoded;

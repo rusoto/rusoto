@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [MarketplaceEntitlementClient](struct.MarketplaceEntitlementClient.html) and [MarketplaceEntitlement](trait.MarketplaceEntitlement.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

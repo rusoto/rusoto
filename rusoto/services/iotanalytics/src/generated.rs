@@ -1072,7 +1072,7 @@ pub struct Message {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
-    pub payload: Vec<u8>,
+    pub payload: bytes::Bytes,
 }
 
 /// <p>The value of the variable as a structure that specifies an output file URI.</p>
@@ -1262,7 +1262,7 @@ pub struct RunPipelineActivityRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlobList::serialize_blob_list",
         default
     )]
-    pub payloads: Vec<Vec<u8>>,
+    pub payloads: Vec<bytes::Bytes>,
     /// <p>The pipeline activity that is run. This must not be a 'channel' activity or a 'datastore' activity because these activities are used in a pipeline only to load the original message and to store the (possibly) transformed message. If a 'lambda' activity is specified, only short-running Lambda functions (those with a timeout of less than 30 seconds or less) can be used.</p>
     #[serde(rename = "pipelineActivity")]
     pub pipeline_activity: PipelineActivity,
@@ -1283,7 +1283,7 @@ pub struct RunPipelineActivityResponse {
         default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payloads: Option<Vec<Vec<u8>>>,
+    pub payloads: Option<Vec<bytes::Bytes>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1316,7 +1316,7 @@ pub struct SampleChannelDataResponse {
         default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payloads: Option<Vec<Vec<u8>>>,
+    pub payloads: Option<Vec<bytes::Bytes>>,
 }
 
 /// <p>The schedule for when to trigger an update.</p>
@@ -4844,8 +4844,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4884,8 +4884,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4922,8 +4922,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4961,8 +4961,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5000,8 +5000,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5039,8 +5039,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5078,8 +5078,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5277,8 +5277,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5316,8 +5316,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5361,8 +5361,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5397,8 +5397,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5436,8 +5436,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5481,8 +5481,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5527,8 +5527,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5581,8 +5581,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5626,8 +5626,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5671,8 +5671,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5716,8 +5716,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5756,8 +5756,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5826,8 +5826,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5877,8 +5877,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5920,8 +5920,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5961,8 +5961,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6004,8 +6004,8 @@ impl IotAnalytics for IotAnalyticsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);

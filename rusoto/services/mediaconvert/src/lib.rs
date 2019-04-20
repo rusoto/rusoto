@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [MediaConvertClient](struct.MediaConvertClient.html) and [MediaConvert](trait.MediaConvert.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

@@ -38,7 +38,7 @@ pub struct InvokeEndpointInput {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
-    pub body: Vec<u8>,
+    pub body: bytes::Bytes,
     /// <p>The MIME type of the input data in the request body.</p>
     #[serde(rename = "ContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -55,7 +55,7 @@ pub struct InvokeEndpointInput {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InvokeEndpointOutput {
     /// <p>Includes the inference provided by the model.</p> <p>For information about the format of the response body, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.</p>
-    pub body: Vec<u8>,
+    pub body: bytes::Bytes,
     /// <p>The MIME type of the inference returned in the response body.</p>
     pub content_type: Option<String>,
     /// <p><p/></p>

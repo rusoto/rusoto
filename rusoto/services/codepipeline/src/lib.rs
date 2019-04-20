@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [CodePipelineClient](struct.CodePipelineClient.html) and [CodePipeline](trait.CodePipeline.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

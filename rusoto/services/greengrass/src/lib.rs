@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [GreenGrassClient](struct.GreenGrassClient.html) and [GreenGrass](trait.GreenGrass.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

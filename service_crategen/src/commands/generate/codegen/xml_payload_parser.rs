@@ -186,7 +186,7 @@ fn xml_body_parser(
                 result = {output_shape}::default();
             }} else {{
                 let reader = EventReader::new_with_config(
-                    response.body.as_slice(),
+                    response.body.as_ref(),
                     ParserConfig::new().trim_whitespace(true)
                 );
                 let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -357,7 +357,7 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
         }
         ShapeType::Double => "f64::from_str(characters(stack)?.as_ref()).unwrap()",
         ShapeType::Float => "f32::from_str(characters(stack)?.as_ref()).unwrap()",
-        ShapeType::Blob => "characters(stack)?.into_bytes()",
+        ShapeType::Blob => "characters(stack)?.into()",
         ShapeType::Boolean => "bool::from_str(characters(stack)?.as_ref()).unwrap()",
         _ => panic!("Unknown primitive shape type"),
     };

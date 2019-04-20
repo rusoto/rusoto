@@ -1748,7 +1748,7 @@ pub struct StartImportRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
-    pub payload: Vec<u8>,
+    pub payload: bytes::Bytes,
     /// <p><p>Specifies the type of resource to export. Each resource also exports any resources that it depends on. </p> <ul> <li> <p>A bot exports dependent intents.</p> </li> <li> <p>An intent exports dependent slot types.</p> </li> </ul></p>
     #[serde(rename = "resourceType")]
     pub resource_type: String,
@@ -5196,8 +5196,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5236,8 +5236,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5276,8 +5276,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5599,8 +5599,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5641,8 +5641,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5691,8 +5691,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5734,8 +5734,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5786,8 +5786,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5831,8 +5831,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5878,8 +5878,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5916,8 +5916,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5969,8 +5969,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6023,8 +6023,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6068,8 +6068,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6106,8 +6106,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6148,8 +6148,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6195,8 +6195,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6246,8 +6246,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6288,8 +6288,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6335,8 +6335,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6385,8 +6385,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6431,8 +6431,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6469,8 +6469,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6513,8 +6513,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6553,8 +6553,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6593,8 +6593,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -6633,8 +6633,8 @@ impl LexModels for LexModelsClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);

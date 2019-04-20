@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [SageMakerRuntimeClient](struct.SageMakerRuntimeClient.html) and [SageMakerRuntime](trait.SageMakerRuntime.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

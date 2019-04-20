@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [SqsClient](struct.SqsClient.html) and [Sqs](trait.Sqs.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde_urlencoded;

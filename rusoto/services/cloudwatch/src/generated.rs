@@ -1356,7 +1356,7 @@ impl GetMetricWidgetImageInputSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetMetricWidgetImageOutput {
     /// <p>The image of the graph, in the output format specified.</p>
-    pub metric_widget_image: Option<Vec<u8>>,
+    pub metric_widget_image: Option<bytes::Bytes>,
 }
 
 struct GetMetricWidgetImageOutputDeserializer;
@@ -2329,9 +2329,9 @@ impl MetricWidgetImageDeserializer {
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<u8>, XmlParseError> {
+    ) -> Result<bytes::Bytes, XmlParseError> {
         start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into_bytes();
+        let obj = characters(stack)?.into();
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -2954,7 +2954,7 @@ pub enum DeleteAlarmsError {
 impl DeleteAlarmsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAlarmsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3005,7 +3005,7 @@ pub enum DeleteDashboardsError {
 impl DeleteDashboardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDashboardsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3064,7 +3064,7 @@ pub enum DescribeAlarmHistoryError {
 impl DescribeAlarmHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAlarmHistoryError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3111,7 +3111,7 @@ pub enum DescribeAlarmsError {
 impl DescribeAlarmsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAlarmsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3155,7 +3155,7 @@ pub enum DescribeAlarmsForMetricError {}
 impl DescribeAlarmsForMetricError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAlarmsForMetricError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3192,7 +3192,7 @@ pub enum DisableAlarmActionsError {}
 impl DisableAlarmActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableAlarmActionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3229,7 +3229,7 @@ pub enum EnableAlarmActionsError {}
 impl EnableAlarmActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableAlarmActionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3273,7 +3273,7 @@ pub enum GetDashboardError {
 impl GetDashboardError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDashboardError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3332,7 +3332,7 @@ pub enum GetMetricDataError {
 impl GetMetricDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMetricDataError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3385,7 +3385,7 @@ pub enum GetMetricStatisticsError {
 impl GetMetricStatisticsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMetricStatisticsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3455,7 +3455,7 @@ pub enum GetMetricWidgetImageError {}
 impl GetMetricWidgetImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMetricWidgetImageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3497,7 +3497,7 @@ pub enum ListDashboardsError {
 impl ListDashboardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDashboardsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3552,7 +3552,7 @@ pub enum ListMetricsError {
 impl ListMetricsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMetricsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3607,7 +3607,7 @@ pub enum PutDashboardError {
 impl PutDashboardError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutDashboardError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3660,7 +3660,7 @@ pub enum PutMetricAlarmError {
 impl PutMetricAlarmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMetricAlarmError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3713,7 +3713,7 @@ pub enum PutMetricDataError {
 impl PutMetricDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMetricDataError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3782,7 +3782,7 @@ pub enum SetAlarmStateError {
 impl SetAlarmStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetAlarmStateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3963,9 +3963,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DeleteAlarms");
         params.put("Version", "2010-08-01");
         DeleteAlarmsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3993,9 +3991,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DeleteDashboards");
         params.put("Version", "2010-08-01");
         DeleteDashboardsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4015,7 +4011,7 @@ impl CloudWatch for CloudWatchClient {
                     result = DeleteDashboardsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4046,9 +4042,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DescribeAlarmHistory");
         params.put("Version", "2010-08-01");
         DescribeAlarmHistoryInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4067,7 +4061,7 @@ impl CloudWatch for CloudWatchClient {
                     result = DescribeAlarmHistoryOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4098,9 +4092,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DescribeAlarms");
         params.put("Version", "2010-08-01");
         DescribeAlarmsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4120,7 +4112,7 @@ impl CloudWatch for CloudWatchClient {
                     result = DescribeAlarmsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4151,9 +4143,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DescribeAlarmsForMetric");
         params.put("Version", "2010-08-01");
         DescribeAlarmsForMetricInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4170,7 +4160,7 @@ impl CloudWatch for CloudWatchClient {
                     result = DescribeAlarmsForMetricOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4201,9 +4191,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DisableAlarmActions");
         params.put("Version", "2010-08-01");
         DisableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4230,9 +4218,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "EnableAlarmActions");
         params.put("Version", "2010-08-01");
         EnableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4260,9 +4246,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "GetDashboard");
         params.put("Version", "2010-08-01");
         GetDashboardInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4282,7 +4266,7 @@ impl CloudWatch for CloudWatchClient {
                     result = GetDashboardOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4313,9 +4297,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "GetMetricData");
         params.put("Version", "2010-08-01");
         GetMetricDataInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4335,7 +4317,7 @@ impl CloudWatch for CloudWatchClient {
                     result = GetMetricDataOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4366,9 +4348,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "GetMetricStatistics");
         params.put("Version", "2010-08-01");
         GetMetricStatisticsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4387,7 +4367,7 @@ impl CloudWatch for CloudWatchClient {
                     result = GetMetricStatisticsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4418,9 +4398,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "GetMetricWidgetImage");
         params.put("Version", "2010-08-01");
         GetMetricWidgetImageInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4439,7 +4417,7 @@ impl CloudWatch for CloudWatchClient {
                     result = GetMetricWidgetImageOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4470,9 +4448,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "ListDashboards");
         params.put("Version", "2010-08-01");
         ListDashboardsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4492,7 +4468,7 @@ impl CloudWatch for CloudWatchClient {
                     result = ListDashboardsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4523,9 +4499,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "ListMetrics");
         params.put("Version", "2010-08-01");
         ListMetricsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4545,7 +4519,7 @@ impl CloudWatch for CloudWatchClient {
                     result = ListMetricsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4576,9 +4550,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "PutDashboard");
         params.put("Version", "2010-08-01");
         PutDashboardInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4598,7 +4570,7 @@ impl CloudWatch for CloudWatchClient {
                     result = PutDashboardOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4629,9 +4601,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "PutMetricAlarm");
         params.put("Version", "2010-08-01");
         PutMetricAlarmInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4656,9 +4626,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "PutMetricData");
         params.put("Version", "2010-08-01");
         PutMetricDataInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4683,9 +4651,7 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "SetAlarmState");
         params.put("Version", "2010-08-01");
         SetAlarmStateInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {

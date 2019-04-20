@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [LightsailClient](struct.LightsailClient.html) and [Lightsail](trait.Lightsail.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

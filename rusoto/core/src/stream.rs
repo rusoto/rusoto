@@ -1,20 +1,21 @@
 use std::fmt;
 use std::io;
 
+use bytes::Bytes;
 use futures::{future, stream, Async, Future, Poll, Stream};
 use tokio::io::AsyncRead;
 
 /// Stream of bytes.
 pub struct ByteStream {
     size_hint: Option<usize>,
-    inner: Box<Stream<Item = Vec<u8>, Error = io::Error> + Send>,
+    inner: Box<Stream<Item = Bytes, Error = io::Error> + Send>,
 }
 
 impl ByteStream {
     /// Create a new `ByteStream` by wrapping a `futures` stream.
     pub fn new<S>(stream: S) -> ByteStream
     where
-        S: Stream<Item = Vec<u8>, Error = io::Error> + Send + 'static,
+        S: Stream<Item = Bytes, Error = io::Error> + Send + 'static,
     {
         ByteStream {
             size_hint: None,
@@ -41,7 +42,7 @@ impl From<Vec<u8>> for ByteStream {
     fn from(buf: Vec<u8>) -> ByteStream {
         ByteStream {
             size_hint: Some(buf.len()),
-            inner: Box::new(stream::once(Ok(buf))),
+            inner: Box::new(stream::once(Ok(Bytes::from(buf)))),
         }
     }
 }
@@ -53,7 +54,7 @@ impl fmt::Debug for ByteStream {
 }
 
 impl Stream for ByteStream {
-    type Item = Vec<u8>;
+    type Item = Bytes;
     type Error = io::Error;
 
     fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
@@ -62,14 +63,14 @@ impl Stream for ByteStream {
 }
 
 struct ImplAsyncRead {
-    buffer: io::Cursor<Vec<u8>>,
-    stream: stream::Fuse<Box<Stream<Item = Vec<u8>, Error = io::Error> + Send>>,
+    buffer: io::Cursor<Bytes>,
+    stream: stream::Fuse<Box<Stream<Item = Bytes, Error = io::Error> + Send>>,
 }
 
 impl ImplAsyncRead {
-    fn new(stream: Box<Stream<Item = Vec<u8>, Error = io::Error> + Send>) -> Self {
+    fn new(stream: Box<Stream<Item = Bytes, Error = io::Error> + Send>) -> Self {
         ImplAsyncRead {
-            buffer: io::Cursor::new(Vec::new()),
+            buffer: io::Cursor::new(Bytes::new()),
             stream: stream.fuse(),
         }
     }
@@ -108,7 +109,7 @@ struct ImplBlockingRead {
 }
 
 impl ImplBlockingRead {
-    fn new(stream: Box<Stream<Item = Vec<u8>, Error = io::Error> + Send>) -> Self {
+    fn new(stream: Box<Stream<Item = Bytes, Error = io::Error> + Send>) -> Self {
         ImplBlockingRead {
             inner: ImplAsyncRead::new(stream),
         }
@@ -124,8 +125,9 @@ impl io::Read for ImplBlockingRead {
 #[test]
 fn test_async_read() {
     use std::io::Read;
+    use bytes::Bytes;
 
-    let chunks = vec![b"1234".to_vec(), b"5678".to_vec()];
+    let chunks = vec![Bytes::from_static(b"1234"), Bytes::from_static(b"5678")];
     let stream = ByteStream::new(stream::iter_ok(chunks));
     let mut async_read = stream.into_async_read();
 
@@ -144,8 +146,9 @@ fn test_async_read() {
 #[test]
 fn test_blocking_read() {
     use std::io::Read;
+    use bytes::Bytes;
 
-    let chunks = vec![b"1234".to_vec(), b"5678".to_vec()];
+    let chunks = vec![Bytes::from_static(b"1234"), Bytes::from_static(b"5678")];
     let stream = ByteStream::new(stream::iter_ok(chunks));
     let mut async_read = stream.into_blocking_read();
 

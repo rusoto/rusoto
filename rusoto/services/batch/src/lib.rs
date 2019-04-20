@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [BatchClient](struct.BatchClient.html) and [Batch](trait.Batch.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [RamClient](struct.RamClient.html) and [Ram](trait.Ram.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

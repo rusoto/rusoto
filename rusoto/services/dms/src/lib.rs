@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [DatabaseMigrationServiceClient](struct.DatabaseMigrationServiceClient.html) and [DatabaseMigrationService](trait.DatabaseMigrationService.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

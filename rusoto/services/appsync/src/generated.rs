@@ -534,7 +534,7 @@ pub struct GetIntrospectionSchemaRequest {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetIntrospectionSchemaResponse {
     /// <p>The schema, in GraphQL Schema Definition Language (SDL) format.</p> <p>For more information, see the <a href="http://graphql.org/learn/schema/">GraphQL SDL documentation</a>.</p>
-    pub schema: Option<Vec<u8>>,
+    pub schema: Option<bytes::Bytes>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -990,7 +990,7 @@ pub struct StartSchemaCreationRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
-    pub definition: Vec<u8>,
+    pub definition: bytes::Bytes,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -4350,8 +4350,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4389,8 +4389,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4428,8 +4428,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4467,8 +4467,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4510,8 +4510,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4549,8 +4549,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4589,8 +4589,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4629,8 +4629,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4669,8 +4669,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4705,8 +4705,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4746,8 +4746,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4786,8 +4786,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4826,8 +4826,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4866,8 +4866,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4902,8 +4902,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -4975,8 +4975,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5011,8 +5011,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5050,8 +5050,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5095,8 +5095,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5140,8 +5140,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5185,8 +5185,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5230,8 +5230,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5279,8 +5279,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5328,8 +5328,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5372,8 +5372,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5411,8 +5411,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5454,8 +5454,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5497,8 +5497,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5540,8 +5540,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5579,8 +5579,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5623,8 +5623,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);
@@ -5666,8 +5666,8 @@ impl AppSync for AppSyncClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" || body.is_empty() {
-                        body = b"{}".to_vec();
+                    if body.as_ref() == b"null" || body.is_empty() {
+                        body = bytes::Bytes::from_static(b"{}");
                     }
 
                     debug!("Response body: {:?}", body);

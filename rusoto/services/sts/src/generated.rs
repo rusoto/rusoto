@@ -967,7 +967,7 @@ pub enum AssumeRoleError {
 impl AssumeRoleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssumeRoleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1036,7 +1036,7 @@ pub enum AssumeRoleWithSAMLError {
 impl AssumeRoleWithSAMLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssumeRoleWithSAMLError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1127,7 +1127,7 @@ pub enum AssumeRoleWithWebIdentityError {
 impl AssumeRoleWithWebIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssumeRoleWithWebIdentityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1224,7 +1224,7 @@ impl DecodeAuthorizationMessageError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DecodeAuthorizationMessageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1270,7 +1270,7 @@ pub enum GetCallerIdentityError {}
 impl GetCallerIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCallerIdentityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1314,7 +1314,7 @@ pub enum GetFederationTokenError {
 impl GetFederationTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFederationTokenError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1375,7 +1375,7 @@ pub enum GetSessionTokenError {
 impl GetSessionTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSessionTokenError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -1504,9 +1504,7 @@ impl Sts for StsClient {
         params.put("Action", "AssumeRole");
         params.put("Version", "2011-06-15");
         AssumeRoleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1526,7 +1524,7 @@ impl Sts for StsClient {
                     result = AssumeRoleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1557,9 +1555,7 @@ impl Sts for StsClient {
         params.put("Action", "AssumeRoleWithSAML");
         params.put("Version", "2011-06-15");
         AssumeRoleWithSAMLRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1579,7 +1575,7 @@ impl Sts for StsClient {
                     result = AssumeRoleWithSAMLResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1610,9 +1606,7 @@ impl Sts for StsClient {
         params.put("Action", "AssumeRoleWithWebIdentity");
         params.put("Version", "2011-06-15");
         AssumeRoleWithWebIdentityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1629,7 +1623,7 @@ impl Sts for StsClient {
                     result = AssumeRoleWithWebIdentityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1660,9 +1654,7 @@ impl Sts for StsClient {
         params.put("Action", "DecodeAuthorizationMessage");
         params.put("Version", "2011-06-15");
         DecodeAuthorizationMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1679,7 +1671,7 @@ impl Sts for StsClient {
                     result = DecodeAuthorizationMessageResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1710,9 +1702,7 @@ impl Sts for StsClient {
         params.put("Action", "GetCallerIdentity");
         params.put("Version", "2011-06-15");
         GetCallerIdentityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1732,7 +1722,7 @@ impl Sts for StsClient {
                     result = GetCallerIdentityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1763,9 +1753,7 @@ impl Sts for StsClient {
         params.put("Action", "GetFederationToken");
         params.put("Version", "2011-06-15");
         GetFederationTokenRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1785,7 +1773,7 @@ impl Sts for StsClient {
                     result = GetFederationTokenResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1816,9 +1804,7 @@ impl Sts for StsClient {
         params.put("Action", "GetSessionToken");
         params.put("Version", "2011-06-15");
         GetSessionTokenRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -1838,7 +1824,7 @@ impl Sts for StsClient {
                     result = GetSessionTokenResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

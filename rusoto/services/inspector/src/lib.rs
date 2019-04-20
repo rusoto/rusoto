@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [InspectorClient](struct.InspectorClient.html) and [Inspector](trait.Inspector.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [AWSSupportClient](struct.AWSSupportClient.html) and [AWSSupport](trait.AWSSupport.html).
 
+extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde;

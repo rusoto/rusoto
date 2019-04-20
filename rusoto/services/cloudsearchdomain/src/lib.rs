@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [CloudSearchDomainClient](struct.CloudSearchDomainClient.html) and [CloudSearchDomain](trait.CloudSearchDomain.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

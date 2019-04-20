@@ -179,9 +179,9 @@ impl BinaryDeserializer {
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<u8>, XmlParseError> {
+    ) -> Result<bytes::Bytes, XmlParseError> {
         start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into_bytes();
+        let obj = characters(stack)?.into();
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -193,7 +193,7 @@ impl BinaryListDeserializer {
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<Vec<u8>>, XmlParseError> {
+    ) -> Result<Vec<bytes::Bytes>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "BinaryListValue" {
                 obj.push(BinaryDeserializer::deserialize("BinaryListValue", stack)?);
@@ -208,7 +208,7 @@ impl BinaryListDeserializer {
 /// Serialize `BinaryList` contents to a `SignedRequest`.
 struct BinaryListSerializer;
 impl BinaryListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Vec<u8>>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<bytes::Bytes>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, ::std::str::from_utf8(&obj).unwrap());
@@ -1043,9 +1043,9 @@ impl MessageAttributeNameListSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MessageAttributeValue {
     /// <p>Not implemented. Reserved for future use.</p>
-    pub binary_list_values: Option<Vec<Vec<u8>>>,
+    pub binary_list_values: Option<Vec<bytes::Bytes>>,
     /// <p>Binary type attributes can store any binary data, such as compressed data, encrypted data, or images.</p>
-    pub binary_value: Option<Vec<u8>>,
+    pub binary_value: Option<bytes::Bytes>,
     /// <p>Amazon SQS supports the following logical data types: <code>String</code>, <code>Number</code>, and <code>Binary</code>. For the <code>Number</code> data type, you must use <code>StringValue</code>.</p> <p>You can also append custom labels. For more information, see <a href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html">Amazon SQS Message Attributes</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>
     pub data_type: String,
     /// <p>Not implemented. Reserved for future use.</p>
@@ -1957,7 +1957,7 @@ pub enum AddPermissionError {
 impl AddPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddPermissionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2006,7 +2006,7 @@ pub enum ChangeMessageVisibilityError {
 impl ChangeMessageVisibilityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangeMessageVisibilityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2071,7 +2071,7 @@ impl ChangeMessageVisibilityBatchError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ChangeMessageVisibilityBatchError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2146,7 +2146,7 @@ pub enum CreateQueueError {
 impl CreateQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateQueueError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2201,7 +2201,7 @@ pub enum DeleteMessageError {
 impl DeleteMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMessageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2260,7 +2260,7 @@ pub enum DeleteMessageBatchError {
 impl DeleteMessageBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMessageBatchError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2326,7 +2326,7 @@ pub enum DeleteQueueError {}
 impl DeleteQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQueueError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2366,7 +2366,7 @@ pub enum GetQueueAttributesError {
 impl GetQueueAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueueAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2413,7 +2413,7 @@ pub enum GetQueueUrlError {
 impl GetQueueUrlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueueUrlError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2462,7 +2462,7 @@ impl ListDeadLetterSourceQueuesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDeadLetterSourceQueuesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2508,7 +2508,7 @@ pub enum ListQueueTagsError {}
 impl ListQueueTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueueTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2545,7 +2545,7 @@ pub enum ListQueuesError {}
 impl ListQueuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueuesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2587,7 +2587,7 @@ pub enum PurgeQueueError {
 impl PurgeQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurgeQueueError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2640,7 +2640,7 @@ pub enum ReceiveMessageError {
 impl ReceiveMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReceiveMessageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2684,7 +2684,7 @@ pub enum RemovePermissionError {}
 impl RemovePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemovePermissionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2726,7 +2726,7 @@ pub enum SendMessageError {
 impl SendMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendMessageError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2789,7 +2789,7 @@ pub enum SendMessageBatchError {
 impl SendMessageBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendMessageBatchError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2870,7 +2870,7 @@ pub enum SetQueueAttributesError {
 impl SetQueueAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetQueueAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2914,7 +2914,7 @@ pub enum TagQueueError {}
 impl TagQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagQueueError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -2951,7 +2951,7 @@ pub enum UntagQueueError {}
 impl UntagQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagQueueError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -3130,9 +3130,7 @@ impl Sqs for SqsClient {
         params.put("Action", "AddPermission");
         params.put("Version", "2012-11-05");
         AddPermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3160,9 +3158,7 @@ impl Sqs for SqsClient {
         params.put("Action", "ChangeMessageVisibility");
         params.put("Version", "2012-11-05");
         ChangeMessageVisibilityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3187,9 +3183,7 @@ impl Sqs for SqsClient {
         params.put("Action", "ChangeMessageVisibilityBatch");
         params.put("Version", "2012-11-05");
         ChangeMessageVisibilityBatchRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3206,7 +3200,7 @@ impl Sqs for SqsClient {
                     result = ChangeMessageVisibilityBatchResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3237,9 +3231,7 @@ impl Sqs for SqsClient {
         params.put("Action", "CreateQueue");
         params.put("Version", "2012-11-05");
         CreateQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3259,7 +3251,7 @@ impl Sqs for SqsClient {
                     result = CreateQueueResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3287,9 +3279,7 @@ impl Sqs for SqsClient {
         params.put("Action", "DeleteMessage");
         params.put("Version", "2012-11-05");
         DeleteMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3317,9 +3307,7 @@ impl Sqs for SqsClient {
         params.put("Action", "DeleteMessageBatch");
         params.put("Version", "2012-11-05");
         DeleteMessageBatchRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3339,7 +3327,7 @@ impl Sqs for SqsClient {
                     result = DeleteMessageBatchResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3367,9 +3355,7 @@ impl Sqs for SqsClient {
         params.put("Action", "DeleteQueue");
         params.put("Version", "2012-11-05");
         DeleteQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3397,9 +3383,7 @@ impl Sqs for SqsClient {
         params.put("Action", "GetQueueAttributes");
         params.put("Version", "2012-11-05");
         GetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3419,7 +3403,7 @@ impl Sqs for SqsClient {
                     result = GetQueueAttributesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3450,9 +3434,7 @@ impl Sqs for SqsClient {
         params.put("Action", "GetQueueUrl");
         params.put("Version", "2012-11-05");
         GetQueueUrlRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3472,7 +3454,7 @@ impl Sqs for SqsClient {
                     result = GetQueueUrlResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3503,9 +3485,7 @@ impl Sqs for SqsClient {
         params.put("Action", "ListDeadLetterSourceQueues");
         params.put("Version", "2012-11-05");
         ListDeadLetterSourceQueuesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3522,7 +3502,7 @@ impl Sqs for SqsClient {
                     result = ListDeadLetterSourceQueuesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3553,9 +3533,7 @@ impl Sqs for SqsClient {
         params.put("Action", "ListQueueTags");
         params.put("Version", "2012-11-05");
         ListQueueTagsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3575,7 +3553,7 @@ impl Sqs for SqsClient {
                     result = ListQueueTagsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3606,9 +3584,7 @@ impl Sqs for SqsClient {
         params.put("Action", "ListQueues");
         params.put("Version", "2012-11-05");
         ListQueuesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3628,7 +3604,7 @@ impl Sqs for SqsClient {
                     result = ListQueuesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3654,9 +3630,7 @@ impl Sqs for SqsClient {
         params.put("Action", "PurgeQueue");
         params.put("Version", "2012-11-05");
         PurgeQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3684,9 +3658,7 @@ impl Sqs for SqsClient {
         params.put("Action", "ReceiveMessage");
         params.put("Version", "2012-11-05");
         ReceiveMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3706,7 +3678,7 @@ impl Sqs for SqsClient {
                     result = ReceiveMessageResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3737,9 +3709,7 @@ impl Sqs for SqsClient {
         params.put("Action", "RemovePermission");
         params.put("Version", "2012-11-05");
         RemovePermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3767,9 +3737,7 @@ impl Sqs for SqsClient {
         params.put("Action", "SendMessage");
         params.put("Version", "2012-11-05");
         SendMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3789,7 +3757,7 @@ impl Sqs for SqsClient {
                     result = SendMessageResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3820,9 +3788,7 @@ impl Sqs for SqsClient {
         params.put("Action", "SendMessageBatch");
         params.put("Version", "2012-11-05");
         SendMessageBatchRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3842,7 +3808,7 @@ impl Sqs for SqsClient {
                     result = SendMessageBatchResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3873,9 +3839,7 @@ impl Sqs for SqsClient {
         params.put("Action", "SetQueueAttributes");
         params.put("Version", "2012-11-05");
         SetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3900,9 +3864,7 @@ impl Sqs for SqsClient {
         params.put("Action", "TagQueue");
         params.put("Version", "2012-11-05");
         TagQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -3927,9 +3889,7 @@ impl Sqs for SqsClient {
         params.put("Action", "UntagQueue");
         params.put("Version", "2012-11-05");
         UntagQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {

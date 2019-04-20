@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [PollyClient](struct.PollyClient.html) and [Polly](trait.Polly.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

@@ -4115,7 +4115,7 @@ impl PutIdentityPolicyResponseDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RawMessage {
     /// <p>The raw data of the message. This data needs to base64-encoded if you are accessing Amazon SES directly through the HTTPS interface. If you are accessing Amazon SES using an AWS SDK, the SDK takes care of the base 64-encoding for you. In all cases, the client must ensure that the message format complies with Internet email standards regarding email header fields, MIME types, and MIME encoding.</p> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list.</p> <p>If you are using <code>SendRawEmail</code> with sending authorization, you can include X-headers in the raw message to specify the "Source," "From," and "Return-Path" addresses. For more information, see the documentation for <code>SendRawEmail</code>. </p> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html">Amazon SES Developer Guide</a>.</p>
-    pub data: Vec<u8>,
+    pub data: bytes::Bytes,
 }
 
 /// Serialize `RawMessage` contents to a `SignedRequest`.
@@ -7035,7 +7035,7 @@ pub enum CloneReceiptRuleSetError {
 impl CloneReceiptRuleSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CloneReceiptRuleSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7098,7 +7098,7 @@ pub enum CreateConfigurationSetError {
 impl CreateConfigurationSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConfigurationSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7173,7 +7173,7 @@ impl CreateConfigurationSetEventDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateConfigurationSetEventDestinationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7270,7 +7270,7 @@ impl CreateConfigurationSetTrackingOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateConfigurationSetTrackingOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7343,7 +7343,7 @@ impl CreateCustomVerificationEmailTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCustomVerificationEmailTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7390,7 +7390,7 @@ pub enum CreateReceiptFilterError {
 impl CreateReceiptFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReceiptFilterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7455,7 +7455,7 @@ pub enum CreateReceiptRuleError {
 impl CreateReceiptRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReceiptRuleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7542,7 +7542,7 @@ pub enum CreateReceiptRuleSetError {
 impl CreateReceiptRuleSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReceiptRuleSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7599,7 +7599,7 @@ pub enum CreateTemplateError {
 impl CreateTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7658,7 +7658,7 @@ pub enum DeleteConfigurationSetError {
 impl DeleteConfigurationSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigurationSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7711,7 +7711,7 @@ impl DeleteConfigurationSetEventDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationSetEventDestinationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7772,7 +7772,7 @@ impl DeleteConfigurationSetTrackingOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationSetTrackingOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7830,7 +7830,7 @@ impl DeleteCustomVerificationEmailTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteCustomVerificationEmailTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7867,7 +7867,7 @@ pub enum DeleteIdentityError {}
 impl DeleteIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7904,7 +7904,7 @@ pub enum DeleteIdentityPolicyError {}
 impl DeleteIdentityPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentityPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7941,7 +7941,7 @@ pub enum DeleteReceiptFilterError {}
 impl DeleteReceiptFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReceiptFilterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7981,7 +7981,7 @@ pub enum DeleteReceiptRuleError {
 impl DeleteReceiptRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReceiptRuleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8028,7 +8028,7 @@ pub enum DeleteReceiptRuleSetError {
 impl DeleteReceiptRuleSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReceiptRuleSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8072,7 +8072,7 @@ pub enum DeleteTemplateError {}
 impl DeleteTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8111,7 +8111,7 @@ impl DeleteVerifiedEmailAddressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVerifiedEmailAddressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8150,7 +8150,7 @@ impl DescribeActiveReceiptRuleSetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeActiveReceiptRuleSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8190,7 +8190,7 @@ pub enum DescribeConfigurationSetError {
 impl DescribeConfigurationSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigurationSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8241,7 +8241,7 @@ pub enum DescribeReceiptRuleError {
 impl DescribeReceiptRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReceiptRuleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8294,7 +8294,7 @@ pub enum DescribeReceiptRuleSetError {
 impl DescribeReceiptRuleSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReceiptRuleSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8340,7 +8340,7 @@ pub enum GetAccountSendingEnabledError {}
 impl GetAccountSendingEnabledError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountSendingEnabledError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8382,7 +8382,7 @@ impl GetCustomVerificationEmailTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCustomVerificationEmailTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8421,7 +8421,7 @@ pub enum GetIdentityDkimAttributesError {}
 impl GetIdentityDkimAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIdentityDkimAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8460,7 +8460,7 @@ impl GetIdentityMailFromDomainAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetIdentityMailFromDomainAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8499,7 +8499,7 @@ impl GetIdentityNotificationAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetIdentityNotificationAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8536,7 +8536,7 @@ pub enum GetIdentityPoliciesError {}
 impl GetIdentityPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIdentityPoliciesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8575,7 +8575,7 @@ impl GetIdentityVerificationAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetIdentityVerificationAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8612,7 +8612,7 @@ pub enum GetSendQuotaError {}
 impl GetSendQuotaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSendQuotaError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8649,7 +8649,7 @@ pub enum GetSendStatisticsError {}
 impl GetSendStatisticsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSendStatisticsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8689,7 +8689,7 @@ pub enum GetTemplateError {
 impl GetTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8733,7 +8733,7 @@ pub enum ListConfigurationSetsError {}
 impl ListConfigurationSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigurationSetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8772,7 +8772,7 @@ impl ListCustomVerificationEmailTemplatesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCustomVerificationEmailTemplatesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8809,7 +8809,7 @@ pub enum ListIdentitiesError {}
 impl ListIdentitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentitiesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8846,7 +8846,7 @@ pub enum ListIdentityPoliciesError {}
 impl ListIdentityPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentityPoliciesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8883,7 +8883,7 @@ pub enum ListReceiptFiltersError {}
 impl ListReceiptFiltersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReceiptFiltersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8920,7 +8920,7 @@ pub enum ListReceiptRuleSetsError {}
 impl ListReceiptRuleSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReceiptRuleSetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8957,7 +8957,7 @@ pub enum ListTemplatesError {}
 impl ListTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTemplatesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8996,7 +8996,7 @@ impl ListVerifiedEmailAddressesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListVerifiedEmailAddressesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9036,7 +9036,7 @@ pub enum PutIdentityPolicyError {
 impl PutIdentityPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutIdentityPolicyError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9085,7 +9085,7 @@ pub enum ReorderReceiptRuleSetError {
 impl ReorderReceiptRuleSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReorderReceiptRuleSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9140,7 +9140,7 @@ pub enum SendBounceError {
 impl SendBounceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendBounceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9197,7 +9197,7 @@ pub enum SendBulkTemplatedEmailError {
 impl SendBulkTemplatedEmailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendBulkTemplatedEmailError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9294,7 +9294,7 @@ impl SendCustomVerificationEmailError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SendCustomVerificationEmailError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9350,7 +9350,7 @@ pub enum SendEmailError {
 impl SendEmailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendEmailError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9429,7 +9429,7 @@ pub enum SendRawEmailError {
 impl SendRawEmailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendRawEmailError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9514,7 +9514,7 @@ pub enum SendTemplatedEmailError {
 impl SendTemplatedEmailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTemplatedEmailError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9597,7 +9597,7 @@ pub enum SetActiveReceiptRuleSetError {
 impl SetActiveReceiptRuleSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetActiveReceiptRuleSetError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9643,7 +9643,7 @@ pub enum SetIdentityDkimEnabledError {}
 impl SetIdentityDkimEnabledError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetIdentityDkimEnabledError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9682,7 +9682,7 @@ impl SetIdentityFeedbackForwardingEnabledError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SetIdentityFeedbackForwardingEnabledError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9721,7 +9721,7 @@ impl SetIdentityHeadersInNotificationsEnabledError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SetIdentityHeadersInNotificationsEnabledError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9758,7 +9758,7 @@ pub enum SetIdentityMailFromDomainError {}
 impl SetIdentityMailFromDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetIdentityMailFromDomainError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9797,7 +9797,7 @@ impl SetIdentityNotificationTopicError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SetIdentityNotificationTopicError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9839,7 +9839,7 @@ pub enum SetReceiptRulePositionError {
 impl SetReceiptRulePositionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetReceiptRulePositionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9898,7 +9898,7 @@ pub enum TestRenderTemplateError {
 impl TestRenderTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestRenderTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9960,7 +9960,7 @@ impl UpdateAccountSendingEnabledError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateAccountSendingEnabledError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10010,7 +10010,7 @@ impl UpdateConfigurationSetEventDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConfigurationSetEventDestinationError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10095,7 +10095,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConfigurationSetReputationMetricsEnabledError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10141,7 +10141,7 @@ impl UpdateConfigurationSetSendingEnabledError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConfigurationSetSendingEnabledError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10198,7 +10198,7 @@ impl UpdateConfigurationSetTrackingOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConfigurationSetTrackingOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10271,7 +10271,7 @@ impl UpdateCustomVerificationEmailTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateCustomVerificationEmailTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10325,7 +10325,7 @@ pub enum UpdateReceiptRuleError {
 impl UpdateReceiptRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateReceiptRuleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10406,7 +10406,7 @@ pub enum UpdateTemplateError {
 impl UpdateTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTemplateError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10456,7 +10456,7 @@ pub enum VerifyDomainDkimError {}
 impl VerifyDomainDkimError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyDomainDkimError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10493,7 +10493,7 @@ pub enum VerifyDomainIdentityError {}
 impl VerifyDomainIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyDomainIdentityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10530,7 +10530,7 @@ pub enum VerifyEmailAddressError {}
 impl VerifyEmailAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyEmailAddressError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10567,7 +10567,7 @@ pub enum VerifyEmailIdentityError {}
 impl VerifyEmailIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyEmailIdentityError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11100,9 +11100,7 @@ impl Ses for SesClient {
         params.put("Action", "CloneReceiptRuleSet");
         params.put("Version", "2010-12-01");
         CloneReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11121,7 +11119,7 @@ impl Ses for SesClient {
                     result = CloneReceiptRuleSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11152,9 +11150,7 @@ impl Ses for SesClient {
         params.put("Action", "CreateConfigurationSet");
         params.put("Version", "2010-12-01");
         CreateConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11171,7 +11167,7 @@ impl Ses for SesClient {
                     result = CreateConfigurationSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11205,9 +11201,7 @@ impl Ses for SesClient {
         params.put("Action", "CreateConfigurationSetEventDestination");
         params.put("Version", "2010-12-01");
         CreateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11226,7 +11220,7 @@ impl Ses for SesClient {
                     result = CreateConfigurationSetEventDestinationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11261,9 +11255,7 @@ impl Ses for SesClient {
         params.put("Action", "CreateConfigurationSetTrackingOptions");
         params.put("Version", "2010-12-01");
         CreateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11282,7 +11274,7 @@ impl Ses for SesClient {
                     result = CreateConfigurationSetTrackingOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11314,9 +11306,7 @@ impl Ses for SesClient {
         params.put("Action", "CreateCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
         CreateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11343,9 +11333,7 @@ impl Ses for SesClient {
         params.put("Action", "CreateReceiptFilter");
         params.put("Version", "2010-12-01");
         CreateReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11364,7 +11352,7 @@ impl Ses for SesClient {
                     result = CreateReceiptFilterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11395,9 +11383,7 @@ impl Ses for SesClient {
         params.put("Action", "CreateReceiptRule");
         params.put("Version", "2010-12-01");
         CreateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11417,7 +11403,7 @@ impl Ses for SesClient {
                     result = CreateReceiptRuleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11448,9 +11434,7 @@ impl Ses for SesClient {
         params.put("Action", "CreateReceiptRuleSet");
         params.put("Version", "2010-12-01");
         CreateReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11469,7 +11453,7 @@ impl Ses for SesClient {
                     result = CreateReceiptRuleSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11500,9 +11484,7 @@ impl Ses for SesClient {
         params.put("Action", "CreateTemplate");
         params.put("Version", "2010-12-01");
         CreateTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11522,7 +11504,7 @@ impl Ses for SesClient {
                     result = CreateTemplateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11553,9 +11535,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteConfigurationSet");
         params.put("Version", "2010-12-01");
         DeleteConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11572,7 +11552,7 @@ impl Ses for SesClient {
                     result = DeleteConfigurationSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11606,9 +11586,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteConfigurationSetEventDestination");
         params.put("Version", "2010-12-01");
         DeleteConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11627,7 +11605,7 @@ impl Ses for SesClient {
                     result = DeleteConfigurationSetEventDestinationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11662,9 +11640,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteConfigurationSetTrackingOptions");
         params.put("Version", "2010-12-01");
         DeleteConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11683,7 +11659,7 @@ impl Ses for SesClient {
                     result = DeleteConfigurationSetTrackingOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11715,9 +11691,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
         DeleteCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11744,9 +11718,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteIdentity");
         params.put("Version", "2010-12-01");
         DeleteIdentityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11766,7 +11738,7 @@ impl Ses for SesClient {
                     result = DeleteIdentityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11797,9 +11769,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteIdentityPolicy");
         params.put("Version", "2010-12-01");
         DeleteIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11818,7 +11788,7 @@ impl Ses for SesClient {
                     result = DeleteIdentityPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11849,9 +11819,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteReceiptFilter");
         params.put("Version", "2010-12-01");
         DeleteReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11870,7 +11838,7 @@ impl Ses for SesClient {
                     result = DeleteReceiptFilterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11901,9 +11869,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteReceiptRule");
         params.put("Version", "2010-12-01");
         DeleteReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11923,7 +11889,7 @@ impl Ses for SesClient {
                     result = DeleteReceiptRuleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11954,9 +11920,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteReceiptRuleSet");
         params.put("Version", "2010-12-01");
         DeleteReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -11975,7 +11939,7 @@ impl Ses for SesClient {
                     result = DeleteReceiptRuleSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12006,9 +11970,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteTemplate");
         params.put("Version", "2010-12-01");
         DeleteTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12028,7 +11990,7 @@ impl Ses for SesClient {
                     result = DeleteTemplateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12059,9 +12021,7 @@ impl Ses for SesClient {
         params.put("Action", "DeleteVerifiedEmailAddress");
         params.put("Version", "2010-12-01");
         DeleteVerifiedEmailAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12086,9 +12046,7 @@ impl Ses for SesClient {
         params.put("Action", "DescribeActiveReceiptRuleSet");
         params.put("Version", "2010-12-01");
         DescribeActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12105,7 +12063,7 @@ impl Ses for SesClient {
                     result = DescribeActiveReceiptRuleSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12136,9 +12094,7 @@ impl Ses for SesClient {
         params.put("Action", "DescribeConfigurationSet");
         params.put("Version", "2010-12-01");
         DescribeConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12155,7 +12111,7 @@ impl Ses for SesClient {
                     result = DescribeConfigurationSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12186,9 +12142,7 @@ impl Ses for SesClient {
         params.put("Action", "DescribeReceiptRule");
         params.put("Version", "2010-12-01");
         DescribeReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12207,7 +12161,7 @@ impl Ses for SesClient {
                     result = DescribeReceiptRuleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12238,9 +12192,7 @@ impl Ses for SesClient {
         params.put("Action", "DescribeReceiptRuleSet");
         params.put("Version", "2010-12-01");
         DescribeReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12257,7 +12209,7 @@ impl Ses for SesClient {
                     result = DescribeReceiptRuleSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12287,9 +12239,7 @@ impl Ses for SesClient {
         params.put("Action", "GetAccountSendingEnabled");
         params.put("Version", "2010-12-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12306,7 +12256,7 @@ impl Ses for SesClient {
                     result = GetAccountSendingEnabledResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12340,9 +12290,7 @@ impl Ses for SesClient {
         params.put("Action", "GetCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
         GetCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12361,7 +12309,7 @@ impl Ses for SesClient {
                     result = GetCustomVerificationEmailTemplateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12392,9 +12340,7 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityDkimAttributes");
         params.put("Version", "2010-12-01");
         GetIdentityDkimAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12411,7 +12357,7 @@ impl Ses for SesClient {
                     result = GetIdentityDkimAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12445,9 +12391,7 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityMailFromDomainAttributes");
         params.put("Version", "2010-12-01");
         GetIdentityMailFromDomainAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12466,7 +12410,7 @@ impl Ses for SesClient {
                     result = GetIdentityMailFromDomainAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12500,9 +12444,7 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityNotificationAttributes");
         params.put("Version", "2010-12-01");
         GetIdentityNotificationAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12521,7 +12463,7 @@ impl Ses for SesClient {
                     result = GetIdentityNotificationAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12552,9 +12494,7 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityPolicies");
         params.put("Version", "2010-12-01");
         GetIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12573,7 +12513,7 @@ impl Ses for SesClient {
                     result = GetIdentityPoliciesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12607,9 +12547,7 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityVerificationAttributes");
         params.put("Version", "2010-12-01");
         GetIdentityVerificationAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12628,7 +12566,7 @@ impl Ses for SesClient {
                     result = GetIdentityVerificationAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12656,9 +12594,7 @@ impl Ses for SesClient {
         params.put("Action", "GetSendQuota");
         params.put("Version", "2010-12-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12678,7 +12614,7 @@ impl Ses for SesClient {
                     result = GetSendQuotaResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12708,9 +12644,7 @@ impl Ses for SesClient {
         params.put("Action", "GetSendStatistics");
         params.put("Version", "2010-12-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12730,7 +12664,7 @@ impl Ses for SesClient {
                     result = GetSendStatisticsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12761,9 +12695,7 @@ impl Ses for SesClient {
         params.put("Action", "GetTemplate");
         params.put("Version", "2010-12-01");
         GetTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12783,7 +12715,7 @@ impl Ses for SesClient {
                     result = GetTemplateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12814,9 +12746,7 @@ impl Ses for SesClient {
         params.put("Action", "ListConfigurationSets");
         params.put("Version", "2010-12-01");
         ListConfigurationSetsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12833,7 +12763,7 @@ impl Ses for SesClient {
                     result = ListConfigurationSetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12867,9 +12797,7 @@ impl Ses for SesClient {
         params.put("Action", "ListCustomVerificationEmailTemplates");
         params.put("Version", "2010-12-01");
         ListCustomVerificationEmailTemplatesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12888,7 +12816,7 @@ impl Ses for SesClient {
                     result = ListCustomVerificationEmailTemplatesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12919,9 +12847,7 @@ impl Ses for SesClient {
         params.put("Action", "ListIdentities");
         params.put("Version", "2010-12-01");
         ListIdentitiesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12941,7 +12867,7 @@ impl Ses for SesClient {
                     result = ListIdentitiesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12972,9 +12898,7 @@ impl Ses for SesClient {
         params.put("Action", "ListIdentityPolicies");
         params.put("Version", "2010-12-01");
         ListIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -12993,7 +12917,7 @@ impl Ses for SesClient {
                     result = ListIdentityPoliciesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13024,9 +12948,7 @@ impl Ses for SesClient {
         params.put("Action", "ListReceiptFilters");
         params.put("Version", "2010-12-01");
         ListReceiptFiltersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13046,7 +12968,7 @@ impl Ses for SesClient {
                     result = ListReceiptFiltersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13077,9 +12999,7 @@ impl Ses for SesClient {
         params.put("Action", "ListReceiptRuleSets");
         params.put("Version", "2010-12-01");
         ListReceiptRuleSetsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13098,7 +13018,7 @@ impl Ses for SesClient {
                     result = ListReceiptRuleSetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13129,9 +13049,7 @@ impl Ses for SesClient {
         params.put("Action", "ListTemplates");
         params.put("Version", "2010-12-01");
         ListTemplatesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13151,7 +13069,7 @@ impl Ses for SesClient {
                     result = ListTemplatesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13181,9 +13099,7 @@ impl Ses for SesClient {
         params.put("Action", "ListVerifiedEmailAddresses");
         params.put("Version", "2010-12-01");
 
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13200,7 +13116,7 @@ impl Ses for SesClient {
                     result = ListVerifiedEmailAddressesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13231,9 +13147,7 @@ impl Ses for SesClient {
         params.put("Action", "PutIdentityPolicy");
         params.put("Version", "2010-12-01");
         PutIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13253,7 +13167,7 @@ impl Ses for SesClient {
                     result = PutIdentityPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13284,9 +13198,7 @@ impl Ses for SesClient {
         params.put("Action", "ReorderReceiptRuleSet");
         params.put("Version", "2010-12-01");
         ReorderReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13303,7 +13215,7 @@ impl Ses for SesClient {
                     result = ReorderReceiptRuleSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13334,9 +13246,7 @@ impl Ses for SesClient {
         params.put("Action", "SendBounce");
         params.put("Version", "2010-12-01");
         SendBounceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13356,7 +13266,7 @@ impl Ses for SesClient {
                     result = SendBounceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13387,9 +13297,7 @@ impl Ses for SesClient {
         params.put("Action", "SendBulkTemplatedEmail");
         params.put("Version", "2010-12-01");
         SendBulkTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13406,7 +13314,7 @@ impl Ses for SesClient {
                     result = SendBulkTemplatedEmailResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13437,9 +13345,7 @@ impl Ses for SesClient {
         params.put("Action", "SendCustomVerificationEmail");
         params.put("Version", "2010-12-01");
         SendCustomVerificationEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13456,7 +13362,7 @@ impl Ses for SesClient {
                     result = SendCustomVerificationEmailResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13487,9 +13393,7 @@ impl Ses for SesClient {
         params.put("Action", "SendEmail");
         params.put("Version", "2010-12-01");
         SendEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13509,7 +13413,7 @@ impl Ses for SesClient {
                     result = SendEmailResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13538,9 +13442,7 @@ impl Ses for SesClient {
         params.put("Action", "SendRawEmail");
         params.put("Version", "2010-12-01");
         SendRawEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13560,7 +13462,7 @@ impl Ses for SesClient {
                     result = SendRawEmailResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13591,9 +13493,7 @@ impl Ses for SesClient {
         params.put("Action", "SendTemplatedEmail");
         params.put("Version", "2010-12-01");
         SendTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13613,7 +13513,7 @@ impl Ses for SesClient {
                     result = SendTemplatedEmailResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13644,9 +13544,7 @@ impl Ses for SesClient {
         params.put("Action", "SetActiveReceiptRuleSet");
         params.put("Version", "2010-12-01");
         SetActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13663,7 +13561,7 @@ impl Ses for SesClient {
                     result = SetActiveReceiptRuleSetResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13694,9 +13592,7 @@ impl Ses for SesClient {
         params.put("Action", "SetIdentityDkimEnabled");
         params.put("Version", "2010-12-01");
         SetIdentityDkimEnabledRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13713,7 +13609,7 @@ impl Ses for SesClient {
                     result = SetIdentityDkimEnabledResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13747,9 +13643,7 @@ impl Ses for SesClient {
         params.put("Action", "SetIdentityFeedbackForwardingEnabled");
         params.put("Version", "2010-12-01");
         SetIdentityFeedbackForwardingEnabledRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13768,7 +13662,7 @@ impl Ses for SesClient {
                     result = SetIdentityFeedbackForwardingEnabledResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13806,9 +13700,7 @@ impl Ses for SesClient {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13825,7 +13717,7 @@ impl Ses for SesClient {
                     result = SetIdentityHeadersInNotificationsEnabledResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13857,9 +13749,7 @@ impl Ses for SesClient {
         params.put("Action", "SetIdentityMailFromDomain");
         params.put("Version", "2010-12-01");
         SetIdentityMailFromDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13876,7 +13766,7 @@ impl Ses for SesClient {
                     result = SetIdentityMailFromDomainResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13907,9 +13797,7 @@ impl Ses for SesClient {
         params.put("Action", "SetIdentityNotificationTopic");
         params.put("Version", "2010-12-01");
         SetIdentityNotificationTopicRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13926,7 +13814,7 @@ impl Ses for SesClient {
                     result = SetIdentityNotificationTopicResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13957,9 +13845,7 @@ impl Ses for SesClient {
         params.put("Action", "SetReceiptRulePosition");
         params.put("Version", "2010-12-01");
         SetReceiptRulePositionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13976,7 +13862,7 @@ impl Ses for SesClient {
                     result = SetReceiptRulePositionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14007,9 +13893,7 @@ impl Ses for SesClient {
         params.put("Action", "TestRenderTemplate");
         params.put("Version", "2010-12-01");
         TestRenderTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14029,7 +13913,7 @@ impl Ses for SesClient {
                     result = TestRenderTemplateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14060,9 +13944,7 @@ impl Ses for SesClient {
         params.put("Action", "UpdateAccountSendingEnabled");
         params.put("Version", "2010-12-01");
         UpdateAccountSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14090,9 +13972,7 @@ impl Ses for SesClient {
         params.put("Action", "UpdateConfigurationSetEventDestination");
         params.put("Version", "2010-12-01");
         UpdateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14111,7 +13991,7 @@ impl Ses for SesClient {
                     result = UpdateConfigurationSetEventDestinationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14147,9 +14027,7 @@ impl Ses for SesClient {
             "",
             &input,
         );
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14178,9 +14056,7 @@ impl Ses for SesClient {
         params.put("Action", "UpdateConfigurationSetSendingEnabled");
         params.put("Version", "2010-12-01");
         UpdateConfigurationSetSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14210,9 +14086,7 @@ impl Ses for SesClient {
         params.put("Action", "UpdateConfigurationSetTrackingOptions");
         params.put("Version", "2010-12-01");
         UpdateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14231,7 +14105,7 @@ impl Ses for SesClient {
                     result = UpdateConfigurationSetTrackingOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14263,9 +14137,7 @@ impl Ses for SesClient {
         params.put("Action", "UpdateCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
         UpdateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14292,9 +14164,7 @@ impl Ses for SesClient {
         params.put("Action", "UpdateReceiptRule");
         params.put("Version", "2010-12-01");
         UpdateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14314,7 +14184,7 @@ impl Ses for SesClient {
                     result = UpdateReceiptRuleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14345,9 +14215,7 @@ impl Ses for SesClient {
         params.put("Action", "UpdateTemplate");
         params.put("Version", "2010-12-01");
         UpdateTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14367,7 +14235,7 @@ impl Ses for SesClient {
                     result = UpdateTemplateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14398,9 +14266,7 @@ impl Ses for SesClient {
         params.put("Action", "VerifyDomainDkim");
         params.put("Version", "2010-12-01");
         VerifyDomainDkimRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14420,7 +14286,7 @@ impl Ses for SesClient {
                     result = VerifyDomainDkimResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14451,9 +14317,7 @@ impl Ses for SesClient {
         params.put("Action", "VerifyDomainIdentity");
         params.put("Version", "2010-12-01");
         VerifyDomainIdentityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14472,7 +14336,7 @@ impl Ses for SesClient {
                     result = VerifyDomainIdentityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14503,9 +14367,7 @@ impl Ses for SesClient {
         params.put("Action", "VerifyEmailAddress");
         params.put("Version", "2010-12-01");
         VerifyEmailAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14533,9 +14395,7 @@ impl Ses for SesClient {
         params.put("Action", "VerifyEmailIdentity");
         params.put("Version", "2010-12-01");
         VerifyEmailIdentityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14554,7 +14414,7 @@ impl Ses for SesClient {
                     result = VerifyEmailIdentityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

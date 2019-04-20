@@ -16,6 +16,7 @@
 //!
 //! If you're using the service, you're probably looking for [MediaPackageClient](struct.MediaPackageClient.html) and [MediaPackage](trait.MediaPackage.html).
 
+extern crate bytes;
 extern crate futures;
 #[macro_use]
 extern crate log;

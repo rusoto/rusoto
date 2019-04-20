@@ -15,6 +15,7 @@ use std::rc::Rc;
 use std::sync::Arc;
 use std::time::Duration;
 
+use bytes::Bytes;
 use futures::{Async, Future, Poll, Stream};
 use hyper::body::Payload;
 use hyper::client::connect::Connect;
@@ -107,7 +108,7 @@ pub struct BufferedHttpResponse {
     /// Status code of HTTP Request
     pub status: StatusCode,
     /// Contents of Response
-    pub body: Vec<u8>,
+    pub body: Bytes,
     /// Response headers
     pub headers: Headers,
 }
@@ -180,7 +181,7 @@ impl HttpResponse {
         }));
         let body = hyper_response
             .into_body()
-            .map(|chunk| chunk.as_ref().to_vec())
+            .map(|chunk| chunk.into_bytes())
             .map_err(|err| io::Error::new(io::ErrorKind::Other, err));
 
         HttpResponse {
@@ -305,7 +306,7 @@ struct HttpClientPayload {
 }
 
 impl Payload for HttpClientPayload {
-    type Data = io::Cursor<Vec<u8>>;
+    type Data = io::Cursor<Bytes>;
     type Error = io::Error;
 
     fn poll_data(&mut self) -> Poll<Option<Self::Data>, Self::Error> {
@@ -315,7 +316,7 @@ impl Payload for HttpClientPayload {
                 if buffer.len() == 0 {
                     Ok(Async::Ready(None))
                 } else {
-                    Ok(Async::Ready(Some(io::Cursor::new(buffer.split_off(0)))))
+                    Ok(Async::Ready(Some(io::Cursor::new(buffer.split_off(0).into()))))
                 }
             }
             Some(SignedRequestPayload::Stream(ref mut stream)) => match stream.poll()? {
@@ -496,7 +497,7 @@ where
         if log_enabled!(Debug) {
             let payload = match request.payload {
                 Some(SignedRequestPayload::Buffer(ref payload_bytes)) => {
-                    String::from_utf8(payload_bytes.to_owned())
+                    String::from_utf8(payload_bytes.as_ref().to_owned())
                         .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
                 }
                 Some(SignedRequestPayload::Stream(ref stream)) => {

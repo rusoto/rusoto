@@ -5780,7 +5780,7 @@ pub enum AddListenerCertificatesError {
 impl AddListenerCertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddListenerCertificatesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5851,7 +5851,7 @@ pub enum AddTagsError {
 impl AddTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -5944,7 +5944,7 @@ pub enum CreateListenerError {
 impl CreateListenerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateListenerError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6107,7 +6107,7 @@ pub enum CreateLoadBalancerError {
 impl CreateLoadBalancerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLoadBalancerError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6258,7 +6258,7 @@ pub enum CreateRuleError {
 impl CreateRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6383,7 +6383,7 @@ pub enum CreateTargetGroupError {
 impl CreateTargetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTargetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6446,7 +6446,7 @@ pub enum DeleteListenerError {
 impl DeleteListenerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteListenerError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6497,7 +6497,7 @@ pub enum DeleteLoadBalancerError {
 impl DeleteLoadBalancerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLoadBalancerError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6560,7 +6560,7 @@ pub enum DeleteRuleError {
 impl DeleteRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6613,7 +6613,7 @@ pub enum DeleteTargetGroupError {
 impl DeleteTargetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTargetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6662,7 +6662,7 @@ pub enum DeregisterTargetsError {
 impl DeregisterTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterTargetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6712,7 +6712,7 @@ pub enum DescribeAccountLimitsError {}
 impl DescribeAccountLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountLimitsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6754,7 +6754,7 @@ impl DescribeListenerCertificatesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeListenerCertificatesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6807,7 +6807,7 @@ pub enum DescribeListenersError {
 impl DescribeListenersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeListenersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6868,7 +6868,7 @@ impl DescribeLoadBalancerAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLoadBalancerAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6917,7 +6917,7 @@ pub enum DescribeLoadBalancersError {
 impl DescribeLoadBalancersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoadBalancersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -6970,7 +6970,7 @@ pub enum DescribeRulesError {
 impl DescribeRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRulesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7029,7 +7029,7 @@ pub enum DescribeSSLPoliciesError {
 impl DescribeSSLPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSSLPoliciesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7082,7 +7082,7 @@ pub enum DescribeTagsError {
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7149,7 +7149,7 @@ impl DescribeTargetGroupAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTargetGroupAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7200,7 +7200,7 @@ pub enum DescribeTargetGroupsError {
 impl DescribeTargetGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTargetGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7261,7 +7261,7 @@ pub enum DescribeTargetHealthError {
 impl DescribeTargetHealthError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTargetHealthError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7350,7 +7350,7 @@ pub enum ModifyListenerError {
 impl ModifyListenerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyListenerError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7493,7 +7493,7 @@ impl ModifyLoadBalancerAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyLoadBalancerAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7568,7 +7568,7 @@ pub enum ModifyRuleError {
 impl ModifyRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyRuleError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7673,7 +7673,7 @@ pub enum ModifyTargetGroupError {
 impl ModifyTargetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyTargetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7732,7 +7732,7 @@ impl ModifyTargetGroupAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyTargetGroupAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7795,7 +7795,7 @@ pub enum RegisterTargetsError {
 impl RegisterTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterTargetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7866,7 +7866,7 @@ impl RemoveListenerCertificatesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveListenerCertificatesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -7931,7 +7931,7 @@ pub enum RemoveTagsError {
 impl RemoveTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8006,7 +8006,7 @@ pub enum SetIpAddressTypeError {
 impl SetIpAddressTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetIpAddressTypeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8071,7 +8071,7 @@ pub enum SetRulePrioritiesError {
 impl SetRulePrioritiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetRulePrioritiesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8134,7 +8134,7 @@ pub enum SetSecurityGroupsError {
 impl SetSecurityGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetSecurityGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8205,7 +8205,7 @@ pub enum SetSubnetsError {
 impl SetSubnetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetSubnetsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8523,9 +8523,7 @@ impl Elb for ElbClient {
         params.put("Action", "AddListenerCertificates");
         params.put("Version", "2015-12-01");
         AddListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -8542,7 +8540,7 @@ impl Elb for ElbClient {
                     result = AddListenerCertificatesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8570,9 +8568,7 @@ impl Elb for ElbClient {
         params.put("Action", "AddTags");
         params.put("Version", "2015-12-01");
         AddTagsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -8592,7 +8588,7 @@ impl Elb for ElbClient {
                     result = AddTagsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8620,9 +8616,7 @@ impl Elb for ElbClient {
         params.put("Action", "CreateListener");
         params.put("Version", "2015-12-01");
         CreateListenerInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -8642,7 +8636,7 @@ impl Elb for ElbClient {
                     result = CreateListenerOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8673,9 +8667,7 @@ impl Elb for ElbClient {
         params.put("Action", "CreateLoadBalancer");
         params.put("Version", "2015-12-01");
         CreateLoadBalancerInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -8695,7 +8687,7 @@ impl Elb for ElbClient {
                     result = CreateLoadBalancerOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8726,9 +8718,7 @@ impl Elb for ElbClient {
         params.put("Action", "CreateRule");
         params.put("Version", "2015-12-01");
         CreateRuleInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -8748,7 +8738,7 @@ impl Elb for ElbClient {
                     result = CreateRuleOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8777,9 +8767,7 @@ impl Elb for ElbClient {
         params.put("Action", "CreateTargetGroup");
         params.put("Version", "2015-12-01");
         CreateTargetGroupInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -8799,7 +8787,7 @@ impl Elb for ElbClient {
                     result = CreateTargetGroupOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8830,9 +8818,7 @@ impl Elb for ElbClient {
         params.put("Action", "DeleteListener");
         params.put("Version", "2015-12-01");
         DeleteListenerInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -8852,7 +8838,7 @@ impl Elb for ElbClient {
                     result = DeleteListenerOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8883,9 +8869,7 @@ impl Elb for ElbClient {
         params.put("Action", "DeleteLoadBalancer");
         params.put("Version", "2015-12-01");
         DeleteLoadBalancerInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -8905,7 +8889,7 @@ impl Elb for ElbClient {
                     result = DeleteLoadBalancerOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8936,9 +8920,7 @@ impl Elb for ElbClient {
         params.put("Action", "DeleteRule");
         params.put("Version", "2015-12-01");
         DeleteRuleInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -8958,7 +8940,7 @@ impl Elb for ElbClient {
                     result = DeleteRuleOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8987,9 +8969,7 @@ impl Elb for ElbClient {
         params.put("Action", "DeleteTargetGroup");
         params.put("Version", "2015-12-01");
         DeleteTargetGroupInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9009,7 +8989,7 @@ impl Elb for ElbClient {
                     result = DeleteTargetGroupOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9040,9 +9020,7 @@ impl Elb for ElbClient {
         params.put("Action", "DeregisterTargets");
         params.put("Version", "2015-12-01");
         DeregisterTargetsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9062,7 +9040,7 @@ impl Elb for ElbClient {
                     result = DeregisterTargetsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9093,9 +9071,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeAccountLimits");
         params.put("Version", "2015-12-01");
         DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9112,7 +9088,7 @@ impl Elb for ElbClient {
                     result = DescribeAccountLimitsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9143,9 +9119,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeListenerCertificates");
         params.put("Version", "2015-12-01");
         DescribeListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9162,7 +9136,7 @@ impl Elb for ElbClient {
                     result = DescribeListenerCertificatesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9193,9 +9167,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeListeners");
         params.put("Version", "2015-12-01");
         DescribeListenersInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9215,7 +9187,7 @@ impl Elb for ElbClient {
                     result = DescribeListenersOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9247,9 +9219,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeLoadBalancerAttributes");
         params.put("Version", "2015-12-01");
         DescribeLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9266,7 +9236,7 @@ impl Elb for ElbClient {
                     result = DescribeLoadBalancerAttributesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9297,9 +9267,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeLoadBalancers");
         params.put("Version", "2015-12-01");
         DescribeLoadBalancersInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9316,7 +9284,7 @@ impl Elb for ElbClient {
                     result = DescribeLoadBalancersOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9347,9 +9315,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeRules");
         params.put("Version", "2015-12-01");
         DescribeRulesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9369,7 +9335,7 @@ impl Elb for ElbClient {
                     result = DescribeRulesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9400,9 +9366,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeSSLPolicies");
         params.put("Version", "2015-12-01");
         DescribeSSLPoliciesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9421,7 +9385,7 @@ impl Elb for ElbClient {
                     result = DescribeSSLPoliciesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9452,9 +9416,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeTags");
         params.put("Version", "2015-12-01");
         DescribeTagsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9474,7 +9436,7 @@ impl Elb for ElbClient {
                     result = DescribeTagsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9505,9 +9467,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeTargetGroupAttributes");
         params.put("Version", "2015-12-01");
         DescribeTargetGroupAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9524,7 +9484,7 @@ impl Elb for ElbClient {
                     result = DescribeTargetGroupAttributesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9555,9 +9515,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeTargetGroups");
         params.put("Version", "2015-12-01");
         DescribeTargetGroupsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9576,7 +9534,7 @@ impl Elb for ElbClient {
                     result = DescribeTargetGroupsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9607,9 +9565,7 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeTargetHealth");
         params.put("Version", "2015-12-01");
         DescribeTargetHealthInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9628,7 +9584,7 @@ impl Elb for ElbClient {
                     result = DescribeTargetHealthOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9659,9 +9615,7 @@ impl Elb for ElbClient {
         params.put("Action", "ModifyListener");
         params.put("Version", "2015-12-01");
         ModifyListenerInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9681,7 +9635,7 @@ impl Elb for ElbClient {
                     result = ModifyListenerOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9712,9 +9666,7 @@ impl Elb for ElbClient {
         params.put("Action", "ModifyLoadBalancerAttributes");
         params.put("Version", "2015-12-01");
         ModifyLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9731,7 +9683,7 @@ impl Elb for ElbClient {
                     result = ModifyLoadBalancerAttributesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9762,9 +9714,7 @@ impl Elb for ElbClient {
         params.put("Action", "ModifyRule");
         params.put("Version", "2015-12-01");
         ModifyRuleInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9784,7 +9734,7 @@ impl Elb for ElbClient {
                     result = ModifyRuleOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9813,9 +9763,7 @@ impl Elb for ElbClient {
         params.put("Action", "ModifyTargetGroup");
         params.put("Version", "2015-12-01");
         ModifyTargetGroupInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9835,7 +9783,7 @@ impl Elb for ElbClient {
                     result = ModifyTargetGroupOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9866,9 +9814,7 @@ impl Elb for ElbClient {
         params.put("Action", "ModifyTargetGroupAttributes");
         params.put("Version", "2015-12-01");
         ModifyTargetGroupAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9885,7 +9831,7 @@ impl Elb for ElbClient {
                     result = ModifyTargetGroupAttributesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9916,9 +9862,7 @@ impl Elb for ElbClient {
         params.put("Action", "RegisterTargets");
         params.put("Version", "2015-12-01");
         RegisterTargetsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9938,7 +9882,7 @@ impl Elb for ElbClient {
                     result = RegisterTargetsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9969,9 +9913,7 @@ impl Elb for ElbClient {
         params.put("Action", "RemoveListenerCertificates");
         params.put("Version", "2015-12-01");
         RemoveListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -9988,7 +9930,7 @@ impl Elb for ElbClient {
                     result = RemoveListenerCertificatesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10019,9 +9961,7 @@ impl Elb for ElbClient {
         params.put("Action", "RemoveTags");
         params.put("Version", "2015-12-01");
         RemoveTagsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10041,7 +9981,7 @@ impl Elb for ElbClient {
                     result = RemoveTagsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10070,9 +10010,7 @@ impl Elb for ElbClient {
         params.put("Action", "SetIpAddressType");
         params.put("Version", "2015-12-01");
         SetIpAddressTypeInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10092,7 +10030,7 @@ impl Elb for ElbClient {
                     result = SetIpAddressTypeOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10123,9 +10061,7 @@ impl Elb for ElbClient {
         params.put("Action", "SetRulePriorities");
         params.put("Version", "2015-12-01");
         SetRulePrioritiesInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10145,7 +10081,7 @@ impl Elb for ElbClient {
                     result = SetRulePrioritiesOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10176,9 +10112,7 @@ impl Elb for ElbClient {
         params.put("Action", "SetSecurityGroups");
         params.put("Version", "2015-12-01");
         SetSecurityGroupsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10198,7 +10132,7 @@ impl Elb for ElbClient {
                     result = SetSecurityGroupsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10229,9 +10163,7 @@ impl Elb for ElbClient {
         params.put("Action", "SetSubnets");
         params.put("Version", "2015-12-01");
         SetSubnetsInputSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -10251,7 +10183,7 @@ impl Elb for ElbClient {
                     result = SetSubnetsOutput::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

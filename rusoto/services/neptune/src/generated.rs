@@ -8304,7 +8304,7 @@ pub enum AddRoleToDBClusterError {
 impl AddRoleToDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddRoleToDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8380,7 +8380,7 @@ impl AddSourceIdentifierToSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AddSourceIdentifierToSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8441,7 +8441,7 @@ pub enum AddTagsToResourceError {
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8508,7 +8508,7 @@ impl ApplyPendingMaintenanceActionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ApplyPendingMaintenanceActionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8563,7 +8563,7 @@ impl CopyDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CopyDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8642,7 +8642,7 @@ pub enum CopyDBClusterSnapshotError {
 impl CopyDBClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyDBClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8735,7 +8735,7 @@ pub enum CopyDBParameterGroupError {
 impl CopyDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8828,7 +8828,7 @@ pub enum CreateDBClusterError {
 impl CreateDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -8987,7 +8987,7 @@ impl CreateDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9056,7 +9056,7 @@ pub enum CreateDBClusterSnapshotError {
 impl CreateDBClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9171,7 +9171,7 @@ pub enum CreateDBInstanceError {
 impl CreateDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9352,7 +9352,7 @@ pub enum CreateDBParameterGroupError {
 impl CreateDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9417,7 +9417,7 @@ pub enum CreateDBSubnetGroupError {
 impl CreateDBSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9507,7 +9507,7 @@ pub enum CreateEventSubscriptionError {
 impl CreateEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9612,7 +9612,7 @@ pub enum DeleteDBClusterError {
 impl DeleteDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9695,7 +9695,7 @@ impl DeleteDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9756,7 +9756,7 @@ pub enum DeleteDBClusterSnapshotError {
 impl DeleteDBClusterSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBClusterSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9821,7 +9821,7 @@ pub enum DeleteDBInstanceError {
 impl DeleteDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9904,7 +9904,7 @@ pub enum DeleteDBParameterGroupError {
 impl DeleteDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -9965,7 +9965,7 @@ pub enum DeleteDBSubnetGroupError {
 impl DeleteDBSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10031,7 +10031,7 @@ pub enum DeleteEventSubscriptionError {
 impl DeleteEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10090,7 +10090,7 @@ impl DescribeDBClusterParameterGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterParameterGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10143,7 +10143,7 @@ impl DescribeDBClusterParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10194,7 +10194,7 @@ impl DescribeDBClusterSnapshotAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterSnapshotAttributesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10245,7 +10245,7 @@ impl DescribeDBClusterSnapshotsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDBClusterSnapshotsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10294,7 +10294,7 @@ pub enum DescribeDBClustersError {
 impl DescribeDBClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBClustersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10340,7 +10340,7 @@ pub enum DescribeDBEngineVersionsError {}
 impl DescribeDBEngineVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBEngineVersionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10380,7 +10380,7 @@ pub enum DescribeDBInstancesError {
 impl DescribeDBInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBInstancesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10429,7 +10429,7 @@ pub enum DescribeDBParameterGroupsError {
 impl DescribeDBParameterGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBParameterGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10478,7 +10478,7 @@ pub enum DescribeDBParametersError {
 impl DescribeDBParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10527,7 +10527,7 @@ pub enum DescribeDBSubnetGroupsError {
 impl DescribeDBSubnetGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBSubnetGroupsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10575,7 +10575,7 @@ impl DescribeEngineDefaultClusterParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEngineDefaultClusterParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10614,7 +10614,7 @@ impl DescribeEngineDefaultParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEngineDefaultParametersError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10651,7 +10651,7 @@ pub enum DescribeEventCategoriesError {}
 impl DescribeEventCategoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventCategoriesError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10692,7 +10692,7 @@ impl DescribeEventSubscriptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEventSubscriptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10738,7 +10738,7 @@ pub enum DescribeEventsError {}
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10777,7 +10777,7 @@ impl DescribeOrderableDBInstanceOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrderableDBInstanceOptionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10819,7 +10819,7 @@ impl DescribePendingMaintenanceActionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePendingMaintenanceActionsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10872,7 +10872,7 @@ impl DescribeValidDBInstanceModificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeValidDBInstanceModificationsError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -10935,7 +10935,7 @@ pub enum FailoverDBClusterError {
 impl FailoverDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<FailoverDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11004,7 +11004,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11089,7 +11089,7 @@ pub enum ModifyDBClusterError {
 impl ModifyDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11218,7 +11218,7 @@ impl ModifyDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11283,7 +11283,7 @@ impl ModifyDBClusterSnapshotAttributeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyDBClusterSnapshotAttributeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11382,7 +11382,7 @@ pub enum ModifyDBInstanceError {
 impl ModifyDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11551,7 +11551,7 @@ pub enum ModifyDBParameterGroupError {
 impl ModifyDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11616,7 +11616,7 @@ pub enum ModifyDBSubnetGroupError {
 impl ModifyDBSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBSubnetGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11702,7 +11702,7 @@ pub enum ModifyEventSubscriptionError {
 impl ModifyEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEventSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11795,7 +11795,7 @@ impl PromoteReadReplicaDBClusterError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PromoteReadReplicaDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11854,7 +11854,7 @@ pub enum RebootDBInstanceError {
 impl RebootDBInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootDBInstanceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11915,7 +11915,7 @@ pub enum RemoveRoleFromDBClusterError {
 impl RemoveRoleFromDBClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveRoleFromDBClusterError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -11983,7 +11983,7 @@ impl RemoveSourceIdentifierFromSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveSourceIdentifierFromSubscriptionError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12046,7 +12046,7 @@ pub enum RemoveTagsFromResourceError {
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12115,7 +12115,7 @@ impl ResetDBClusterParameterGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ResetDBClusterParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12176,7 +12176,7 @@ pub enum ResetDBParameterGroupError {
 impl ResetDBParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetDBParameterGroupError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12263,7 +12263,7 @@ impl RestoreDBClusterFromSnapshotError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreDBClusterFromSnapshotError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -12460,7 +12460,7 @@ impl RestoreDBClusterToPointInTimeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreDBClusterToPointInTimeError> {
         {
-            let reader = EventReader::new(res.body.as_slice());
+            let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
@@ -13027,9 +13027,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "AddRoleToDBCluster");
         params.put("Version", "2014-10-31");
         AddRoleToDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13058,9 +13056,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "AddSourceIdentifierToSubscription");
         params.put("Version", "2014-10-31");
         AddSourceIdentifierToSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13079,7 +13075,7 @@ impl Neptune for NeptuneClient {
                     result = AddSourceIdentifierToSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13110,9 +13106,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "AddTagsToResource");
         params.put("Version", "2014-10-31");
         AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13140,9 +13134,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ApplyPendingMaintenanceAction");
         params.put("Version", "2014-10-31");
         ApplyPendingMaintenanceActionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13159,7 +13151,7 @@ impl Neptune for NeptuneClient {
                     result = ApplyPendingMaintenanceActionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13190,9 +13182,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CopyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         CopyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13209,7 +13199,7 @@ impl Neptune for NeptuneClient {
                     result = CopyDBClusterParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13240,9 +13230,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CopyDBClusterSnapshot");
         params.put("Version", "2014-10-31");
         CopyDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13259,7 +13247,7 @@ impl Neptune for NeptuneClient {
                     result = CopyDBClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13290,9 +13278,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CopyDBParameterGroup");
         params.put("Version", "2014-10-31");
         CopyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13311,7 +13297,7 @@ impl Neptune for NeptuneClient {
                     result = CopyDBParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13342,9 +13328,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CreateDBCluster");
         params.put("Version", "2014-10-31");
         CreateDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13364,7 +13348,7 @@ impl Neptune for NeptuneClient {
                     result = CreateDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13395,9 +13379,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CreateDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         CreateDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13414,7 +13396,7 @@ impl Neptune for NeptuneClient {
                     result = CreateDBClusterParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13445,9 +13427,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CreateDBClusterSnapshot");
         params.put("Version", "2014-10-31");
         CreateDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13464,7 +13444,7 @@ impl Neptune for NeptuneClient {
                     result = CreateDBClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13495,9 +13475,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CreateDBInstance");
         params.put("Version", "2014-10-31");
         CreateDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13517,7 +13495,7 @@ impl Neptune for NeptuneClient {
                     result = CreateDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13548,9 +13526,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CreateDBParameterGroup");
         params.put("Version", "2014-10-31");
         CreateDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13567,7 +13543,7 @@ impl Neptune for NeptuneClient {
                     result = CreateDBParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13598,9 +13574,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CreateDBSubnetGroup");
         params.put("Version", "2014-10-31");
         CreateDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13619,7 +13593,7 @@ impl Neptune for NeptuneClient {
                     result = CreateDBSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13650,9 +13624,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "CreateEventSubscription");
         params.put("Version", "2014-10-31");
         CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13669,7 +13641,7 @@ impl Neptune for NeptuneClient {
                     result = CreateEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13700,9 +13672,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DeleteDBCluster");
         params.put("Version", "2014-10-31");
         DeleteDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13722,7 +13692,7 @@ impl Neptune for NeptuneClient {
                     result = DeleteDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13753,9 +13723,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DeleteDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         DeleteDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13780,9 +13748,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DeleteDBClusterSnapshot");
         params.put("Version", "2014-10-31");
         DeleteDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13799,7 +13765,7 @@ impl Neptune for NeptuneClient {
                     result = DeleteDBClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13830,9 +13796,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DeleteDBInstance");
         params.put("Version", "2014-10-31");
         DeleteDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13852,7 +13816,7 @@ impl Neptune for NeptuneClient {
                     result = DeleteDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13883,9 +13847,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DeleteDBParameterGroup");
         params.put("Version", "2014-10-31");
         DeleteDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13910,9 +13872,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DeleteDBSubnetGroup");
         params.put("Version", "2014-10-31");
         DeleteDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13939,9 +13899,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DeleteEventSubscription");
         params.put("Version", "2014-10-31");
         DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -13958,7 +13916,7 @@ impl Neptune for NeptuneClient {
                     result = DeleteEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13989,9 +13947,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBClusterParameterGroups");
         params.put("Version", "2014-10-31");
         DescribeDBClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14010,7 +13966,7 @@ impl Neptune for NeptuneClient {
                     result = DBClusterParameterGroupsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14041,9 +13997,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBClusterParameters");
         params.put("Version", "2014-10-31");
         DescribeDBClusterParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14060,7 +14014,7 @@ impl Neptune for NeptuneClient {
                     result = DBClusterParameterGroupDetails::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14094,9 +14048,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBClusterSnapshotAttributes");
         params.put("Version", "2014-10-31");
         DescribeDBClusterSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14115,7 +14067,7 @@ impl Neptune for NeptuneClient {
                     result = DescribeDBClusterSnapshotAttributesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14146,9 +14098,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBClusterSnapshots");
         params.put("Version", "2014-10-31");
         DescribeDBClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14165,7 +14115,7 @@ impl Neptune for NeptuneClient {
                     result = DBClusterSnapshotMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14196,9 +14146,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBClusters");
         params.put("Version", "2014-10-31");
         DescribeDBClustersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14218,7 +14166,7 @@ impl Neptune for NeptuneClient {
                     result = DBClusterMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14249,9 +14197,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBEngineVersions");
         params.put("Version", "2014-10-31");
         DescribeDBEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14268,7 +14214,7 @@ impl Neptune for NeptuneClient {
                     result = DBEngineVersionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14299,9 +14245,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBInstances");
         params.put("Version", "2014-10-31");
         DescribeDBInstancesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14320,7 +14264,7 @@ impl Neptune for NeptuneClient {
                     result = DBInstanceMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14351,9 +14295,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBParameterGroups");
         params.put("Version", "2014-10-31");
         DescribeDBParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14370,7 +14312,7 @@ impl Neptune for NeptuneClient {
                     result = DBParameterGroupsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14401,9 +14343,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBParameters");
         params.put("Version", "2014-10-31");
         DescribeDBParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14422,7 +14362,7 @@ impl Neptune for NeptuneClient {
                     result = DBParameterGroupDetails::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14453,9 +14393,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeDBSubnetGroups");
         params.put("Version", "2014-10-31");
         DescribeDBSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14472,7 +14410,7 @@ impl Neptune for NeptuneClient {
                     result = DBSubnetGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14506,9 +14444,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeEngineDefaultClusterParameters");
         params.put("Version", "2014-10-31");
         DescribeEngineDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14527,7 +14463,7 @@ impl Neptune for NeptuneClient {
                     result = DescribeEngineDefaultClusterParametersResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14559,9 +14495,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeEngineDefaultParameters");
         params.put("Version", "2014-10-31");
         DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14580,7 +14514,7 @@ impl Neptune for NeptuneClient {
                     result = DescribeEngineDefaultParametersResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14611,9 +14545,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeEventCategories");
         params.put("Version", "2014-10-31");
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14630,7 +14562,7 @@ impl Neptune for NeptuneClient {
                     result = EventCategoriesMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14661,9 +14593,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeEventSubscriptions");
         params.put("Version", "2014-10-31");
         DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14680,7 +14610,7 @@ impl Neptune for NeptuneClient {
                     result = EventSubscriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14711,9 +14641,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeEvents");
         params.put("Version", "2014-10-31");
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14733,7 +14661,7 @@ impl Neptune for NeptuneClient {
                     result = EventsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14763,9 +14691,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeOrderableDBInstanceOptions");
         params.put("Version", "2014-10-31");
         DescribeOrderableDBInstanceOptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14784,7 +14710,7 @@ impl Neptune for NeptuneClient {
                     result = OrderableDBInstanceOptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14816,9 +14742,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribePendingMaintenanceActions");
         params.put("Version", "2014-10-31");
         DescribePendingMaintenanceActionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14837,7 +14761,7 @@ impl Neptune for NeptuneClient {
                     result = PendingMaintenanceActionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14871,9 +14795,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "DescribeValidDBInstanceModifications");
         params.put("Version", "2014-10-31");
         DescribeValidDBInstanceModificationsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14892,7 +14814,7 @@ impl Neptune for NeptuneClient {
                     result = DescribeValidDBInstanceModificationsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14923,9 +14845,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "FailoverDBCluster");
         params.put("Version", "2014-10-31");
         FailoverDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14945,7 +14865,7 @@ impl Neptune for NeptuneClient {
                     result = FailoverDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14976,9 +14896,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2014-10-31");
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -14997,7 +14915,7 @@ impl Neptune for NeptuneClient {
                     result = TagListMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15028,9 +14946,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ModifyDBCluster");
         params.put("Version", "2014-10-31");
         ModifyDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15050,7 +14966,7 @@ impl Neptune for NeptuneClient {
                     result = ModifyDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15081,9 +14997,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ModifyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         ModifyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15100,7 +15014,7 @@ impl Neptune for NeptuneClient {
                     result = DBClusterParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15132,9 +15046,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ModifyDBClusterSnapshotAttribute");
         params.put("Version", "2014-10-31");
         ModifyDBClusterSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15153,7 +15065,7 @@ impl Neptune for NeptuneClient {
                     result = ModifyDBClusterSnapshotAttributeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15184,9 +15096,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ModifyDBInstance");
         params.put("Version", "2014-10-31");
         ModifyDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15206,7 +15116,7 @@ impl Neptune for NeptuneClient {
                     result = ModifyDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15237,9 +15147,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ModifyDBParameterGroup");
         params.put("Version", "2014-10-31");
         ModifyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15256,7 +15164,7 @@ impl Neptune for NeptuneClient {
                     result = DBParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15287,9 +15195,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ModifyDBSubnetGroup");
         params.put("Version", "2014-10-31");
         ModifyDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15308,7 +15214,7 @@ impl Neptune for NeptuneClient {
                     result = ModifyDBSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15339,9 +15245,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ModifyEventSubscription");
         params.put("Version", "2014-10-31");
         ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15358,7 +15262,7 @@ impl Neptune for NeptuneClient {
                     result = ModifyEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15389,9 +15293,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "PromoteReadReplicaDBCluster");
         params.put("Version", "2014-10-31");
         PromoteReadReplicaDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15408,7 +15310,7 @@ impl Neptune for NeptuneClient {
                     result = PromoteReadReplicaDBClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15439,9 +15341,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "RebootDBInstance");
         params.put("Version", "2014-10-31");
         RebootDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15461,7 +15361,7 @@ impl Neptune for NeptuneClient {
                     result = RebootDBInstanceResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15492,9 +15392,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "RemoveRoleFromDBCluster");
         params.put("Version", "2014-10-31");
         RemoveRoleFromDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15522,9 +15420,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "RemoveSourceIdentifierFromSubscription");
         params.put("Version", "2014-10-31");
         RemoveSourceIdentifierFromSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15543,7 +15439,7 @@ impl Neptune for NeptuneClient {
                     result = RemoveSourceIdentifierFromSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15574,9 +15470,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "RemoveTagsFromResource");
         params.put("Version", "2014-10-31");
         RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15601,9 +15495,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ResetDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         ResetDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15620,7 +15512,7 @@ impl Neptune for NeptuneClient {
                     result = DBClusterParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15651,9 +15543,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "ResetDBParameterGroup");
         params.put("Version", "2014-10-31");
         ResetDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15670,7 +15560,7 @@ impl Neptune for NeptuneClient {
                     result = DBParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15701,9 +15591,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "RestoreDBClusterFromSnapshot");
         params.put("Version", "2014-10-31");
         RestoreDBClusterFromSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15720,7 +15608,7 @@ impl Neptune for NeptuneClient {
                     result = RestoreDBClusterFromSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15751,9 +15639,7 @@ impl Neptune for NeptuneClient {
         params.put("Action", "RestoreDBClusterToPointInTime");
         params.put("Version", "2014-10-31");
         RestoreDBClusterToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(
-            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
-        ));
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
@@ -15770,7 +15656,7 @@ impl Neptune for NeptuneClient {
                     result = RestoreDBClusterToPointInTimeResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        response.body.as_slice(),
+                        response.body.as_ref(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());

@@ -107,6 +107,10 @@ impl<'b> Service<'b> {
         let mut dependencies = BTreeMap::new();
 
         dependencies.insert(
+            "bytes".to_owned(),
+            cargo::Dependency::Simple("0.4.12".into()),
+        );
+        dependencies.insert(
             "futures".to_owned(),
             cargo::Dependency::Simple("0.1.16".into()),
         );
