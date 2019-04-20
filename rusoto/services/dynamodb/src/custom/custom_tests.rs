@@ -31,3 +31,18 @@ fn attribute_value_with_number_contains_only_number() {
     let serialized = serde_json::to_string(&all_default).unwrap();
     assert_eq!(&serialized, r#"{"N":"1234"}"#);
 }
+
+#[test]
+fn attribute_value_with_binary_set() {
+    let all_default = AttributeValue{
+        bs: Some(vec![
+            "foo".bytes().collect(),
+            "bar".bytes().collect(),
+            "baz".bytes().collect()
+        ]),
+        ..Default::default()
+    };
+
+    let serialized = serde_json::to_string(&all_default).unwrap();
+    assert_eq!(&serialized, r#"{"BS":["Zm9v","YmFy","YmF6"]}"#);
+}

@@ -477,8 +477,8 @@ fn generate_struct_fields<P: GenerateProtocol>(
         if serde_attrs {
             lines.push(format!("#[serde(rename=\"{}\")]", member_name));
 
-            if let Some(shape_type) = service.shape_type_for_member(member) {
-                if shape_type == ShapeType::Blob {
+            if let Some(member_shape) = service.shape_for_member(member) {
+                if member_shape.shape_type == ShapeType::Blob {
                     lines.push(
                         "#[serde(
                             deserialize_with=\"::rusoto_core::serialization::SerdeBlob::deserialize_blob\",
@@ -486,6 +486,20 @@ fn generate_struct_fields<P: GenerateProtocol>(
                             default,
                         )]".to_owned()
                     );
+                } else if member_shape.shape_type == ShapeType::List {
+                    if let Some(ref list_element_member) = member_shape.member {
+                        if let Some(list_element_shape_type) = service.shape_type_for_member(list_element_member) {
+                            if list_element_shape_type == ShapeType::Blob {
+                                lines.push(
+                                    "#[serde(
+                                        deserialize_with=\"::rusoto_core::serialization::SerdeBlobList::deserialize_blob_list\",
+                                        serialize_with=\"::rusoto_core::serialization::SerdeBlobList::serialize_blob_list\",
+                                        default,
+                                    )]".to_owned()
+                                ); 
+                            }
+                        }
+                    }
                 }
             }
 
