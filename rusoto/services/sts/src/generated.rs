@@ -118,10 +118,7 @@ impl AssumeRoleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(
-                &format!("{}{}", prefix, "DurationSeconds"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
         if let Some(ref field_value) = obj.external_id {
             params.put(&format!("{}{}", prefix, "ExternalId"), &field_value);
@@ -209,10 +206,7 @@ impl AssumeRoleWithSAMLRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(
-                &format!("{}{}", prefix, "DurationSeconds"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
         if let Some(ref field_value) = obj.policy {
             params.put(&format!("{}{}", prefix, "Policy"), &field_value);
@@ -328,10 +322,7 @@ impl AssumeRoleWithWebIdentityRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(
-                &format!("{}{}", prefix, "DurationSeconds"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
         if let Some(ref field_value) = obj.policy {
             params.put(&format!("{}{}", prefix, "Policy"), &field_value);
@@ -718,10 +709,7 @@ impl GetFederationTokenRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(
-                &format!("{}{}", prefix, "DurationSeconds"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.policy {
@@ -797,10 +785,7 @@ impl GetSessionTokenRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(
-                &format!("{}{}", prefix, "DurationSeconds"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
         if let Some(ref field_value) = obj.serial_number {
             params.put(&format!("{}{}", prefix, "SerialNumber"), &field_value);

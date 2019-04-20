@@ -466,10 +466,7 @@ impl GetAttributesRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.consistent_read {
-            params.put(
-                &format!("{}{}", prefix, "ConsistentRead"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ConsistentRead"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         params.put(&format!("{}{}", prefix, "ItemName"), &obj.item_name);
@@ -600,10 +597,7 @@ impl ListDomainsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.max_number_of_domains {
-            params.put(
-                &format!("{}{}", prefix, "MaxNumberOfDomains"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxNumberOfDomains"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -716,10 +710,7 @@ impl ReplaceableAttributeSerializer {
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.replace {
-            params.put(
-                &format!("{}{}", prefix, "Replace"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "Replace"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "Value"), &obj.value);
     }
@@ -794,10 +785,7 @@ impl SelectRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.consistent_read {
-            params.put(
-                &format!("{}{}", prefix, "ConsistentRead"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ConsistentRead"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -875,7 +863,7 @@ impl UpdateConditionSerializer {
         }
 
         if let Some(ref field_value) = obj.exists {
-            params.put(&format!("{}{}", prefix, "Exists"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Exists"), &field_value);
         }
         if let Some(ref field_value) = obj.name {
             params.put(&format!("{}{}", prefix, "Name"), &field_value);

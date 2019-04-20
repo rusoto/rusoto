@@ -283,10 +283,7 @@ impl ChangeMessageVisibilityBatchRequestEntrySerializer {
             &obj.receipt_handle,
         );
         if let Some(ref field_value) = obj.visibility_timeout {
-            params.put(
-                &format!("{}{}", prefix, "VisibilityTimeout"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "VisibilityTimeout"), &field_value);
         }
     }
 }
@@ -435,7 +432,7 @@ impl ChangeMessageVisibilityRequestSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "VisibilityTimeout"),
-            &obj.visibility_timeout.to_string(),
+            &obj.visibility_timeout,
         );
     }
 }
@@ -1363,7 +1360,7 @@ impl ReceiveMessageRequestSerializer {
         if let Some(ref field_value) = obj.max_number_of_messages {
             params.put(
                 &format!("{}{}", prefix, "MaxNumberOfMessages"),
-                &field_value.to_string(),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.message_attribute_names {
@@ -1381,16 +1378,10 @@ impl ReceiveMessageRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.visibility_timeout {
-            params.put(
-                &format!("{}{}", prefix, "VisibilityTimeout"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "VisibilityTimeout"), &field_value);
         }
         if let Some(ref field_value) = obj.wait_time_seconds {
-            params.put(
-                &format!("{}{}", prefix, "WaitTimeSeconds"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "WaitTimeSeconds"), &field_value);
         }
     }
 }
@@ -1499,10 +1490,7 @@ impl SendMessageBatchRequestEntrySerializer {
         }
 
         if let Some(ref field_value) = obj.delay_seconds {
-            params.put(
-                &format!("{}{}", prefix, "DelaySeconds"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DelaySeconds"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "Id"), &obj.id);
         if let Some(ref field_value) = obj.message_attributes {
@@ -1685,10 +1673,7 @@ impl SendMessageRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.delay_seconds {
-            params.put(
-                &format!("{}{}", prefix, "DelaySeconds"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DelaySeconds"), &field_value);
         }
         if let Some(ref field_value) = obj.message_attributes {
             MessageBodyAttributeMapSerializer::serialize(

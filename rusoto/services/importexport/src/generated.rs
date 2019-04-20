@@ -168,10 +168,7 @@ impl CreateJobInputSerializer {
         if let Some(ref field_value) = obj.manifest_addendum {
             params.put(&format!("{}{}", prefix, "ManifestAddendum"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "ValidateOnly"),
-            &obj.validate_only.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "ValidateOnly"), &obj.validate_only);
     }
 }
 
@@ -673,10 +670,7 @@ impl ListJobsInputSerializer {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_jobs {
-            params.put(
-                &format!("{}{}", prefix, "MaxJobs"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxJobs"), &field_value);
         }
     }
 }
@@ -891,10 +885,7 @@ impl UpdateJobInputSerializer {
         params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
         params.put(&format!("{}{}", prefix, "JobType"), &obj.job_type);
         params.put(&format!("{}{}", prefix, "Manifest"), &obj.manifest);
-        params.put(
-            &format!("{}{}", prefix, "ValidateOnly"),
-            &obj.validate_only.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "ValidateOnly"), &obj.validate_only);
     }
 }
 

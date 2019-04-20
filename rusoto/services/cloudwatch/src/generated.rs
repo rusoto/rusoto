@@ -192,7 +192,7 @@ impl CountsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<f64>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj.to_string());
+            params.put(&key, &obj);
         }
     }
 }
@@ -635,10 +635,7 @@ impl DescribeAlarmHistoryInputSerializer {
             params.put(&format!("{}{}", prefix, "HistoryItemType"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -725,7 +722,7 @@ impl DescribeAlarmsForMetricInputSerializer {
         params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
         params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
         if let Some(ref field_value) = obj.period {
-            params.put(&format!("{}{}", prefix, "Period"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Period"), &field_value);
         }
         if let Some(ref field_value) = obj.statistic {
             params.put(&format!("{}{}", prefix, "Statistic"), &field_value);
@@ -805,10 +802,7 @@ impl DescribeAlarmsInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.max_records {
-            params.put(
-                &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
             params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
@@ -1180,10 +1174,7 @@ impl GetMetricDataInputSerializer {
 
         params.put(&format!("{}{}", prefix, "EndTime"), &obj.end_time);
         if let Some(ref field_value) = obj.max_datapoints {
-            params.put(
-                &format!("{}{}", prefix, "MaxDatapoints"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "MaxDatapoints"), &field_value);
         }
         MetricDataQueriesSerializer::serialize(
             params,
@@ -1279,7 +1270,7 @@ impl GetMetricStatisticsInputSerializer {
         }
         params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
         params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
-        params.put(&format!("{}{}", prefix, "Period"), &obj.period.to_string());
+        params.put(&format!("{}{}", prefix, "Period"), &obj.period);
         params.put(&format!("{}{}", prefix, "StartTime"), &obj.start_time);
         if let Some(ref field_value) = obj.statistics {
             StatisticsSerializer::serialize(
@@ -2038,10 +2029,7 @@ impl MetricDataQuerySerializer {
             );
         }
         if let Some(ref field_value) = obj.return_data {
-            params.put(
-                &format!("{}{}", prefix, "ReturnData"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnData"), &field_value);
         }
     }
 }
@@ -2188,10 +2176,7 @@ impl MetricDatumSerializer {
             );
         }
         if let Some(ref field_value) = obj.storage_resolution {
-            params.put(
-                &format!("{}{}", prefix, "StorageResolution"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "StorageResolution"), &field_value);
         }
         if let Some(ref field_value) = obj.timestamp {
             params.put(&format!("{}{}", prefix, "Timestamp"), &field_value);
@@ -2200,7 +2185,7 @@ impl MetricDatumSerializer {
             params.put(&format!("{}{}", prefix, "Unit"), &field_value);
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
         if let Some(ref field_value) = obj.values {
             ValuesSerializer::serialize(params, &format!("{}{}", prefix, "Values"), field_value);
@@ -2315,7 +2300,7 @@ impl MetricStatSerializer {
         }
 
         MetricSerializer::serialize(params, &format!("{}{}", prefix, "Metric"), &obj.metric);
-        params.put(&format!("{}{}", prefix, "Period"), &obj.period.to_string());
+        params.put(&format!("{}{}", prefix, "Period"), &obj.period);
         params.put(&format!("{}{}", prefix, "Stat"), &obj.stat);
         if let Some(ref field_value) = obj.unit {
             params.put(&format!("{}{}", prefix, "Unit"), &field_value);
@@ -2507,10 +2492,7 @@ impl PutMetricAlarmInputSerializer {
         }
 
         if let Some(ref field_value) = obj.actions_enabled {
-            params.put(
-                &format!("{}{}", prefix, "ActionsEnabled"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "ActionsEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.alarm_actions {
             ResourceListSerializer::serialize(
@@ -2528,10 +2510,7 @@ impl PutMetricAlarmInputSerializer {
             &obj.comparison_operator,
         );
         if let Some(ref field_value) = obj.datapoints_to_alarm {
-            params.put(
-                &format!("{}{}", prefix, "DatapointsToAlarm"),
-                &field_value.to_string(),
-            );
+            params.put(&format!("{}{}", prefix, "DatapointsToAlarm"), &field_value);
         }
         if let Some(ref field_value) = obj.dimensions {
             DimensionsSerializer::serialize(
@@ -2548,7 +2527,7 @@ impl PutMetricAlarmInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "EvaluationPeriods"),
-            &obj.evaluation_periods.to_string(),
+            &obj.evaluation_periods,
         );
         if let Some(ref field_value) = obj.extended_statistic {
             params.put(&format!("{}{}", prefix, "ExtendedStatistic"), &field_value);
@@ -2581,15 +2560,12 @@ impl PutMetricAlarmInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.period {
-            params.put(&format!("{}{}", prefix, "Period"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Period"), &field_value);
         }
         if let Some(ref field_value) = obj.statistic {
             params.put(&format!("{}{}", prefix, "Statistic"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Threshold"),
-            &obj.threshold.to_string(),
-        );
+        params.put(&format!("{}{}", prefix, "Threshold"), &obj.threshold);
         if let Some(ref field_value) = obj.treat_missing_data {
             params.put(&format!("{}{}", prefix, "TreatMissingData"), &field_value);
         }
@@ -2832,19 +2808,10 @@ impl StatisticSetSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Maximum"),
-            &obj.maximum.to_string(),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Minimum"),
-            &obj.minimum.to_string(),
-        );
-        params.put(
-            &format!("{}{}", prefix, "SampleCount"),
-            &obj.sample_count.to_string(),
-        );
-        params.put(&format!("{}{}", prefix, "Sum"), &obj.sum.to_string());
+        params.put(&format!("{}{}", prefix, "Maximum"), &obj.maximum);
+        params.put(&format!("{}{}", prefix, "Minimum"), &obj.minimum);
+        params.put(&format!("{}{}", prefix, "SampleCount"), &obj.sample_count);
+        params.put(&format!("{}{}", prefix, "Sum"), &obj.sum);
     }
 }
 
@@ -2939,7 +2906,7 @@ impl ValuesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<f64>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj.to_string());
+            params.put(&key, &obj);
         }
     }
 }
