@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>The custom terminology applied to the input text by Amazon Translate for the translated text response. This is optional in the response and will only be present if you specified terminology input in the request. Currently, only one terminology can be applied per TranslateText request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -271,33 +270,18 @@ pub enum DeleteTerminologyError {
 
 impl DeleteTerminologyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTerminologyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
-                    return RusotoError::Service(DeleteTerminologyError::InternalServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTerminologyError::InternalServer(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteTerminologyError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTerminologyError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteTerminologyError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTerminologyError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -333,38 +317,23 @@ pub enum GetTerminologyError {
 
 impl GetTerminologyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTerminologyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
-                    return RusotoError::Service(GetTerminologyError::InternalServer(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTerminologyError::InternalServer(err.msg))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetTerminologyError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetTerminologyError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTerminologyError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetTerminologyError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTerminologyError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -401,38 +370,23 @@ pub enum ImportTerminologyError {
 
 impl ImportTerminologyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportTerminologyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
-                    return RusotoError::Service(ImportTerminologyError::InternalServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportTerminologyError::InternalServer(err.msg))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ImportTerminologyError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ImportTerminologyError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportTerminologyError::LimitExceeded(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ImportTerminologyError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportTerminologyError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -467,33 +421,20 @@ pub enum ListTerminologiesError {
 
 impl ListTerminologiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTerminologiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
-                    return RusotoError::Service(ListTerminologiesError::InternalServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTerminologiesError::InternalServer(err.msg))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListTerminologiesError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListTerminologiesError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTerminologiesError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -537,58 +478,37 @@ pub enum TranslateTextError {
 
 impl TranslateTextError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TranslateTextError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DetectedLanguageLowConfidenceException" => {
                     return RusotoError::Service(TranslateTextError::DetectedLanguageLowConfidence(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerException" => {
-                    return RusotoError::Service(TranslateTextError::InternalServer(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TranslateTextError::InternalServer(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(TranslateTextError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TranslateTextError::InvalidRequest(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(TranslateTextError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TranslateTextError::ResourceNotFound(err.msg))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(TranslateTextError::ServiceUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TranslateTextError::ServiceUnavailable(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
-                    return RusotoError::Service(TranslateTextError::TextSizeLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TranslateTextError::TextSizeLimitExceeded(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(TranslateTextError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TranslateTextError::TooManyRequests(err.msg))
                 }
                 "UnsupportedLanguagePairException" => {
                     return RusotoError::Service(TranslateTextError::UnsupportedLanguagePair(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

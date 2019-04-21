@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>An entitlement represents capacity in a product owned by the customer. For example, a customer might own some number of users or seats in an SaaS application or some amount of data capacity in a multi-tenant database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -120,33 +119,20 @@ pub enum GetEntitlementsError {
 
 impl GetEntitlementsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEntitlementsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(GetEntitlementsError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetEntitlementsError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetEntitlementsError::InvalidParameter(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(GetEntitlementsError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetEntitlementsError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

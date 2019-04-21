@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Contains information about an alias.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1167,43 +1166,24 @@ pub enum CancelKeyDeletionError {
 
 impl CancelKeyDeletionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelKeyDeletionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(CancelKeyDeletionError::DependencyTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelKeyDeletionError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(CancelKeyDeletionError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelKeyDeletionError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(CancelKeyDeletionError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelKeyDeletionError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(CancelKeyDeletionError::KMSInvalidState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelKeyDeletionError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CancelKeyDeletionError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelKeyDeletionError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1243,51 +1223,32 @@ pub enum ConnectCustomKeyStoreError {
 
 impl ConnectCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConnectCustomKeyStoreError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmClusterInvalidConfigurationException" => {
                     return RusotoError::Service(
-                        ConnectCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
-                            String::from(error_message),
-                        ),
+                        ConnectCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(err.msg),
                     )
                 }
                 "CloudHsmClusterNotActiveException" => {
                     return RusotoError::Service(
-                        ConnectCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
-                            error_message,
-                        )),
+                        ConnectCustomKeyStoreError::CloudHsmClusterNotActive(err.msg),
                     )
                 }
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(
-                        ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
-                            error_message,
-                        )),
+                        ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(err.msg),
                     )
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(
-                        ConnectCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
-                            error_message,
-                        )),
+                        ConnectCustomKeyStoreError::CustomKeyStoreNotFound(err.msg),
                     )
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ConnectCustomKeyStoreError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConnectCustomKeyStoreError::KMSInternal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1331,53 +1292,30 @@ pub enum CreateAliasError {
 
 impl CreateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateAliasError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::AlreadyExists(err.msg))
                 }
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(CreateAliasError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::DependencyTimeout(err.msg))
                 }
                 "InvalidAliasNameException" => {
-                    return RusotoError::Service(CreateAliasError::InvalidAliasName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::InvalidAliasName(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(CreateAliasError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(CreateAliasError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::KMSInvalidState(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateAliasError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateAliasError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1423,61 +1361,42 @@ pub enum CreateCustomKeyStoreError {
 
 impl CreateCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomKeyStoreError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmClusterInUseException" => {
                     return RusotoError::Service(CreateCustomKeyStoreError::CloudHsmClusterInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmClusterInvalidConfigurationException" => {
                     return RusotoError::Service(
-                        CreateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
-                            String::from(error_message),
-                        ),
+                        CreateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(err.msg),
                     )
                 }
                 "CloudHsmClusterNotActiveException" => {
                     return RusotoError::Service(
-                        CreateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
-                            error_message,
-                        )),
+                        CreateCustomKeyStoreError::CloudHsmClusterNotActive(err.msg),
                     )
                 }
                 "CloudHsmClusterNotFoundException" => {
                     return RusotoError::Service(
-                        CreateCustomKeyStoreError::CloudHsmClusterNotFound(String::from(
-                            error_message,
-                        )),
+                        CreateCustomKeyStoreError::CloudHsmClusterNotFound(err.msg),
                     )
                 }
                 "CustomKeyStoreNameInUseException" => {
                     return RusotoError::Service(
-                        CreateCustomKeyStoreError::CustomKeyStoreNameInUse(String::from(
-                            error_message,
-                        )),
+                        CreateCustomKeyStoreError::CustomKeyStoreNameInUse(err.msg),
                     )
                 }
                 "IncorrectTrustAnchorException" => {
                     return RusotoError::Service(CreateCustomKeyStoreError::IncorrectTrustAnchor(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(CreateCustomKeyStoreError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateCustomKeyStoreError::KMSInternal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1525,58 +1444,33 @@ pub enum CreateGrantError {
 
 impl CreateGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGrantError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(CreateGrantError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGrantError::DependencyTimeout(err.msg))
                 }
                 "DisabledException" => {
-                    return RusotoError::Service(CreateGrantError::Disabled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGrantError::Disabled(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(CreateGrantError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGrantError::InvalidArn(err.msg))
                 }
                 "InvalidGrantTokenException" => {
-                    return RusotoError::Service(CreateGrantError::InvalidGrantToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGrantError::InvalidGrantToken(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(CreateGrantError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGrantError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(CreateGrantError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGrantError::KMSInvalidState(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateGrantError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGrantError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateGrantError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGrantError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1629,68 +1523,41 @@ pub enum CreateKeyError {
 
 impl CreateKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateKeyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmClusterInvalidConfigurationException" => {
                     return RusotoError::Service(
-                        CreateKeyError::CloudHsmClusterInvalidConfiguration(String::from(
-                            error_message,
-                        )),
+                        CreateKeyError::CloudHsmClusterInvalidConfiguration(err.msg),
                     )
                 }
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(CreateKeyError::CustomKeyStoreInvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CustomKeyStoreNotFoundException" => {
-                    return RusotoError::Service(CreateKeyError::CustomKeyStoreNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateKeyError::CustomKeyStoreNotFound(err.msg))
                 }
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(CreateKeyError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateKeyError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(CreateKeyError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateKeyError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(CreateKeyError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateKeyError::KMSInternal(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateKeyError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateKeyError::LimitExceeded(err.msg))
                 }
                 "MalformedPolicyDocumentException" => {
-                    return RusotoError::Service(CreateKeyError::MalformedPolicyDocument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateKeyError::MalformedPolicyDocument(err.msg))
                 }
-                "TagException" => {
-                    return RusotoError::Service(CreateKeyError::Tag(String::from(error_message)))
-                }
+                "TagException" => return RusotoError::Service(CreateKeyError::Tag(err.msg)),
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(CreateKeyError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateKeyError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1741,58 +1608,33 @@ pub enum DecryptError {
 
 impl DecryptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DecryptError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(DecryptError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DecryptError::DependencyTimeout(err.msg))
                 }
                 "DisabledException" => {
-                    return RusotoError::Service(DecryptError::Disabled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DecryptError::Disabled(err.msg))
                 }
                 "InvalidCiphertextException" => {
-                    return RusotoError::Service(DecryptError::InvalidCiphertext(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DecryptError::InvalidCiphertext(err.msg))
                 }
                 "InvalidGrantTokenException" => {
-                    return RusotoError::Service(DecryptError::InvalidGrantToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DecryptError::InvalidGrantToken(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(DecryptError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DecryptError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(DecryptError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DecryptError::KMSInvalidState(err.msg))
                 }
                 "KeyUnavailableException" => {
-                    return RusotoError::Service(DecryptError::KeyUnavailable(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DecryptError::KeyUnavailable(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DecryptError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DecryptError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1833,38 +1675,21 @@ pub enum DeleteAliasError {
 
 impl DeleteAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAliasError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(DeleteAliasError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAliasError::DependencyTimeout(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(DeleteAliasError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAliasError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(DeleteAliasError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAliasError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteAliasError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAliasError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1901,40 +1726,27 @@ pub enum DeleteCustomKeyStoreError {
 
 impl DeleteCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomKeyStoreError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CustomKeyStoreHasCMKsException" => {
                     return RusotoError::Service(DeleteCustomKeyStoreError::CustomKeyStoreHasCMKs(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(
-                        DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
-                            error_message,
-                        )),
+                        DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(err.msg),
                     )
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(DeleteCustomKeyStoreError::CustomKeyStoreNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(DeleteCustomKeyStoreError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteCustomKeyStoreError::KMSInternal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1975,50 +1787,37 @@ pub enum DeleteImportedKeyMaterialError {
 
 impl DeleteImportedKeyMaterialError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImportedKeyMaterialError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::DependencyTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::InvalidArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::KMSInternal(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::KMSInvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteImportedKeyMaterialError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteImportedKeyMaterialError::NotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
-                        DeleteImportedKeyMaterialError::UnsupportedOperation(String::from(
-                            error_message,
-                        )),
+                        DeleteImportedKeyMaterialError::UnsupportedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2053,30 +1852,17 @@ pub enum DescribeCustomKeyStoresError {
 
 impl DescribeCustomKeyStoresError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCustomKeyStoresError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(
-                        DescribeCustomKeyStoresError::CustomKeyStoreNotFound(String::from(
-                            error_message,
-                        )),
+                        DescribeCustomKeyStoresError::CustomKeyStoreNotFound(err.msg),
                     )
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(DescribeCustomKeyStoresError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeCustomKeyStoresError::KMSInternal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2111,38 +1897,21 @@ pub enum DescribeKeyError {
 
 impl DescribeKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeKeyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(DescribeKeyError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeKeyError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(DescribeKeyError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeKeyError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(DescribeKeyError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeKeyError::KMSInternal(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeKeyError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeKeyError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2181,43 +1950,24 @@ pub enum DisableKeyError {
 
 impl DisableKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableKeyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(DisableKeyError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableKeyError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(DisableKeyError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableKeyError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(DisableKeyError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableKeyError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(DisableKeyError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableKeyError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DisableKeyError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableKeyError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2261,53 +2011,34 @@ pub enum DisableKeyRotationError {
 
 impl DisableKeyRotationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableKeyRotationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DisableKeyRotationError::DependencyTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DisabledException" => {
-                    return RusotoError::Service(DisableKeyRotationError::Disabled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableKeyRotationError::Disabled(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(DisableKeyRotationError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableKeyRotationError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(DisableKeyRotationError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisableKeyRotationError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(DisableKeyRotationError::KMSInvalidState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisableKeyRotationError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DisableKeyRotationError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableKeyRotationError::NotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DisableKeyRotationError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2345,37 +2076,24 @@ pub enum DisconnectCustomKeyStoreError {
 
 impl DisconnectCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisconnectCustomKeyStoreError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(
-                        DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
-                            error_message,
-                        )),
+                        DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(err.msg),
                     )
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(
-                        DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
-                            error_message,
-                        )),
+                        DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(err.msg),
                     )
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(DisconnectCustomKeyStoreError::KMSInternal(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2415,48 +2133,27 @@ pub enum EnableKeyError {
 
 impl EnableKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableKeyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(EnableKeyError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(EnableKeyError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(EnableKeyError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(EnableKeyError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyError::KMSInvalidState(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(EnableKeyError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(EnableKeyError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2501,53 +2198,32 @@ pub enum EnableKeyRotationError {
 
 impl EnableKeyRotationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableKeyRotationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(EnableKeyRotationError::DependencyTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableKeyRotationError::DependencyTimeout(err.msg))
                 }
                 "DisabledException" => {
-                    return RusotoError::Service(EnableKeyRotationError::Disabled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyRotationError::Disabled(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(EnableKeyRotationError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyRotationError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(EnableKeyRotationError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyRotationError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(EnableKeyRotationError::KMSInvalidState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableKeyRotationError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(EnableKeyRotationError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableKeyRotationError::NotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(EnableKeyRotationError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2595,58 +2271,33 @@ pub enum EncryptError {
 
 impl EncryptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EncryptError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(EncryptError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EncryptError::DependencyTimeout(err.msg))
                 }
                 "DisabledException" => {
-                    return RusotoError::Service(EncryptError::Disabled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EncryptError::Disabled(err.msg))
                 }
                 "InvalidGrantTokenException" => {
-                    return RusotoError::Service(EncryptError::InvalidGrantToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EncryptError::InvalidGrantToken(err.msg))
                 }
                 "InvalidKeyUsageException" => {
-                    return RusotoError::Service(EncryptError::InvalidKeyUsage(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EncryptError::InvalidKeyUsage(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(EncryptError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EncryptError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(EncryptError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EncryptError::KMSInvalidState(err.msg))
                 }
                 "KeyUnavailableException" => {
-                    return RusotoError::Service(EncryptError::KeyUnavailable(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EncryptError::KeyUnavailable(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(EncryptError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EncryptError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2695,58 +2346,33 @@ pub enum GenerateDataKeyError {
 
 impl GenerateDataKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateDataKeyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(GenerateDataKeyError::DependencyTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateDataKeyError::DependencyTimeout(err.msg))
                 }
                 "DisabledException" => {
-                    return RusotoError::Service(GenerateDataKeyError::Disabled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GenerateDataKeyError::Disabled(err.msg))
                 }
                 "InvalidGrantTokenException" => {
-                    return RusotoError::Service(GenerateDataKeyError::InvalidGrantToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateDataKeyError::InvalidGrantToken(err.msg))
                 }
                 "InvalidKeyUsageException" => {
-                    return RusotoError::Service(GenerateDataKeyError::InvalidKeyUsage(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateDataKeyError::InvalidKeyUsage(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(GenerateDataKeyError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GenerateDataKeyError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(GenerateDataKeyError::KMSInvalidState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateDataKeyError::KMSInvalidState(err.msg))
                 }
                 "KeyUnavailableException" => {
-                    return RusotoError::Service(GenerateDataKeyError::KeyUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateDataKeyError::KeyUnavailable(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GenerateDataKeyError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GenerateDataKeyError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2797,68 +2423,49 @@ impl GenerateDataKeyWithoutPlaintextError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GenerateDataKeyWithoutPlaintextError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(
-                        GenerateDataKeyWithoutPlaintextError::DependencyTimeout(String::from(
-                            error_message,
-                        )),
+                        GenerateDataKeyWithoutPlaintextError::DependencyTimeout(err.msg),
                     )
                 }
                 "DisabledException" => {
                     return RusotoError::Service(GenerateDataKeyWithoutPlaintextError::Disabled(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGrantTokenException" => {
                     return RusotoError::Service(
-                        GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(String::from(
-                            error_message,
-                        )),
+                        GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(err.msg),
                     )
                 }
                 "InvalidKeyUsageException" => {
                     return RusotoError::Service(
-                        GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(String::from(
-                            error_message,
-                        )),
+                        GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(err.msg),
                     )
                 }
                 "KMSInternalException" => {
                     return RusotoError::Service(GenerateDataKeyWithoutPlaintextError::KMSInternal(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(
-                        GenerateDataKeyWithoutPlaintextError::KMSInvalidState(String::from(
-                            error_message,
-                        )),
+                        GenerateDataKeyWithoutPlaintextError::KMSInvalidState(err.msg),
                     )
                 }
                 "KeyUnavailableException" => {
                     return RusotoError::Service(
-                        GenerateDataKeyWithoutPlaintextError::KeyUnavailable(String::from(
-                            error_message,
-                        )),
+                        GenerateDataKeyWithoutPlaintextError::KeyUnavailable(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GenerateDataKeyWithoutPlaintextError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2899,38 +2506,25 @@ pub enum GenerateRandomError {
 
 impl GenerateRandomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateRandomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(GenerateRandomError::CustomKeyStoreInvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(GenerateRandomError::CustomKeyStoreNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(GenerateRandomError::DependencyTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateRandomError::DependencyTimeout(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(GenerateRandomError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GenerateRandomError::KMSInternal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2969,43 +2563,24 @@ pub enum GetKeyPolicyError {
 
 impl GetKeyPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(GetKeyPolicyError::DependencyTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetKeyPolicyError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(GetKeyPolicyError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPolicyError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(GetKeyPolicyError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPolicyError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(GetKeyPolicyError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPolicyError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetKeyPolicyError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPolicyError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3047,48 +2622,33 @@ pub enum GetKeyRotationStatusError {
 
 impl GetKeyRotationStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyRotationStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::DependencyTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(GetKeyRotationStatusError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetKeyRotationStatusError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(GetKeyRotationStatusError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetKeyRotationStatusError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::KMSInvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetKeyRotationStatusError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyRotationStatusError::NotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3131,48 +2691,33 @@ pub enum GetParametersForImportError {
 
 impl GetParametersForImportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetParametersForImportError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GetParametersForImportError::DependencyTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(GetParametersForImportError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetParametersForImportError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(GetParametersForImportError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetParametersForImportError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(GetParametersForImportError::KMSInvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetParametersForImportError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetParametersForImportError::NotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(GetParametersForImportError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3223,68 +2768,47 @@ pub enum ImportKeyMaterialError {
 
 impl ImportKeyMaterialError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportKeyMaterialError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(ImportKeyMaterialError::DependencyTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportKeyMaterialError::DependencyTimeout(err.msg))
                 }
                 "ExpiredImportTokenException" => {
                     return RusotoError::Service(ImportKeyMaterialError::ExpiredImportToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "IncorrectKeyMaterialException" => {
                     return RusotoError::Service(ImportKeyMaterialError::IncorrectKeyMaterial(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ImportKeyMaterialError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ImportKeyMaterialError::InvalidArn(err.msg))
                 }
                 "InvalidCiphertextException" => {
-                    return RusotoError::Service(ImportKeyMaterialError::InvalidCiphertext(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportKeyMaterialError::InvalidCiphertext(err.msg))
                 }
                 "InvalidImportTokenException" => {
                     return RusotoError::Service(ImportKeyMaterialError::InvalidImportToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ImportKeyMaterialError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ImportKeyMaterialError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(ImportKeyMaterialError::KMSInvalidState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportKeyMaterialError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ImportKeyMaterialError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ImportKeyMaterialError::NotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(ImportKeyMaterialError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3329,43 +2853,24 @@ pub enum ListAliasesError {
 
 impl ListAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAliasesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(ListAliasesError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAliasesError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListAliasesError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAliasesError::InvalidArn(err.msg))
                 }
                 "InvalidMarkerException" => {
-                    return RusotoError::Service(ListAliasesError::InvalidMarker(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAliasesError::InvalidMarker(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ListAliasesError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAliasesError::KMSInternal(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListAliasesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAliasesError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3407,48 +2912,27 @@ pub enum ListGrantsError {
 
 impl ListGrantsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGrantsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(ListGrantsError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGrantsError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListGrantsError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGrantsError::InvalidArn(err.msg))
                 }
                 "InvalidMarkerException" => {
-                    return RusotoError::Service(ListGrantsError::InvalidMarker(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGrantsError::InvalidMarker(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ListGrantsError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGrantsError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(ListGrantsError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGrantsError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListGrantsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGrantsError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3489,43 +2973,24 @@ pub enum ListKeyPoliciesError {
 
 impl ListKeyPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListKeyPoliciesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(ListKeyPoliciesError::DependencyTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListKeyPoliciesError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListKeyPoliciesError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListKeyPoliciesError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ListKeyPoliciesError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListKeyPoliciesError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(ListKeyPoliciesError::KMSInvalidState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListKeyPoliciesError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListKeyPoliciesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListKeyPoliciesError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3561,33 +3026,18 @@ pub enum ListKeysError {
 
 impl ListKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListKeysError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(ListKeysError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListKeysError::DependencyTimeout(err.msg))
                 }
                 "InvalidMarkerException" => {
-                    return RusotoError::Service(ListKeysError::InvalidMarker(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListKeysError::InvalidMarker(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ListKeysError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListKeysError::KMSInternal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3623,38 +3073,21 @@ pub enum ListResourceTagsError {
 
 impl ListResourceTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListResourceTagsError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListResourceTagsError::InvalidArn(err.msg))
                 }
                 "InvalidMarkerException" => {
-                    return RusotoError::Service(ListResourceTagsError::InvalidMarker(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListResourceTagsError::InvalidMarker(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ListResourceTagsError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListResourceTagsError::KMSInternal(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListResourceTagsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListResourceTagsError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3693,43 +3126,26 @@ pub enum ListRetirableGrantsError {
 
 impl ListRetirableGrantsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRetirableGrantsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListRetirableGrantsError::DependencyTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListRetirableGrantsError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRetirableGrantsError::InvalidArn(err.msg))
                 }
                 "InvalidMarkerException" => {
-                    return RusotoError::Service(ListRetirableGrantsError::InvalidMarker(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRetirableGrantsError::InvalidMarker(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ListRetirableGrantsError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRetirableGrantsError::KMSInternal(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListRetirableGrantsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRetirableGrantsError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3775,58 +3191,35 @@ pub enum PutKeyPolicyError {
 
 impl PutKeyPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutKeyPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(PutKeyPolicyError::DependencyTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutKeyPolicyError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(PutKeyPolicyError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutKeyPolicyError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(PutKeyPolicyError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutKeyPolicyError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(PutKeyPolicyError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutKeyPolicyError::KMSInvalidState(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PutKeyPolicyError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutKeyPolicyError::LimitExceeded(err.msg))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(PutKeyPolicyError::MalformedPolicyDocument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(PutKeyPolicyError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutKeyPolicyError::NotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(PutKeyPolicyError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutKeyPolicyError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3877,63 +3270,36 @@ pub enum ReEncryptError {
 
 impl ReEncryptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReEncryptError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(ReEncryptError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReEncryptError::DependencyTimeout(err.msg))
                 }
                 "DisabledException" => {
-                    return RusotoError::Service(ReEncryptError::Disabled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReEncryptError::Disabled(err.msg))
                 }
                 "InvalidCiphertextException" => {
-                    return RusotoError::Service(ReEncryptError::InvalidCiphertext(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReEncryptError::InvalidCiphertext(err.msg))
                 }
                 "InvalidGrantTokenException" => {
-                    return RusotoError::Service(ReEncryptError::InvalidGrantToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReEncryptError::InvalidGrantToken(err.msg))
                 }
                 "InvalidKeyUsageException" => {
-                    return RusotoError::Service(ReEncryptError::InvalidKeyUsage(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReEncryptError::InvalidKeyUsage(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ReEncryptError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReEncryptError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(ReEncryptError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReEncryptError::KMSInvalidState(err.msg))
                 }
                 "KeyUnavailableException" => {
-                    return RusotoError::Service(ReEncryptError::KeyUnavailable(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReEncryptError::KeyUnavailable(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ReEncryptError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReEncryptError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3981,53 +3347,30 @@ pub enum RetireGrantError {
 
 impl RetireGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetireGrantError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(RetireGrantError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RetireGrantError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(RetireGrantError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RetireGrantError::InvalidArn(err.msg))
                 }
                 "InvalidGrantIdException" => {
-                    return RusotoError::Service(RetireGrantError::InvalidGrantId(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RetireGrantError::InvalidGrantId(err.msg))
                 }
                 "InvalidGrantTokenException" => {
-                    return RusotoError::Service(RetireGrantError::InvalidGrantToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RetireGrantError::InvalidGrantToken(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(RetireGrantError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RetireGrantError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(RetireGrantError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RetireGrantError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(RetireGrantError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RetireGrantError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4071,48 +3414,27 @@ pub enum RevokeGrantError {
 
 impl RevokeGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeGrantError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(RevokeGrantError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RevokeGrantError::DependencyTimeout(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(RevokeGrantError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RevokeGrantError::InvalidArn(err.msg))
                 }
                 "InvalidGrantIdException" => {
-                    return RusotoError::Service(RevokeGrantError::InvalidGrantId(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RevokeGrantError::InvalidGrantId(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(RevokeGrantError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RevokeGrantError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(RevokeGrantError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RevokeGrantError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(RevokeGrantError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RevokeGrantError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4153,43 +3475,26 @@ pub enum ScheduleKeyDeletionError {
 
 impl ScheduleKeyDeletionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ScheduleKeyDeletionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ScheduleKeyDeletionError::DependencyTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ScheduleKeyDeletionError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ScheduleKeyDeletionError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(ScheduleKeyDeletionError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ScheduleKeyDeletionError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(ScheduleKeyDeletionError::KMSInvalidState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ScheduleKeyDeletionError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ScheduleKeyDeletionError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ScheduleKeyDeletionError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4231,46 +3536,25 @@ pub enum TagResourceError {
 
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(TagResourceError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(TagResourceError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(TagResourceError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::KMSInvalidState(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(TagResourceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
                 }
-                "TagException" => {
-                    return RusotoError::Service(TagResourceError::Tag(String::from(error_message)))
-                }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "TagException" => return RusotoError::Service(TagResourceError::Tag(err.msg)),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4311,43 +3595,22 @@ pub enum UntagResourceError {
 
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(UntagResourceError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(UntagResourceError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(UntagResourceError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
                 }
-                "TagException" => {
-                    return RusotoError::Service(UntagResourceError::Tag(String::from(
-                        error_message,
-                    )))
-                }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "TagException" => return RusotoError::Service(UntagResourceError::Tag(err.msg)),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4385,38 +3648,21 @@ pub enum UpdateAliasError {
 
 impl UpdateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAliasError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
-                    return RusotoError::Service(UpdateAliasError::DependencyTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateAliasError::DependencyTimeout(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(UpdateAliasError::KMSInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateAliasError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
-                    return RusotoError::Service(UpdateAliasError::KMSInvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateAliasError::KMSInvalidState(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateAliasError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateAliasError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4459,63 +3705,42 @@ pub enum UpdateCustomKeyStoreError {
 
 impl UpdateCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCustomKeyStoreError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmClusterInvalidConfigurationException" => {
                     return RusotoError::Service(
-                        UpdateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
-                            String::from(error_message),
-                        ),
+                        UpdateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(err.msg),
                     )
                 }
                 "CloudHsmClusterNotActiveException" => {
                     return RusotoError::Service(
-                        UpdateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
-                            error_message,
-                        )),
+                        UpdateCustomKeyStoreError::CloudHsmClusterNotActive(err.msg),
                     )
                 }
                 "CloudHsmClusterNotFoundException" => {
                     return RusotoError::Service(
-                        UpdateCustomKeyStoreError::CloudHsmClusterNotFound(String::from(
-                            error_message,
-                        )),
+                        UpdateCustomKeyStoreError::CloudHsmClusterNotFound(err.msg),
                     )
                 }
                 "CloudHsmClusterNotRelatedException" => {
                     return RusotoError::Service(
-                        UpdateCustomKeyStoreError::CloudHsmClusterNotRelated(String::from(
-                            error_message,
-                        )),
+                        UpdateCustomKeyStoreError::CloudHsmClusterNotRelated(err.msg),
                     )
                 }
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(
-                        UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
-                            error_message,
-                        )),
+                        UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(err.msg),
                     )
                 }
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(UpdateCustomKeyStoreError::CustomKeyStoreNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(UpdateCustomKeyStoreError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateCustomKeyStoreError::KMSInternal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4557,43 +3782,28 @@ pub enum UpdateKeyDescriptionError {
 
 impl UpdateKeyDescriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateKeyDescriptionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(UpdateKeyDescriptionError::DependencyTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(UpdateKeyDescriptionError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateKeyDescriptionError::InvalidArn(err.msg))
                 }
                 "KMSInternalException" => {
-                    return RusotoError::Service(UpdateKeyDescriptionError::KMSInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateKeyDescriptionError::KMSInternal(err.msg))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(UpdateKeyDescriptionError::KMSInvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateKeyDescriptionError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateKeyDescriptionError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

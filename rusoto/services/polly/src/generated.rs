@@ -22,10 +22,9 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLexiconInput {
     /// <p>The name of the lexicon to delete. Must be an existing lexicon in the region.</p>
@@ -422,43 +421,16 @@ pub enum DeleteLexiconError {
 }
 
 impl DeleteLexiconError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLexiconError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "LexiconNotFoundException" => {
-                    return RusotoError::Service(DeleteLexiconError::LexiconNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteLexiconError::LexiconNotFound(err.msg))
                 }
                 "ServiceFailureException" => {
-                    return RusotoError::Service(DeleteLexiconError::ServiceFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteLexiconError::ServiceFailure(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -488,43 +460,16 @@ pub enum DescribeVoicesError {
 }
 
 impl DescribeVoicesError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVoicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(DescribeVoicesError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeVoicesError::InvalidNextToken(err.msg))
                 }
                 "ServiceFailureException" => {
-                    return RusotoError::Service(DescribeVoicesError::ServiceFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeVoicesError::ServiceFailure(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -554,43 +499,16 @@ pub enum GetLexiconError {
 }
 
 impl GetLexiconError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLexiconError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "LexiconNotFoundException" => {
-                    return RusotoError::Service(GetLexiconError::LexiconNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLexiconError::LexiconNotFound(err.msg))
                 }
                 "ServiceFailureException" => {
-                    return RusotoError::Service(GetLexiconError::ServiceFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLexiconError::ServiceFailure(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -622,50 +540,25 @@ pub enum GetSpeechSynthesisTaskError {
 }
 
 impl GetSpeechSynthesisTaskError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSpeechSynthesisTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "InvalidTaskIdException" => {
                     return RusotoError::Service(GetSpeechSynthesisTaskError::InvalidTaskId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(GetSpeechSynthesisTaskError::ServiceFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SynthesisTaskNotFoundException" => {
                     return RusotoError::Service(
-                        GetSpeechSynthesisTaskError::SynthesisTaskNotFound(String::from(
-                            error_message,
-                        )),
+                        GetSpeechSynthesisTaskError::SynthesisTaskNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -696,43 +589,16 @@ pub enum ListLexiconsError {
 }
 
 impl ListLexiconsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLexiconsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListLexiconsError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListLexiconsError::InvalidNextToken(err.msg))
                 }
                 "ServiceFailureException" => {
-                    return RusotoError::Service(ListLexiconsError::ServiceFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListLexiconsError::ServiceFailure(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -762,43 +628,20 @@ pub enum ListSpeechSynthesisTasksError {
 }
 
 impl ListSpeechSynthesisTasksError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSpeechSynthesisTasksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListSpeechSynthesisTasksError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(ListSpeechSynthesisTasksError::ServiceFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -838,68 +681,33 @@ pub enum PutLexiconError {
 }
 
 impl PutLexiconError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLexiconError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "InvalidLexiconException" => {
-                    return RusotoError::Service(PutLexiconError::InvalidLexicon(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutLexiconError::InvalidLexicon(err.msg))
                 }
                 "LexiconSizeExceededException" => {
-                    return RusotoError::Service(PutLexiconError::LexiconSizeExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutLexiconError::LexiconSizeExceeded(err.msg))
                 }
                 "MaxLexemeLengthExceededException" => {
-                    return RusotoError::Service(PutLexiconError::MaxLexemeLengthExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutLexiconError::MaxLexemeLengthExceeded(err.msg))
                 }
                 "MaxLexiconsNumberExceededException" => {
                     return RusotoError::Service(PutLexiconError::MaxLexiconsNumberExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceFailureException" => {
-                    return RusotoError::Service(PutLexiconError::ServiceFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutLexiconError::ServiceFailure(err.msg))
                 }
                 "UnsupportedPlsAlphabetException" => {
-                    return RusotoError::Service(PutLexiconError::UnsupportedPlsAlphabet(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutLexiconError::UnsupportedPlsAlphabet(err.msg))
                 }
                 "UnsupportedPlsLanguageException" => {
-                    return RusotoError::Service(PutLexiconError::UnsupportedPlsLanguage(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutLexiconError::UnsupportedPlsLanguage(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -952,94 +760,65 @@ pub enum StartSpeechSynthesisTaskError {
 }
 
 impl StartSpeechSynthesisTaskError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSpeechSynthesisTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "InvalidS3BucketException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidS3Bucket(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidS3KeyException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidS3Key(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSampleRateException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidSampleRate(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSnsTopicArnException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidSnsTopicArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSsmlException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::InvalidSsml(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LanguageNotSupportedException" => {
                     return RusotoError::Service(
-                        StartSpeechSynthesisTaskError::LanguageNotSupported(String::from(
-                            error_message,
-                        )),
+                        StartSpeechSynthesisTaskError::LanguageNotSupported(err.msg),
                     )
                 }
                 "LexiconNotFoundException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::LexiconNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MarksNotSupportedForFormatException" => {
                     return RusotoError::Service(
-                        StartSpeechSynthesisTaskError::MarksNotSupportedForFormat(String::from(
-                            error_message,
-                        )),
+                        StartSpeechSynthesisTaskError::MarksNotSupportedForFormat(err.msg),
                     )
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::ServiceFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SsmlMarksNotSupportedForTextTypeException" => {
                     return RusotoError::Service(
-                        StartSpeechSynthesisTaskError::SsmlMarksNotSupportedForTextType(
-                            String::from(error_message),
-                        ),
+                        StartSpeechSynthesisTaskError::SsmlMarksNotSupportedForTextType(err.msg),
                     )
                 }
                 "TextLengthExceededException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::TextLengthExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1090,75 +869,40 @@ pub enum SynthesizeSpeechError {
 }
 
 impl SynthesizeSpeechError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SynthesizeSpeechError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "InvalidSampleRateException" => {
-                    return RusotoError::Service(SynthesizeSpeechError::InvalidSampleRate(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SynthesizeSpeechError::InvalidSampleRate(err.msg))
                 }
                 "InvalidSsmlException" => {
-                    return RusotoError::Service(SynthesizeSpeechError::InvalidSsml(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SynthesizeSpeechError::InvalidSsml(err.msg))
                 }
                 "LanguageNotSupportedException" => {
                     return RusotoError::Service(SynthesizeSpeechError::LanguageNotSupported(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LexiconNotFoundException" => {
-                    return RusotoError::Service(SynthesizeSpeechError::LexiconNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SynthesizeSpeechError::LexiconNotFound(err.msg))
                 }
                 "MarksNotSupportedForFormatException" => {
                     return RusotoError::Service(SynthesizeSpeechError::MarksNotSupportedForFormat(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceFailureException" => {
-                    return RusotoError::Service(SynthesizeSpeechError::ServiceFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SynthesizeSpeechError::ServiceFailure(err.msg))
                 }
                 "SsmlMarksNotSupportedForTextTypeException" => {
                     return RusotoError::Service(
-                        SynthesizeSpeechError::SsmlMarksNotSupportedForTextType(String::from(
-                            error_message,
-                        )),
+                        SynthesizeSpeechError::SsmlMarksNotSupportedForTextType(err.msg),
                     )
                 }
                 "TextLengthExceededException" => {
-                    return RusotoError::Service(SynthesizeSpeechError::TextLengthExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SynthesizeSpeechError::TextLengthExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

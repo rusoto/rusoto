@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1929,42 +1928,29 @@ impl BatchDetectDominantLanguageError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDetectDominantLanguageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(
-                        BatchDetectDominantLanguageError::BatchSizeLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        BatchDetectDominantLanguageError::BatchSizeLimitExceeded(err.msg),
                     )
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(BatchDetectDominantLanguageError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchDetectDominantLanguageError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(
-                        BatchDetectDominantLanguageError::TextSizeLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        BatchDetectDominantLanguageError::TextSizeLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2003,43 +1989,30 @@ pub enum BatchDetectEntitiesError {
 
 impl BatchDetectEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectEntitiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectEntitiesError::BatchSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerException" => {
-                    return RusotoError::Service(BatchDetectEntitiesError::InternalServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDetectEntitiesError::InternalServer(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(BatchDetectEntitiesError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDetectEntitiesError::InvalidRequest(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectEntitiesError::TextSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(BatchDetectEntitiesError::UnsupportedLanguage(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2079,45 +2052,34 @@ pub enum BatchDetectKeyPhrasesError {
 
 impl BatchDetectKeyPhrasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectKeyPhrasesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(
-                        BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(err.msg),
                     )
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(BatchDetectKeyPhrasesError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchDetectKeyPhrasesError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectKeyPhrasesError::TextSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(BatchDetectKeyPhrasesError::UnsupportedLanguage(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2157,43 +2119,30 @@ pub enum BatchDetectSentimentError {
 
 impl BatchDetectSentimentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectSentimentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSentimentError::BatchSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerException" => {
-                    return RusotoError::Service(BatchDetectSentimentError::InternalServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDetectSentimentError::InternalServer(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(BatchDetectSentimentError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDetectSentimentError::InvalidRequest(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSentimentError::TextSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(BatchDetectSentimentError::UnsupportedLanguage(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2233,43 +2182,30 @@ pub enum BatchDetectSyntaxError {
 
 impl BatchDetectSyntaxError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectSyntaxError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSyntaxError::BatchSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerException" => {
-                    return RusotoError::Service(BatchDetectSyntaxError::InternalServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDetectSyntaxError::InternalServer(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(BatchDetectSyntaxError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDetectSyntaxError::InvalidRequest(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSyntaxError::TextSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(BatchDetectSyntaxError::UnsupportedLanguage(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2311,52 +2247,39 @@ pub enum CreateDocumentClassifierError {
 
 impl CreateDocumentClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDocumentClassifierError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::ResourceInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateDocumentClassifierError::ResourceLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateDocumentClassifierError::ResourceLimitExceeded(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(
-                        CreateDocumentClassifierError::UnsupportedLanguage(String::from(
-                            error_message,
-                        )),
+                        CreateDocumentClassifierError::UnsupportedLanguage(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2399,50 +2322,39 @@ pub enum CreateEntityRecognizerError {
 
 impl CreateEntityRecognizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEntityRecognizerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::ResourceInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateEntityRecognizerError::ResourceLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateEntityRecognizerError::ResourceLimitExceeded(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::UnsupportedLanguage(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2485,50 +2397,39 @@ pub enum DeleteDocumentClassifierError {
 
 impl DeleteDocumentClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDocumentClassifierError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::ResourceInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(
-                        DeleteDocumentClassifierError::ResourceUnavailable(String::from(
-                            error_message,
-                        )),
+                        DeleteDocumentClassifierError::ResourceUnavailable(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2571,48 +2472,39 @@ pub enum DeleteEntityRecognizerError {
 
 impl DeleteEntityRecognizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEntityRecognizerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::ResourceInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::ResourceUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2653,46 +2545,29 @@ impl DescribeDocumentClassificationJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDocumentClassificationJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        DescribeDocumentClassificationJobError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        DescribeDocumentClassificationJobError::InternalServer(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        DescribeDocumentClassificationJobError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeDocumentClassificationJobError::InvalidRequest(err.msg),
                     )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(
-                        DescribeDocumentClassificationJobError::JobNotFound(String::from(
-                            error_message,
-                        )),
+                        DescribeDocumentClassificationJobError::JobNotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        DescribeDocumentClassificationJobError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        DescribeDocumentClassificationJobError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2731,38 +2606,29 @@ impl DescribeDocumentClassifierError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDocumentClassifierError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeDocumentClassifierError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeDocumentClassifierError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDocumentClassifierError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeDocumentClassifierError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2801,46 +2667,29 @@ impl DescribeDominantLanguageDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDominantLanguageDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        DescribeDominantLanguageDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        DescribeDominantLanguageDetectionJobError::InternalServer(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        DescribeDominantLanguageDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeDominantLanguageDetectionJobError::InvalidRequest(err.msg),
                     )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(
-                        DescribeDominantLanguageDetectionJobError::JobNotFound(String::from(
-                            error_message,
-                        )),
+                        DescribeDominantLanguageDetectionJobError::JobNotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        DescribeDominantLanguageDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        DescribeDominantLanguageDetectionJobError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2879,40 +2728,29 @@ impl DescribeEntitiesDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEntitiesDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEntitiesDetectionJobError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeEntitiesDetectionJobError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(DescribeEntitiesDetectionJobError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        DescribeEntitiesDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        DescribeEntitiesDetectionJobError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2949,38 +2787,29 @@ pub enum DescribeEntityRecognizerError {
 
 impl DescribeEntityRecognizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEntityRecognizerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEntityRecognizerError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeEntityRecognizerError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeEntityRecognizerError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeEntityRecognizerError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3019,44 +2848,29 @@ impl DescribeKeyPhrasesDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeKeyPhrasesDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        DescribeKeyPhrasesDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        DescribeKeyPhrasesDetectionJobError::InternalServer(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        DescribeKeyPhrasesDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeKeyPhrasesDetectionJobError::InvalidRequest(err.msg),
                     )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(DescribeKeyPhrasesDetectionJobError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        DescribeKeyPhrasesDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        DescribeKeyPhrasesDetectionJobError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3095,44 +2909,29 @@ impl DescribeSentimentDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSentimentDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        DescribeSentimentDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        DescribeSentimentDetectionJobError::InternalServer(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        DescribeSentimentDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeSentimentDetectionJobError::InvalidRequest(err.msg),
                     )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(DescribeSentimentDetectionJobError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        DescribeSentimentDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        DescribeSentimentDetectionJobError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3171,38 +2970,29 @@ impl DescribeTopicsDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTopicsDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeTopicsDetectionJobError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeTopicsDetectionJobError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(DescribeTopicsDetectionJobError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeTopicsDetectionJobError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3237,35 +3027,24 @@ pub enum DetectDominantLanguageError {
 
 impl DetectDominantLanguageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectDominantLanguageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectDominantLanguageError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DetectDominantLanguageError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(
-                        DetectDominantLanguageError::TextSizeLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        DetectDominantLanguageError::TextSizeLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3301,38 +3080,23 @@ pub enum DetectEntitiesError {
 
 impl DetectEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectEntitiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
-                    return RusotoError::Service(DetectEntitiesError::InternalServer(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectEntitiesError::InternalServer(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DetectEntitiesError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectEntitiesError::InvalidRequest(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(DetectEntitiesError::TextSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedLanguageException" => {
-                    return RusotoError::Service(DetectEntitiesError::UnsupportedLanguage(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectEntitiesError::UnsupportedLanguage(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3369,38 +3133,25 @@ pub enum DetectKeyPhrasesError {
 
 impl DetectKeyPhrasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectKeyPhrasesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
-                    return RusotoError::Service(DetectKeyPhrasesError::InternalServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectKeyPhrasesError::InternalServer(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DetectKeyPhrasesError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectKeyPhrasesError::InvalidRequest(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(DetectKeyPhrasesError::TextSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(DetectKeyPhrasesError::UnsupportedLanguage(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3437,38 +3188,23 @@ pub enum DetectSentimentError {
 
 impl DetectSentimentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectSentimentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
-                    return RusotoError::Service(DetectSentimentError::InternalServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectSentimentError::InternalServer(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DetectSentimentError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectSentimentError::InvalidRequest(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(DetectSentimentError::TextSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedLanguageException" => {
-                    return RusotoError::Service(DetectSentimentError::UnsupportedLanguage(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectSentimentError::UnsupportedLanguage(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3505,38 +3241,21 @@ pub enum DetectSyntaxError {
 
 impl DetectSyntaxError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectSyntaxError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
-                    return RusotoError::Service(DetectSyntaxError::InternalServer(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectSyntaxError::InternalServer(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DetectSyntaxError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectSyntaxError::InvalidRequest(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
-                    return RusotoError::Service(DetectSyntaxError::TextSizeLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectSyntaxError::TextSizeLimitExceeded(err.msg))
                 }
                 "UnsupportedLanguageException" => {
-                    return RusotoError::Service(DetectSyntaxError::UnsupportedLanguage(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectSyntaxError::UnsupportedLanguage(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3575,46 +3294,29 @@ impl ListDocumentClassificationJobsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDocumentClassificationJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        ListDocumentClassificationJobsError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        ListDocumentClassificationJobsError::InternalServer(err.msg),
                     )
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(
-                        ListDocumentClassificationJobsError::InvalidFilter(String::from(
-                            error_message,
-                        )),
+                        ListDocumentClassificationJobsError::InvalidFilter(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        ListDocumentClassificationJobsError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        ListDocumentClassificationJobsError::InvalidRequest(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        ListDocumentClassificationJobsError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        ListDocumentClassificationJobsError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3651,38 +3353,29 @@ pub enum ListDocumentClassifiersError {
 
 impl ListDocumentClassifiersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDocumentClassifiersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListDocumentClassifiersError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListDocumentClassifiersError::InvalidFilter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListDocumentClassifiersError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListDocumentClassifiersError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3721,46 +3414,29 @@ impl ListDominantLanguageDetectionJobsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDominantLanguageDetectionJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        ListDominantLanguageDetectionJobsError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        ListDominantLanguageDetectionJobsError::InternalServer(err.msg),
                     )
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(
-                        ListDominantLanguageDetectionJobsError::InvalidFilter(String::from(
-                            error_message,
-                        )),
+                        ListDominantLanguageDetectionJobsError::InvalidFilter(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        ListDominantLanguageDetectionJobsError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        ListDominantLanguageDetectionJobsError::InvalidRequest(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        ListDominantLanguageDetectionJobsError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        ListDominantLanguageDetectionJobsError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3797,38 +3473,29 @@ pub enum ListEntitiesDetectionJobsError {
 
 impl ListEntitiesDetectionJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEntitiesDetectionJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListEntitiesDetectionJobsError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListEntitiesDetectionJobsError::InvalidFilter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListEntitiesDetectionJobsError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListEntitiesDetectionJobsError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3865,38 +3532,27 @@ pub enum ListEntityRecognizersError {
 
 impl ListEntityRecognizersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEntityRecognizersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListEntityRecognizersError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterException" => {
-                    return RusotoError::Service(ListEntityRecognizersError::InvalidFilter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListEntityRecognizersError::InvalidFilter(err.msg))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListEntityRecognizersError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListEntityRecognizersError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3935,38 +3591,29 @@ impl ListKeyPhrasesDetectionJobsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListKeyPhrasesDetectionJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InvalidFilter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListKeyPhrasesDetectionJobsError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4005,38 +3652,29 @@ impl ListSentimentDetectionJobsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListSentimentDetectionJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListSentimentDetectionJobsError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListSentimentDetectionJobsError::InvalidFilter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListSentimentDetectionJobsError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListSentimentDetectionJobsError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4073,38 +3711,29 @@ pub enum ListTopicsDetectionJobsError {
 
 impl ListTopicsDetectionJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTopicsDetectionJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTopicsDetectionJobsError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListTopicsDetectionJobsError::InvalidFilter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListTopicsDetectionJobsError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListTopicsDetectionJobsError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4145,53 +3774,34 @@ impl StartDocumentClassificationJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartDocumentClassificationJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        StartDocumentClassificationJobError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        StartDocumentClassificationJobError::InternalServer(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        StartDocumentClassificationJobError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        StartDocumentClassificationJobError::InvalidRequest(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        StartDocumentClassificationJobError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        StartDocumentClassificationJobError::ResourceNotFound(err.msg),
                     )
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(
-                        StartDocumentClassificationJobError::ResourceUnavailable(String::from(
-                            error_message,
-                        )),
+                        StartDocumentClassificationJobError::ResourceUnavailable(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        StartDocumentClassificationJobError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        StartDocumentClassificationJobError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4229,39 +3839,24 @@ impl StartDominantLanguageDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartDominantLanguageDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        StartDominantLanguageDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        StartDominantLanguageDetectionJobError::InternalServer(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        StartDominantLanguageDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        StartDominantLanguageDetectionJobError::InvalidRequest(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        StartDominantLanguageDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        StartDominantLanguageDetectionJobError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4299,45 +3894,34 @@ pub enum StartEntitiesDetectionJobError {
 
 impl StartEntitiesDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartEntitiesDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(
-                        StartEntitiesDetectionJobError::ResourceUnavailable(String::from(
-                            error_message,
-                        )),
+                        StartEntitiesDetectionJobError::ResourceUnavailable(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4375,33 +3959,24 @@ impl StartKeyPhrasesDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartKeyPhrasesDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartKeyPhrasesDetectionJobError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartKeyPhrasesDetectionJobError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartKeyPhrasesDetectionJobError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4437,33 +4012,24 @@ impl StartSentimentDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartSentimentDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartSentimentDetectionJobError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartSentimentDetectionJobError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartSentimentDetectionJobError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4497,33 +4063,24 @@ pub enum StartTopicsDetectionJobError {
 
 impl StartTopicsDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTopicsDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartTopicsDetectionJobError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartTopicsDetectionJobError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartTopicsDetectionJobError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4559,39 +4116,24 @@ impl StopDominantLanguageDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StopDominantLanguageDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        StopDominantLanguageDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        StopDominantLanguageDetectionJobError::InternalServer(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        StopDominantLanguageDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        StopDominantLanguageDetectionJobError::InvalidRequest(err.msg),
                     )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(
-                        StopDominantLanguageDetectionJobError::JobNotFound(String::from(
-                            error_message,
-                        )),
+                        StopDominantLanguageDetectionJobError::JobNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4625,33 +4167,24 @@ pub enum StopEntitiesDetectionJobError {
 
 impl StopEntitiesDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopEntitiesDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopEntitiesDetectionJobError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopEntitiesDetectionJobError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(StopEntitiesDetectionJobError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4687,33 +4220,24 @@ impl StopKeyPhrasesDetectionJobError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StopKeyPhrasesDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopKeyPhrasesDetectionJobError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopKeyPhrasesDetectionJobError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(StopKeyPhrasesDetectionJobError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4747,33 +4271,24 @@ pub enum StopSentimentDetectionJobError {
 
 impl StopSentimentDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopSentimentDetectionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopSentimentDetectionJobError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopSentimentDetectionJobError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(StopSentimentDetectionJobError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4811,46 +4326,29 @@ impl StopTrainingDocumentClassifierError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StopTrainingDocumentClassifierError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
-                        StopTrainingDocumentClassifierError::InternalServer(String::from(
-                            error_message,
-                        )),
+                        StopTrainingDocumentClassifierError::InternalServer(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
-                        StopTrainingDocumentClassifierError::InvalidRequest(String::from(
-                            error_message,
-                        )),
+                        StopTrainingDocumentClassifierError::InvalidRequest(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        StopTrainingDocumentClassifierError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        StopTrainingDocumentClassifierError::ResourceNotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        StopTrainingDocumentClassifierError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        StopTrainingDocumentClassifierError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4889,42 +4387,29 @@ impl StopTrainingEntityRecognizerError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StopTrainingEntityRecognizerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopTrainingEntityRecognizerError::InternalServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopTrainingEntityRecognizerError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        StopTrainingEntityRecognizerError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        StopTrainingEntityRecognizerError::ResourceNotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        StopTrainingEntityRecognizerError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        StopTrainingEntityRecognizerError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

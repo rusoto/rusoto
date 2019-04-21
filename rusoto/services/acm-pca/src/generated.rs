@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Contains information about the certificate subject. The certificate can be one issued by your private certificate authority (CA) or it can be your private CA certificate. The <b>Subject</b> field in the certificate identifies the entity that owns or controls the public key in the certificate. The entity can be a user, computer, device, or service. The <b>Subject</b> must contain an X.500 distinguished name (DN). A DN is a sequence of relative distinguished names (RDNs). The RDNs are separated by commas in the certificate. The DN must be unique for each entity, but your private CA can issue more than one certificate with the same DN to the same entity. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ASN1Subject {
@@ -562,38 +561,29 @@ impl CreateCertificateAuthorityError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCertificateAuthorityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgsException" => {
                     return RusotoError::Service(CreateCertificateAuthorityError::InvalidArgs(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPolicyException" => {
                     return RusotoError::Service(CreateCertificateAuthorityError::InvalidPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(CreateCertificateAuthorityError::InvalidTag(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateCertificateAuthorityError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -636,60 +626,39 @@ impl CreateCertificateAuthorityAuditReportError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCertificateAuthorityAuditReportError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgsException" => {
                     return RusotoError::Service(
-                        CreateCertificateAuthorityAuditReportError::InvalidArgs(String::from(
-                            error_message,
-                        )),
+                        CreateCertificateAuthorityAuditReportError::InvalidArgs(err.msg),
                     )
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(
-                        CreateCertificateAuthorityAuditReportError::InvalidArn(String::from(
-                            error_message,
-                        )),
+                        CreateCertificateAuthorityAuditReportError::InvalidArn(err.msg),
                     )
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(
-                        CreateCertificateAuthorityAuditReportError::InvalidState(String::from(
-                            error_message,
-                        )),
+                        CreateCertificateAuthorityAuditReportError::InvalidState(err.msg),
                     )
                 }
                 "RequestFailedException" => {
                     return RusotoError::Service(
-                        CreateCertificateAuthorityAuditReportError::RequestFailed(String::from(
-                            error_message,
-                        )),
+                        CreateCertificateAuthorityAuditReportError::RequestFailed(err.msg),
                     )
                 }
                 "RequestInProgressException" => {
                     return RusotoError::Service(
-                        CreateCertificateAuthorityAuditReportError::RequestInProgress(
-                            String::from(error_message),
-                        ),
+                        CreateCertificateAuthorityAuditReportError::RequestInProgress(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        CreateCertificateAuthorityAuditReportError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        CreateCertificateAuthorityAuditReportError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -730,40 +699,29 @@ impl DeleteCertificateAuthorityError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteCertificateAuthorityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DeleteCertificateAuthorityError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DeleteCertificateAuthorityError::ConcurrentModification(err.msg),
                     )
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteCertificateAuthorityError::InvalidArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(DeleteCertificateAuthorityError::InvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteCertificateAuthorityError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -798,30 +756,19 @@ impl DescribeCertificateAuthorityError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCertificateAuthorityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(DescribeCertificateAuthorityError::InvalidArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        DescribeCertificateAuthorityError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        DescribeCertificateAuthorityError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -856,39 +803,24 @@ impl DescribeCertificateAuthorityAuditReportError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCertificateAuthorityAuditReportError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgsException" => {
                     return RusotoError::Service(
-                        DescribeCertificateAuthorityAuditReportError::InvalidArgs(String::from(
-                            error_message,
-                        )),
+                        DescribeCertificateAuthorityAuditReportError::InvalidArgs(err.msg),
                     )
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(
-                        DescribeCertificateAuthorityAuditReportError::InvalidArn(String::from(
-                            error_message,
-                        )),
+                        DescribeCertificateAuthorityAuditReportError::InvalidArn(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        DescribeCertificateAuthorityAuditReportError::ResourceNotFound(
-                            String::from(error_message),
-                        ),
+                        DescribeCertificateAuthorityAuditReportError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -926,43 +858,24 @@ pub enum GetCertificateError {
 
 impl GetCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(GetCertificateError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCertificateError::InvalidArn(err.msg))
                 }
                 "InvalidStateException" => {
-                    return RusotoError::Service(GetCertificateError::InvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCertificateError::InvalidState(err.msg))
                 }
                 "RequestFailedException" => {
-                    return RusotoError::Service(GetCertificateError::RequestFailed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCertificateError::RequestFailed(err.msg))
                 }
                 "RequestInProgressException" => {
-                    return RusotoError::Service(GetCertificateError::RequestInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCertificateError::RequestInProgress(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetCertificateError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCertificateError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1000,39 +913,24 @@ impl GetCertificateAuthorityCertificateError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCertificateAuthorityCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(
-                        GetCertificateAuthorityCertificateError::InvalidArn(String::from(
-                            error_message,
-                        )),
+                        GetCertificateAuthorityCertificateError::InvalidArn(err.msg),
                     )
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(
-                        GetCertificateAuthorityCertificateError::InvalidState(String::from(
-                            error_message,
-                        )),
+                        GetCertificateAuthorityCertificateError::InvalidState(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        GetCertificateAuthorityCertificateError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        GetCertificateAuthorityCertificateError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1072,45 +970,34 @@ impl GetCertificateAuthorityCsrError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCertificateAuthorityCsrError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(GetCertificateAuthorityCsrError::InvalidArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(GetCertificateAuthorityCsrError::InvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "RequestFailedException" => {
                     return RusotoError::Service(GetCertificateAuthorityCsrError::RequestFailed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "RequestInProgressException" => {
                     return RusotoError::Service(
-                        GetCertificateAuthorityCsrError::RequestInProgress(String::from(
-                            error_message,
-                        )),
+                        GetCertificateAuthorityCsrError::RequestInProgress(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetCertificateAuthorityCsrError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1158,74 +1045,49 @@ impl ImportCertificateAuthorityCertificateError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ImportCertificateAuthorityCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CertificateMismatchException" => {
                     return RusotoError::Service(
-                        ImportCertificateAuthorityCertificateError::CertificateMismatch(
-                            String::from(error_message),
-                        ),
+                        ImportCertificateAuthorityCertificateError::CertificateMismatch(err.msg),
                     )
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        ImportCertificateAuthorityCertificateError::ConcurrentModification(
-                            String::from(error_message),
-                        ),
+                        ImportCertificateAuthorityCertificateError::ConcurrentModification(err.msg),
                     )
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(
-                        ImportCertificateAuthorityCertificateError::InvalidArn(String::from(
-                            error_message,
-                        )),
+                        ImportCertificateAuthorityCertificateError::InvalidArn(err.msg),
                     )
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(
-                        ImportCertificateAuthorityCertificateError::InvalidState(String::from(
-                            error_message,
-                        )),
+                        ImportCertificateAuthorityCertificateError::InvalidState(err.msg),
                     )
                 }
                 "MalformedCertificateException" => {
                     return RusotoError::Service(
-                        ImportCertificateAuthorityCertificateError::MalformedCertificate(
-                            String::from(error_message),
-                        ),
+                        ImportCertificateAuthorityCertificateError::MalformedCertificate(err.msg),
                     )
                 }
                 "RequestFailedException" => {
                     return RusotoError::Service(
-                        ImportCertificateAuthorityCertificateError::RequestFailed(String::from(
-                            error_message,
-                        )),
+                        ImportCertificateAuthorityCertificateError::RequestFailed(err.msg),
                     )
                 }
                 "RequestInProgressException" => {
                     return RusotoError::Service(
-                        ImportCertificateAuthorityCertificateError::RequestInProgress(
-                            String::from(error_message),
-                        ),
+                        ImportCertificateAuthorityCertificateError::RequestInProgress(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        ImportCertificateAuthorityCertificateError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        ImportCertificateAuthorityCertificateError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1270,48 +1132,27 @@ pub enum IssueCertificateError {
 
 impl IssueCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IssueCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgsException" => {
-                    return RusotoError::Service(IssueCertificateError::InvalidArgs(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IssueCertificateError::InvalidArgs(err.msg))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(IssueCertificateError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IssueCertificateError::InvalidArn(err.msg))
                 }
                 "InvalidStateException" => {
-                    return RusotoError::Service(IssueCertificateError::InvalidState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IssueCertificateError::InvalidState(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(IssueCertificateError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(IssueCertificateError::LimitExceeded(err.msg))
                 }
                 "MalformedCSRException" => {
-                    return RusotoError::Service(IssueCertificateError::MalformedCSR(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IssueCertificateError::MalformedCSR(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(IssueCertificateError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(IssueCertificateError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1346,23 +1187,14 @@ impl ListCertificateAuthoritiesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCertificateAuthoritiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListCertificateAuthoritiesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1392,28 +1224,15 @@ pub enum ListTagsError {
 
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListTagsError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::InvalidArn(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListTagsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1448,35 +1267,24 @@ impl RestoreCertificateAuthorityError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreCertificateAuthorityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(RestoreCertificateAuthorityError::InvalidArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(RestoreCertificateAuthorityError::InvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        RestoreCertificateAuthorityError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        RestoreCertificateAuthorityError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1520,58 +1328,37 @@ pub enum RevokeCertificateError {
 
 impl RevokeCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RevokeCertificateError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(RevokeCertificateError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RevokeCertificateError::InvalidArn(err.msg))
                 }
                 "InvalidStateException" => {
-                    return RusotoError::Service(RevokeCertificateError::InvalidState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RevokeCertificateError::InvalidState(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(RevokeCertificateError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RevokeCertificateError::LimitExceeded(err.msg))
                 }
                 "RequestAlreadyProcessedException" => {
                     return RusotoError::Service(RevokeCertificateError::RequestAlreadyProcessed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "RequestFailedException" => {
-                    return RusotoError::Service(RevokeCertificateError::RequestFailed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RevokeCertificateError::RequestFailed(err.msg))
                 }
                 "RequestInProgressException" => {
-                    return RusotoError::Service(RevokeCertificateError::RequestInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RevokeCertificateError::RequestInProgress(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(RevokeCertificateError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RevokeCertificateError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1614,43 +1401,28 @@ pub enum TagCertificateAuthorityError {
 
 impl TagCertificateAuthorityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagCertificateAuthorityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(TagCertificateAuthorityError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagCertificateAuthorityError::InvalidArn(err.msg))
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(TagCertificateAuthorityError::InvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidTagException" => {
-                    return RusotoError::Service(TagCertificateAuthorityError::InvalidTag(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagCertificateAuthorityError::InvalidTag(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagCertificateAuthorityError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyTagsException" => {
-                    return RusotoError::Service(TagCertificateAuthorityError::TooManyTags(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagCertificateAuthorityError::TooManyTags(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1688,38 +1460,29 @@ pub enum UntagCertificateAuthorityError {
 
 impl UntagCertificateAuthorityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagCertificateAuthorityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(UntagCertificateAuthorityError::InvalidArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(UntagCertificateAuthorityError::InvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(UntagCertificateAuthorityError::InvalidTag(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UntagCertificateAuthorityError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1762,50 +1525,39 @@ impl UpdateCertificateAuthorityError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateCertificateAuthorityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        UpdateCertificateAuthorityError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        UpdateCertificateAuthorityError::ConcurrentModification(err.msg),
                     )
                 }
                 "InvalidArgsException" => {
                     return RusotoError::Service(UpdateCertificateAuthorityError::InvalidArgs(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UpdateCertificateAuthorityError::InvalidArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPolicyException" => {
                     return RusotoError::Service(UpdateCertificateAuthorityError::InvalidPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(UpdateCertificateAuthorityError::InvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateCertificateAuthorityError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Represents a segment of video or other time-delimited data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -220,81 +219,50 @@ pub enum GetHLSStreamingSessionURLError {
 }
 
 impl GetHLSStreamingSessionURLError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHLSStreamingSessionURLError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(
-                        GetHLSStreamingSessionURLError::ClientLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        GetHLSStreamingSessionURLError::ClientLimitExceeded(err.msg),
                     )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(GetHLSStreamingSessionURLError::InvalidArgument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidCodecPrivateDataException" => {
                     return RusotoError::Service(
-                        GetHLSStreamingSessionURLError::InvalidCodecPrivateData(String::from(
-                            error_message,
-                        )),
+                        GetHLSStreamingSessionURLError::InvalidCodecPrivateData(err.msg),
                     )
                 }
                 "MissingCodecPrivateDataException" => {
                     return RusotoError::Service(
-                        GetHLSStreamingSessionURLError::MissingCodecPrivateData(String::from(
-                            error_message,
-                        )),
+                        GetHLSStreamingSessionURLError::MissingCodecPrivateData(err.msg),
                     )
                 }
                 "NoDataRetentionException" => {
                     return RusotoError::Service(GetHLSStreamingSessionURLError::NoDataRetention(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetHLSStreamingSessionURLError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetHLSStreamingSessionURLError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedStreamMediaTypeException" => {
                     return RusotoError::Service(
-                        GetHLSStreamingSessionURLError::UnsupportedStreamMediaType(String::from(
-                            error_message,
-                        )),
+                        GetHLSStreamingSessionURLError::UnsupportedStreamMediaType(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -334,53 +302,30 @@ pub enum GetMediaForFragmentListError {
 }
 
 impl GetMediaForFragmentListError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMediaForFragmentListError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(GetMediaForFragmentListError::ClientLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(GetMediaForFragmentListError::InvalidArgument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetMediaForFragmentListError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetMediaForFragmentListError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -416,53 +361,22 @@ pub enum ListFragmentsError {
 }
 
 impl ListFragmentsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFragmentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "ClientLimitExceededException" => {
-                    return RusotoError::Service(ListFragmentsError::ClientLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListFragmentsError::ClientLimitExceeded(err.msg))
                 }
                 "InvalidArgumentException" => {
-                    return RusotoError::Service(ListFragmentsError::InvalidArgument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFragmentsError::InvalidArgument(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListFragmentsError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFragmentsError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListFragmentsError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListFragmentsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Contains all of the attributes of a specific DAX cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -955,100 +954,77 @@ pub enum CreateClusterError {
 
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterAlreadyExistsFault" => {
                     return RusotoError::Service(CreateClusterError::ClusterAlreadyExistsFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ClusterQuotaForCustomerExceededFault" => {
                     return RusotoError::Service(
-                        CreateClusterError::ClusterQuotaForCustomerExceededFault(String::from(
-                            error_message,
-                        )),
+                        CreateClusterError::ClusterQuotaForCustomerExceededFault(err.msg),
                     )
                 }
                 "InsufficientClusterCapacityFault" => {
                     return RusotoError::Service(
-                        CreateClusterError::InsufficientClusterCapacityFault(String::from(
-                            error_message,
-                        )),
+                        CreateClusterError::InsufficientClusterCapacityFault(err.msg),
                     )
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(CreateClusterError::InvalidClusterStateFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(CreateClusterError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
-                        CreateClusterError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        )),
+                        CreateClusterError::InvalidParameterGroupStateFault(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(CreateClusterError::InvalidParameterValue(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateClusterError::InvalidParameterValue(err.msg))
                 }
                 "InvalidVPCNetworkStateFault" => {
                     return RusotoError::Service(CreateClusterError::InvalidVPCNetworkStateFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NodeQuotaForClusterExceededFault" => {
                     return RusotoError::Service(
-                        CreateClusterError::NodeQuotaForClusterExceededFault(String::from(
-                            error_message,
-                        )),
+                        CreateClusterError::NodeQuotaForClusterExceededFault(err.msg),
                     )
                 }
                 "NodeQuotaForCustomerExceededFault" => {
                     return RusotoError::Service(
-                        CreateClusterError::NodeQuotaForCustomerExceededFault(String::from(
-                            error_message,
-                        )),
+                        CreateClusterError::NodeQuotaForCustomerExceededFault(err.msg),
                     )
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(CreateClusterError::ParameterGroupNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        CreateClusterError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        CreateClusterError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
                 "SubnetGroupNotFoundFault" => {
                     return RusotoError::Service(CreateClusterError::SubnetGroupNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TagQuotaPerResourceExceeded" => {
                     return RusotoError::Service(CreateClusterError::TagQuotaPerResourceExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1099,58 +1075,39 @@ pub enum CreateParameterGroupError {
 
 impl CreateParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateParameterGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
-                        CreateParameterGroupError::InvalidParameterCombination(String::from(
-                            error_message,
-                        )),
+                        CreateParameterGroupError::InvalidParameterCombination(err.msg),
                     )
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
-                        CreateParameterGroupError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        )),
+                        CreateParameterGroupError::InvalidParameterGroupStateFault(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateParameterGroupError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ParameterGroupAlreadyExistsFault" => {
                     return RusotoError::Service(
-                        CreateParameterGroupError::ParameterGroupAlreadyExistsFault(String::from(
-                            error_message,
-                        )),
+                        CreateParameterGroupError::ParameterGroupAlreadyExistsFault(err.msg),
                     )
                 }
                 "ParameterGroupQuotaExceededFault" => {
                     return RusotoError::Service(
-                        CreateParameterGroupError::ParameterGroupQuotaExceededFault(String::from(
-                            error_message,
-                        )),
+                        CreateParameterGroupError::ParameterGroupQuotaExceededFault(err.msg),
                     )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1191,49 +1148,32 @@ pub enum CreateSubnetGroupError {
 
 impl CreateSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSubnetGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidSubnet" => {
-                    return RusotoError::Service(CreateSubnetGroupError::InvalidSubnet(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateSubnetGroupError::InvalidSubnet(err.msg))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        CreateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        CreateSubnetGroupError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
                 "SubnetGroupAlreadyExistsFault" => {
                     return RusotoError::Service(
-                        CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(
-                            error_message,
-                        )),
+                        CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(err.msg),
                     )
                 }
                 "SubnetGroupQuotaExceededFault" => {
                     return RusotoError::Service(
-                        CreateSubnetGroupError::SubnetGroupQuotaExceededFault(String::from(
-                            error_message,
-                        )),
+                        CreateSubnetGroupError::SubnetGroupQuotaExceededFault(err.msg),
                     )
                 }
                 "SubnetQuotaExceededFault" => {
                     return RusotoError::Service(CreateSubnetGroupError::SubnetQuotaExceededFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1275,58 +1215,39 @@ pub enum DecreaseReplicationFactorError {
 
 impl DecreaseReplicationFactorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DecreaseReplicationFactorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(
-                        DecreaseReplicationFactorError::ClusterNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DecreaseReplicationFactorError::ClusterNotFoundFault(err.msg),
                     )
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(
-                        DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(
-                            error_message,
-                        )),
+                        DecreaseReplicationFactorError::InvalidClusterStateFault(err.msg),
                     )
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
-                        DecreaseReplicationFactorError::InvalidParameterCombination(String::from(
-                            error_message,
-                        )),
+                        DecreaseReplicationFactorError::InvalidParameterCombination(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DecreaseReplicationFactorError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DecreaseReplicationFactorError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NodeNotFoundFault" => {
                     return RusotoError::Service(DecreaseReplicationFactorError::NodeNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
-                            String::from(error_message),
-                        ),
+                        DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1367,45 +1288,30 @@ pub enum DeleteClusterError {
 
 impl DeleteClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
-                    return RusotoError::Service(DeleteClusterError::ClusterNotFoundFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteClusterError::ClusterNotFoundFault(err.msg))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(DeleteClusterError::InvalidClusterStateFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(DeleteClusterError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(DeleteClusterError::InvalidParameterValue(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteClusterError::InvalidParameterValue(err.msg))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DeleteClusterError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DeleteClusterError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1445,51 +1351,34 @@ pub enum DeleteParameterGroupError {
 
 impl DeleteParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteParameterGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
-                        DeleteParameterGroupError::InvalidParameterCombination(String::from(
-                            error_message,
-                        )),
+                        DeleteParameterGroupError::InvalidParameterCombination(err.msg),
                     )
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
-                        DeleteParameterGroupError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        )),
+                        DeleteParameterGroupError::InvalidParameterGroupStateFault(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteParameterGroupError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(
-                        DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DeleteParameterGroupError::ParameterGroupNotFoundFault(err.msg),
                     )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1524,35 +1413,24 @@ pub enum DeleteSubnetGroupError {
 
 impl DeleteSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubnetGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
                 "SubnetGroupInUseFault" => {
                     return RusotoError::Service(DeleteSubnetGroupError::SubnetGroupInUseFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SubnetGroupNotFoundFault" => {
                     return RusotoError::Service(DeleteSubnetGroupError::SubnetGroupNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1588,42 +1466,29 @@ pub enum DescribeClustersError {
 
 impl DescribeClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(DescribeClustersError::ClusterNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
-                        DescribeClustersError::InvalidParameterCombination(String::from(
-                            error_message,
-                        )),
+                        DescribeClustersError::InvalidParameterCombination(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeClustersError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DescribeClustersError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DescribeClustersError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1658,39 +1523,24 @@ pub enum DescribeDefaultParametersError {
 
 impl DescribeDefaultParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDefaultParametersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
-                        DescribeDefaultParametersError::InvalidParameterCombination(String::from(
-                            error_message,
-                        )),
+                        DescribeDefaultParametersError::InvalidParameterCombination(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DescribeDefaultParametersError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DescribeDefaultParametersError::InvalidParameterValue(err.msg),
                     )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(
-                            String::from(error_message),
-                        ),
+                        DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1724,35 +1574,24 @@ pub enum DescribeEventsError {
 
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(DescribeEventsError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeEventsError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DescribeEventsError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DescribeEventsError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1788,46 +1627,29 @@ pub enum DescribeParameterGroupsError {
 
 impl DescribeParameterGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeParameterGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
-                        DescribeParameterGroupsError::InvalidParameterCombination(String::from(
-                            error_message,
-                        )),
+                        DescribeParameterGroupsError::InvalidParameterCombination(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DescribeParameterGroupsError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DescribeParameterGroupsError::InvalidParameterValue(err.msg),
                     )
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(
-                        DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DescribeParameterGroupsError::ParameterGroupNotFoundFault(err.msg),
                     )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1864,44 +1686,29 @@ pub enum DescribeParametersError {
 
 impl DescribeParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeParametersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
-                        DescribeParametersError::InvalidParameterCombination(String::from(
-                            error_message,
-                        )),
+                        DescribeParametersError::InvalidParameterCombination(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeParametersError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(
-                        DescribeParametersError::ParameterGroupNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DescribeParametersError::ParameterGroupNotFoundFault(err.msg),
                     )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DescribeParametersError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DescribeParametersError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1933,32 +1740,19 @@ pub enum DescribeSubnetGroupsError {
 
 impl DescribeSubnetGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSubnetGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
                 "SubnetGroupNotFoundFault" => {
                     return RusotoError::Service(
-                        DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        DescribeSubnetGroupsError::SubnetGroupNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2003,81 +1797,54 @@ pub enum IncreaseReplicationFactorError {
 
 impl IncreaseReplicationFactorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IncreaseReplicationFactorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(
-                        IncreaseReplicationFactorError::ClusterNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        IncreaseReplicationFactorError::ClusterNotFoundFault(err.msg),
                     )
                 }
                 "InsufficientClusterCapacityFault" => {
                     return RusotoError::Service(
-                        IncreaseReplicationFactorError::InsufficientClusterCapacityFault(
-                            String::from(error_message),
-                        ),
+                        IncreaseReplicationFactorError::InsufficientClusterCapacityFault(err.msg),
                     )
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(
-                        IncreaseReplicationFactorError::InvalidClusterStateFault(String::from(
-                            error_message,
-                        )),
+                        IncreaseReplicationFactorError::InvalidClusterStateFault(err.msg),
                     )
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
-                        IncreaseReplicationFactorError::InvalidParameterCombination(String::from(
-                            error_message,
-                        )),
+                        IncreaseReplicationFactorError::InvalidParameterCombination(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        IncreaseReplicationFactorError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        IncreaseReplicationFactorError::InvalidParameterValue(err.msg),
                     )
                 }
                 "InvalidVPCNetworkStateFault" => {
                     return RusotoError::Service(
-                        IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(String::from(
-                            error_message,
-                        )),
+                        IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(err.msg),
                     )
                 }
                 "NodeQuotaForClusterExceededFault" => {
                     return RusotoError::Service(
-                        IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(
-                            String::from(error_message),
-                        ),
+                        IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(err.msg),
                     )
                 }
                 "NodeQuotaForCustomerExceededFault" => {
                     return RusotoError::Service(
-                        IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(
-                            String::from(error_message),
-                        ),
+                        IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(err.msg),
                     )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
-                            String::from(error_message),
-                        ),
+                        IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2123,48 +1890,31 @@ pub enum ListTagsError {
 
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
-                    return RusotoError::Service(ListTagsError::ClusterNotFoundFault(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::ClusterNotFoundFault(err.msg))
                 }
                 "InvalidARNFault" => {
-                    return RusotoError::Service(ListTagsError::InvalidARNFault(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::InvalidARNFault(err.msg))
                 }
                 "InvalidClusterStateFault" => {
-                    return RusotoError::Service(ListTagsError::InvalidClusterStateFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsError::InvalidClusterStateFault(err.msg))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(ListTagsError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(ListTagsError::InvalidParameterValue(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsError::InvalidParameterValue(err.msg))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(ListTagsError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2207,48 +1957,31 @@ pub enum RebootNodeError {
 
 impl RebootNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootNodeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
-                    return RusotoError::Service(RebootNodeError::ClusterNotFoundFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RebootNodeError::ClusterNotFoundFault(err.msg))
                 }
                 "InvalidClusterStateFault" => {
-                    return RusotoError::Service(RebootNodeError::InvalidClusterStateFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RebootNodeError::InvalidClusterStateFault(err.msg))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(RebootNodeError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(RebootNodeError::InvalidParameterValue(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RebootNodeError::InvalidParameterValue(err.msg))
                 }
                 "NodeNotFoundFault" => {
-                    return RusotoError::Service(RebootNodeError::NodeNotFoundFault(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RebootNodeError::NodeNotFoundFault(err.msg))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(RebootNodeError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2293,53 +2026,38 @@ pub enum TagResourceError {
 
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
-                    return RusotoError::Service(TagResourceError::ClusterNotFoundFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagResourceError::ClusterNotFoundFault(err.msg))
                 }
                 "InvalidARNFault" => {
-                    return RusotoError::Service(TagResourceError::InvalidARNFault(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::InvalidARNFault(err.msg))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(TagResourceError::InvalidClusterStateFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(TagResourceError::InvalidParameterValue(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagResourceError::InvalidParameterValue(err.msg))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(TagResourceError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TagQuotaPerResourceExceeded" => {
                     return RusotoError::Service(TagResourceError::TagQuotaPerResourceExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2385,55 +2103,36 @@ pub enum UntagResourceError {
 
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
-                    return RusotoError::Service(UntagResourceError::ClusterNotFoundFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::ClusterNotFoundFault(err.msg))
                 }
                 "InvalidARNFault" => {
-                    return RusotoError::Service(UntagResourceError::InvalidARNFault(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::InvalidARNFault(err.msg))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(UntagResourceError::InvalidClusterStateFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(UntagResourceError::InvalidParameterValue(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::InvalidParameterValue(err.msg))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        UntagResourceError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        UntagResourceError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
                 "TagNotFoundFault" => {
-                    return RusotoError::Service(UntagResourceError::TagNotFoundFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::TagNotFoundFault(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2479,57 +2178,40 @@ pub enum UpdateClusterError {
 
 impl UpdateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
-                    return RusotoError::Service(UpdateClusterError::ClusterNotFoundFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateClusterError::ClusterNotFoundFault(err.msg))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(UpdateClusterError::InvalidClusterStateFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(UpdateClusterError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
-                        UpdateClusterError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        )),
+                        UpdateClusterError::InvalidParameterGroupStateFault(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(UpdateClusterError::InvalidParameterValue(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateClusterError::InvalidParameterValue(err.msg))
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(UpdateClusterError::ParameterGroupNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        UpdateClusterError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        UpdateClusterError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2571,51 +2253,34 @@ pub enum UpdateParameterGroupError {
 
 impl UpdateParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateParameterGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
-                        UpdateParameterGroupError::InvalidParameterCombination(String::from(
-                            error_message,
-                        )),
+                        UpdateParameterGroupError::InvalidParameterCombination(err.msg),
                     )
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
-                        UpdateParameterGroupError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        )),
+                        UpdateParameterGroupError::InvalidParameterGroupStateFault(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateParameterGroupError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(
-                        UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        UpdateParameterGroupError::ParameterGroupNotFoundFault(err.msg),
                     )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2655,45 +2320,30 @@ pub enum UpdateSubnetGroupError {
 
 impl UpdateSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSubnetGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidSubnet" => {
-                    return RusotoError::Service(UpdateSubnetGroupError::InvalidSubnet(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateSubnetGroupError::InvalidSubnet(err.msg))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
-                        UpdateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                            error_message,
-                        )),
+                        UpdateSubnetGroupError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
                 "SubnetGroupNotFoundFault" => {
                     return RusotoError::Service(UpdateSubnetGroupError::SubnetGroupNotFoundFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SubnetInUse" => {
-                    return RusotoError::Service(UpdateSubnetGroupError::SubnetInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateSubnetGroupError::SubnetInUse(err.msg))
                 }
                 "SubnetQuotaExceededFault" => {
                     return RusotoError::Service(UpdateSubnetGroupError::SubnetQuotaExceededFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

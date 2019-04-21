@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddAttachmentsToSetRequest {
@@ -730,45 +729,34 @@ pub enum AddAttachmentsToSetError {
 
 impl AddAttachmentsToSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddAttachmentsToSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AttachmentLimitExceeded" => {
                     return RusotoError::Service(AddAttachmentsToSetError::AttachmentLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AttachmentSetExpired" => {
                     return RusotoError::Service(AddAttachmentsToSetError::AttachmentSetExpired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AttachmentSetIdNotFound" => {
                     return RusotoError::Service(AddAttachmentsToSetError::AttachmentSetIdNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AttachmentSetSizeLimitExceeded" => {
                     return RusotoError::Service(
-                        AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(AddAttachmentsToSetError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -806,40 +794,29 @@ pub enum AddCommunicationToCaseError {
 
 impl AddCommunicationToCaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCommunicationToCaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AttachmentSetExpired" => {
                     return RusotoError::Service(AddCommunicationToCaseError::AttachmentSetExpired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AttachmentSetIdNotFound" => {
                     return RusotoError::Service(
-                        AddCommunicationToCaseError::AttachmentSetIdNotFound(String::from(
-                            error_message,
-                        )),
+                        AddCommunicationToCaseError::AttachmentSetIdNotFound(err.msg),
                     )
                 }
                 "CaseIdNotFound" => {
                     return RusotoError::Service(AddCommunicationToCaseError::CaseIdNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(AddCommunicationToCaseError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -876,38 +853,23 @@ pub enum CreateCaseError {
 
 impl CreateCaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AttachmentSetExpired" => {
-                    return RusotoError::Service(CreateCaseError::AttachmentSetExpired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateCaseError::AttachmentSetExpired(err.msg))
                 }
                 "AttachmentSetIdNotFound" => {
-                    return RusotoError::Service(CreateCaseError::AttachmentSetIdNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateCaseError::AttachmentSetIdNotFound(err.msg))
                 }
                 "CaseCreationLimitExceeded" => {
                     return RusotoError::Service(CreateCaseError::CaseCreationLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(CreateCaseError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateCaseError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -942,35 +904,24 @@ pub enum DescribeAttachmentError {
 
 impl DescribeAttachmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAttachmentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AttachmentIdNotFound" => {
                     return RusotoError::Service(DescribeAttachmentError::AttachmentIdNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DescribeAttachmentLimitExceeded" => {
                     return RusotoError::Service(
-                        DescribeAttachmentError::DescribeAttachmentLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        DescribeAttachmentError::DescribeAttachmentLimitExceeded(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeAttachmentError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1002,28 +953,15 @@ pub enum DescribeCasesError {
 
 impl DescribeCasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCasesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CaseIdNotFound" => {
-                    return RusotoError::Service(DescribeCasesError::CaseIdNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeCasesError::CaseIdNotFound(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DescribeCasesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeCasesError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1054,28 +992,19 @@ pub enum DescribeCommunicationsError {
 
 impl DescribeCommunicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCommunicationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CaseIdNotFound" => {
                     return RusotoError::Service(DescribeCommunicationsError::CaseIdNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeCommunicationsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1104,23 +1033,14 @@ pub enum DescribeServicesError {
 
 impl DescribeServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeServicesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1148,23 +1068,14 @@ pub enum DescribeSeverityLevelsError {
 
 impl DescribeSeverityLevelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSeverityLevelsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeSeverityLevelsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1194,25 +1105,16 @@ impl DescribeTrustedAdvisorCheckRefreshStatusesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTrustedAdvisorCheckRefreshStatusesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeTrustedAdvisorCheckRefreshStatusesError::InternalServerError(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1244,25 +1146,14 @@ impl DescribeTrustedAdvisorCheckResultError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTrustedAdvisorCheckResultError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeTrustedAdvisorCheckResultError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeTrustedAdvisorCheckResultError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1292,25 +1183,14 @@ impl DescribeTrustedAdvisorCheckSummariesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTrustedAdvisorCheckSummariesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeTrustedAdvisorCheckSummariesError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DescribeTrustedAdvisorCheckSummariesError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1340,25 +1220,14 @@ impl DescribeTrustedAdvisorChecksError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTrustedAdvisorChecksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeTrustedAdvisorChecksError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeTrustedAdvisorChecksError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1388,25 +1257,14 @@ impl RefreshTrustedAdvisorCheckError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RefreshTrustedAdvisorCheckError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        RefreshTrustedAdvisorCheckError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        RefreshTrustedAdvisorCheckError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1436,28 +1294,15 @@ pub enum ResolveCaseError {
 
 impl ResolveCaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResolveCaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CaseIdNotFound" => {
-                    return RusotoError::Service(ResolveCaseError::CaseIdNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResolveCaseError::CaseIdNotFound(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(ResolveCaseError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResolveCaseError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

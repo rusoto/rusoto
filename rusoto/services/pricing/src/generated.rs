@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>The values of a given attribute, such as <code>Throughput Optimized HDD</code> or <code>Provisioned IOPS</code> for the <code>Amazon EC2</code> <code>volumeType</code> attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -189,43 +188,24 @@ pub enum DescribeServicesError {
 
 impl DescribeServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ExpiredNextTokenException" => {
-                    return RusotoError::Service(DescribeServicesError::ExpiredNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeServicesError::ExpiredNextToken(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeServicesError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeServicesError::InternalError(err.msg))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(DescribeServicesError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeServicesError::InvalidNextToken(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeServicesError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeServicesError::InvalidParameter(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeServicesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeServicesError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -265,43 +245,24 @@ pub enum GetAttributeValuesError {
 
 impl GetAttributeValuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAttributeValuesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ExpiredNextTokenException" => {
-                    return RusotoError::Service(GetAttributeValuesError::ExpiredNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAttributeValuesError::ExpiredNextToken(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetAttributeValuesError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAttributeValuesError::InternalError(err.msg))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(GetAttributeValuesError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAttributeValuesError::InvalidNextToken(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetAttributeValuesError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAttributeValuesError::InvalidParameter(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetAttributeValuesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetAttributeValuesError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -341,43 +302,24 @@ pub enum GetProductsError {
 
 impl GetProductsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProductsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ExpiredNextTokenException" => {
-                    return RusotoError::Service(GetProductsError::ExpiredNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProductsError::ExpiredNextToken(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetProductsError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProductsError::InternalError(err.msg))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(GetProductsError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProductsError::InvalidNextToken(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetProductsError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProductsError::InvalidParameter(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetProductsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProductsError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

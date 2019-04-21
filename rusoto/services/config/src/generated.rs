@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>A collection of accounts and regions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccountAggregationSource {
@@ -2102,25 +2101,16 @@ impl BatchGetAggregateResourceConfigError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchGetAggregateResourceConfigError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
                         BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2148,25 +2138,14 @@ pub enum BatchGetResourceConfigError {
 
 impl BatchGetResourceConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetResourceConfigError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        BatchGetResourceConfigError::NoAvailableConfigurationRecorder(
-                            String::from(error_message),
-                        ),
+                        BatchGetResourceConfigError::NoAvailableConfigurationRecorder(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2196,25 +2175,14 @@ impl DeleteAggregationAuthorizationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteAggregationAuthorizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DeleteAggregationAuthorizationError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DeleteAggregationAuthorizationError::InvalidParameterValue(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2244,28 +2212,15 @@ pub enum DeleteConfigRuleError {
 
 impl DeleteConfigRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchConfigRuleException" => {
-                    return RusotoError::Service(DeleteConfigRuleError::NoSuchConfigRule(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteConfigRuleError::NoSuchConfigRule(err.msg))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(DeleteConfigRuleError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteConfigRuleError::ResourceInUse(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2296,25 +2251,14 @@ impl DeleteConfigurationAggregatorError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationAggregatorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
-                        DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
-                        ),
+                        DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2344,25 +2288,14 @@ impl DeleteConfigurationRecorderError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationRecorderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(
-                            String::from(error_message),
-                        ),
+                        DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2392,30 +2325,19 @@ pub enum DeleteDeliveryChannelError {
 
 impl DeleteDeliveryChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeliveryChannelError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "LastDeliveryChannelDeleteFailedException" => {
                     return RusotoError::Service(
-                        DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(String::from(
-                            error_message,
-                        )),
+                        DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(err.msg),
                     )
                 }
                 "NoSuchDeliveryChannelException" => {
                     return RusotoError::Service(DeleteDeliveryChannelError::NoSuchDeliveryChannel(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2446,28 +2368,19 @@ pub enum DeleteEvaluationResultsError {
 
 impl DeleteEvaluationResultsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEvaluationResultsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(DeleteEvaluationResultsError::NoSuchConfigRule(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteEvaluationResultsError::ResourceInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2498,25 +2411,14 @@ impl DeletePendingAggregationRequestError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeletePendingAggregationRequestError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DeletePendingAggregationRequestError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DeletePendingAggregationRequestError::InvalidParameterValue(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2548,32 +2450,19 @@ impl DeleteRetentionConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteRetentionConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DeleteRetentionConfigurationError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DeleteRetentionConfigurationError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NoSuchRetentionConfigurationException" => {
                     return RusotoError::Service(
-                        DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(
-                            String::from(error_message),
-                        ),
+                        DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2606,37 +2495,24 @@ pub enum DeliverConfigSnapshotError {
 
 impl DeliverConfigSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeliverConfigSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(String::from(
-                            error_message,
-                        )),
+                        DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(err.msg),
                     )
                 }
                 "NoRunningConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        DeliverConfigSnapshotError::NoRunningConfigurationRecorder(String::from(
-                            error_message,
-                        )),
+                        DeliverConfigSnapshotError::NoRunningConfigurationRecorder(err.msg),
                     )
                 }
                 "NoSuchDeliveryChannelException" => {
                     return RusotoError::Service(DeliverConfigSnapshotError::NoSuchDeliveryChannel(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2672,37 +2548,24 @@ impl DescribeAggregateComplianceByConfigRulesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAggregateComplianceByConfigRulesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
-                        DescribeAggregateComplianceByConfigRulesError::InvalidLimit(String::from(
-                            error_message,
-                        )),
+                        DescribeAggregateComplianceByConfigRulesError::InvalidLimit(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(
-                            String::from(error_message),
-                        ),
+                        DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(err.msg),
                     )
                 }
                 "NoSuchConfigurationAggregatorException" => return RusotoError::Service(
                     DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
-                        String::from(error_message),
+                        err.msg,
                     ),
                 ),
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2740,39 +2603,24 @@ impl DescribeAggregationAuthorizationsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAggregationAuthorizationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
-                        DescribeAggregationAuthorizationsError::InvalidLimit(String::from(
-                            error_message,
-                        )),
+                        DescribeAggregationAuthorizationsError::InvalidLimit(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        DescribeAggregationAuthorizationsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeAggregationAuthorizationsError::InvalidNextToken(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DescribeAggregationAuthorizationsError::InvalidParameterValue(
-                            String::from(error_message),
-                        ),
+                        DescribeAggregationAuthorizationsError::InvalidParameterValue(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2808,39 +2656,24 @@ impl DescribeComplianceByConfigRuleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeComplianceByConfigRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeComplianceByConfigRuleError::InvalidNextToken(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DescribeComplianceByConfigRuleError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(
-                        DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(
-                            error_message,
-                        )),
+                        DescribeComplianceByConfigRuleError::NoSuchConfigRule(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2874,32 +2707,19 @@ impl DescribeComplianceByResourceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeComplianceByResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        DescribeComplianceByResourceError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeComplianceByResourceError::InvalidNextToken(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DescribeComplianceByResourceError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DescribeComplianceByResourceError::InvalidParameterValue(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2934,39 +2754,24 @@ impl DescribeConfigRuleEvaluationStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigRuleEvaluationStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeConfigRuleEvaluationStatusError::InvalidNextToken(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(
-                            String::from(error_message),
-                        ),
+                        DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(
-                        DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(
-                            error_message,
-                        )),
+                        DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2998,28 +2803,19 @@ pub enum DescribeConfigRulesError {
 
 impl DescribeConfigRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigRulesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeConfigRulesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(DescribeConfigRulesError::NoSuchConfigRule(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3056,22 +2852,13 @@ impl DescribeConfigurationAggregatorSourcesStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationAggregatorSourcesStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                                "InvalidLimitException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(String::from(error_message))),
-"InvalidNextTokenException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(String::from(error_message))),
-"InvalidParameterValueException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(String::from(error_message))),
-"NoSuchConfigurationAggregatorException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(String::from(error_message))),
-"ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                                "InvalidLimitException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(err.msg)),
+"InvalidNextTokenException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(err.msg)),
+"InvalidParameterValueException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(err.msg)),
+"NoSuchConfigurationAggregatorException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(err.msg)),
+"ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
                             }
         }
@@ -3114,46 +2901,31 @@ impl DescribeConfigurationAggregatorsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationAggregatorsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
-                        DescribeConfigurationAggregatorsError::InvalidLimit(String::from(
-                            error_message,
-                        )),
+                        DescribeConfigurationAggregatorsError::InvalidLimit(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        DescribeConfigurationAggregatorsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeConfigurationAggregatorsError::InvalidNextToken(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DescribeConfigurationAggregatorsError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DescribeConfigurationAggregatorsError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
                         DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3188,25 +2960,16 @@ impl DescribeConfigurationRecorderStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationRecorderStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
                         DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3238,25 +3001,14 @@ impl DescribeConfigurationRecordersError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationRecordersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(
-                            String::from(error_message),
-                        ),
+                        DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3286,25 +3038,14 @@ impl DescribeDeliveryChannelStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDeliveryChannelStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchDeliveryChannelException" => {
                     return RusotoError::Service(
-                        DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(String::from(
-                            error_message,
-                        )),
+                        DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3332,25 +3073,14 @@ pub enum DescribeDeliveryChannelsError {
 
 impl DescribeDeliveryChannelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeliveryChannelsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchDeliveryChannelException" => {
                     return RusotoError::Service(
-                        DescribeDeliveryChannelsError::NoSuchDeliveryChannel(String::from(
-                            error_message,
-                        )),
+                        DescribeDeliveryChannelsError::NoSuchDeliveryChannel(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3384,39 +3114,24 @@ impl DescribePendingAggregationRequestsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePendingAggregationRequestsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
-                        DescribePendingAggregationRequestsError::InvalidLimit(String::from(
-                            error_message,
-                        )),
+                        DescribePendingAggregationRequestsError::InvalidLimit(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        DescribePendingAggregationRequestsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribePendingAggregationRequestsError::InvalidNextToken(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DescribePendingAggregationRequestsError::InvalidParameterValue(
-                            String::from(error_message),
-                        ),
+                        DescribePendingAggregationRequestsError::InvalidParameterValue(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3452,39 +3167,24 @@ impl DescribeRetentionConfigurationsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRetentionConfigurationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        DescribeRetentionConfigurationsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeRetentionConfigurationsError::InvalidNextToken(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        DescribeRetentionConfigurationsError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        DescribeRetentionConfigurationsError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NoSuchRetentionConfigurationException" => {
                     return RusotoError::Service(
-                        DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(
-                            String::from(error_message),
-                        ),
+                        DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3520,37 +3220,24 @@ impl GetAggregateComplianceDetailsByConfigRuleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAggregateComplianceDetailsByConfigRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
-                        GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(String::from(
-                            error_message,
-                        )),
+                        GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(
-                            String::from(error_message),
-                        ),
+                        GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(err.msg),
                     )
                 }
                 "NoSuchConfigurationAggregatorException" => return RusotoError::Service(
                     GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(
-                        String::from(error_message),
+                        err.msg,
                     ),
                 ),
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3588,39 +3275,26 @@ impl GetAggregateConfigRuleComplianceSummaryError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAggregateConfigRuleComplianceSummaryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
-                        GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(String::from(
-                            error_message,
-                        )),
+                        GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(
-                            String::from(error_message),
-                        ),
+                        GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(err.msg),
                     )
                 }
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
                         GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3658,39 +3332,26 @@ impl GetAggregateDiscoveredResourceCountsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAggregateDiscoveredResourceCountsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
-                        GetAggregateDiscoveredResourceCountsError::InvalidLimit(String::from(
-                            error_message,
-                        )),
+                        GetAggregateDiscoveredResourceCountsError::InvalidLimit(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        GetAggregateDiscoveredResourceCountsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        GetAggregateDiscoveredResourceCountsError::InvalidNextToken(err.msg),
                     )
                 }
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
                         GetAggregateDiscoveredResourceCountsError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3728,39 +3389,24 @@ impl GetAggregateResourceConfigError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAggregateResourceConfigError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
-                        GetAggregateResourceConfigError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
-                        ),
+                        GetAggregateResourceConfigError::NoSuchConfigurationAggregator(err.msg),
                     )
                 }
                 "OversizedConfigurationItemException" => {
                     return RusotoError::Service(
-                        GetAggregateResourceConfigError::OversizedConfigurationItem(String::from(
-                            error_message,
-                        )),
+                        GetAggregateResourceConfigError::OversizedConfigurationItem(err.msg),
                     )
                 }
                 "ResourceNotDiscoveredException" => {
                     return RusotoError::Service(
-                        GetAggregateResourceConfigError::ResourceNotDiscovered(String::from(
-                            error_message,
-                        )),
+                        GetAggregateResourceConfigError::ResourceNotDiscovered(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3796,39 +3442,24 @@ impl GetComplianceDetailsByConfigRuleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetComplianceDetailsByConfigRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        GetComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        GetComplianceDetailsByConfigRuleError::InvalidNextToken(err.msg),
                     )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        GetComplianceDetailsByConfigRuleError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        GetComplianceDetailsByConfigRuleError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(
-                        GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(String::from(
-                            error_message,
-                        )),
+                        GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3860,25 +3491,14 @@ impl GetComplianceDetailsByResourceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetComplianceDetailsByResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        GetComplianceDetailsByResourceError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        GetComplianceDetailsByResourceError::InvalidParameterValue(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3905,18 +3525,9 @@ impl GetComplianceSummaryByConfigRuleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetComplianceSummaryByConfigRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3944,25 +3555,14 @@ impl GetComplianceSummaryByResourceTypeError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetComplianceSummaryByResourceTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        GetComplianceSummaryByResourceTypeError::InvalidParameterValue(
-                            String::from(error_message),
-                        ),
+                        GetComplianceSummaryByResourceTypeError::InvalidParameterValue(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3994,30 +3594,19 @@ impl GetDiscoveredResourceCountsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDiscoveredResourceCountsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(GetDiscoveredResourceCountsError::InvalidLimit(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        GetDiscoveredResourceCountsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        GetDiscoveredResourceCountsError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4054,47 +3643,34 @@ pub enum GetResourceConfigHistoryError {
 
 impl GetResourceConfigHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceConfigHistoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(GetResourceConfigHistoryError::InvalidLimit(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetResourceConfigHistoryError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidTimeRangeException" => {
                     return RusotoError::Service(GetResourceConfigHistoryError::InvalidTimeRange(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(
-                            String::from(error_message),
-                        ),
+                        GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(err.msg),
                     )
                 }
                 "ResourceNotDiscoveredException" => {
                     return RusotoError::Service(
-                        GetResourceConfigHistoryError::ResourceNotDiscovered(String::from(
-                            error_message,
-                        )),
+                        GetResourceConfigHistoryError::ResourceNotDiscovered(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4132,39 +3708,26 @@ impl ListAggregateDiscoveredResourcesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAggregateDiscoveredResourcesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
-                        ListAggregateDiscoveredResourcesError::InvalidLimit(String::from(
-                            error_message,
-                        )),
+                        ListAggregateDiscoveredResourcesError::InvalidLimit(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        ListAggregateDiscoveredResourcesError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        ListAggregateDiscoveredResourcesError::InvalidNextToken(err.msg),
                     )
                 }
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
                         ListAggregateDiscoveredResourcesError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4200,35 +3763,24 @@ pub enum ListDiscoveredResourcesError {
 
 impl ListDiscoveredResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDiscoveredResourcesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(ListDiscoveredResourcesError::InvalidLimit(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDiscoveredResourcesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(
-                            String::from(error_message),
-                        ),
+                        ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4260,25 +3812,14 @@ impl PutAggregationAuthorizationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<PutAggregationAuthorizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        PutAggregationAuthorizationError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        PutAggregationAuthorizationError::InvalidParameterValue(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4314,47 +3855,30 @@ pub enum PutConfigRuleError {
 
 impl PutConfigRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConfigRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(PutConfigRuleError::InsufficientPermissions(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(PutConfigRuleError::InvalidParameterValue(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutConfigRuleError::InvalidParameterValue(err.msg))
                 }
                 "MaxNumberOfConfigRulesExceededException" => {
                     return RusotoError::Service(
-                        PutConfigRuleError::MaxNumberOfConfigRulesExceeded(String::from(
-                            error_message,
-                        )),
+                        PutConfigRuleError::MaxNumberOfConfigRulesExceeded(err.msg),
                     )
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        PutConfigRuleError::NoAvailableConfigurationRecorder(String::from(
-                            error_message,
-                        )),
+                        PutConfigRuleError::NoAvailableConfigurationRecorder(err.msg),
                     )
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(PutConfigRuleError::ResourceInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutConfigRuleError::ResourceInUse(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4398,56 +3922,39 @@ impl PutConfigurationAggregatorError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<PutConfigurationAggregatorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        PutConfigurationAggregatorError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        PutConfigurationAggregatorError::InvalidParameterValue(err.msg),
                     )
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(PutConfigurationAggregatorError::InvalidRole(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutConfigurationAggregatorError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoAvailableOrganizationException" => {
                     return RusotoError::Service(
-                        PutConfigurationAggregatorError::NoAvailableOrganization(String::from(
-                            error_message,
-                        )),
+                        PutConfigurationAggregatorError::NoAvailableOrganization(err.msg),
                     )
                 }
                 "OrganizationAccessDeniedException" => {
                     return RusotoError::Service(
-                        PutConfigurationAggregatorError::OrganizationAccessDenied(String::from(
-                            error_message,
-                        )),
+                        PutConfigurationAggregatorError::OrganizationAccessDenied(err.msg),
                     )
                 }
                 "OrganizationAllFeaturesNotEnabledException" => {
                     return RusotoError::Service(
-                        PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(
-                            String::from(error_message),
-                        ),
+                        PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4486,44 +3993,31 @@ pub enum PutConfigurationRecorderError {
 
 impl PutConfigurationRecorderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConfigurationRecorderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidConfigurationRecorderNameException" => {
                     return RusotoError::Service(
-                        PutConfigurationRecorderError::InvalidConfigurationRecorderName(
-                            String::from(error_message),
-                        ),
+                        PutConfigurationRecorderError::InvalidConfigurationRecorderName(err.msg),
                     )
                 }
                 "InvalidRecordingGroupException" => {
                     return RusotoError::Service(
-                        PutConfigurationRecorderError::InvalidRecordingGroup(String::from(
-                            error_message,
-                        )),
+                        PutConfigurationRecorderError::InvalidRecordingGroup(err.msg),
                     )
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(PutConfigurationRecorderError::InvalidRole(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MaxNumberOfConfigurationRecordersExceededException" => {
                     return RusotoError::Service(
                         PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4568,61 +4062,42 @@ pub enum PutDeliveryChannelError {
 
 impl PutDeliveryChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutDeliveryChannelError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InsufficientDeliveryPolicyException" => {
                     return RusotoError::Service(
-                        PutDeliveryChannelError::InsufficientDeliveryPolicy(String::from(
-                            error_message,
-                        )),
+                        PutDeliveryChannelError::InsufficientDeliveryPolicy(err.msg),
                     )
                 }
                 "InvalidDeliveryChannelNameException" => {
                     return RusotoError::Service(
-                        PutDeliveryChannelError::InvalidDeliveryChannelName(String::from(
-                            error_message,
-                        )),
+                        PutDeliveryChannelError::InvalidDeliveryChannelName(err.msg),
                     )
                 }
                 "InvalidS3KeyPrefixException" => {
                     return RusotoError::Service(PutDeliveryChannelError::InvalidS3KeyPrefix(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSNSTopicARNException" => {
                     return RusotoError::Service(PutDeliveryChannelError::InvalidSNSTopicARN(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MaxNumberOfDeliveryChannelsExceededException" => {
                     return RusotoError::Service(
-                        PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(String::from(
-                            error_message,
-                        )),
+                        PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(err.msg),
                     )
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        PutDeliveryChannelError::NoAvailableConfigurationRecorder(String::from(
-                            error_message,
-                        )),
+                        PutDeliveryChannelError::NoAvailableConfigurationRecorder(err.msg),
                     )
                 }
                 "NoSuchBucketException" => {
-                    return RusotoError::Service(PutDeliveryChannelError::NoSuchBucket(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutDeliveryChannelError::NoSuchBucket(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4660,33 +4135,20 @@ pub enum PutEvaluationsError {
 
 impl PutEvaluationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEvaluationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(PutEvaluationsError::InvalidParameterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResultTokenException" => {
-                    return RusotoError::Service(PutEvaluationsError::InvalidResultToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutEvaluationsError::InvalidResultToken(err.msg))
                 }
                 "NoSuchConfigRuleException" => {
-                    return RusotoError::Service(PutEvaluationsError::NoSuchConfigRule(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutEvaluationsError::NoSuchConfigRule(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4718,32 +4180,21 @@ pub enum PutRetentionConfigurationError {
 
 impl PutRetentionConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRetentionConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        PutRetentionConfigurationError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        PutRetentionConfigurationError::InvalidParameterValue(err.msg),
                     )
                 }
                 "MaxNumberOfRetentionConfigurationsExceededException" => {
                     return RusotoError::Service(
                         PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4782,40 +4233,29 @@ impl StartConfigRulesEvaluationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartConfigRulesEvaluationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
-                        StartConfigRulesEvaluationError::InvalidParameterValue(String::from(
-                            error_message,
-                        )),
+                        StartConfigRulesEvaluationError::InvalidParameterValue(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartConfigRulesEvaluationError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(StartConfigRulesEvaluationError::NoSuchConfigRule(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StartConfigRulesEvaluationError::ResourceInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4850,32 +4290,19 @@ impl StartConfigurationRecorderError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartConfigurationRecorderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoAvailableDeliveryChannelException" => {
                     return RusotoError::Service(
-                        StartConfigurationRecorderError::NoAvailableDeliveryChannel(String::from(
-                            error_message,
-                        )),
+                        StartConfigurationRecorderError::NoAvailableDeliveryChannel(err.msg),
                     )
                 }
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        StartConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
-                            error_message,
-                        )),
+                        StartConfigurationRecorderError::NoSuchConfigurationRecorder(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4904,25 +4331,14 @@ pub enum StopConfigurationRecorderError {
 
 impl StopConfigurationRecorderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopConfigurationRecorderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
-                        StopConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
-                            error_message,
-                        )),
+                        StopConfigurationRecorderError::NoSuchConfigurationRecorder(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

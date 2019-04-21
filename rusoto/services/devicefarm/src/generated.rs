@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>A container for account-level settings within AWS Device Farm.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2933,38 +2932,21 @@ pub enum CreateDevicePoolError {
 
 impl CreateDevicePoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDevicePoolError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(CreateDevicePoolError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDevicePoolError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateDevicePoolError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDevicePoolError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateDevicePoolError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDevicePoolError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(CreateDevicePoolError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDevicePoolError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3001,38 +2983,23 @@ pub enum CreateInstanceProfileError {
 
 impl CreateInstanceProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstanceProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(CreateInstanceProfileError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstanceProfileError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateInstanceProfileError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstanceProfileError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateInstanceProfileError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstanceProfileError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateInstanceProfileError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3069,38 +3036,21 @@ pub enum CreateNetworkProfileError {
 
 impl CreateNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNetworkProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(CreateNetworkProfileError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateNetworkProfileError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateNetworkProfileError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateNetworkProfileError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateNetworkProfileError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateNetworkProfileError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(CreateNetworkProfileError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateNetworkProfileError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3137,38 +3087,21 @@ pub enum CreateProjectError {
 
 impl CreateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(CreateProjectError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateProjectError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateProjectError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateProjectError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateProjectError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateProjectError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(CreateProjectError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateProjectError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3205,38 +3138,25 @@ pub enum CreateRemoteAccessSessionError {
 
 impl CreateRemoteAccessSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRemoteAccessSessionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(CreateRemoteAccessSessionError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRemoteAccessSessionError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateRemoteAccessSessionError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateRemoteAccessSessionError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRemoteAccessSessionError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateRemoteAccessSessionError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3273,38 +3193,21 @@ pub enum CreateUploadError {
 
 impl CreateUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUploadError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(CreateUploadError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateUploadError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateUploadError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateUploadError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateUploadError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateUploadError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(CreateUploadError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateUploadError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3339,33 +3242,22 @@ pub enum CreateVPCEConfigurationError {
 
 impl CreateVPCEConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVPCEConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(CreateVPCEConfigurationError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateVPCEConfigurationError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateVPCEConfigurationError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateVPCEConfigurationError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3401,38 +3293,21 @@ pub enum DeleteDevicePoolError {
 
 impl DeleteDevicePoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDevicePoolError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(DeleteDevicePoolError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDevicePoolError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteDevicePoolError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDevicePoolError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteDevicePoolError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDevicePoolError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(DeleteDevicePoolError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDevicePoolError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3469,38 +3344,23 @@ pub enum DeleteInstanceProfileError {
 
 impl DeleteInstanceProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(DeleteInstanceProfileError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInstanceProfileError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteInstanceProfileError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInstanceProfileError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteInstanceProfileError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInstanceProfileError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteInstanceProfileError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3537,38 +3397,21 @@ pub enum DeleteNetworkProfileError {
 
 impl DeleteNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNetworkProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(DeleteNetworkProfileError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteNetworkProfileError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteNetworkProfileError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteNetworkProfileError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteNetworkProfileError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteNetworkProfileError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(DeleteNetworkProfileError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteNetworkProfileError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3605,38 +3448,21 @@ pub enum DeleteProjectError {
 
 impl DeleteProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(DeleteProjectError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteProjectError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteProjectError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteProjectError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteProjectError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteProjectError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(DeleteProjectError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteProjectError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3673,38 +3499,25 @@ pub enum DeleteRemoteAccessSessionError {
 
 impl DeleteRemoteAccessSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRemoteAccessSessionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(DeleteRemoteAccessSessionError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRemoteAccessSessionError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteRemoteAccessSessionError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteRemoteAccessSessionError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRemoteAccessSessionError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteRemoteAccessSessionError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3741,38 +3554,21 @@ pub enum DeleteRunError {
 
 impl DeleteRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(DeleteRunError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRunError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteRunError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRunError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteRunError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRunError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(DeleteRunError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRunError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3809,38 +3605,21 @@ pub enum DeleteUploadError {
 
 impl DeleteUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUploadError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(DeleteUploadError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUploadError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteUploadError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUploadError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteUploadError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUploadError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(DeleteUploadError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUploadError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3877,38 +3656,25 @@ pub enum DeleteVPCEConfigurationError {
 
 impl DeleteVPCEConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVPCEConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(DeleteVPCEConfigurationError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteVPCEConfigurationError::Argument(err.msg))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DeleteVPCEConfigurationError::InvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteVPCEConfigurationError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteVPCEConfigurationError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(DeleteVPCEConfigurationError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3945,38 +3711,21 @@ pub enum GetAccountSettingsError {
 
 impl GetAccountSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountSettingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetAccountSettingsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetAccountSettingsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetAccountSettingsError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAccountSettingsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetAccountSettingsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetAccountSettingsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetAccountSettingsError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAccountSettingsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4013,38 +3762,21 @@ pub enum GetDeviceError {
 
 impl GetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetDeviceError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetDeviceError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDeviceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetDeviceError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4081,38 +3813,21 @@ pub enum GetDeviceInstanceError {
 
 impl GetDeviceInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetDeviceInstanceError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceInstanceError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetDeviceInstanceError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDeviceInstanceError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDeviceInstanceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceInstanceError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetDeviceInstanceError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDeviceInstanceError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4149,38 +3864,21 @@ pub enum GetDevicePoolError {
 
 impl GetDevicePoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevicePoolError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetDevicePoolError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDevicePoolError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetDevicePoolError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDevicePoolError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDevicePoolError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDevicePoolError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetDevicePoolError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDevicePoolError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4219,38 +3917,25 @@ impl GetDevicePoolCompatibilityError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDevicePoolCompatibilityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetDevicePoolCompatibilityError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDevicePoolCompatibilityError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetDevicePoolCompatibilityError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDevicePoolCompatibilityError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDevicePoolCompatibilityError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetDevicePoolCompatibilityError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4287,38 +3972,21 @@ pub enum GetInstanceProfileError {
 
 impl GetInstanceProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetInstanceProfileError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceProfileError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetInstanceProfileError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceProfileError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetInstanceProfileError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceProfileError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetInstanceProfileError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceProfileError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4355,34 +4023,17 @@ pub enum GetJobError {
 
 impl GetJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ArgumentException" => {
-                    return RusotoError::Service(GetJobError::Argument(String::from(error_message)))
-                }
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ArgumentException" => return RusotoError::Service(GetJobError::Argument(err.msg)),
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetJobError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobError::LimitExceeded(err.msg))
                 }
-                "NotFoundException" => {
-                    return RusotoError::Service(GetJobError::NotFound(String::from(error_message)))
-                }
+                "NotFoundException" => return RusotoError::Service(GetJobError::NotFound(err.msg)),
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetJobError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4419,38 +4070,21 @@ pub enum GetNetworkProfileError {
 
 impl GetNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNetworkProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetNetworkProfileError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetNetworkProfileError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetNetworkProfileError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetNetworkProfileError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetNetworkProfileError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetNetworkProfileError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetNetworkProfileError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetNetworkProfileError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4489,43 +4123,24 @@ pub enum GetOfferingStatusError {
 
 impl GetOfferingStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOfferingStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetOfferingStatusError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOfferingStatusError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetOfferingStatusError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetOfferingStatusError::LimitExceeded(err.msg))
                 }
                 "NotEligibleException" => {
-                    return RusotoError::Service(GetOfferingStatusError::NotEligible(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOfferingStatusError::NotEligible(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetOfferingStatusError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOfferingStatusError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetOfferingStatusError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetOfferingStatusError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4563,38 +4178,21 @@ pub enum GetProjectError {
 
 impl GetProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProjectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetProjectError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProjectError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetProjectError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProjectError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetProjectError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProjectError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetProjectError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProjectError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4631,38 +4229,25 @@ pub enum GetRemoteAccessSessionError {
 
 impl GetRemoteAccessSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRemoteAccessSessionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetRemoteAccessSessionError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRemoteAccessSessionError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetRemoteAccessSessionError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetRemoteAccessSessionError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRemoteAccessSessionError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(GetRemoteAccessSessionError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4699,34 +4284,17 @@ pub enum GetRunError {
 
 impl GetRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ArgumentException" => {
-                    return RusotoError::Service(GetRunError::Argument(String::from(error_message)))
-                }
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ArgumentException" => return RusotoError::Service(GetRunError::Argument(err.msg)),
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetRunError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRunError::LimitExceeded(err.msg))
                 }
-                "NotFoundException" => {
-                    return RusotoError::Service(GetRunError::NotFound(String::from(error_message)))
-                }
+                "NotFoundException" => return RusotoError::Service(GetRunError::NotFound(err.msg)),
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetRunError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRunError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4763,38 +4331,21 @@ pub enum GetSuiteError {
 
 impl GetSuiteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSuiteError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetSuiteError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetSuiteError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetSuiteError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetSuiteError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetSuiteError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetSuiteError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetSuiteError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetSuiteError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4831,38 +4382,21 @@ pub enum GetTestError {
 
 impl GetTestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTestError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetTestError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTestError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetTestError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTestError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetTestError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTestError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetTestError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTestError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4899,38 +4433,21 @@ pub enum GetUploadError {
 
 impl GetUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUploadError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetUploadError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUploadError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetUploadError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUploadError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetUploadError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUploadError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetUploadError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUploadError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4965,33 +4482,18 @@ pub enum GetVPCEConfigurationError {
 
 impl GetVPCEConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVPCEConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(GetVPCEConfigurationError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetVPCEConfigurationError::Argument(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetVPCEConfigurationError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetVPCEConfigurationError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(GetVPCEConfigurationError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetVPCEConfigurationError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5029,38 +4531,29 @@ impl InstallToRemoteAccessSessionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<InstallToRemoteAccessSessionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(InstallToRemoteAccessSessionError::Argument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(InstallToRemoteAccessSessionError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(InstallToRemoteAccessSessionError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(InstallToRemoteAccessSessionError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5097,38 +4590,21 @@ pub enum ListArtifactsError {
 
 impl ListArtifactsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArtifactsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListArtifactsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListArtifactsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListArtifactsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListArtifactsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListArtifactsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListArtifactsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListArtifactsError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListArtifactsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5165,38 +4641,21 @@ pub enum ListDeviceInstancesError {
 
 impl ListDeviceInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListDeviceInstancesError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDeviceInstancesError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListDeviceInstancesError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListDeviceInstancesError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListDeviceInstancesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDeviceInstancesError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListDeviceInstancesError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListDeviceInstancesError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5233,38 +4692,21 @@ pub enum ListDevicePoolsError {
 
 impl ListDevicePoolsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicePoolsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListDevicePoolsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicePoolsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListDevicePoolsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicePoolsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListDevicePoolsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicePoolsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListDevicePoolsError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListDevicePoolsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5301,38 +4743,21 @@ pub enum ListDevicesError {
 
 impl ListDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListDevicesError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListDevicesError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListDevicesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListDevicesError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5369,38 +4794,21 @@ pub enum ListInstanceProfilesError {
 
 impl ListInstanceProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstanceProfilesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListInstanceProfilesError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListInstanceProfilesError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListInstanceProfilesError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListInstanceProfilesError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListInstanceProfilesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListInstanceProfilesError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListInstanceProfilesError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListInstanceProfilesError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5437,38 +4845,21 @@ pub enum ListJobsError {
 
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListJobsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListJobsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListJobsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListJobsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListJobsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListJobsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListJobsError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListJobsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5505,38 +4896,21 @@ pub enum ListNetworkProfilesError {
 
 impl ListNetworkProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNetworkProfilesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListNetworkProfilesError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListNetworkProfilesError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListNetworkProfilesError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListNetworkProfilesError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListNetworkProfilesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListNetworkProfilesError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListNetworkProfilesError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListNetworkProfilesError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5575,43 +4949,28 @@ pub enum ListOfferingPromotionsError {
 
 impl ListOfferingPromotionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingPromotionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListOfferingPromotionsError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListOfferingPromotionsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListOfferingPromotionsError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotEligibleException" => {
-                    return RusotoError::Service(ListOfferingPromotionsError::NotEligible(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListOfferingPromotionsError::NotEligible(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListOfferingPromotionsError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListOfferingPromotionsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListOfferingPromotionsError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5651,43 +5010,30 @@ pub enum ListOfferingTransactionsError {
 
 impl ListOfferingTransactionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingTransactionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListOfferingTransactionsError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListOfferingTransactionsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListOfferingTransactionsError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotEligibleException" => {
                     return RusotoError::Service(ListOfferingTransactionsError::NotEligible(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListOfferingTransactionsError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListOfferingTransactionsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListOfferingTransactionsError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5727,43 +5073,24 @@ pub enum ListOfferingsError {
 
 impl ListOfferingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListOfferingsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListOfferingsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::LimitExceeded(err.msg))
                 }
                 "NotEligibleException" => {
-                    return RusotoError::Service(ListOfferingsError::NotEligible(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::NotEligible(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListOfferingsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListOfferingsError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5801,38 +5128,21 @@ pub enum ListProjectsError {
 
 impl ListProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListProjectsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListProjectsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListProjectsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListProjectsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListProjectsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListProjectsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListProjectsError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListProjectsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5869,38 +5179,25 @@ pub enum ListRemoteAccessSessionsError {
 
 impl ListRemoteAccessSessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRemoteAccessSessionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListRemoteAccessSessionsError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRemoteAccessSessionsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListRemoteAccessSessionsError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListRemoteAccessSessionsError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRemoteAccessSessionsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListRemoteAccessSessionsError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5937,38 +5234,21 @@ pub enum ListRunsError {
 
 impl ListRunsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRunsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListRunsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRunsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListRunsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRunsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListRunsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRunsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListRunsError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRunsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6005,38 +5285,21 @@ pub enum ListSamplesError {
 
 impl ListSamplesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSamplesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListSamplesError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSamplesError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListSamplesError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSamplesError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListSamplesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSamplesError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListSamplesError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSamplesError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6073,38 +5336,21 @@ pub enum ListSuitesError {
 
 impl ListSuitesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSuitesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListSuitesError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSuitesError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListSuitesError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSuitesError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListSuitesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSuitesError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListSuitesError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSuitesError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6141,38 +5387,21 @@ pub enum ListTestsError {
 
 impl ListTestsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTestsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListTestsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTestsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListTestsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTestsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListTestsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTestsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListTestsError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTestsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6209,38 +5438,21 @@ pub enum ListUniqueProblemsError {
 
 impl ListUniqueProblemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUniqueProblemsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListUniqueProblemsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUniqueProblemsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListUniqueProblemsError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUniqueProblemsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListUniqueProblemsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUniqueProblemsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListUniqueProblemsError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUniqueProblemsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6277,38 +5489,21 @@ pub enum ListUploadsError {
 
 impl ListUploadsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUploadsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListUploadsError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUploadsError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListUploadsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUploadsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListUploadsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUploadsError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ListUploadsError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUploadsError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6341,28 +5536,17 @@ pub enum ListVPCEConfigurationsError {
 
 impl ListVPCEConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVPCEConfigurationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ListVPCEConfigurationsError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListVPCEConfigurationsError::Argument(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(ListVPCEConfigurationsError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6399,43 +5583,24 @@ pub enum PurchaseOfferingError {
 
 impl PurchaseOfferingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurchaseOfferingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(PurchaseOfferingError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PurchaseOfferingError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PurchaseOfferingError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PurchaseOfferingError::LimitExceeded(err.msg))
                 }
                 "NotEligibleException" => {
-                    return RusotoError::Service(PurchaseOfferingError::NotEligible(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PurchaseOfferingError::NotEligible(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(PurchaseOfferingError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PurchaseOfferingError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(PurchaseOfferingError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PurchaseOfferingError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6475,43 +5640,24 @@ pub enum RenewOfferingError {
 
 impl RenewOfferingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RenewOfferingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(RenewOfferingError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RenewOfferingError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(RenewOfferingError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RenewOfferingError::LimitExceeded(err.msg))
                 }
                 "NotEligibleException" => {
-                    return RusotoError::Service(RenewOfferingError::NotEligible(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RenewOfferingError::NotEligible(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(RenewOfferingError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RenewOfferingError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(RenewOfferingError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RenewOfferingError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6551,43 +5697,24 @@ pub enum ScheduleRunError {
 
 impl ScheduleRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ScheduleRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(ScheduleRunError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ScheduleRunError::Argument(err.msg))
                 }
                 "IdempotencyException" => {
-                    return RusotoError::Service(ScheduleRunError::Idempotency(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ScheduleRunError::Idempotency(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ScheduleRunError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ScheduleRunError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ScheduleRunError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ScheduleRunError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(ScheduleRunError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ScheduleRunError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6625,38 +5752,21 @@ pub enum StopJobError {
 
 impl StopJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(StopJobError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopJobError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(StopJobError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopJobError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StopJobError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopJobError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(StopJobError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopJobError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6693,38 +5803,25 @@ pub enum StopRemoteAccessSessionError {
 
 impl StopRemoteAccessSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRemoteAccessSessionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(StopRemoteAccessSessionError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopRemoteAccessSessionError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StopRemoteAccessSessionError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StopRemoteAccessSessionError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopRemoteAccessSessionError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(StopRemoteAccessSessionError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6761,38 +5858,21 @@ pub enum StopRunError {
 
 impl StopRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(StopRunError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopRunError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(StopRunError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopRunError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StopRunError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopRunError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(StopRunError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopRunError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6829,38 +5909,21 @@ pub enum UpdateDeviceInstanceError {
 
 impl UpdateDeviceInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(UpdateDeviceInstanceError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDeviceInstanceError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateDeviceInstanceError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceInstanceError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateDeviceInstanceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDeviceInstanceError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(UpdateDeviceInstanceError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceInstanceError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6897,38 +5960,21 @@ pub enum UpdateDevicePoolError {
 
 impl UpdateDevicePoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDevicePoolError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(UpdateDevicePoolError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDevicePoolError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateDevicePoolError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDevicePoolError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateDevicePoolError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDevicePoolError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(UpdateDevicePoolError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDevicePoolError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6965,38 +6011,23 @@ pub enum UpdateInstanceProfileError {
 
 impl UpdateInstanceProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInstanceProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(UpdateInstanceProfileError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateInstanceProfileError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateInstanceProfileError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateInstanceProfileError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateInstanceProfileError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateInstanceProfileError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(UpdateInstanceProfileError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7033,38 +6064,21 @@ pub enum UpdateNetworkProfileError {
 
 impl UpdateNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNetworkProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(UpdateNetworkProfileError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateNetworkProfileError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateNetworkProfileError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateNetworkProfileError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateNetworkProfileError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateNetworkProfileError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(UpdateNetworkProfileError::ServiceAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateNetworkProfileError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7101,38 +6115,21 @@ pub enum UpdateProjectError {
 
 impl UpdateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(UpdateProjectError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateProjectError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateProjectError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateProjectError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateProjectError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateProjectError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(UpdateProjectError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateProjectError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7169,38 +6166,21 @@ pub enum UpdateUploadError {
 
 impl UpdateUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUploadError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(UpdateUploadError::Argument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateUploadError::Argument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateUploadError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateUploadError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateUploadError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateUploadError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
-                    return RusotoError::Service(UpdateUploadError::ServiceAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateUploadError::ServiceAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7237,38 +6217,25 @@ pub enum UpdateVPCEConfigurationError {
 
 impl UpdateVPCEConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVPCEConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ArgumentException" => {
-                    return RusotoError::Service(UpdateVPCEConfigurationError::Argument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateVPCEConfigurationError::Argument(err.msg))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(UpdateVPCEConfigurationError::InvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateVPCEConfigurationError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateVPCEConfigurationError::NotFound(err.msg))
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(UpdateVPCEConfigurationError::ServiceAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

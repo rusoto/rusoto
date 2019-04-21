@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToCertificateRequest {
     /// <p>String that contains the ARN of the ACM certificate to which the tag is to be applied. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>. </p>
@@ -542,38 +541,23 @@ pub enum AddTagsToCertificateError {
 
 impl AddTagsToCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(AddTagsToCertificateError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToCertificateError::InvalidArn(err.msg))
                 }
                 "InvalidTagException" => {
-                    return RusotoError::Service(AddTagsToCertificateError::InvalidTag(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToCertificateError::InvalidTag(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddTagsToCertificateError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyTagsException" => {
-                    return RusotoError::Service(AddTagsToCertificateError::TooManyTags(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToCertificateError::TooManyTags(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -608,33 +592,18 @@ pub enum DeleteCertificateError {
 
 impl DeleteCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(DeleteCertificateError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteCertificateError::InvalidArn(err.msg))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(DeleteCertificateError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteCertificateError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteCertificateError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteCertificateError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -666,28 +635,17 @@ pub enum DescribeCertificateError {
 
 impl DescribeCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(DescribeCertificateError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeCertificateError::InvalidArn(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeCertificateError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -720,33 +678,18 @@ pub enum ExportCertificateError {
 
 impl ExportCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(ExportCertificateError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ExportCertificateError::InvalidArn(err.msg))
                 }
                 "RequestInProgressException" => {
-                    return RusotoError::Service(ExportCertificateError::RequestInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ExportCertificateError::RequestInProgress(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ExportCertificateError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ExportCertificateError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -780,33 +723,18 @@ pub enum GetCertificateError {
 
 impl GetCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(GetCertificateError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCertificateError::InvalidArn(err.msg))
                 }
                 "RequestInProgressException" => {
-                    return RusotoError::Service(GetCertificateError::RequestInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCertificateError::RequestInProgress(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetCertificateError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCertificateError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -838,28 +766,15 @@ pub enum ImportCertificateError {
 
 impl ImportCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "LimitExceededException" => {
-                    return RusotoError::Service(ImportCertificateError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportCertificateError::LimitExceeded(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ImportCertificateError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportCertificateError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -885,18 +800,9 @@ pub enum ListCertificatesError {}
 
 impl ListCertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCertificatesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -924,28 +830,17 @@ pub enum ListTagsForCertificateError {
 
 impl ListTagsForCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListTagsForCertificateError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForCertificateError::InvalidArn(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForCertificateError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -978,33 +873,24 @@ pub enum RemoveTagsFromCertificateError {
 
 impl RemoveTagsFromCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(RemoveTagsFromCertificateError::InvalidArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(RemoveTagsFromCertificateError::InvalidTag(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RemoveTagsFromCertificateError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1038,35 +924,20 @@ pub enum RequestCertificateError {
 
 impl RequestCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RequestCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(RequestCertificateError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RequestCertificateError::InvalidArn(err.msg))
                 }
                 "InvalidDomainValidationOptionsException" => {
                     return RusotoError::Service(
-                        RequestCertificateError::InvalidDomainValidationOptions(String::from(
-                            error_message,
-                        )),
+                        RequestCertificateError::InvalidDomainValidationOptions(err.msg),
                     )
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(RequestCertificateError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RequestCertificateError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1102,40 +973,25 @@ pub enum ResendValidationEmailError {
 
 impl ResendValidationEmailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResendValidationEmailError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(ResendValidationEmailError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResendValidationEmailError::InvalidArn(err.msg))
                 }
                 "InvalidDomainValidationOptionsException" => {
                     return RusotoError::Service(
-                        ResendValidationEmailError::InvalidDomainValidationOptions(String::from(
-                            error_message,
-                        )),
+                        ResendValidationEmailError::InvalidDomainValidationOptions(err.msg),
                     )
                 }
                 "InvalidStateException" => {
-                    return RusotoError::Service(ResendValidationEmailError::InvalidState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResendValidationEmailError::InvalidState(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ResendValidationEmailError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1172,38 +1028,27 @@ pub enum UpdateCertificateOptionsError {
 
 impl UpdateCertificateOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCertificateOptionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArnException" => {
-                    return RusotoError::Service(UpdateCertificateOptionsError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateCertificateOptionsError::InvalidArn(err.msg))
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(UpdateCertificateOptionsError::InvalidState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateCertificateOptionsError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateCertificateOptionsError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

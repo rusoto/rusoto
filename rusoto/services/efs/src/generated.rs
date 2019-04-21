@@ -22,10 +22,9 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFileSystemRequest {
     /// <p>A string of up to 64 ASCII characters. Amazon EFS uses this to ensure idempotent creation.</p>
@@ -435,65 +434,38 @@ pub enum CreateFileSystemError {
 }
 
 impl CreateFileSystemError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFileSystemError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
-                    return RusotoError::Service(CreateFileSystemError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateFileSystemError::BadRequest(err.msg))
                 }
                 "FileSystemAlreadyExists" => {
                     return RusotoError::Service(CreateFileSystemError::FileSystemAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "FileSystemLimitExceeded" => {
                     return RusotoError::Service(CreateFileSystemError::FileSystemLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InsufficientThroughputCapacity" => {
                     return RusotoError::Service(
-                        CreateFileSystemError::InsufficientThroughputCapacity(String::from(
-                            error_message,
-                        )),
+                        CreateFileSystemError::InsufficientThroughputCapacity(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateFileSystemError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThroughputLimitExceeded" => {
                     return RusotoError::Service(CreateFileSystemError::ThroughputLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -547,101 +519,64 @@ pub enum CreateMountTargetError {
 }
 
 impl CreateMountTargetError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMountTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
-                    return RusotoError::Service(CreateMountTargetError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateMountTargetError::BadRequest(err.msg))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(CreateMountTargetError::FileSystemNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "IncorrectFileSystemLifeCycleState" => {
                     return RusotoError::Service(
-                        CreateMountTargetError::IncorrectFileSystemLifeCycleState(String::from(
-                            error_message,
-                        )),
+                        CreateMountTargetError::IncorrectFileSystemLifeCycleState(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateMountTargetError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "IpAddressInUse" => {
-                    return RusotoError::Service(CreateMountTargetError::IpAddressInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateMountTargetError::IpAddressInUse(err.msg))
                 }
                 "MountTargetConflict" => {
                     return RusotoError::Service(CreateMountTargetError::MountTargetConflict(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NetworkInterfaceLimitExceeded" => {
                     return RusotoError::Service(
-                        CreateMountTargetError::NetworkInterfaceLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateMountTargetError::NetworkInterfaceLimitExceeded(err.msg),
                     )
                 }
                 "NoFreeAddressesInSubnet" => {
                     return RusotoError::Service(CreateMountTargetError::NoFreeAddressesInSubnet(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SecurityGroupLimitExceeded" => {
                     return RusotoError::Service(
-                        CreateMountTargetError::SecurityGroupLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateMountTargetError::SecurityGroupLimitExceeded(err.msg),
                     )
                 }
                 "SecurityGroupNotFound" => {
                     return RusotoError::Service(CreateMountTargetError::SecurityGroupNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SubnetNotFound" => {
-                    return RusotoError::Service(CreateMountTargetError::SubnetNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateMountTargetError::SubnetNotFound(err.msg))
                 }
                 "UnsupportedAvailabilityZone" => {
                     return RusotoError::Service(
-                        CreateMountTargetError::UnsupportedAvailabilityZone(String::from(
-                            error_message,
-                        )),
+                        CreateMountTargetError::UnsupportedAvailabilityZone(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -683,48 +618,17 @@ pub enum CreateTagsError {
 }
 
 impl CreateTagsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
-                "BadRequest" => {
-                    return RusotoError::Service(CreateTagsError::BadRequest(String::from(
-                        error_message,
-                    )))
-                }
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequest" => return RusotoError::Service(CreateTagsError::BadRequest(err.msg)),
                 "FileSystemNotFound" => {
-                    return RusotoError::Service(CreateTagsError::FileSystemNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTagsError::FileSystemNotFound(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(CreateTagsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTagsError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -759,53 +663,24 @@ pub enum DeleteFileSystemError {
 }
 
 impl DeleteFileSystemError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileSystemError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
-                    return RusotoError::Service(DeleteFileSystemError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteFileSystemError::BadRequest(err.msg))
                 }
                 "FileSystemInUse" => {
-                    return RusotoError::Service(DeleteFileSystemError::FileSystemInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteFileSystemError::FileSystemInUse(err.msg))
                 }
                 "FileSystemNotFound" => {
-                    return RusotoError::Service(DeleteFileSystemError::FileSystemNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteFileSystemError::FileSystemNotFound(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteFileSystemError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -841,53 +716,26 @@ pub enum DeleteMountTargetError {
 }
 
 impl DeleteMountTargetError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMountTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
-                    return RusotoError::Service(DeleteMountTargetError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteMountTargetError::BadRequest(err.msg))
                 }
                 "DependencyTimeout" => {
-                    return RusotoError::Service(DeleteMountTargetError::DependencyTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteMountTargetError::DependencyTimeout(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteMountTargetError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MountTargetNotFound" => {
                     return RusotoError::Service(DeleteMountTargetError::MountTargetNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -921,48 +769,17 @@ pub enum DeleteTagsError {
 }
 
 impl DeleteTagsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
-                "BadRequest" => {
-                    return RusotoError::Service(DeleteTagsError::BadRequest(String::from(
-                        error_message,
-                    )))
-                }
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequest" => return RusotoError::Service(DeleteTagsError::BadRequest(err.msg)),
                 "FileSystemNotFound" => {
-                    return RusotoError::Service(DeleteTagsError::FileSystemNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTagsError::FileSystemNotFound(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteTagsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTagsError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -995,48 +812,23 @@ pub enum DescribeFileSystemsError {
 }
 
 impl DescribeFileSystemsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFileSystemsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
-                    return RusotoError::Service(DescribeFileSystemsError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeFileSystemsError::BadRequest(err.msg))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(DescribeFileSystemsError::FileSystemNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeFileSystemsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1069,54 +861,27 @@ pub enum DescribeLifecycleConfigurationError {
 }
 
 impl DescribeLifecycleConfigurationError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLifecycleConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeLifecycleConfigurationError::BadRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(
-                        DescribeLifecycleConfigurationError::FileSystemNotFound(String::from(
-                            error_message,
-                        )),
+                        DescribeLifecycleConfigurationError::FileSystemNotFound(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeLifecycleConfigurationError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeLifecycleConfigurationError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1151,63 +916,32 @@ pub enum DescribeMountTargetSecurityGroupsError {
 }
 
 impl DescribeMountTargetSecurityGroupsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMountTargetSecurityGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(
-                        DescribeMountTargetSecurityGroupsError::BadRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeMountTargetSecurityGroupsError::BadRequest(err.msg),
                     )
                 }
                 "IncorrectMountTargetState" => {
                     return RusotoError::Service(
-                        DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(
-                            String::from(error_message),
-                        ),
+                        DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeMountTargetSecurityGroupsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeMountTargetSecurityGroupsError::InternalServerError(err.msg),
                     )
                 }
                 "MountTargetNotFound" => {
                     return RusotoError::Service(
-                        DescribeMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
-                            error_message,
-                        )),
+                        DescribeMountTargetSecurityGroupsError::MountTargetNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1243,53 +977,28 @@ pub enum DescribeMountTargetsError {
 }
 
 impl DescribeMountTargetsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMountTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
-                    return RusotoError::Service(DescribeMountTargetsError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeMountTargetsError::BadRequest(err.msg))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(DescribeMountTargetsError::FileSystemNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeMountTargetsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MountTargetNotFound" => {
                     return RusotoError::Service(DescribeMountTargetsError::MountTargetNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1323,48 +1032,19 @@ pub enum DescribeTagsError {
 }
 
 impl DescribeTagsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
-                    return RusotoError::Service(DescribeTagsError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeTagsError::BadRequest(err.msg))
                 }
                 "FileSystemNotFound" => {
-                    return RusotoError::Service(DescribeTagsError::FileSystemNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTagsError::FileSystemNotFound(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DescribeTagsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTagsError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1403,75 +1083,42 @@ pub enum ModifyMountTargetSecurityGroupsError {
 }
 
 impl ModifyMountTargetSecurityGroupsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyMountTargetSecurityGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(ModifyMountTargetSecurityGroupsError::BadRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "IncorrectMountTargetState" => {
                     return RusotoError::Service(
-                        ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(
-                            String::from(error_message),
-                        ),
+                        ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        ModifyMountTargetSecurityGroupsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        ModifyMountTargetSecurityGroupsError::InternalServerError(err.msg),
                     )
                 }
                 "MountTargetNotFound" => {
                     return RusotoError::Service(
-                        ModifyMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
-                            error_message,
-                        )),
+                        ModifyMountTargetSecurityGroupsError::MountTargetNotFound(err.msg),
                     )
                 }
                 "SecurityGroupLimitExceeded" => {
                     return RusotoError::Service(
-                        ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(
-                            String::from(error_message),
-                        ),
+                        ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(err.msg),
                     )
                 }
                 "SecurityGroupNotFound" => {
                     return RusotoError::Service(
-                        ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(String::from(
-                            error_message,
-                        )),
+                        ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1509,59 +1156,30 @@ pub enum PutLifecycleConfigurationError {
 }
 
 impl PutLifecycleConfigurationError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLifecycleConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(PutLifecycleConfigurationError::BadRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "FileSystemNotFound" => {
                     return RusotoError::Service(
-                        PutLifecycleConfigurationError::FileSystemNotFound(String::from(
-                            error_message,
-                        )),
+                        PutLifecycleConfigurationError::FileSystemNotFound(err.msg),
                     )
                 }
                 "IncorrectFileSystemLifeCycleState" => {
                     return RusotoError::Service(
-                        PutLifecycleConfigurationError::IncorrectFileSystemLifeCycleState(
-                            String::from(error_message),
-                        ),
+                        PutLifecycleConfigurationError::IncorrectFileSystemLifeCycleState(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        PutLifecycleConfigurationError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        PutLifecycleConfigurationError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1603,72 +1221,39 @@ pub enum UpdateFileSystemError {
 }
 
 impl UpdateFileSystemError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFileSystemError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequest" => {
-                    return RusotoError::Service(UpdateFileSystemError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateFileSystemError::BadRequest(err.msg))
                 }
                 "FileSystemNotFound" => {
-                    return RusotoError::Service(UpdateFileSystemError::FileSystemNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateFileSystemError::FileSystemNotFound(err.msg))
                 }
                 "IncorrectFileSystemLifeCycleState" => {
                     return RusotoError::Service(
-                        UpdateFileSystemError::IncorrectFileSystemLifeCycleState(String::from(
-                            error_message,
-                        )),
+                        UpdateFileSystemError::IncorrectFileSystemLifeCycleState(err.msg),
                     )
                 }
                 "InsufficientThroughputCapacity" => {
                     return RusotoError::Service(
-                        UpdateFileSystemError::InsufficientThroughputCapacity(String::from(
-                            error_message,
-                        )),
+                        UpdateFileSystemError::InsufficientThroughputCapacity(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateFileSystemError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThroughputLimitExceeded" => {
                     return RusotoError::Service(UpdateFileSystemError::ThroughputLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequests" => {
-                    return RusotoError::Service(UpdateFileSystemError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateFileSystemError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

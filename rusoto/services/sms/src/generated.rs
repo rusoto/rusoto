@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Information about the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1179,43 +1178,24 @@ pub enum CreateAppError {
 
 impl CreateAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(CreateAppError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAppError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateAppError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAppError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(CreateAppError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAppError::MissingRequiredParameter(err.msg))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(CreateAppError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAppError::OperationNotPermitted(err.msg))
                 }
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(CreateAppError::UnauthorizedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAppError::UnauthorizedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1263,69 +1243,52 @@ pub enum CreateReplicationJobError {
 
 impl CreateReplicationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReplicationJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(CreateReplicationJobError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateReplicationJobError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateReplicationJobError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        CreateReplicationJobError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        CreateReplicationJobError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "NoConnectorsAvailableException" => {
                     return RusotoError::Service(CreateReplicationJobError::NoConnectorsAvailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateReplicationJobError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ReplicationJobAlreadyExistsException" => {
                     return RusotoError::Service(
-                        CreateReplicationJobError::ReplicationJobAlreadyExists(String::from(
-                            error_message,
-                        )),
+                        CreateReplicationJobError::ReplicationJobAlreadyExists(err.msg),
                     )
                 }
                 "ServerCannotBeReplicatedException" => {
                     return RusotoError::Service(
-                        CreateReplicationJobError::ServerCannotBeReplicated(String::from(
-                            error_message,
-                        )),
+                        CreateReplicationJobError::ServerCannotBeReplicated(err.msg),
                     )
                 }
                 "TemporarilyUnavailableException" => {
                     return RusotoError::Service(CreateReplicationJobError::TemporarilyUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(CreateReplicationJobError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1369,43 +1332,24 @@ pub enum DeleteAppError {
 
 impl DeleteAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(DeleteAppError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAppError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteAppError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAppError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(DeleteAppError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAppError::MissingRequiredParameter(err.msg))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(DeleteAppError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAppError::OperationNotPermitted(err.msg))
                 }
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(DeleteAppError::UnauthorizedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAppError::UnauthorizedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1447,51 +1391,34 @@ impl DeleteAppLaunchConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteAppLaunchConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
                     return RusotoError::Service(DeleteAppLaunchConfigurationError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        DeleteAppLaunchConfigurationError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        DeleteAppLaunchConfigurationError::InvalidParameter(err.msg),
                     )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        DeleteAppLaunchConfigurationError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        DeleteAppLaunchConfigurationError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
-                        DeleteAppLaunchConfigurationError::OperationNotPermitted(String::from(
-                            error_message,
-                        )),
+                        DeleteAppLaunchConfigurationError::OperationNotPermitted(err.msg),
                     )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
-                        DeleteAppLaunchConfigurationError::UnauthorizedOperation(String::from(
-                            error_message,
-                        )),
+                        DeleteAppLaunchConfigurationError::UnauthorizedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1533,53 +1460,34 @@ impl DeleteAppReplicationConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteAppReplicationConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
                     return RusotoError::Service(
-                        DeleteAppReplicationConfigurationError::InternalError(String::from(
-                            error_message,
-                        )),
+                        DeleteAppReplicationConfigurationError::InternalError(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        DeleteAppReplicationConfigurationError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        DeleteAppReplicationConfigurationError::InvalidParameter(err.msg),
                     )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        DeleteAppReplicationConfigurationError::MissingRequiredParameter(
-                            String::from(error_message),
-                        ),
+                        DeleteAppReplicationConfigurationError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
-                        DeleteAppReplicationConfigurationError::OperationNotPermitted(
-                            String::from(error_message),
-                        ),
+                        DeleteAppReplicationConfigurationError::OperationNotPermitted(err.msg),
                     )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
-                        DeleteAppReplicationConfigurationError::UnauthorizedOperation(
-                            String::from(error_message),
-                        ),
+                        DeleteAppReplicationConfigurationError::UnauthorizedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1619,45 +1527,34 @@ pub enum DeleteReplicationJobError {
 
 impl DeleteReplicationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReplicationJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteReplicationJobError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        DeleteReplicationJobError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        DeleteReplicationJobError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DeleteReplicationJobError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ReplicationJobNotFoundException" => {
                     return RusotoError::Service(DeleteReplicationJobError::ReplicationJobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(DeleteReplicationJobError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1695,40 +1592,29 @@ pub enum DeleteServerCatalogError {
 
 impl DeleteServerCatalogError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServerCatalogError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteServerCatalogError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        DeleteServerCatalogError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        DeleteServerCatalogError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DeleteServerCatalogError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(DeleteServerCatalogError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1765,40 +1651,29 @@ pub enum DisassociateConnectorError {
 
 impl DisassociateConnectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateConnectorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DisassociateConnectorError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        DisassociateConnectorError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        DisassociateConnectorError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DisassociateConnectorError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(DisassociateConnectorError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1837,43 +1712,30 @@ pub enum GenerateChangeSetError {
 
 impl GenerateChangeSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateChangeSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(GenerateChangeSetError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateChangeSetError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GenerateChangeSetError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateChangeSetError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(GenerateChangeSetError::MissingRequiredParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(GenerateChangeSetError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GenerateChangeSetError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1913,43 +1775,30 @@ pub enum GenerateTemplateError {
 
 impl GenerateTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateTemplateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(GenerateTemplateError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateTemplateError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GenerateTemplateError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GenerateTemplateError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(GenerateTemplateError::MissingRequiredParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(GenerateTemplateError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GenerateTemplateError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1989,43 +1838,24 @@ pub enum GetAppError {
 
 impl GetAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(GetAppError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetAppError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetAppError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetAppError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(GetAppError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAppError::MissingRequiredParameter(err.msg))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(GetAppError::OperationNotPermitted(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetAppError::OperationNotPermitted(err.msg))
                 }
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(GetAppError::UnauthorizedOperation(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetAppError::UnauthorizedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2065,49 +1895,34 @@ pub enum GetAppLaunchConfigurationError {
 
 impl GetAppLaunchConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppLaunchConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
                     return RusotoError::Service(GetAppLaunchConfigurationError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetAppLaunchConfigurationError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        GetAppLaunchConfigurationError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        GetAppLaunchConfigurationError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
-                        GetAppLaunchConfigurationError::OperationNotPermitted(String::from(
-                            error_message,
-                        )),
+                        GetAppLaunchConfigurationError::OperationNotPermitted(err.msg),
                     )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
-                        GetAppLaunchConfigurationError::UnauthorizedOperation(String::from(
-                            error_message,
-                        )),
+                        GetAppLaunchConfigurationError::UnauthorizedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2149,53 +1964,34 @@ impl GetAppReplicationConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAppReplicationConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
                     return RusotoError::Service(
-                        GetAppReplicationConfigurationError::InternalError(String::from(
-                            error_message,
-                        )),
+                        GetAppReplicationConfigurationError::InternalError(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        GetAppReplicationConfigurationError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        GetAppReplicationConfigurationError::InvalidParameter(err.msg),
                     )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        GetAppReplicationConfigurationError::MissingRequiredParameter(
-                            String::from(error_message),
-                        ),
+                        GetAppReplicationConfigurationError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
-                        GetAppReplicationConfigurationError::OperationNotPermitted(String::from(
-                            error_message,
-                        )),
+                        GetAppReplicationConfigurationError::OperationNotPermitted(err.msg),
                     )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
-                        GetAppReplicationConfigurationError::UnauthorizedOperation(String::from(
-                            error_message,
-                        )),
+                        GetAppReplicationConfigurationError::UnauthorizedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2227,23 +2023,12 @@ pub enum GetConnectorsError {
 
 impl GetConnectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectorsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(GetConnectorsError::UnauthorizedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetConnectorsError::UnauthorizedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2275,33 +2060,22 @@ pub enum GetReplicationJobsError {
 
 impl GetReplicationJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReplicationJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetReplicationJobsError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetReplicationJobsError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(GetReplicationJobsError::MissingRequiredParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GetReplicationJobsError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2335,33 +2109,22 @@ pub enum GetReplicationRunsError {
 
 impl GetReplicationRunsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReplicationRunsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetReplicationRunsError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetReplicationRunsError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(GetReplicationRunsError::MissingRequiredParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GetReplicationRunsError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2391,23 +2154,12 @@ pub enum GetServersError {
 
 impl GetServersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(GetServersError::UnauthorizedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetServersError::UnauthorizedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2443,45 +2195,34 @@ pub enum ImportServerCatalogError {
 
 impl ImportServerCatalogError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportServerCatalogError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ImportServerCatalogError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        ImportServerCatalogError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        ImportServerCatalogError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "NoConnectorsAvailableException" => {
                     return RusotoError::Service(ImportServerCatalogError::NoConnectorsAvailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(ImportServerCatalogError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(ImportServerCatalogError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2521,43 +2262,24 @@ pub enum LaunchAppError {
 
 impl LaunchAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LaunchAppError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(LaunchAppError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(LaunchAppError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(LaunchAppError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(LaunchAppError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(LaunchAppError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(LaunchAppError::MissingRequiredParameter(err.msg))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(LaunchAppError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(LaunchAppError::OperationNotPermitted(err.msg))
                 }
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(LaunchAppError::UnauthorizedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(LaunchAppError::UnauthorizedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2597,43 +2319,24 @@ pub enum ListAppsError {
 
 impl ListAppsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(ListAppsError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAppsError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListAppsError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAppsError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(ListAppsError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAppsError::MissingRequiredParameter(err.msg))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(ListAppsError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAppsError::OperationNotPermitted(err.msg))
                 }
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(ListAppsError::UnauthorizedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAppsError::UnauthorizedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2673,49 +2376,34 @@ pub enum PutAppLaunchConfigurationError {
 
 impl PutAppLaunchConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAppLaunchConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
                     return RusotoError::Service(PutAppLaunchConfigurationError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutAppLaunchConfigurationError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        PutAppLaunchConfigurationError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        PutAppLaunchConfigurationError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
-                        PutAppLaunchConfigurationError::OperationNotPermitted(String::from(
-                            error_message,
-                        )),
+                        PutAppLaunchConfigurationError::OperationNotPermitted(err.msg),
                     )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
-                        PutAppLaunchConfigurationError::UnauthorizedOperation(String::from(
-                            error_message,
-                        )),
+                        PutAppLaunchConfigurationError::UnauthorizedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2757,53 +2445,34 @@ impl PutAppReplicationConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<PutAppReplicationConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
                     return RusotoError::Service(
-                        PutAppReplicationConfigurationError::InternalError(String::from(
-                            error_message,
-                        )),
+                        PutAppReplicationConfigurationError::InternalError(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        PutAppReplicationConfigurationError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        PutAppReplicationConfigurationError::InvalidParameter(err.msg),
                     )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        PutAppReplicationConfigurationError::MissingRequiredParameter(
-                            String::from(error_message),
-                        ),
+                        PutAppReplicationConfigurationError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
-                        PutAppReplicationConfigurationError::OperationNotPermitted(String::from(
-                            error_message,
-                        )),
+                        PutAppReplicationConfigurationError::OperationNotPermitted(err.msg),
                     )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
-                        PutAppReplicationConfigurationError::UnauthorizedOperation(String::from(
-                            error_message,
-                        )),
+                        PutAppReplicationConfigurationError::UnauthorizedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2843,45 +2512,32 @@ pub enum StartAppReplicationError {
 
 impl StartAppReplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartAppReplicationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(StartAppReplicationError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartAppReplicationError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartAppReplicationError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        StartAppReplicationError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        StartAppReplicationError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StartAppReplicationError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(StartAppReplicationError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2923,53 +2579,34 @@ impl StartOnDemandReplicationRunError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartOnDemandReplicationRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        StartOnDemandReplicationRunError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        StartOnDemandReplicationRunError::InvalidParameter(err.msg),
                     )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        StartOnDemandReplicationRunError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        StartOnDemandReplicationRunError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
-                        StartOnDemandReplicationRunError::OperationNotPermitted(String::from(
-                            error_message,
-                        )),
+                        StartOnDemandReplicationRunError::OperationNotPermitted(err.msg),
                     )
                 }
                 "ReplicationRunLimitExceededException" => {
                     return RusotoError::Service(
-                        StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(
-                            String::from(error_message),
-                        ),
+                        StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(err.msg),
                     )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
-                        StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(
-                            error_message,
-                        )),
+                        StartOnDemandReplicationRunError::UnauthorizedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3009,43 +2646,30 @@ pub enum StopAppReplicationError {
 
 impl StopAppReplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopAppReplicationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(StopAppReplicationError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopAppReplicationError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(StopAppReplicationError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopAppReplicationError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(StopAppReplicationError::MissingRequiredParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StopAppReplicationError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(StopAppReplicationError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3085,43 +2709,26 @@ pub enum TerminateAppError {
 
 impl TerminateAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateAppError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(TerminateAppError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TerminateAppError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(TerminateAppError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TerminateAppError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(TerminateAppError::MissingRequiredParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(TerminateAppError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TerminateAppError::OperationNotPermitted(err.msg))
                 }
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(TerminateAppError::UnauthorizedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TerminateAppError::UnauthorizedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3161,43 +2768,24 @@ pub enum UpdateAppError {
 
 impl UpdateAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(UpdateAppError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateAppError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UpdateAppError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateAppError::InvalidParameter(err.msg))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(UpdateAppError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAppError::MissingRequiredParameter(err.msg))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(UpdateAppError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAppError::OperationNotPermitted(err.msg))
                 }
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(UpdateAppError::UnauthorizedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAppError::UnauthorizedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3243,62 +2831,47 @@ pub enum UpdateReplicationJobError {
 
 impl UpdateReplicationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateReplicationJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalError" => {
-                    return RusotoError::Service(UpdateReplicationJobError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateReplicationJobError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateReplicationJobError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
-                        UpdateReplicationJobError::MissingRequiredParameter(String::from(
-                            error_message,
-                        )),
+                        UpdateReplicationJobError::MissingRequiredParameter(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(UpdateReplicationJobError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ReplicationJobNotFoundException" => {
                     return RusotoError::Service(UpdateReplicationJobError::ReplicationJobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerCannotBeReplicatedException" => {
                     return RusotoError::Service(
-                        UpdateReplicationJobError::ServerCannotBeReplicated(String::from(
-                            error_message,
-                        )),
+                        UpdateReplicationJobError::ServerCannotBeReplicated(err.msg),
                     )
                 }
                 "TemporarilyUnavailableException" => {
                     return RusotoError::Service(UpdateReplicationJobError::TemporarilyUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(UpdateReplicationJobError::UnauthorizedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

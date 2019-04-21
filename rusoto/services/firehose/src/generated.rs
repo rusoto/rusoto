@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Describes hints for the buffering to perform before delivering data to the destination. These options are treated as hints, and therefore Kinesis Data Firehose might choose to use different values when it is optimal.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BufferingHints {
@@ -1450,33 +1449,20 @@ pub enum CreateDeliveryStreamError {
 
 impl CreateDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeliveryStreamError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(CreateDeliveryStreamError::InvalidArgument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateDeliveryStreamError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeliveryStreamError::LimitExceeded(err.msg))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(CreateDeliveryStreamError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeliveryStreamError::ResourceInUse(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1508,28 +1494,17 @@ pub enum DeleteDeliveryStreamError {
 
 impl DeleteDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeliveryStreamError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ResourceInUseException" => {
-                    return RusotoError::Service(DeleteDeliveryStreamError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDeliveryStreamError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteDeliveryStreamError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1558,23 +1533,14 @@ pub enum DescribeDeliveryStreamError {
 
 impl DescribeDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeliveryStreamError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDeliveryStreamError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1599,18 +1565,9 @@ pub enum ListDeliveryStreamsError {}
 
 impl ListDeliveryStreamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeliveryStreamsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1640,33 +1597,24 @@ pub enum ListTagsForDeliveryStreamError {
 
 impl ListTagsForDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForDeliveryStreamError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(ListTagsForDeliveryStreamError::InvalidArgument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListTagsForDeliveryStreamError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForDeliveryStreamError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1700,33 +1648,18 @@ pub enum PutRecordError {
 
 impl PutRecordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRecordError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgumentException" => {
-                    return RusotoError::Service(PutRecordError::InvalidArgument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutRecordError::InvalidArgument(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(PutRecordError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutRecordError::ResourceNotFound(err.msg))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(PutRecordError::ServiceUnavailable(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutRecordError::ServiceUnavailable(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1760,33 +1693,18 @@ pub enum PutRecordBatchError {
 
 impl PutRecordBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRecordBatchError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgumentException" => {
-                    return RusotoError::Service(PutRecordBatchError::InvalidArgument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutRecordBatchError::InvalidArgument(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(PutRecordBatchError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutRecordBatchError::ResourceNotFound(err.msg))
                 }
                 "ServiceUnavailableException" => {
-                    return RusotoError::Service(PutRecordBatchError::ServiceUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutRecordBatchError::ServiceUnavailable(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1824,42 +1742,29 @@ impl StartDeliveryStreamEncryptionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartDeliveryStreamEncryptionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
-                        StartDeliveryStreamEncryptionError::InvalidArgument(String::from(
-                            error_message,
-                        )),
+                        StartDeliveryStreamEncryptionError::InvalidArgument(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartDeliveryStreamEncryptionError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StartDeliveryStreamEncryptionError::ResourceInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        StartDeliveryStreamEncryptionError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        StartDeliveryStreamEncryptionError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1898,42 +1803,29 @@ impl StopDeliveryStreamEncryptionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StopDeliveryStreamEncryptionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
-                        StopDeliveryStreamEncryptionError::InvalidArgument(String::from(
-                            error_message,
-                        )),
+                        StopDeliveryStreamEncryptionError::InvalidArgument(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StopDeliveryStreamEncryptionError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StopDeliveryStreamEncryptionError::ResourceInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        StopDeliveryStreamEncryptionError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        StopDeliveryStreamEncryptionError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1970,38 +1862,21 @@ pub enum TagDeliveryStreamError {
 
 impl TagDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagDeliveryStreamError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgumentException" => {
-                    return RusotoError::Service(TagDeliveryStreamError::InvalidArgument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagDeliveryStreamError::InvalidArgument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(TagDeliveryStreamError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagDeliveryStreamError::LimitExceeded(err.msg))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(TagDeliveryStreamError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagDeliveryStreamError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(TagDeliveryStreamError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagDeliveryStreamError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2038,38 +1913,23 @@ pub enum UntagDeliveryStreamError {
 
 impl UntagDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagDeliveryStreamError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArgumentException" => {
-                    return RusotoError::Service(UntagDeliveryStreamError::InvalidArgument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagDeliveryStreamError::InvalidArgument(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UntagDeliveryStreamError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagDeliveryStreamError::LimitExceeded(err.msg))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(UntagDeliveryStreamError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagDeliveryStreamError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UntagDeliveryStreamError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2106,38 +1966,23 @@ pub enum UpdateDestinationError {
 
 impl UpdateDestinationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDestinationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateDestinationError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArgumentException" => {
-                    return RusotoError::Service(UpdateDestinationError::InvalidArgument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDestinationError::InvalidArgument(err.msg))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(UpdateDestinationError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDestinationError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateDestinationError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDestinationError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

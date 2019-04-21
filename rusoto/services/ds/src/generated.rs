@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptSharedDirectoryRequest {
     /// <p>Identifier of the shared directory in the directory consumer account. This identifier is different for each directory owner account. </p>
@@ -1831,45 +1830,30 @@ pub enum AcceptSharedDirectoryError {
 
 impl AcceptSharedDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptSharedDirectoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(AcceptSharedDirectoryError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AcceptSharedDirectoryError::Client(err.msg))
                 }
                 "DirectoryAlreadySharedException" => {
                     return RusotoError::Service(
-                        AcceptSharedDirectoryError::DirectoryAlreadyShared(String::from(
-                            error_message,
-                        )),
+                        AcceptSharedDirectoryError::DirectoryAlreadyShared(err.msg),
                     )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(AcceptSharedDirectoryError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AcceptSharedDirectoryError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(AcceptSharedDirectoryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AcceptSharedDirectoryError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1913,53 +1897,30 @@ pub enum AddIpRoutesError {
 
 impl AddIpRoutesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddIpRoutesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(AddIpRoutesError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddIpRoutesError::Client(err.msg))
                 }
                 "DirectoryUnavailableException" => {
-                    return RusotoError::Service(AddIpRoutesError::DirectoryUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddIpRoutesError::DirectoryUnavailable(err.msg))
                 }
                 "EntityAlreadyExistsException" => {
-                    return RusotoError::Service(AddIpRoutesError::EntityAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddIpRoutesError::EntityAlreadyExists(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(AddIpRoutesError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddIpRoutesError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AddIpRoutesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddIpRoutesError::InvalidParameter(err.msg))
                 }
                 "IpRouteLimitExceededException" => {
-                    return RusotoError::Service(AddIpRoutesError::IpRouteLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddIpRoutesError::IpRouteLimitExceeded(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(AddIpRoutesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddIpRoutesError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2001,43 +1962,26 @@ pub enum AddTagsToResourceError {
 
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(AddTagsToResourceError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsToResourceError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(AddTagsToResourceError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AddTagsToResourceError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToResourceError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(AddTagsToResourceError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsToResourceError::Service(err.msg))
                 }
                 "TagLimitExceededException" => {
-                    return RusotoError::Service(AddTagsToResourceError::TagLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToResourceError::TagLimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2073,33 +2017,20 @@ pub enum CancelSchemaExtensionError {
 
 impl CancelSchemaExtensionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelSchemaExtensionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(CancelSchemaExtensionError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelSchemaExtensionError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(CancelSchemaExtensionError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CancelSchemaExtensionError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelSchemaExtensionError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2135,38 +2066,23 @@ pub enum ConnectDirectoryError {
 
 impl ConnectDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConnectDirectoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ConnectDirectoryError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConnectDirectoryError::Client(err.msg))
                 }
                 "DirectoryLimitExceededException" => {
                     return RusotoError::Service(ConnectDirectoryError::DirectoryLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ConnectDirectoryError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConnectDirectoryError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ConnectDirectoryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConnectDirectoryError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2205,43 +2121,24 @@ pub enum CreateAliasError {
 
 impl CreateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(CreateAliasError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::Client(err.msg))
                 }
                 "EntityAlreadyExistsException" => {
-                    return RusotoError::Service(CreateAliasError::EntityAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAliasError::EntityAlreadyExists(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(CreateAliasError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAliasError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateAliasError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateAliasError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAliasError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2287,58 +2184,33 @@ pub enum CreateComputerError {
 
 impl CreateComputerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateComputerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AuthenticationFailedException" => {
-                    return RusotoError::Service(CreateComputerError::AuthenticationFailed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateComputerError::AuthenticationFailed(err.msg))
                 }
                 "ClientException" => {
-                    return RusotoError::Service(CreateComputerError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateComputerError::Client(err.msg))
                 }
                 "DirectoryUnavailableException" => {
-                    return RusotoError::Service(CreateComputerError::DirectoryUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateComputerError::DirectoryUnavailable(err.msg))
                 }
                 "EntityAlreadyExistsException" => {
-                    return RusotoError::Service(CreateComputerError::EntityAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateComputerError::EntityAlreadyExists(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(CreateComputerError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateComputerError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateComputerError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateComputerError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateComputerError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateComputerError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(CreateComputerError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateComputerError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2387,61 +2259,40 @@ impl CreateConditionalForwarderError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateConditionalForwarderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(CreateConditionalForwarderError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateConditionalForwarderError::Client(err.msg))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
-                        CreateConditionalForwarderError::DirectoryUnavailable(String::from(
-                            error_message,
-                        )),
+                        CreateConditionalForwarderError::DirectoryUnavailable(err.msg),
                     )
                 }
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(
-                        CreateConditionalForwarderError::EntityAlreadyExists(String::from(
-                            error_message,
-                        )),
+                        CreateConditionalForwarderError::EntityAlreadyExists(err.msg),
                     )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
-                        CreateConditionalForwarderError::EntityDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        CreateConditionalForwarderError::EntityDoesNotExist(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateConditionalForwarderError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateConditionalForwarderError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateConditionalForwarderError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
-                        CreateConditionalForwarderError::UnsupportedOperation(String::from(
-                            error_message,
-                        )),
+                        CreateConditionalForwarderError::UnsupportedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2481,38 +2332,23 @@ pub enum CreateDirectoryError {
 
 impl CreateDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDirectoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(CreateDirectoryError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDirectoryError::Client(err.msg))
                 }
                 "DirectoryLimitExceededException" => {
                     return RusotoError::Service(CreateDirectoryError::DirectoryLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateDirectoryError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDirectoryError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateDirectoryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDirectoryError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2553,50 +2389,35 @@ pub enum CreateLogSubscriptionError {
 
 impl CreateLogSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLogSubscriptionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(CreateLogSubscriptionError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateLogSubscriptionError::Client(err.msg))
                 }
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(CreateLogSubscriptionError::EntityAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(CreateLogSubscriptionError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(
-                        CreateLogSubscriptionError::InsufficientPermissions(String::from(
-                            error_message,
-                        )),
+                        CreateLogSubscriptionError::InsufficientPermissions(err.msg),
                     )
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateLogSubscriptionError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateLogSubscriptionError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(CreateLogSubscriptionError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2637,43 +2458,28 @@ pub enum CreateMicrosoftADError {
 
 impl CreateMicrosoftADError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMicrosoftADError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(CreateMicrosoftADError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateMicrosoftADError::Client(err.msg))
                 }
                 "DirectoryLimitExceededException" => {
                     return RusotoError::Service(CreateMicrosoftADError::DirectoryLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateMicrosoftADError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateMicrosoftADError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateMicrosoftADError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateMicrosoftADError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(CreateMicrosoftADError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2713,43 +2519,26 @@ pub enum CreateSnapshotError {
 
 impl CreateSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(CreateSnapshotError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateSnapshotError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(CreateSnapshotError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateSnapshotError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateSnapshotError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateSnapshotError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateSnapshotError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateSnapshotError::Service(err.msg))
                 }
                 "SnapshotLimitExceededException" => {
                     return RusotoError::Service(CreateSnapshotError::SnapshotLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2791,48 +2580,27 @@ pub enum CreateTrustError {
 
 impl CreateTrustError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrustError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(CreateTrustError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTrustError::Client(err.msg))
                 }
                 "EntityAlreadyExistsException" => {
-                    return RusotoError::Service(CreateTrustError::EntityAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrustError::EntityAlreadyExists(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(CreateTrustError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrustError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateTrustError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTrustError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateTrustError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTrustError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(CreateTrustError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrustError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2877,54 +2645,35 @@ impl DeleteConditionalForwarderError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConditionalForwarderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeleteConditionalForwarderError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteConditionalForwarderError::Client(err.msg))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
-                        DeleteConditionalForwarderError::DirectoryUnavailable(String::from(
-                            error_message,
-                        )),
+                        DeleteConditionalForwarderError::DirectoryUnavailable(err.msg),
                     )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
-                        DeleteConditionalForwarderError::EntityDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DeleteConditionalForwarderError::EntityDoesNotExist(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteConditionalForwarderError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteConditionalForwarderError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteConditionalForwarderError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
-                        DeleteConditionalForwarderError::UnsupportedOperation(String::from(
-                            error_message,
-                        )),
+                        DeleteConditionalForwarderError::UnsupportedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2961,33 +2710,18 @@ pub enum DeleteDirectoryError {
 
 impl DeleteDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDirectoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeleteDirectoryError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDirectoryError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(DeleteDirectoryError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDirectoryError::EntityDoesNotExist(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteDirectoryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDirectoryError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3023,38 +2757,25 @@ pub enum DeleteLogSubscriptionError {
 
 impl DeleteLogSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLogSubscriptionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeleteLogSubscriptionError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteLogSubscriptionError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DeleteLogSubscriptionError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteLogSubscriptionError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteLogSubscriptionError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DeleteLogSubscriptionError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3091,38 +2812,21 @@ pub enum DeleteSnapshotError {
 
 impl DeleteSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeleteSnapshotError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteSnapshotError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(DeleteSnapshotError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteSnapshotError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteSnapshotError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteSnapshotError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteSnapshotError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteSnapshotError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3161,43 +2865,24 @@ pub enum DeleteTrustError {
 
 impl DeleteTrustError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrustError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeleteTrustError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTrustError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(DeleteTrustError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTrustError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteTrustError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTrustError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteTrustError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTrustError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(DeleteTrustError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTrustError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3235,38 +2920,25 @@ pub enum DeregisterEventTopicError {
 
 impl DeregisterEventTopicError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterEventTopicError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeregisterEventTopicError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeregisterEventTopicError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DeregisterEventTopicError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeregisterEventTopicError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeregisterEventTopicError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeregisterEventTopicError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3309,56 +2981,39 @@ impl DescribeConditionalForwardersError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConditionalForwardersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeConditionalForwardersError::Client(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
-                        DescribeConditionalForwardersError::DirectoryUnavailable(String::from(
-                            error_message,
-                        )),
+                        DescribeConditionalForwardersError::DirectoryUnavailable(err.msg),
                     )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
-                        DescribeConditionalForwardersError::EntityDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeConditionalForwardersError::EntityDoesNotExist(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        DescribeConditionalForwardersError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        DescribeConditionalForwardersError::InvalidParameter(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeConditionalForwardersError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
-                        DescribeConditionalForwardersError::UnsupportedOperation(String::from(
-                            error_message,
-                        )),
+                        DescribeConditionalForwardersError::UnsupportedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3399,43 +3054,30 @@ pub enum DescribeDirectoriesError {
 
 impl DescribeDirectoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDirectoriesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeDirectoriesError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeDirectoriesError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DescribeDirectoriesError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeDirectoriesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeDirectoriesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeDirectoriesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeDirectoriesError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3477,52 +3119,35 @@ pub enum DescribeDomainControllersError {
 
 impl DescribeDomainControllersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainControllersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeDomainControllersError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeDomainControllersError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
-                        DescribeDomainControllersError::EntityDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeDomainControllersError::EntityDoesNotExist(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeDomainControllersError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeDomainControllersError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeDomainControllersError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeDomainControllersError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
-                        DescribeDomainControllersError::UnsupportedOperation(String::from(
-                            error_message,
-                        )),
+                        DescribeDomainControllersError::UnsupportedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3561,38 +3186,25 @@ pub enum DescribeEventTopicsError {
 
 impl DescribeEventTopicsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventTopicsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeEventTopicsError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeEventTopicsError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DescribeEventTopicsError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeEventTopicsError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeEventTopicsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeEventTopicsError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3633,52 +3245,35 @@ pub enum DescribeSharedDirectoriesError {
 
 impl DescribeSharedDirectoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSharedDirectoriesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeSharedDirectoriesError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeSharedDirectoriesError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
-                        DescribeSharedDirectoriesError::EntityDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeSharedDirectoriesError::EntityDoesNotExist(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeSharedDirectoriesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeSharedDirectoriesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeSharedDirectoriesError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeSharedDirectoriesError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
-                        DescribeSharedDirectoriesError::UnsupportedOperation(String::from(
-                            error_message,
-                        )),
+                        DescribeSharedDirectoriesError::UnsupportedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3719,43 +3314,26 @@ pub enum DescribeSnapshotsError {
 
 impl DescribeSnapshotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSnapshotsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeSnapshotsError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeSnapshotsError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(DescribeSnapshotsError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(DescribeSnapshotsError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeSnapshotsError::InvalidNextToken(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeSnapshotsError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeSnapshotsError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeSnapshotsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeSnapshotsError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3797,48 +3375,27 @@ pub enum DescribeTrustsError {
 
 impl DescribeTrustsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrustsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeTrustsError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeTrustsError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(DescribeTrustsError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTrustsError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(DescribeTrustsError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTrustsError::InvalidNextToken(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeTrustsError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTrustsError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeTrustsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeTrustsError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(DescribeTrustsError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTrustsError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3875,33 +3432,18 @@ pub enum DisableRadiusError {
 
 impl DisableRadiusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableRadiusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DisableRadiusError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableRadiusError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(DisableRadiusError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisableRadiusError::EntityDoesNotExist(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DisableRadiusError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableRadiusError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3939,43 +3481,22 @@ pub enum DisableSsoError {
 
 impl DisableSsoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableSsoError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AuthenticationFailedException" => {
-                    return RusotoError::Service(DisableSsoError::AuthenticationFailed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisableSsoError::AuthenticationFailed(err.msg))
                 }
-                "ClientException" => {
-                    return RusotoError::Service(DisableSsoError::Client(String::from(
-                        error_message,
-                    )))
-                }
+                "ClientException" => return RusotoError::Service(DisableSsoError::Client(err.msg)),
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(DisableSsoError::EntityDoesNotExist(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableSsoError::EntityDoesNotExist(err.msg))
                 }
                 "InsufficientPermissionsException" => {
-                    return RusotoError::Service(DisableSsoError::InsufficientPermissions(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisableSsoError::InsufficientPermissions(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DisableSsoError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableSsoError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4015,43 +3536,24 @@ pub enum EnableRadiusError {
 
 impl EnableRadiusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableRadiusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(EnableRadiusError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableRadiusError::Client(err.msg))
                 }
                 "EntityAlreadyExistsException" => {
-                    return RusotoError::Service(EnableRadiusError::EntityAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableRadiusError::EntityAlreadyExists(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(EnableRadiusError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableRadiusError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(EnableRadiusError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableRadiusError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(EnableRadiusError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableRadiusError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4091,43 +3593,22 @@ pub enum EnableSsoError {
 
 impl EnableSsoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableSsoError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AuthenticationFailedException" => {
-                    return RusotoError::Service(EnableSsoError::AuthenticationFailed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableSsoError::AuthenticationFailed(err.msg))
                 }
-                "ClientException" => {
-                    return RusotoError::Service(EnableSsoError::Client(String::from(
-                        error_message,
-                    )))
-                }
+                "ClientException" => return RusotoError::Service(EnableSsoError::Client(err.msg)),
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(EnableSsoError::EntityDoesNotExist(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableSsoError::EntityDoesNotExist(err.msg))
                 }
                 "InsufficientPermissionsException" => {
-                    return RusotoError::Service(EnableSsoError::InsufficientPermissions(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableSsoError::InsufficientPermissions(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(EnableSsoError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableSsoError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4163,33 +3644,20 @@ pub enum GetDirectoryLimitsError {
 
 impl GetDirectoryLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDirectoryLimitsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(GetDirectoryLimitsError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDirectoryLimitsError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(GetDirectoryLimitsError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetDirectoryLimitsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDirectoryLimitsError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4223,33 +3691,20 @@ pub enum GetSnapshotLimitsError {
 
 impl GetSnapshotLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSnapshotLimitsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(GetSnapshotLimitsError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetSnapshotLimitsError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(GetSnapshotLimitsError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetSnapshotLimitsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetSnapshotLimitsError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4287,43 +3742,24 @@ pub enum ListIpRoutesError {
 
 impl ListIpRoutesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIpRoutesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListIpRoutesError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListIpRoutesError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(ListIpRoutesError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListIpRoutesError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListIpRoutesError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListIpRoutesError::InvalidNextToken(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListIpRoutesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListIpRoutesError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListIpRoutesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListIpRoutesError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4361,38 +3797,25 @@ pub enum ListLogSubscriptionsError {
 
 impl ListLogSubscriptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLogSubscriptionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListLogSubscriptionsError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListLogSubscriptionsError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ListLogSubscriptionsError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListLogSubscriptionsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListLogSubscriptionsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListLogSubscriptionsError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4429,38 +3852,25 @@ pub enum ListSchemaExtensionsError {
 
 impl ListSchemaExtensionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSchemaExtensionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListSchemaExtensionsError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSchemaExtensionsError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ListSchemaExtensionsError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListSchemaExtensionsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListSchemaExtensionsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListSchemaExtensionsError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4499,43 +3909,30 @@ pub enum ListTagsForResourceError {
 
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListTagsForResourceError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsForResourceError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ListTagsForResourceError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListTagsForResourceError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsForResourceError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4573,38 +3970,23 @@ pub enum RegisterEventTopicError {
 
 impl RegisterEventTopicError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterEventTopicError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(RegisterEventTopicError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RegisterEventTopicError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(RegisterEventTopicError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(RegisterEventTopicError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterEventTopicError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(RegisterEventTopicError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RegisterEventTopicError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4643,45 +4025,30 @@ pub enum RejectSharedDirectoryError {
 
 impl RejectSharedDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectSharedDirectoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(RejectSharedDirectoryError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RejectSharedDirectoryError::Client(err.msg))
                 }
                 "DirectoryAlreadySharedException" => {
                     return RusotoError::Service(
-                        RejectSharedDirectoryError::DirectoryAlreadyShared(String::from(
-                            error_message,
-                        )),
+                        RejectSharedDirectoryError::DirectoryAlreadyShared(err.msg),
                     )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(RejectSharedDirectoryError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RejectSharedDirectoryError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(RejectSharedDirectoryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RejectSharedDirectoryError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4721,43 +4088,24 @@ pub enum RemoveIpRoutesError {
 
 impl RemoveIpRoutesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveIpRoutesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(RemoveIpRoutesError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveIpRoutesError::Client(err.msg))
                 }
                 "DirectoryUnavailableException" => {
-                    return RusotoError::Service(RemoveIpRoutesError::DirectoryUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveIpRoutesError::DirectoryUnavailable(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(RemoveIpRoutesError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveIpRoutesError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(RemoveIpRoutesError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveIpRoutesError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(RemoveIpRoutesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveIpRoutesError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4795,38 +4143,25 @@ pub enum RemoveTagsFromResourceError {
 
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(RemoveTagsFromResourceError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveTagsFromResourceError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(RemoveTagsFromResourceError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveTagsFromResourceError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4869,53 +4204,36 @@ pub enum ResetUserPasswordError {
 
 impl ResetUserPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetUserPasswordError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ResetUserPasswordError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResetUserPasswordError::Client(err.msg))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(ResetUserPasswordError::DirectoryUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(ResetUserPasswordError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPasswordException" => {
-                    return RusotoError::Service(ResetUserPasswordError::InvalidPassword(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResetUserPasswordError::InvalidPassword(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ResetUserPasswordError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResetUserPasswordError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(ResetUserPasswordError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserDoesNotExistException" => {
-                    return RusotoError::Service(ResetUserPasswordError::UserDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResetUserPasswordError::UserDoesNotExist(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4955,38 +4273,25 @@ pub enum RestoreFromSnapshotError {
 
 impl RestoreFromSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreFromSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(RestoreFromSnapshotError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RestoreFromSnapshotError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(RestoreFromSnapshotError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RestoreFromSnapshotError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(RestoreFromSnapshotError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RestoreFromSnapshotError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5035,68 +4340,41 @@ pub enum ShareDirectoryError {
 
 impl ShareDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ShareDirectoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ShareDirectoryError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ShareDirectoryError::AccessDenied(err.msg))
                 }
                 "ClientException" => {
-                    return RusotoError::Service(ShareDirectoryError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ShareDirectoryError::Client(err.msg))
                 }
                 "DirectoryAlreadySharedException" => {
                     return RusotoError::Service(ShareDirectoryError::DirectoryAlreadyShared(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(ShareDirectoryError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ShareDirectoryError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ShareDirectoryError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ShareDirectoryError::InvalidParameter(err.msg))
                 }
                 "InvalidTargetException" => {
-                    return RusotoError::Service(ShareDirectoryError::InvalidTarget(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ShareDirectoryError::InvalidTarget(err.msg))
                 }
                 "OrganizationsException" => {
-                    return RusotoError::Service(ShareDirectoryError::Organizations(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ShareDirectoryError::Organizations(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ShareDirectoryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ShareDirectoryError::Service(err.msg))
                 }
                 "ShareLimitExceededException" => {
-                    return RusotoError::Service(ShareDirectoryError::ShareLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ShareDirectoryError::ShareLimitExceeded(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(ShareDirectoryError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ShareDirectoryError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5143,48 +4421,35 @@ pub enum StartSchemaExtensionError {
 
 impl StartSchemaExtensionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSchemaExtensionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(StartSchemaExtensionError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartSchemaExtensionError::Client(err.msg))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(StartSchemaExtensionError::DirectoryUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(StartSchemaExtensionError::EntityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartSchemaExtensionError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(StartSchemaExtensionError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartSchemaExtensionError::Service(err.msg))
                 }
                 "SnapshotLimitExceededException" => {
                     return RusotoError::Service(StartSchemaExtensionError::SnapshotLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5225,43 +4490,24 @@ pub enum UnshareDirectoryError {
 
 impl UnshareDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnshareDirectoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(UnshareDirectoryError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UnshareDirectoryError::Client(err.msg))
                 }
                 "DirectoryNotSharedException" => {
-                    return RusotoError::Service(UnshareDirectoryError::DirectoryNotShared(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UnshareDirectoryError::DirectoryNotShared(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(UnshareDirectoryError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UnshareDirectoryError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidTargetException" => {
-                    return RusotoError::Service(UnshareDirectoryError::InvalidTarget(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UnshareDirectoryError::InvalidTarget(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UnshareDirectoryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UnshareDirectoryError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5305,54 +4551,35 @@ impl UpdateConditionalForwarderError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConditionalForwarderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(UpdateConditionalForwarderError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateConditionalForwarderError::Client(err.msg))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
-                        UpdateConditionalForwarderError::DirectoryUnavailable(String::from(
-                            error_message,
-                        )),
+                        UpdateConditionalForwarderError::DirectoryUnavailable(err.msg),
                     )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
-                        UpdateConditionalForwarderError::EntityDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        UpdateConditionalForwarderError::EntityDoesNotExist(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateConditionalForwarderError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UpdateConditionalForwarderError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateConditionalForwarderError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
-                        UpdateConditionalForwarderError::UnsupportedOperation(String::from(
-                            error_message,
-                        )),
+                        UpdateConditionalForwarderError::UnsupportedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5399,63 +4626,46 @@ impl UpdateNumberOfDomainControllersError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateNumberOfDomainControllersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateNumberOfDomainControllersError::Client(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(
-                        UpdateNumberOfDomainControllersError::DirectoryUnavailable(String::from(
-                            error_message,
-                        )),
+                        UpdateNumberOfDomainControllersError::DirectoryUnavailable(err.msg),
                     )
                 }
                 "DomainControllerLimitExceededException" => {
                     return RusotoError::Service(
                         UpdateNumberOfDomainControllersError::DomainControllerLimitExceeded(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "EntityDoesNotExistException" => {
                     return RusotoError::Service(
-                        UpdateNumberOfDomainControllersError::EntityDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        UpdateNumberOfDomainControllersError::EntityDoesNotExist(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        UpdateNumberOfDomainControllersError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        UpdateNumberOfDomainControllersError::InvalidParameter(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateNumberOfDomainControllersError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
-                        UpdateNumberOfDomainControllersError::UnsupportedOperation(String::from(
-                            error_message,
-                        )),
+                        UpdateNumberOfDomainControllersError::UnsupportedOperation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5495,38 +4705,21 @@ pub enum UpdateRadiusError {
 
 impl UpdateRadiusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRadiusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(UpdateRadiusError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRadiusError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(UpdateRadiusError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRadiusError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UpdateRadiusError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRadiusError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UpdateRadiusError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRadiusError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5563,38 +4756,21 @@ pub enum UpdateTrustError {
 
 impl UpdateTrustError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrustError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(UpdateTrustError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrustError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(UpdateTrustError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTrustError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UpdateTrustError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrustError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UpdateTrustError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrustError::Service(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5633,43 +4809,24 @@ pub enum VerifyTrustError {
 
 impl VerifyTrustError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyTrustError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(VerifyTrustError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(VerifyTrustError::Client(err.msg))
                 }
                 "EntityDoesNotExistException" => {
-                    return RusotoError::Service(VerifyTrustError::EntityDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifyTrustError::EntityDoesNotExist(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(VerifyTrustError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(VerifyTrustError::InvalidParameter(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(VerifyTrustError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(VerifyTrustError::Service(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(VerifyTrustError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifyTrustError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

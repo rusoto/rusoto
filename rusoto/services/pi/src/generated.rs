@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>A timestamp, and a single numerical value, which together represent a measurement at a particular point in time.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -259,33 +258,22 @@ pub enum DescribeDimensionKeysError {
 
 impl DescribeDimensionKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDimensionKeysError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribeDimensionKeysError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DescribeDimensionKeysError::InvalidArgument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DescribeDimensionKeysError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeDimensionKeysError::NotAuthorized(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -319,33 +307,20 @@ pub enum GetResourceMetricsError {
 
 impl GetResourceMetricsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceMetricsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetResourceMetricsError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArgumentException" => {
-                    return RusotoError::Service(GetResourceMetricsError::InvalidArgument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetResourceMetricsError::InvalidArgument(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(GetResourceMetricsError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetResourceMetricsError::NotAuthorized(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

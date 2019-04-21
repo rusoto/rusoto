@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Describes a modification to the configuration of bring your own license (BYOL) for the specified account. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1181,48 +1180,35 @@ pub enum AssociateIpGroupsError {
 
 impl AssociateIpGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateIpGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(AssociateIpGroupsError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateIpGroupsError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(AssociateIpGroupsError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(AssociateIpGroupsError::InvalidResourceState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(AssociateIpGroupsError::OperationNotSupported(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(AssociateIpGroupsError::ResourceLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AssociateIpGroupsError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateIpGroupsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1263,43 +1249,30 @@ pub enum AuthorizeIpRulesError {
 
 impl AuthorizeIpRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AuthorizeIpRulesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(AuthorizeIpRulesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AuthorizeIpRulesError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(AuthorizeIpRulesError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(AuthorizeIpRulesError::InvalidResourceState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(AuthorizeIpRulesError::ResourceLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AuthorizeIpRulesError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AuthorizeIpRulesError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1339,43 +1312,28 @@ pub enum CreateIpGroupError {
 
 impl CreateIpGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIpGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateIpGroupError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateIpGroupError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(CreateIpGroupError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceAlreadyExistsException" => {
-                    return RusotoError::Service(CreateIpGroupError::ResourceAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateIpGroupError::ResourceAlreadyExists(err.msg))
                 }
                 "ResourceCreationFailedException" => {
                     return RusotoError::Service(CreateIpGroupError::ResourceCreationFailed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
-                    return RusotoError::Service(CreateIpGroupError::ResourceLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateIpGroupError::ResourceLimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1411,33 +1369,18 @@ pub enum CreateTagsError {
 
 impl CreateTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
-                    return RusotoError::Service(CreateTagsError::InvalidParameterValues(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTagsError::InvalidParameterValues(err.msg))
                 }
                 "ResourceLimitExceededException" => {
-                    return RusotoError::Service(CreateTagsError::ResourceLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTagsError::ResourceLimitExceeded(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(CreateTagsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTagsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1469,28 +1412,19 @@ pub enum CreateWorkspacesError {
 
 impl CreateWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkspacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(CreateWorkspacesError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(CreateWorkspacesError::ResourceLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1525,38 +1459,23 @@ pub enum DeleteIpGroupError {
 
 impl DeleteIpGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIpGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteIpGroupError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteIpGroupError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DeleteIpGroupError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceAssociatedException" => {
-                    return RusotoError::Service(DeleteIpGroupError::ResourceAssociated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteIpGroupError::ResourceAssociated(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteIpGroupError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteIpGroupError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1589,28 +1508,15 @@ pub enum DeleteTagsError {
 
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
-                    return RusotoError::Service(DeleteTagsError::InvalidParameterValues(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTagsError::InvalidParameterValues(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteTagsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTagsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1643,33 +1549,22 @@ pub enum DeleteWorkspaceImageError {
 
 impl DeleteWorkspaceImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkspaceImageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteWorkspaceImageError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteWorkspaceImageError::AccessDenied(err.msg))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(DeleteWorkspaceImageError::InvalidResourceState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceAssociatedException" => {
                     return RusotoError::Service(DeleteWorkspaceImageError::ResourceAssociated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1699,23 +1594,12 @@ pub enum DescribeAccountError {
 
 impl DescribeAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeAccountError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeAccountError::AccessDenied(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1745,23 +1629,14 @@ impl DescribeAccountModificationsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAccountModificationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAccountModificationsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1793,35 +1668,24 @@ pub enum DescribeClientPropertiesError {
 
 impl DescribeClientPropertiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClientPropertiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeClientPropertiesError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
-                        DescribeClientPropertiesError::InvalidParameterValues(String::from(
-                            error_message,
-                        )),
+                        DescribeClientPropertiesError::InvalidParameterValues(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeClientPropertiesError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1853,28 +1717,17 @@ pub enum DescribeIpGroupsError {
 
 impl DescribeIpGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIpGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeIpGroupsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeIpGroupsError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DescribeIpGroupsError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1903,23 +1756,12 @@ pub enum DescribeTagsError {
 
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeTagsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeTagsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1947,25 +1789,14 @@ pub enum DescribeWorkspaceBundlesError {
 
 impl DescribeWorkspaceBundlesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkspaceBundlesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
-                        DescribeWorkspaceBundlesError::InvalidParameterValues(String::from(
-                            error_message,
-                        )),
+                        DescribeWorkspaceBundlesError::InvalidParameterValues(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1995,25 +1826,14 @@ impl DescribeWorkspaceDirectoriesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeWorkspaceDirectoriesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
-                        DescribeWorkspaceDirectoriesError::InvalidParameterValues(String::from(
-                            error_message,
-                        )),
+                        DescribeWorkspaceDirectoriesError::InvalidParameterValues(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2041,23 +1861,14 @@ pub enum DescribeWorkspaceImagesError {
 
 impl DescribeWorkspaceImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkspaceImagesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeWorkspaceImagesError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2087,28 +1898,19 @@ pub enum DescribeWorkspacesError {
 
 impl DescribeWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkspacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DescribeWorkspacesError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(DescribeWorkspacesError::ResourceUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2139,25 +1941,14 @@ impl DescribeWorkspacesConnectionStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeWorkspacesConnectionStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
-                        DescribeWorkspacesConnectionStatusError::InvalidParameterValues(
-                            String::from(error_message),
-                        ),
+                        DescribeWorkspacesConnectionStatusError::InvalidParameterValues(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2191,38 +1982,27 @@ pub enum DisassociateIpGroupsError {
 
 impl DisassociateIpGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateIpGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DisassociateIpGroupsError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisassociateIpGroupsError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DisassociateIpGroupsError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(DisassociateIpGroupsError::InvalidResourceState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateIpGroupsError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2261,43 +2041,32 @@ pub enum ImportWorkspaceImageError {
 
 impl ImportWorkspaceImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportWorkspaceImageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ImportWorkspaceImageError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportWorkspaceImageError::AccessDenied(err.msg))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::OperationNotSupported(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::ResourceAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::ResourceLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2333,32 +2102,19 @@ impl ListAvailableManagementCidrRangesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAvailableManagementCidrRangesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        ListAvailableManagementCidrRangesError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        ListAvailableManagementCidrRangesError::AccessDenied(err.msg),
                     )
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
-                        ListAvailableManagementCidrRangesError::InvalidParameterValues(
-                            String::from(error_message),
-                        ),
+                        ListAvailableManagementCidrRangesError::InvalidParameterValues(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2395,43 +2151,26 @@ pub enum ModifyAccountError {
 
 impl ModifyAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyAccountError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ModifyAccountError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ModifyAccountError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(ModifyAccountError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceStateException" => {
-                    return RusotoError::Service(ModifyAccountError::InvalidResourceState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ModifyAccountError::InvalidResourceState(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ModifyAccountError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ModifyAccountError::ResourceNotFound(err.msg))
                 }
                 "ResourceUnavailableException" => {
-                    return RusotoError::Service(ModifyAccountError::ResourceUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ModifyAccountError::ResourceUnavailable(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2467,35 +2206,22 @@ pub enum ModifyClientPropertiesError {
 
 impl ModifyClientPropertiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClientPropertiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ModifyClientPropertiesError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ModifyClientPropertiesError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
-                        ModifyClientPropertiesError::InvalidParameterValues(String::from(
-                            error_message,
-                        )),
+                        ModifyClientPropertiesError::InvalidParameterValues(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ModifyClientPropertiesError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2537,63 +2263,44 @@ pub enum ModifyWorkspacePropertiesError {
 
 impl ModifyWorkspacePropertiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyWorkspacePropertiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ModifyWorkspacePropertiesError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
-                        ModifyWorkspacePropertiesError::InvalidParameterValues(String::from(
-                            error_message,
-                        )),
+                        ModifyWorkspacePropertiesError::InvalidParameterValues(err.msg),
                     )
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(
-                        ModifyWorkspacePropertiesError::InvalidResourceState(String::from(
-                            error_message,
-                        )),
+                        ModifyWorkspacePropertiesError::InvalidResourceState(err.msg),
                     )
                 }
                 "OperationInProgressException" => {
                     return RusotoError::Service(
-                        ModifyWorkspacePropertiesError::OperationInProgress(String::from(
-                            error_message,
-                        )),
+                        ModifyWorkspacePropertiesError::OperationInProgress(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ModifyWorkspacePropertiesError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(
-                        ModifyWorkspacePropertiesError::ResourceUnavailable(String::from(
-                            error_message,
-                        )),
+                        ModifyWorkspacePropertiesError::ResourceUnavailable(err.msg),
                     )
                 }
                 "UnsupportedWorkspaceConfigurationException" => {
                     return RusotoError::Service(
-                        ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(
-                            String::from(error_message),
-                        ),
+                        ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2631,33 +2338,24 @@ pub enum ModifyWorkspaceStateError {
 
 impl ModifyWorkspaceStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyWorkspaceStateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(ModifyWorkspaceStateError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(ModifyWorkspaceStateError::InvalidResourceState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ModifyWorkspaceStateError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2684,18 +2382,9 @@ pub enum RebootWorkspacesError {}
 
 impl RebootWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootWorkspacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2718,18 +2407,9 @@ pub enum RebuildWorkspacesError {}
 
 impl RebuildWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebuildWorkspacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2761,38 +2441,23 @@ pub enum RevokeIpRulesError {
 
 impl RevokeIpRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeIpRulesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(RevokeIpRulesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RevokeIpRulesError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(RevokeIpRulesError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceStateException" => {
-                    return RusotoError::Service(RevokeIpRulesError::InvalidResourceState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RevokeIpRulesError::InvalidResourceState(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(RevokeIpRulesError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RevokeIpRulesError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2820,18 +2485,9 @@ pub enum StartWorkspacesError {}
 
 impl StartWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartWorkspacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2854,18 +2510,9 @@ pub enum StopWorkspacesError {}
 
 impl StopWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopWorkspacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2888,18 +2535,9 @@ pub enum TerminateWorkspacesError {}
 
 impl TerminateWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateWorkspacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2933,43 +2571,32 @@ pub enum UpdateRulesOfIpGroupError {
 
 impl UpdateRulesOfIpGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRulesOfIpGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UpdateRulesOfIpGroupError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRulesOfIpGroupError::AccessDenied(err.msg))
                 }
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::InvalidParameterValues(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceStateException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::InvalidResourceState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::ResourceLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

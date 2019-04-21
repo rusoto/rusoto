@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Structure containing the estimated age range, in years, for a face.</p> <p>Amazon Rekognition estimates an age range for faces detected in the input image. Estimated age ranges can overlap. A face of a 5-year-old might have an estimated range of 4-6, while the face of a 6-year-old might have an estimated range of 4-8.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1930,58 +1929,35 @@ pub enum CompareFacesError {
 
 impl CompareFacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompareFacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CompareFacesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CompareFacesError::AccessDenied(err.msg))
                 }
                 "ImageTooLargeException" => {
-                    return RusotoError::Service(CompareFacesError::ImageTooLarge(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CompareFacesError::ImageTooLarge(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(CompareFacesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CompareFacesError::InternalServerError(err.msg))
                 }
                 "InvalidImageFormatException" => {
-                    return RusotoError::Service(CompareFacesError::InvalidImageFormat(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CompareFacesError::InvalidImageFormat(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CompareFacesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CompareFacesError::InvalidParameter(err.msg))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(CompareFacesError::InvalidS3Object(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CompareFacesError::InvalidS3Object(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(CompareFacesError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(CompareFacesError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CompareFacesError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2026,50 +2002,33 @@ pub enum CreateCollectionError {
 
 impl CreateCollectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCollectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateCollectionError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateCollectionError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateCollectionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateCollectionError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateCollectionError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        CreateCollectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateCollectionError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateCollectionError::ResourceAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(CreateCollectionError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateCollectionError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2114,55 +2073,36 @@ pub enum CreateStreamProcessorError {
 
 impl CreateStreamProcessorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStreamProcessorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateStreamProcessorError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateStreamProcessorError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateStreamProcessorError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateStreamProcessorError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateStreamProcessorError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateStreamProcessorError::LimitExceeded(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        CreateStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateStreamProcessorError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(CreateStreamProcessorError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateStreamProcessorError::ResourceInUse(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(CreateStreamProcessorError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateStreamProcessorError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2206,50 +2146,31 @@ pub enum DeleteCollectionError {
 
 impl DeleteCollectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCollectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteCollectionError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteCollectionError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteCollectionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteCollectionError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteCollectionError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        DeleteCollectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        DeleteCollectionError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteCollectionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteCollectionError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DeleteCollectionError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteCollectionError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2292,48 +2213,29 @@ pub enum DeleteFacesError {
 
 impl DeleteFacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteFacesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteFacesError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteFacesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteFacesError::InternalServerError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteFacesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteFacesError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(DeleteFacesError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteFacesError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteFacesError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DeleteFacesError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteFacesError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2378,55 +2280,38 @@ pub enum DeleteStreamProcessorError {
 
 impl DeleteStreamProcessorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStreamProcessorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteStreamProcessorError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteStreamProcessorError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteStreamProcessorError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteStreamProcessorError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        DeleteStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        DeleteStreamProcessorError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(DeleteStreamProcessorError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteStreamProcessorError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteStreamProcessorError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DeleteStreamProcessorError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteStreamProcessorError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2470,50 +2355,31 @@ pub enum DescribeCollectionError {
 
 impl DescribeCollectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCollectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeCollectionError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeCollectionError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeCollectionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeCollectionError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeCollectionError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        DescribeCollectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        DescribeCollectionError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeCollectionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeCollectionError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DescribeCollectionError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeCollectionError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2556,50 +2422,37 @@ pub enum DescribeStreamProcessorError {
 
 impl DescribeStreamProcessorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamProcessorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeStreamProcessorError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeStreamProcessorError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeStreamProcessorError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        DescribeStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        DescribeStreamProcessorError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStreamProcessorError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DescribeStreamProcessorError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeStreamProcessorError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2646,58 +2499,35 @@ pub enum DetectFacesError {
 
 impl DetectFacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectFacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DetectFacesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectFacesError::AccessDenied(err.msg))
                 }
                 "ImageTooLargeException" => {
-                    return RusotoError::Service(DetectFacesError::ImageTooLarge(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectFacesError::ImageTooLarge(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DetectFacesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectFacesError::InternalServerError(err.msg))
                 }
                 "InvalidImageFormatException" => {
-                    return RusotoError::Service(DetectFacesError::InvalidImageFormat(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectFacesError::InvalidImageFormat(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DetectFacesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectFacesError::InvalidParameter(err.msg))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(DetectFacesError::InvalidS3Object(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectFacesError::InvalidS3Object(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(DetectFacesError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DetectFacesError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectFacesError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2746,58 +2576,35 @@ pub enum DetectLabelsError {
 
 impl DetectLabelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectLabelsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DetectLabelsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectLabelsError::AccessDenied(err.msg))
                 }
                 "ImageTooLargeException" => {
-                    return RusotoError::Service(DetectLabelsError::ImageTooLarge(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectLabelsError::ImageTooLarge(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DetectLabelsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectLabelsError::InternalServerError(err.msg))
                 }
                 "InvalidImageFormatException" => {
-                    return RusotoError::Service(DetectLabelsError::InvalidImageFormat(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectLabelsError::InvalidImageFormat(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DetectLabelsError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectLabelsError::InvalidParameter(err.msg))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(DetectLabelsError::InvalidS3Object(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectLabelsError::InvalidS3Object(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(DetectLabelsError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DetectLabelsError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectLabelsError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2846,60 +2653,45 @@ pub enum DetectModerationLabelsError {
 
 impl DetectModerationLabelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectModerationLabelsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DetectModerationLabelsError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectModerationLabelsError::AccessDenied(err.msg))
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(DetectModerationLabelsError::ImageTooLarge(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DetectModerationLabelsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(DetectModerationLabelsError::InvalidImageFormat(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DetectModerationLabelsError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(DetectModerationLabelsError::InvalidS3Object(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        DetectModerationLabelsError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        DetectModerationLabelsError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DetectModerationLabelsError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectModerationLabelsError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2948,58 +2740,35 @@ pub enum DetectTextError {
 
 impl DetectTextError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectTextError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DetectTextError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectTextError::AccessDenied(err.msg))
                 }
                 "ImageTooLargeException" => {
-                    return RusotoError::Service(DetectTextError::ImageTooLarge(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectTextError::ImageTooLarge(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DetectTextError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetectTextError::InternalServerError(err.msg))
                 }
                 "InvalidImageFormatException" => {
-                    return RusotoError::Service(DetectTextError::InvalidImageFormat(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectTextError::InvalidImageFormat(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DetectTextError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectTextError::InvalidParameter(err.msg))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(DetectTextError::InvalidS3Object(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectTextError::InvalidS3Object(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(DetectTextError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DetectTextError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetectTextError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3044,50 +2813,31 @@ pub enum GetCelebrityInfoError {
 
 impl GetCelebrityInfoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCelebrityInfoError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetCelebrityInfoError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCelebrityInfoError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetCelebrityInfoError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetCelebrityInfoError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCelebrityInfoError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        GetCelebrityInfoError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        GetCelebrityInfoError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetCelebrityInfoError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCelebrityInfoError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(GetCelebrityInfoError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCelebrityInfoError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3132,57 +2882,42 @@ pub enum GetCelebrityRecognitionError {
 
 impl GetCelebrityRecognitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCelebrityRecognitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetCelebrityRecognitionError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetCelebrityRecognitionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(
-                        GetCelebrityRecognitionError::InvalidPaginationToken(String::from(
-                            error_message,
-                        )),
+                        GetCelebrityRecognitionError::InvalidPaginationToken(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetCelebrityRecognitionError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        GetCelebrityRecognitionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        GetCelebrityRecognitionError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetCelebrityRecognitionError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(GetCelebrityRecognitionError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCelebrityRecognitionError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3228,55 +2963,40 @@ pub enum GetContentModerationError {
 
 impl GetContentModerationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContentModerationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetContentModerationError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetContentModerationError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetContentModerationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetContentModerationError::InvalidPaginationToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetContentModerationError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        GetContentModerationError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        GetContentModerationError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetContentModerationError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(GetContentModerationError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetContentModerationError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3322,55 +3042,36 @@ pub enum GetFaceDetectionError {
 
 impl GetFaceDetectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFaceDetectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetFaceDetectionError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetFaceDetectionError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetFaceDetectionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetFaceDetectionError::InvalidPaginationToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetFaceDetectionError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetFaceDetectionError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        GetFaceDetectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        GetFaceDetectionError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetFaceDetectionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetFaceDetectionError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(GetFaceDetectionError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetFaceDetectionError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3416,53 +3117,34 @@ pub enum GetFaceSearchError {
 
 impl GetFaceSearchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFaceSearchError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetFaceSearchError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetFaceSearchError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(GetFaceSearchError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetFaceSearchError::InternalServerError(err.msg))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetFaceSearchError::InvalidPaginationToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetFaceSearchError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetFaceSearchError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(GetFaceSearchError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetFaceSearchError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetFaceSearchError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(GetFaceSearchError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetFaceSearchError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3508,55 +3190,36 @@ pub enum GetLabelDetectionError {
 
 impl GetLabelDetectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLabelDetectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetLabelDetectionError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLabelDetectionError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetLabelDetectionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetLabelDetectionError::InvalidPaginationToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetLabelDetectionError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLabelDetectionError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        GetLabelDetectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        GetLabelDetectionError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetLabelDetectionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLabelDetectionError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(GetLabelDetectionError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLabelDetectionError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3602,55 +3265,36 @@ pub enum GetPersonTrackingError {
 
 impl GetPersonTrackingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPersonTrackingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetPersonTrackingError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetPersonTrackingError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetPersonTrackingError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetPersonTrackingError::InvalidPaginationToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetPersonTrackingError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetPersonTrackingError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        GetPersonTrackingError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        GetPersonTrackingError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetPersonTrackingError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetPersonTrackingError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(GetPersonTrackingError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPersonTrackingError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3700,63 +3344,38 @@ pub enum IndexFacesError {
 
 impl IndexFacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IndexFacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(IndexFacesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IndexFacesError::AccessDenied(err.msg))
                 }
                 "ImageTooLargeException" => {
-                    return RusotoError::Service(IndexFacesError::ImageTooLarge(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IndexFacesError::ImageTooLarge(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(IndexFacesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(IndexFacesError::InternalServerError(err.msg))
                 }
                 "InvalidImageFormatException" => {
-                    return RusotoError::Service(IndexFacesError::InvalidImageFormat(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IndexFacesError::InvalidImageFormat(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(IndexFacesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IndexFacesError::InvalidParameter(err.msg))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(IndexFacesError::InvalidS3Object(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IndexFacesError::InvalidS3Object(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(IndexFacesError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(IndexFacesError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IndexFacesError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(IndexFacesError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IndexFacesError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3804,55 +3423,34 @@ pub enum ListCollectionsError {
 
 impl ListCollectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCollectionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListCollectionsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListCollectionsError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(ListCollectionsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListCollectionsError::InternalServerError(err.msg))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(ListCollectionsError::InvalidPaginationToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListCollectionsError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListCollectionsError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        ListCollectionsError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        ListCollectionsError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListCollectionsError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListCollectionsError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(ListCollectionsError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListCollectionsError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3898,53 +3496,32 @@ pub enum ListFacesError {
 
 impl ListFacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListFacesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFacesError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(ListFacesError::InternalServerError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFacesError::InternalServerError(err.msg))
                 }
                 "InvalidPaginationTokenException" => {
-                    return RusotoError::Service(ListFacesError::InvalidPaginationToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListFacesError::InvalidPaginationToken(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListFacesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFacesError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(ListFacesError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListFacesError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFacesError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(ListFacesError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFacesError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3988,50 +3565,35 @@ pub enum ListStreamProcessorsError {
 
 impl ListStreamProcessorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamProcessorsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListStreamProcessorsError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListStreamProcessorsError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListStreamProcessorsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(ListStreamProcessorsError::InvalidPaginationToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListStreamProcessorsError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        ListStreamProcessorsError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        ListStreamProcessorsError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(ListStreamProcessorsError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListStreamProcessorsError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4078,60 +3640,43 @@ pub enum RecognizeCelebritiesError {
 
 impl RecognizeCelebritiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RecognizeCelebritiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(RecognizeCelebritiesError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RecognizeCelebritiesError::AccessDenied(err.msg))
                 }
                 "ImageTooLargeException" => {
-                    return RusotoError::Service(RecognizeCelebritiesError::ImageTooLarge(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RecognizeCelebritiesError::ImageTooLarge(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(RecognizeCelebritiesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(RecognizeCelebritiesError::InvalidImageFormat(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RecognizeCelebritiesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(RecognizeCelebritiesError::InvalidS3Object(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        RecognizeCelebritiesError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        RecognizeCelebritiesError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(RecognizeCelebritiesError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RecognizeCelebritiesError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4176,48 +3721,29 @@ pub enum SearchFacesError {
 
 impl SearchFacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchFacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(SearchFacesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SearchFacesError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(SearchFacesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SearchFacesError::InternalServerError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(SearchFacesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SearchFacesError::InvalidParameter(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(SearchFacesError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(SearchFacesError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SearchFacesError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(SearchFacesError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SearchFacesError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4266,65 +3792,42 @@ pub enum SearchFacesByImageError {
 
 impl SearchFacesByImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchFacesByImageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(SearchFacesByImageError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SearchFacesByImageError::AccessDenied(err.msg))
                 }
                 "ImageTooLargeException" => {
-                    return RusotoError::Service(SearchFacesByImageError::ImageTooLarge(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SearchFacesByImageError::ImageTooLarge(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(SearchFacesByImageError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(SearchFacesByImageError::InvalidImageFormat(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(SearchFacesByImageError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SearchFacesByImageError::InvalidParameter(err.msg))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(SearchFacesByImageError::InvalidS3Object(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SearchFacesByImageError::InvalidS3Object(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        SearchFacesByImageError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        SearchFacesByImageError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(SearchFacesByImageError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SearchFacesByImageError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(SearchFacesByImageError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SearchFacesByImageError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4376,69 +3879,54 @@ pub enum StartCelebrityRecognitionError {
 
 impl StartCelebrityRecognitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartCelebrityRecognitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
-                        StartCelebrityRecognitionError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        )),
+                        StartCelebrityRecognitionError::IdempotentParameterMismatch(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        StartCelebrityRecognitionError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        StartCelebrityRecognitionError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::InvalidS3Object(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        StartCelebrityRecognitionError::ProvisionedThroughputExceeded(
-                            String::from(error_message),
-                        ),
+                        StartCelebrityRecognitionError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::Throttling(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "VideoTooLargeException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::VideoTooLarge(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4490,67 +3978,50 @@ pub enum StartContentModerationError {
 
 impl StartContentModerationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartContentModerationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StartContentModerationError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartContentModerationError::AccessDenied(err.msg))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
-                        StartContentModerationError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        )),
+                        StartContentModerationError::IdempotentParameterMismatch(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartContentModerationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartContentModerationError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(StartContentModerationError::InvalidS3Object(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartContentModerationError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        StartContentModerationError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        StartContentModerationError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StartContentModerationError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartContentModerationError::Throttling(err.msg))
                 }
                 "VideoTooLargeException" => {
                     return RusotoError::Service(StartContentModerationError::VideoTooLarge(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4602,67 +4073,42 @@ pub enum StartFaceDetectionError {
 
 impl StartFaceDetectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartFaceDetectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StartFaceDetectionError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartFaceDetectionError::AccessDenied(err.msg))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
-                        StartFaceDetectionError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        )),
+                        StartFaceDetectionError::IdempotentParameterMismatch(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartFaceDetectionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(StartFaceDetectionError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartFaceDetectionError::InvalidParameter(err.msg))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(StartFaceDetectionError::InvalidS3Object(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartFaceDetectionError::InvalidS3Object(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(StartFaceDetectionError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartFaceDetectionError::LimitExceeded(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        StartFaceDetectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        StartFaceDetectionError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StartFaceDetectionError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartFaceDetectionError::Throttling(err.msg))
                 }
                 "VideoTooLargeException" => {
-                    return RusotoError::Service(StartFaceDetectionError::VideoTooLarge(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartFaceDetectionError::VideoTooLarge(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4716,70 +4162,43 @@ pub enum StartFaceSearchError {
 
 impl StartFaceSearchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartFaceSearchError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StartFaceSearchError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartFaceSearchError::AccessDenied(err.msg))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(StartFaceSearchError::IdempotentParameterMismatch(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(StartFaceSearchError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartFaceSearchError::InternalServerError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(StartFaceSearchError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartFaceSearchError::InvalidParameter(err.msg))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(StartFaceSearchError::InvalidS3Object(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartFaceSearchError::InvalidS3Object(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(StartFaceSearchError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartFaceSearchError::LimitExceeded(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        StartFaceSearchError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        StartFaceSearchError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(StartFaceSearchError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartFaceSearchError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StartFaceSearchError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartFaceSearchError::Throttling(err.msg))
                 }
                 "VideoTooLargeException" => {
-                    return RusotoError::Service(StartFaceSearchError::VideoTooLarge(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartFaceSearchError::VideoTooLarge(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4832,67 +4251,44 @@ pub enum StartLabelDetectionError {
 
 impl StartLabelDetectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartLabelDetectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StartLabelDetectionError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartLabelDetectionError::AccessDenied(err.msg))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
-                        StartLabelDetectionError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        )),
+                        StartLabelDetectionError::IdempotentParameterMismatch(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartLabelDetectionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartLabelDetectionError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(StartLabelDetectionError::InvalidS3Object(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartLabelDetectionError::InvalidS3Object(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(StartLabelDetectionError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartLabelDetectionError::LimitExceeded(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        StartLabelDetectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        StartLabelDetectionError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StartLabelDetectionError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartLabelDetectionError::Throttling(err.msg))
                 }
                 "VideoTooLargeException" => {
-                    return RusotoError::Service(StartLabelDetectionError::VideoTooLarge(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartLabelDetectionError::VideoTooLarge(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4944,67 +4340,44 @@ pub enum StartPersonTrackingError {
 
 impl StartPersonTrackingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPersonTrackingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StartPersonTrackingError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartPersonTrackingError::AccessDenied(err.msg))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
-                        StartPersonTrackingError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        )),
+                        StartPersonTrackingError::IdempotentParameterMismatch(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartPersonTrackingError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartPersonTrackingError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidS3ObjectException" => {
-                    return RusotoError::Service(StartPersonTrackingError::InvalidS3Object(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartPersonTrackingError::InvalidS3Object(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(StartPersonTrackingError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartPersonTrackingError::LimitExceeded(err.msg))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        StartPersonTrackingError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        StartPersonTrackingError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StartPersonTrackingError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartPersonTrackingError::Throttling(err.msg))
                 }
                 "VideoTooLargeException" => {
-                    return RusotoError::Service(StartPersonTrackingError::VideoTooLarge(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartPersonTrackingError::VideoTooLarge(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5052,55 +4425,38 @@ pub enum StartStreamProcessorError {
 
 impl StartStreamProcessorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartStreamProcessorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StartStreamProcessorError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartStreamProcessorError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartStreamProcessorError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartStreamProcessorError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        StartStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        StartStreamProcessorError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(StartStreamProcessorError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartStreamProcessorError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartStreamProcessorError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StartStreamProcessorError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartStreamProcessorError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5146,55 +4502,38 @@ pub enum StopStreamProcessorError {
 
 impl StopStreamProcessorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopStreamProcessorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StopStreamProcessorError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopStreamProcessorError::AccessDenied(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StopStreamProcessorError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StopStreamProcessorError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
-                        StopStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        )),
+                        StopStreamProcessorError::ProvisionedThroughputExceeded(err.msg),
                     )
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(StopStreamProcessorError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopStreamProcessorError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopStreamProcessorError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StopStreamProcessorError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopStreamProcessorError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

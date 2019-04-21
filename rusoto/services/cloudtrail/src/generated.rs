@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Specifies the tags to add to a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsRequest {
@@ -782,63 +781,38 @@ pub enum AddTagsError {
 
 impl AddTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudTrailARNInvalidException" => {
-                    return RusotoError::Service(AddTagsError::CloudTrailARNInvalid(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::CloudTrailARNInvalid(err.msg))
                 }
                 "InvalidTagParameterException" => {
-                    return RusotoError::Service(AddTagsError::InvalidTagParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::InvalidTagParameter(err.msg))
                 }
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(AddTagsError::InvalidTrailName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::InvalidTrailName(err.msg))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(AddTagsError::NotOrganizationMasterAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(AddTagsError::OperationNotPermitted(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::OperationNotPermitted(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AddTagsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::ResourceNotFound(err.msg))
                 }
                 "ResourceTypeNotSupportedException" => {
-                    return RusotoError::Service(AddTagsError::ResourceTypeNotSupported(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsError::ResourceTypeNotSupported(err.msg))
                 }
                 "TagsLimitExceededException" => {
-                    return RusotoError::Service(AddTagsError::TagsLimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::TagsLimitExceeded(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(AddTagsError::UnsupportedOperation(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -924,154 +898,109 @@ pub enum CreateTrailError {
 
 impl CreateTrailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrailError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudTrailAccessNotEnabledException" => {
                     return RusotoError::Service(CreateTrailError::CloudTrailAccessNotEnabled(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudWatchLogsDeliveryUnavailableException" => {
                     return RusotoError::Service(
-                        CreateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(
-                            error_message,
-                        )),
+                        CreateTrailError::CloudWatchLogsDeliveryUnavailable(err.msg),
                     )
                 }
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
-                        CreateTrailError::InsufficientDependencyServiceAccessPermission(
-                            String::from(error_message),
-                        ),
+                        CreateTrailError::InsufficientDependencyServiceAccessPermission(err.msg),
                     )
                 }
                 "InsufficientEncryptionPolicyException" => {
                     return RusotoError::Service(CreateTrailError::InsufficientEncryptionPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InsufficientS3BucketPolicyException" => {
                     return RusotoError::Service(CreateTrailError::InsufficientS3BucketPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InsufficientSnsTopicPolicyException" => {
                     return RusotoError::Service(CreateTrailError::InsufficientSnsTopicPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidCloudWatchLogsLogGroupArnException" => {
                     return RusotoError::Service(
-                        CreateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(
-                            error_message,
-                        )),
+                        CreateTrailError::InvalidCloudWatchLogsLogGroupArn(err.msg),
                     )
                 }
                 "InvalidCloudWatchLogsRoleArnException" => {
                     return RusotoError::Service(CreateTrailError::InvalidCloudWatchLogsRoleArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidKmsKeyIdException" => {
-                    return RusotoError::Service(CreateTrailError::InvalidKmsKeyId(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTrailError::InvalidKmsKeyId(err.msg))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(CreateTrailError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidS3BucketNameException" => {
-                    return RusotoError::Service(CreateTrailError::InvalidS3BucketName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrailError::InvalidS3BucketName(err.msg))
                 }
                 "InvalidS3PrefixException" => {
-                    return RusotoError::Service(CreateTrailError::InvalidS3Prefix(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTrailError::InvalidS3Prefix(err.msg))
                 }
                 "InvalidSnsTopicNameException" => {
-                    return RusotoError::Service(CreateTrailError::InvalidSnsTopicName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrailError::InvalidSnsTopicName(err.msg))
                 }
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(CreateTrailError::InvalidTrailName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTrailError::InvalidTrailName(err.msg))
                 }
-                "KmsException" => {
-                    return RusotoError::Service(CreateTrailError::Kms(String::from(error_message)))
-                }
+                "KmsException" => return RusotoError::Service(CreateTrailError::Kms(err.msg)),
                 "KmsKeyDisabledException" => {
-                    return RusotoError::Service(CreateTrailError::KmsKeyDisabled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTrailError::KmsKeyDisabled(err.msg))
                 }
                 "KmsKeyNotFoundException" => {
-                    return RusotoError::Service(CreateTrailError::KmsKeyNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTrailError::KmsKeyNotFound(err.msg))
                 }
                 "MaximumNumberOfTrailsExceededException" => {
                     return RusotoError::Service(CreateTrailError::MaximumNumberOfTrailsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(CreateTrailError::NotOrganizationMasterAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(CreateTrailError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrailError::OperationNotPermitted(err.msg))
                 }
                 "OrganizationNotInAllFeaturesModeException" => {
                     return RusotoError::Service(
-                        CreateTrailError::OrganizationNotInAllFeaturesMode(String::from(
-                            error_message,
-                        )),
+                        CreateTrailError::OrganizationNotInAllFeaturesMode(err.msg),
                     )
                 }
                 "OrganizationsNotInUseException" => {
-                    return RusotoError::Service(CreateTrailError::OrganizationsNotInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrailError::OrganizationsNotInUse(err.msg))
                 }
                 "S3BucketDoesNotExistException" => {
-                    return RusotoError::Service(CreateTrailError::S3BucketDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrailError::S3BucketDoesNotExist(err.msg))
                 }
                 "TrailAlreadyExistsException" => {
-                    return RusotoError::Service(CreateTrailError::TrailAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrailError::TrailAlreadyExists(err.msg))
                 }
                 "TrailNotProvidedException" => {
-                    return RusotoError::Service(CreateTrailError::TrailNotProvided(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTrailError::TrailNotProvided(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(CreateTrailError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTrailError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1136,55 +1065,34 @@ pub enum DeleteTrailError {
 
 impl DeleteTrailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrailError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
-                        DeleteTrailError::InsufficientDependencyServiceAccessPermission(
-                            String::from(error_message),
-                        ),
+                        DeleteTrailError::InsufficientDependencyServiceAccessPermission(err.msg),
                     )
                 }
                 "InvalidHomeRegionException" => {
-                    return RusotoError::Service(DeleteTrailError::InvalidHomeRegion(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTrailError::InvalidHomeRegion(err.msg))
                 }
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(DeleteTrailError::InvalidTrailName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTrailError::InvalidTrailName(err.msg))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(DeleteTrailError::NotOrganizationMasterAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(DeleteTrailError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTrailError::OperationNotPermitted(err.msg))
                 }
                 "TrailNotFoundException" => {
-                    return RusotoError::Service(DeleteTrailError::TrailNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTrailError::TrailNotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(DeleteTrailError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTrailError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1220,28 +1128,17 @@ pub enum DescribeTrailsError {
 
 impl DescribeTrailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrailsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DescribeTrailsError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(DescribeTrailsError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTrailsError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1276,38 +1173,25 @@ pub enum GetEventSelectorsError {
 
 impl GetEventSelectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEventSelectorsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(GetEventSelectorsError::InvalidTrailName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetEventSelectorsError::InvalidTrailName(err.msg))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(GetEventSelectorsError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TrailNotFoundException" => {
-                    return RusotoError::Service(GetEventSelectorsError::TrailNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetEventSelectorsError::TrailNotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(GetEventSelectorsError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1340,28 +1224,15 @@ pub enum GetTrailStatusError {
 
 impl GetTrailStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTrailStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(GetTrailStatusError::InvalidTrailName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTrailStatusError::InvalidTrailName(err.msg))
                 }
                 "TrailNotFoundException" => {
-                    return RusotoError::Service(GetTrailStatusError::TrailNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTrailStatusError::TrailNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1396,38 +1267,23 @@ pub enum ListPublicKeysError {
 
 impl ListPublicKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPublicKeysError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidTimeRangeException" => {
-                    return RusotoError::Service(ListPublicKeysError::InvalidTimeRange(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListPublicKeysError::InvalidTimeRange(err.msg))
                 }
                 "InvalidTokenException" => {
-                    return RusotoError::Service(ListPublicKeysError::InvalidToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListPublicKeysError::InvalidToken(err.msg))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(ListPublicKeysError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(ListPublicKeysError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListPublicKeysError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1470,53 +1326,30 @@ pub enum ListTagsError {
 
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudTrailARNInvalidException" => {
-                    return RusotoError::Service(ListTagsError::CloudTrailARNInvalid(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::CloudTrailARNInvalid(err.msg))
                 }
                 "InvalidTokenException" => {
-                    return RusotoError::Service(ListTagsError::InvalidToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::InvalidToken(err.msg))
                 }
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(ListTagsError::InvalidTrailName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::InvalidTrailName(err.msg))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(ListTagsError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsError::OperationNotPermitted(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListTagsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::ResourceNotFound(err.msg))
                 }
                 "ResourceTypeNotSupportedException" => {
-                    return RusotoError::Service(ListTagsError::ResourceTypeNotSupported(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsError::ResourceTypeNotSupported(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(ListTagsError::UnsupportedOperation(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1556,38 +1389,23 @@ pub enum LookupEventsError {
 
 impl LookupEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LookupEventsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidLookupAttributesException" => {
                     return RusotoError::Service(LookupEventsError::InvalidLookupAttributes(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidMaxResultsException" => {
-                    return RusotoError::Service(LookupEventsError::InvalidMaxResults(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(LookupEventsError::InvalidMaxResults(err.msg))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(LookupEventsError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(LookupEventsError::InvalidNextToken(err.msg))
                 }
                 "InvalidTimeRangeException" => {
-                    return RusotoError::Service(LookupEventsError::InvalidTimeRange(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(LookupEventsError::InvalidTimeRange(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1632,62 +1450,45 @@ pub enum PutEventSelectorsError {
 
 impl PutEventSelectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEventSelectorsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
                         PutEventSelectorsError::InsufficientDependencyServiceAccessPermission(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InvalidEventSelectorsException" => {
                     return RusotoError::Service(PutEventSelectorsError::InvalidEventSelectors(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidHomeRegionException" => {
-                    return RusotoError::Service(PutEventSelectorsError::InvalidHomeRegion(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutEventSelectorsError::InvalidHomeRegion(err.msg))
                 }
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(PutEventSelectorsError::InvalidTrailName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutEventSelectorsError::InvalidTrailName(err.msg))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(
-                        PutEventSelectorsError::NotOrganizationMasterAccount(String::from(
-                            error_message,
-                        )),
+                        PutEventSelectorsError::NotOrganizationMasterAccount(err.msg),
                     )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(PutEventSelectorsError::OperationNotPermitted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TrailNotFoundException" => {
-                    return RusotoError::Service(PutEventSelectorsError::TrailNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutEventSelectorsError::TrailNotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(PutEventSelectorsError::UnsupportedOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1738,58 +1539,35 @@ pub enum RemoveTagsError {
 
 impl RemoveTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudTrailARNInvalidException" => {
-                    return RusotoError::Service(RemoveTagsError::CloudTrailARNInvalid(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveTagsError::CloudTrailARNInvalid(err.msg))
                 }
                 "InvalidTagParameterException" => {
-                    return RusotoError::Service(RemoveTagsError::InvalidTagParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveTagsError::InvalidTagParameter(err.msg))
                 }
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(RemoveTagsError::InvalidTrailName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveTagsError::InvalidTrailName(err.msg))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(RemoveTagsError::NotOrganizationMasterAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(RemoveTagsError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveTagsError::OperationNotPermitted(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(RemoveTagsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveTagsError::ResourceNotFound(err.msg))
                 }
                 "ResourceTypeNotSupportedException" => {
-                    return RusotoError::Service(RemoveTagsError::ResourceTypeNotSupported(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveTagsError::ResourceTypeNotSupported(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(RemoveTagsError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveTagsError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1836,55 +1614,34 @@ pub enum StartLoggingError {
 
 impl StartLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartLoggingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
-                        StartLoggingError::InsufficientDependencyServiceAccessPermission(
-                            String::from(error_message),
-                        ),
+                        StartLoggingError::InsufficientDependencyServiceAccessPermission(err.msg),
                     )
                 }
                 "InvalidHomeRegionException" => {
-                    return RusotoError::Service(StartLoggingError::InvalidHomeRegion(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartLoggingError::InvalidHomeRegion(err.msg))
                 }
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(StartLoggingError::InvalidTrailName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartLoggingError::InvalidTrailName(err.msg))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(StartLoggingError::NotOrganizationMasterAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(StartLoggingError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartLoggingError::OperationNotPermitted(err.msg))
                 }
                 "TrailNotFoundException" => {
-                    return RusotoError::Service(StartLoggingError::TrailNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartLoggingError::TrailNotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(StartLoggingError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartLoggingError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1930,55 +1687,34 @@ pub enum StopLoggingError {
 
 impl StopLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopLoggingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
-                        StopLoggingError::InsufficientDependencyServiceAccessPermission(
-                            String::from(error_message),
-                        ),
+                        StopLoggingError::InsufficientDependencyServiceAccessPermission(err.msg),
                     )
                 }
                 "InvalidHomeRegionException" => {
-                    return RusotoError::Service(StopLoggingError::InvalidHomeRegion(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopLoggingError::InvalidHomeRegion(err.msg))
                 }
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(StopLoggingError::InvalidTrailName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopLoggingError::InvalidTrailName(err.msg))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(StopLoggingError::NotOrganizationMasterAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(StopLoggingError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopLoggingError::OperationNotPermitted(err.msg))
                 }
                 "TrailNotFoundException" => {
-                    return RusotoError::Service(StopLoggingError::TrailNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopLoggingError::TrailNotFound(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(StopLoggingError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopLoggingError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2062,154 +1798,107 @@ pub enum UpdateTrailError {
 
 impl UpdateTrailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrailError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudTrailAccessNotEnabledException" => {
                     return RusotoError::Service(UpdateTrailError::CloudTrailAccessNotEnabled(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudWatchLogsDeliveryUnavailableException" => {
                     return RusotoError::Service(
-                        UpdateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(
-                            error_message,
-                        )),
+                        UpdateTrailError::CloudWatchLogsDeliveryUnavailable(err.msg),
                     )
                 }
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
-                        UpdateTrailError::InsufficientDependencyServiceAccessPermission(
-                            String::from(error_message),
-                        ),
+                        UpdateTrailError::InsufficientDependencyServiceAccessPermission(err.msg),
                     )
                 }
                 "InsufficientEncryptionPolicyException" => {
                     return RusotoError::Service(UpdateTrailError::InsufficientEncryptionPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InsufficientS3BucketPolicyException" => {
                     return RusotoError::Service(UpdateTrailError::InsufficientS3BucketPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InsufficientSnsTopicPolicyException" => {
                     return RusotoError::Service(UpdateTrailError::InsufficientSnsTopicPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidCloudWatchLogsLogGroupArnException" => {
                     return RusotoError::Service(
-                        UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(
-                            error_message,
-                        )),
+                        UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(err.msg),
                     )
                 }
                 "InvalidCloudWatchLogsRoleArnException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidCloudWatchLogsRoleArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidHomeRegionException" => {
-                    return RusotoError::Service(UpdateTrailError::InvalidHomeRegion(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrailError::InvalidHomeRegion(err.msg))
                 }
                 "InvalidKmsKeyIdException" => {
-                    return RusotoError::Service(UpdateTrailError::InvalidKmsKeyId(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrailError::InvalidKmsKeyId(err.msg))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidParameterCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidS3BucketNameException" => {
-                    return RusotoError::Service(UpdateTrailError::InvalidS3BucketName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTrailError::InvalidS3BucketName(err.msg))
                 }
                 "InvalidS3PrefixException" => {
-                    return RusotoError::Service(UpdateTrailError::InvalidS3Prefix(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrailError::InvalidS3Prefix(err.msg))
                 }
                 "InvalidSnsTopicNameException" => {
-                    return RusotoError::Service(UpdateTrailError::InvalidSnsTopicName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTrailError::InvalidSnsTopicName(err.msg))
                 }
                 "InvalidTrailNameException" => {
-                    return RusotoError::Service(UpdateTrailError::InvalidTrailName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrailError::InvalidTrailName(err.msg))
                 }
-                "KmsException" => {
-                    return RusotoError::Service(UpdateTrailError::Kms(String::from(error_message)))
-                }
+                "KmsException" => return RusotoError::Service(UpdateTrailError::Kms(err.msg)),
                 "KmsKeyDisabledException" => {
-                    return RusotoError::Service(UpdateTrailError::KmsKeyDisabled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrailError::KmsKeyDisabled(err.msg))
                 }
                 "KmsKeyNotFoundException" => {
-                    return RusotoError::Service(UpdateTrailError::KmsKeyNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrailError::KmsKeyNotFound(err.msg))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(UpdateTrailError::NotOrganizationMasterAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(UpdateTrailError::OperationNotPermitted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTrailError::OperationNotPermitted(err.msg))
                 }
                 "OrganizationNotInAllFeaturesModeException" => {
                     return RusotoError::Service(
-                        UpdateTrailError::OrganizationNotInAllFeaturesMode(String::from(
-                            error_message,
-                        )),
+                        UpdateTrailError::OrganizationNotInAllFeaturesMode(err.msg),
                     )
                 }
                 "OrganizationsNotInUseException" => {
-                    return RusotoError::Service(UpdateTrailError::OrganizationsNotInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTrailError::OrganizationsNotInUse(err.msg))
                 }
                 "S3BucketDoesNotExistException" => {
-                    return RusotoError::Service(UpdateTrailError::S3BucketDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTrailError::S3BucketDoesNotExist(err.msg))
                 }
                 "TrailNotFoundException" => {
-                    return RusotoError::Service(UpdateTrailError::TrailNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrailError::TrailNotFound(err.msg))
                 }
                 "TrailNotProvidedException" => {
-                    return RusotoError::Service(UpdateTrailError::TrailNotProvided(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTrailError::TrailNotProvided(err.msg))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(UpdateTrailError::UnsupportedOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTrailError::UnsupportedOperation(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>An activation registers one or more on-premises servers or virtual machines (VMs) with AWS so that you can configure those servers or VMs using Run Command. A server or VM that has been registered with AWS is called a managed instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -7003,43 +7002,28 @@ pub enum AddTagsToResourceError {
 
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(AddTagsToResourceError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceId" => {
-                    return RusotoError::Service(AddTagsToResourceError::InvalidResourceId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToResourceError::InvalidResourceId(err.msg))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(AddTagsToResourceError::InvalidResourceType(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyTagsError" => {
-                    return RusotoError::Service(AddTagsToResourceError::TooManyTagsError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToResourceError::TooManyTagsError(err.msg))
                 }
                 "TooManyUpdates" => {
-                    return RusotoError::Service(AddTagsToResourceError::TooManyUpdates(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToResourceError::TooManyUpdates(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7077,38 +7061,21 @@ pub enum CancelCommandError {
 
 impl CancelCommandError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelCommandError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateInstanceId" => {
-                    return RusotoError::Service(CancelCommandError::DuplicateInstanceId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelCommandError::DuplicateInstanceId(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(CancelCommandError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelCommandError::InternalServerError(err.msg))
                 }
                 "InvalidCommandId" => {
-                    return RusotoError::Service(CancelCommandError::InvalidCommandId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelCommandError::InvalidCommandId(err.msg))
                 }
                 "InvalidInstanceId" => {
-                    return RusotoError::Service(CancelCommandError::InvalidInstanceId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelCommandError::InvalidInstanceId(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7143,32 +7110,19 @@ impl CancelMaintenanceWindowExecutionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelMaintenanceWindowExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        CancelMaintenanceWindowExecutionError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        CancelMaintenanceWindowExecutionError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        CancelMaintenanceWindowExecutionError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        CancelMaintenanceWindowExecutionError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7197,23 +7151,14 @@ pub enum CreateActivationError {
 
 impl CreateActivationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateActivationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateActivationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7261,73 +7206,54 @@ pub enum CreateAssociationError {
 
 impl CreateAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAssociationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationAlreadyExists" => {
                     return RusotoError::Service(CreateAssociationError::AssociationAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AssociationLimitExceeded" => {
                     return RusotoError::Service(CreateAssociationError::AssociationLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateAssociationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(CreateAssociationError::InvalidDocument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssociationError::InvalidDocument(err.msg))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(CreateAssociationError::InvalidDocumentVersion(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInstanceId" => {
-                    return RusotoError::Service(CreateAssociationError::InvalidInstanceId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssociationError::InvalidInstanceId(err.msg))
                 }
                 "InvalidOutputLocation" => {
                     return RusotoError::Service(CreateAssociationError::InvalidOutputLocation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameters" => {
-                    return RusotoError::Service(CreateAssociationError::InvalidParameters(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssociationError::InvalidParameters(err.msg))
                 }
                 "InvalidSchedule" => {
-                    return RusotoError::Service(CreateAssociationError::InvalidSchedule(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssociationError::InvalidSchedule(err.msg))
                 }
                 "InvalidTarget" => {
-                    return RusotoError::Service(CreateAssociationError::InvalidTarget(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssociationError::InvalidTarget(err.msg))
                 }
                 "UnsupportedPlatformType" => {
                     return RusotoError::Service(CreateAssociationError::UnsupportedPlatformType(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7385,81 +7311,64 @@ pub enum CreateAssociationBatchError {
 
 impl CreateAssociationBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAssociationBatchError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationLimitExceeded" => {
                     return RusotoError::Service(
-                        CreateAssociationBatchError::AssociationLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateAssociationBatchError::AssociationLimitExceeded(err.msg),
                     )
                 }
                 "DuplicateInstanceId" => {
                     return RusotoError::Service(CreateAssociationBatchError::DuplicateInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateAssociationBatchError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidDocument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(
-                        CreateAssociationBatchError::InvalidDocumentVersion(String::from(
-                            error_message,
-                        )),
+                        CreateAssociationBatchError::InvalidDocumentVersion(err.msg),
                     )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidOutputLocation" => {
                     return RusotoError::Service(
-                        CreateAssociationBatchError::InvalidOutputLocation(String::from(
-                            error_message,
-                        )),
+                        CreateAssociationBatchError::InvalidOutputLocation(err.msg),
                     )
                 }
                 "InvalidParameters" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidParameters(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSchedule" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidSchedule(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidTarget" => {
                     return RusotoError::Service(CreateAssociationBatchError::InvalidTarget(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedPlatformType" => {
                     return RusotoError::Service(
-                        CreateAssociationBatchError::UnsupportedPlatformType(String::from(
-                            error_message,
-                        )),
+                        CreateAssociationBatchError::UnsupportedPlatformType(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7507,48 +7416,37 @@ pub enum CreateDocumentError {
 
 impl CreateDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDocumentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DocumentAlreadyExists" => {
                     return RusotoError::Service(CreateDocumentError::DocumentAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DocumentLimitExceeded" => {
                     return RusotoError::Service(CreateDocumentError::DocumentLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(CreateDocumentError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDocumentError::InternalServerError(err.msg))
                 }
                 "InvalidDocumentContent" => {
                     return RusotoError::Service(CreateDocumentError::InvalidDocumentContent(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return RusotoError::Service(CreateDocumentError::InvalidDocumentSchemaVersion(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MaxDocumentSizeExceeded" => {
                     return RusotoError::Service(CreateDocumentError::MaxDocumentSizeExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7585,37 +7483,24 @@ pub enum CreateMaintenanceWindowError {
 
 impl CreateMaintenanceWindowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMaintenanceWindowError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "IdempotentParameterMismatch" => {
                     return RusotoError::Service(
-                        CreateMaintenanceWindowError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        )),
+                        CreateMaintenanceWindowError::IdempotentParameterMismatch(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateMaintenanceWindowError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateMaintenanceWindowError::ResourceLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateMaintenanceWindowError::ResourceLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7649,35 +7534,24 @@ pub enum CreatePatchBaselineError {
 
 impl CreatePatchBaselineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePatchBaselineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "IdempotentParameterMismatch" => {
                     return RusotoError::Service(
-                        CreatePatchBaselineError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        )),
+                        CreatePatchBaselineError::IdempotentParameterMismatch(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreatePatchBaselineError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(CreatePatchBaselineError::ResourceLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7713,44 +7587,29 @@ pub enum CreateResourceDataSyncError {
 
 impl CreateResourceDataSyncError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceDataSyncError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateResourceDataSyncError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceDataSyncAlreadyExistsException" => {
                     return RusotoError::Service(
-                        CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(String::from(
-                            error_message,
-                        )),
+                        CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(err.msg),
                     )
                 }
                 "ResourceDataSyncCountExceededException" => {
                     return RusotoError::Service(
-                        CreateResourceDataSyncError::ResourceDataSyncCountExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateResourceDataSyncError::ResourceDataSyncCountExceeded(err.msg),
                     )
                 }
                 "ResourceDataSyncInvalidConfigurationException" => {
                     return RusotoError::Service(
-                        CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(
-                            String::from(error_message),
-                        ),
+                        CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7787,38 +7646,25 @@ pub enum DeleteActivationError {
 
 impl DeleteActivationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteActivationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteActivationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidActivation" => {
-                    return RusotoError::Service(DeleteActivationError::InvalidActivation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteActivationError::InvalidActivation(err.msg))
                 }
                 "InvalidActivationId" => {
                     return RusotoError::Service(DeleteActivationError::InvalidActivationId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyUpdates" => {
-                    return RusotoError::Service(DeleteActivationError::TooManyUpdates(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteActivationError::TooManyUpdates(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7857,43 +7703,28 @@ pub enum DeleteAssociationError {
 
 impl DeleteAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAssociationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(DeleteAssociationError::AssociationDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteAssociationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(DeleteAssociationError::InvalidDocument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssociationError::InvalidDocument(err.msg))
                 }
                 "InvalidInstanceId" => {
-                    return RusotoError::Service(DeleteAssociationError::InvalidInstanceId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssociationError::InvalidInstanceId(err.msg))
                 }
                 "TooManyUpdates" => {
-                    return RusotoError::Service(DeleteAssociationError::TooManyUpdates(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssociationError::TooManyUpdates(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7931,38 +7762,23 @@ pub enum DeleteDocumentError {
 
 impl DeleteDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDocumentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociatedInstances" => {
-                    return RusotoError::Service(DeleteDocumentError::AssociatedInstances(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDocumentError::AssociatedInstances(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteDocumentError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDocumentError::InternalServerError(err.msg))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(DeleteDocumentError::InvalidDocument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDocumentError::InvalidDocument(err.msg))
                 }
                 "InvalidDocumentOperation" => {
                     return RusotoError::Service(DeleteDocumentError::InvalidDocumentOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8001,45 +7817,28 @@ pub enum DeleteInventoryError {
 
 impl DeleteInventoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInventoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteInventoryError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInventoryError::InternalServerError(err.msg))
                 }
                 "InvalidDeleteInventoryParametersException" => {
                     return RusotoError::Service(
-                        DeleteInventoryError::InvalidDeleteInventoryParameters(String::from(
-                            error_message,
-                        )),
+                        DeleteInventoryError::InvalidDeleteInventoryParameters(err.msg),
                     )
                 }
                 "InvalidInventoryRequestException" => {
                     return RusotoError::Service(DeleteInventoryError::InvalidInventoryRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidOptionException" => {
-                    return RusotoError::Service(DeleteInventoryError::InvalidOption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInventoryError::InvalidOption(err.msg))
                 }
                 "InvalidTypeNameException" => {
-                    return RusotoError::Service(DeleteInventoryError::InvalidTypeName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInventoryError::InvalidTypeName(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8071,23 +7870,14 @@ pub enum DeleteMaintenanceWindowError {
 
 impl DeleteMaintenanceWindowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMaintenanceWindowError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteMaintenanceWindowError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8117,28 +7907,15 @@ pub enum DeleteParameterError {
 
 impl DeleteParameterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteParameterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteParameterError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteParameterError::InternalServerError(err.msg))
                 }
                 "ParameterNotFound" => {
-                    return RusotoError::Service(DeleteParameterError::ParameterNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteParameterError::ParameterNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8167,23 +7944,14 @@ pub enum DeleteParametersError {
 
 impl DeleteParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteParametersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteParametersError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8213,28 +7981,17 @@ pub enum DeletePatchBaselineError {
 
 impl DeletePatchBaselineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePatchBaselineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DeletePatchBaselineError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(DeletePatchBaselineError::ResourceInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeletePatchBaselineError::ResourceInUse(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8265,30 +8022,19 @@ pub enum DeleteResourceDataSyncError {
 
 impl DeleteResourceDataSyncError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceDataSyncError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteResourceDataSyncError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceDataSyncNotFoundException" => {
                     return RusotoError::Service(
-                        DeleteResourceDataSyncError::ResourceDataSyncNotFound(String::from(
-                            error_message,
-                        )),
+                        DeleteResourceDataSyncError::ResourceDataSyncNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8319,30 +8065,19 @@ pub enum DeregisterManagedInstanceError {
 
 impl DeregisterManagedInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterManagedInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DeregisterManagedInstanceError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DeregisterManagedInstanceError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(DeregisterManagedInstanceError::InvalidInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8375,32 +8110,19 @@ impl DeregisterPatchBaselineForPatchGroupError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterPatchBaselineForPatchGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DeregisterPatchBaselineForPatchGroupError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DeregisterPatchBaselineForPatchGroupError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(
-                        DeregisterPatchBaselineForPatchGroupError::InvalidResourceId(String::from(
-                            error_message,
-                        )),
+                        DeregisterPatchBaselineForPatchGroupError::InvalidResourceId(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8435,39 +8157,24 @@ impl DeregisterTargetFromMaintenanceWindowError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterTargetFromMaintenanceWindowError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        DeregisterTargetFromMaintenanceWindowError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DeregisterTargetFromMaintenanceWindowError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DeregisterTargetFromMaintenanceWindowError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DeregisterTargetFromMaintenanceWindowError::InternalServerError(err.msg),
                     )
                 }
                 "TargetInUseException" => {
                     return RusotoError::Service(
-                        DeregisterTargetFromMaintenanceWindowError::TargetInUse(String::from(
-                            error_message,
-                        )),
+                        DeregisterTargetFromMaintenanceWindowError::TargetInUse(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8501,32 +8208,19 @@ impl DeregisterTaskFromMaintenanceWindowError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterTaskFromMaintenanceWindowError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        DeregisterTaskFromMaintenanceWindowError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DeregisterTaskFromMaintenanceWindowError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DeregisterTaskFromMaintenanceWindowError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DeregisterTaskFromMaintenanceWindowError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8559,33 +8253,22 @@ pub enum DescribeActivationsError {
 
 impl DescribeActivationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActivationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeActivationsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilter" => {
-                    return RusotoError::Service(DescribeActivationsError::InvalidFilter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeActivationsError::InvalidFilter(err.msg))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribeActivationsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8623,45 +8306,32 @@ pub enum DescribeAssociationError {
 
 impl DescribeAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAssociationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(DescribeAssociationError::AssociationDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeAssociationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidAssociationVersion" => {
                     return RusotoError::Service(
-                        DescribeAssociationError::InvalidAssociationVersion(String::from(
-                            error_message,
-                        )),
+                        DescribeAssociationError::InvalidAssociationVersion(err.msg),
                     )
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(DescribeAssociationError::InvalidDocument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeAssociationError::InvalidDocument(err.msg))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(DescribeAssociationError::InvalidInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8701,46 +8371,31 @@ impl DescribeAssociationExecutionTargetsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAssociationExecutionTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(
-                        DescribeAssociationExecutionTargetsError::AssociationDoesNotExist(
-                            String::from(error_message),
-                        ),
+                        DescribeAssociationExecutionTargetsError::AssociationDoesNotExist(err.msg),
                     )
                 }
                 "AssociationExecutionDoesNotExist" => {
                     return RusotoError::Service(
                         DescribeAssociationExecutionTargetsError::AssociationExecutionDoesNotExist(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeAssociationExecutionTargetsError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DescribeAssociationExecutionTargetsError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        DescribeAssociationExecutionTargetsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeAssociationExecutionTargetsError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8779,39 +8434,24 @@ impl DescribeAssociationExecutionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAssociationExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(
-                        DescribeAssociationExecutionsError::AssociationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeAssociationExecutionsError::AssociationDoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeAssociationExecutionsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeAssociationExecutionsError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        DescribeAssociationExecutionsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeAssociationExecutionsError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8849,46 +8489,29 @@ impl DescribeAutomationExecutionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAutomationExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeAutomationExecutionsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeAutomationExecutionsError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(
-                        DescribeAutomationExecutionsError::InvalidFilterKey(String::from(
-                            error_message,
-                        )),
+                        DescribeAutomationExecutionsError::InvalidFilterKey(err.msg),
                     )
                 }
                 "InvalidFilterValue" => {
                     return RusotoError::Service(
-                        DescribeAutomationExecutionsError::InvalidFilterValue(String::from(
-                            error_message,
-                        )),
+                        DescribeAutomationExecutionsError::InvalidFilterValue(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        DescribeAutomationExecutionsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeAutomationExecutionsError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8929,53 +8552,34 @@ impl DescribeAutomationStepExecutionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAutomationStepExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AutomationExecutionNotFoundException" => {
                     return RusotoError::Service(
-                        DescribeAutomationStepExecutionsError::AutomationExecutionNotFound(
-                            String::from(error_message),
-                        ),
+                        DescribeAutomationStepExecutionsError::AutomationExecutionNotFound(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeAutomationStepExecutionsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeAutomationStepExecutionsError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(
-                        DescribeAutomationStepExecutionsError::InvalidFilterKey(String::from(
-                            error_message,
-                        )),
+                        DescribeAutomationStepExecutionsError::InvalidFilterKey(err.msg),
                     )
                 }
                 "InvalidFilterValue" => {
                     return RusotoError::Service(
-                        DescribeAutomationStepExecutionsError::InvalidFilterValue(String::from(
-                            error_message,
-                        )),
+                        DescribeAutomationStepExecutionsError::InvalidFilterValue(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        DescribeAutomationStepExecutionsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeAutomationStepExecutionsError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9007,25 +8611,14 @@ pub enum DescribeAvailablePatchesError {
 
 impl DescribeAvailablePatchesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAvailablePatchesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeAvailablePatchesError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeAvailablePatchesError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9057,33 +8650,22 @@ pub enum DescribeDocumentError {
 
 impl DescribeDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDocumentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeDocumentError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(DescribeDocumentError::InvalidDocument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeDocumentError::InvalidDocument(err.msg))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(DescribeDocumentError::InvalidDocumentVersion(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9119,37 +8701,24 @@ impl DescribeDocumentPermissionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDocumentPermissionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeDocumentPermissionError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeDocumentPermissionError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(DescribeDocumentPermissionError::InvalidDocument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPermissionType" => {
                     return RusotoError::Service(
-                        DescribeDocumentPermissionError::InvalidPermissionType(String::from(
-                            error_message,
-                        )),
+                        DescribeDocumentPermissionError::InvalidPermissionType(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9185,39 +8754,24 @@ impl DescribeEffectiveInstanceAssociationsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEffectiveInstanceAssociationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeEffectiveInstanceAssociationsError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DescribeEffectiveInstanceAssociationsError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(
-                        DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(
-                            String::from(error_message),
-                        ),
+                        DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        DescribeEffectiveInstanceAssociationsError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeEffectiveInstanceAssociationsError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9255,46 +8809,31 @@ impl DescribeEffectivePatchesForPatchBaselineError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEffectivePatchesForPatchBaselineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeEffectivePatchesForPatchBaselineError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DescribeEffectivePatchesForPatchBaselineError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(
-                        DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(
-                            String::from(error_message),
-                        ),
+                        DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(err.msg),
                     )
                 }
                 "UnsupportedOperatingSystem" => {
                     return RusotoError::Service(
                         DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9333,39 +8872,24 @@ impl DescribeInstanceAssociationsStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInstanceAssociationsStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeInstanceAssociationsStatusError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeInstanceAssociationsStatusError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(
-                        DescribeInstanceAssociationsStatusError::InvalidInstanceId(String::from(
-                            error_message,
-                        )),
+                        DescribeInstanceAssociationsStatusError::InvalidInstanceId(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        DescribeInstanceAssociationsStatusError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeInstanceAssociationsStatusError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9405,53 +8929,36 @@ impl DescribeInstanceInformationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInstanceInformationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeInstanceInformationError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeInstanceInformationError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(
-                        DescribeInstanceInformationError::InvalidFilterKey(String::from(
-                            error_message,
-                        )),
+                        DescribeInstanceInformationError::InvalidFilterKey(err.msg),
                     )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(
-                        DescribeInstanceInformationError::InvalidInstanceId(String::from(
-                            error_message,
-                        )),
+                        DescribeInstanceInformationError::InvalidInstanceId(err.msg),
                     )
                 }
                 "InvalidInstanceInformationFilterValue" => {
                     return RusotoError::Service(
                         DescribeInstanceInformationError::InvalidInstanceInformationFilterValue(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        DescribeInstanceInformationError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeInstanceInformationError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9489,32 +8996,19 @@ impl DescribeInstancePatchStatesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInstancePatchStatesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeInstancePatchStatesError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeInstancePatchStatesError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        DescribeInstancePatchStatesError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        DescribeInstancePatchStatesError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9549,39 +9043,24 @@ impl DescribeInstancePatchStatesForPatchGroupError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInstancePatchStatesForPatchGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeInstancePatchStatesForPatchGroupError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DescribeInstancePatchStatesForPatchGroupError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(
-                        DescribeInstancePatchStatesForPatchGroupError::InvalidFilter(String::from(
-                            error_message,
-                        )),
+                        DescribeInstancePatchStatesForPatchGroupError::InvalidFilter(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        DescribeInstancePatchStatesForPatchGroupError::InvalidNextToken(
-                            String::from(error_message),
-                        ),
+                        DescribeInstancePatchStatesForPatchGroupError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9617,38 +9096,29 @@ pub enum DescribeInstancePatchesError {
 
 impl DescribeInstancePatchesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstancePatchesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeInstancePatchesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(DescribeInstancePatchesError::InvalidFilter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(DescribeInstancePatchesError::InvalidInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribeInstancePatchesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9685,37 +9155,24 @@ impl DescribeInventoryDeletionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInventoryDeletionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeInventoryDeletionsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeInventoryDeletionsError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidDeletionIdException" => {
                     return RusotoError::Service(
-                        DescribeInventoryDeletionsError::InvalidDeletionId(String::from(
-                            error_message,
-                        )),
+                        DescribeInventoryDeletionsError::InvalidDeletionId(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribeInventoryDeletionsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9749,32 +9206,23 @@ impl DescribeMaintenanceWindowExecutionTaskInvocationsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMaintenanceWindowExecutionTaskInvocationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
                         DescribeMaintenanceWindowExecutionTaskInvocationsError::DoesNotExist(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeMaintenanceWindowExecutionTaskInvocationsError::InternalServerError(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9811,32 +9259,19 @@ impl DescribeMaintenanceWindowExecutionTasksError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMaintenanceWindowExecutionTasksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowExecutionTasksError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeMaintenanceWindowExecutionTasksError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowExecutionTasksError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DescribeMaintenanceWindowExecutionTasksError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9867,25 +9302,14 @@ impl DescribeMaintenanceWindowExecutionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMaintenanceWindowExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowExecutionsError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DescribeMaintenanceWindowExecutionsError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9917,32 +9341,19 @@ impl DescribeMaintenanceWindowScheduleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMaintenanceWindowScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowScheduleError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeMaintenanceWindowScheduleError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowScheduleError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeMaintenanceWindowScheduleError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9975,32 +9386,19 @@ impl DescribeMaintenanceWindowTargetsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMaintenanceWindowTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowTargetsError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeMaintenanceWindowTargetsError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowTargetsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeMaintenanceWindowTargetsError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10033,30 +9431,19 @@ impl DescribeMaintenanceWindowTasksError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMaintenanceWindowTasksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(DescribeMaintenanceWindowTasksError::DoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowTasksError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeMaintenanceWindowTasksError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10087,25 +9474,14 @@ impl DescribeMaintenanceWindowsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMaintenanceWindowsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeMaintenanceWindowsError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10135,25 +9511,14 @@ impl DescribeMaintenanceWindowsForTargetError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMaintenanceWindowsForTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceWindowsForTargetError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        DescribeMaintenanceWindowsForTargetError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10189,43 +9554,30 @@ pub enum DescribeParametersError {
 
 impl DescribeParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeParametersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeParametersError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterKey" => {
-                    return RusotoError::Service(DescribeParametersError::InvalidFilterKey(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeParametersError::InvalidFilterKey(err.msg))
                 }
                 "InvalidFilterOption" => {
                     return RusotoError::Service(DescribeParametersError::InvalidFilterOption(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterValue" => {
                     return RusotoError::Service(DescribeParametersError::InvalidFilterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(DescribeParametersError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeParametersError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10257,23 +9609,14 @@ pub enum DescribePatchBaselinesError {
 
 impl DescribePatchBaselinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePatchBaselinesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribePatchBaselinesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10303,28 +9646,19 @@ pub enum DescribePatchGroupStateError {
 
 impl DescribePatchGroupStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePatchGroupStateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribePatchGroupStateError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(DescribePatchGroupStateError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10353,23 +9687,14 @@ pub enum DescribePatchGroupsError {
 
 impl DescribePatchGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePatchGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribePatchGroupsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10401,33 +9726,20 @@ pub enum DescribeSessionsError {
 
 impl DescribeSessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSessionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeSessionsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterKey" => {
-                    return RusotoError::Service(DescribeSessionsError::InvalidFilterKey(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeSessionsError::InvalidFilterKey(err.msg))
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(DescribeSessionsError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeSessionsError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10459,30 +9771,19 @@ pub enum GetAutomationExecutionError {
 
 impl GetAutomationExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAutomationExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AutomationExecutionNotFoundException" => {
                     return RusotoError::Service(
-                        GetAutomationExecutionError::AutomationExecutionNotFound(String::from(
-                            error_message,
-                        )),
+                        GetAutomationExecutionError::AutomationExecutionNotFound(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetAutomationExecutionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10519,43 +9820,34 @@ pub enum GetCommandInvocationError {
 
 impl GetCommandInvocationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommandInvocationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetCommandInvocationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidCommandId" => {
                     return RusotoError::Service(GetCommandInvocationError::InvalidCommandId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(GetCommandInvocationError::InvalidInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPluginName" => {
                     return RusotoError::Service(GetCommandInvocationError::InvalidPluginName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvocationDoesNotExist" => {
                     return RusotoError::Service(GetCommandInvocationError::InvocationDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10587,23 +9879,14 @@ pub enum GetConnectionStatusError {
 
 impl GetConnectionStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetConnectionStatusError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10631,23 +9914,14 @@ pub enum GetDefaultPatchBaselineError {
 
 impl GetDefaultPatchBaselineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDefaultPatchBaselineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetDefaultPatchBaselineError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10679,32 +9953,21 @@ impl GetDeployablePatchSnapshotForInstanceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDeployablePatchSnapshotForInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        GetDeployablePatchSnapshotForInstanceError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        GetDeployablePatchSnapshotForInstanceError::InternalServerError(err.msg),
                     )
                 }
                 "UnsupportedOperatingSystem" => {
                     return RusotoError::Service(
                         GetDeployablePatchSnapshotForInstanceError::UnsupportedOperatingSystem(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10739,33 +10002,18 @@ pub enum GetDocumentError {
 
 impl GetDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(GetDocumentError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDocumentError::InternalServerError(err.msg))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(GetDocumentError::InvalidDocument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDocumentError::InvalidDocument(err.msg))
                 }
                 "InvalidDocumentVersion" => {
-                    return RusotoError::Service(GetDocumentError::InvalidDocumentVersion(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDocumentError::InvalidDocumentVersion(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10807,53 +10055,30 @@ pub enum GetInventoryError {
 
 impl GetInventoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInventoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(GetInventoryError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInventoryError::InternalServerError(err.msg))
                 }
                 "InvalidAggregatorException" => {
-                    return RusotoError::Service(GetInventoryError::InvalidAggregator(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInventoryError::InvalidAggregator(err.msg))
                 }
                 "InvalidFilter" => {
-                    return RusotoError::Service(GetInventoryError::InvalidFilter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInventoryError::InvalidFilter(err.msg))
                 }
                 "InvalidInventoryGroupException" => {
-                    return RusotoError::Service(GetInventoryError::InvalidInventoryGroup(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInventoryError::InvalidInventoryGroup(err.msg))
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(GetInventoryError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInventoryError::InvalidNextToken(err.msg))
                 }
                 "InvalidResultAttributeException" => {
-                    return RusotoError::Service(GetInventoryError::InvalidResultAttribute(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInventoryError::InvalidResultAttribute(err.msg))
                 }
                 "InvalidTypeNameException" => {
-                    return RusotoError::Service(GetInventoryError::InvalidTypeName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInventoryError::InvalidTypeName(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10891,33 +10116,20 @@ pub enum GetInventorySchemaError {
 
 impl GetInventorySchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInventorySchemaError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetInventorySchemaError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(GetInventorySchemaError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInventorySchemaError::InvalidNextToken(err.msg))
                 }
                 "InvalidTypeNameException" => {
-                    return RusotoError::Service(GetInventorySchemaError::InvalidTypeName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInventorySchemaError::InvalidTypeName(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10949,28 +10161,17 @@ pub enum GetMaintenanceWindowError {
 
 impl GetMaintenanceWindowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMaintenanceWindowError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
-                    return RusotoError::Service(GetMaintenanceWindowError::DoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetMaintenanceWindowError::DoesNotExist(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetMaintenanceWindowError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11003,30 +10204,19 @@ impl GetMaintenanceWindowExecutionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetMaintenanceWindowExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(GetMaintenanceWindowExecutionError::DoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        GetMaintenanceWindowExecutionError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        GetMaintenanceWindowExecutionError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11059,32 +10249,19 @@ impl GetMaintenanceWindowExecutionTaskError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetMaintenanceWindowExecutionTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        GetMaintenanceWindowExecutionTaskError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        GetMaintenanceWindowExecutionTaskError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        GetMaintenanceWindowExecutionTaskError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        GetMaintenanceWindowExecutionTaskError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11117,32 +10294,21 @@ impl GetMaintenanceWindowExecutionTaskInvocationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetMaintenanceWindowExecutionTaskInvocationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(
-                            String::from(error_message),
-                        ),
+                        GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         GetMaintenanceWindowExecutionTaskInvocationError::InternalServerError(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11175,30 +10341,19 @@ pub enum GetMaintenanceWindowTaskError {
 
 impl GetMaintenanceWindowTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMaintenanceWindowTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(GetMaintenanceWindowTaskError::DoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        GetMaintenanceWindowTaskError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        GetMaintenanceWindowTaskError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11233,38 +10388,23 @@ pub enum GetParameterError {
 
 impl GetParameterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetParameterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(GetParameterError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetParameterError::InternalServerError(err.msg))
                 }
                 "InvalidKeyId" => {
-                    return RusotoError::Service(GetParameterError::InvalidKeyId(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetParameterError::InvalidKeyId(err.msg))
                 }
                 "ParameterNotFound" => {
-                    return RusotoError::Service(GetParameterError::ParameterNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetParameterError::ParameterNotFound(err.msg))
                 }
                 "ParameterVersionNotFound" => {
                     return RusotoError::Service(GetParameterError::ParameterVersionNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11301,38 +10441,27 @@ pub enum GetParameterHistoryError {
 
 impl GetParameterHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetParameterHistoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetParameterHistoryError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidKeyId" => {
-                    return RusotoError::Service(GetParameterHistoryError::InvalidKeyId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetParameterHistoryError::InvalidKeyId(err.msg))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(GetParameterHistoryError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ParameterNotFound" => {
                     return RusotoError::Service(GetParameterHistoryError::ParameterNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11365,28 +10494,15 @@ pub enum GetParametersError {
 
 impl GetParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetParametersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(GetParametersError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetParametersError::InternalServerError(err.msg))
                 }
                 "InvalidKeyId" => {
-                    return RusotoError::Service(GetParametersError::InvalidKeyId(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetParametersError::InvalidKeyId(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11425,48 +10541,37 @@ pub enum GetParametersByPathError {
 
 impl GetParametersByPathError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetParametersByPathError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetParametersByPathError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(GetParametersByPathError::InvalidFilterKey(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterOption" => {
                     return RusotoError::Service(GetParametersByPathError::InvalidFilterOption(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterValue" => {
                     return RusotoError::Service(GetParametersByPathError::InvalidFilterValue(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidKeyId" => {
-                    return RusotoError::Service(GetParametersByPathError::InvalidKeyId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetParametersByPathError::InvalidKeyId(err.msg))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(GetParametersByPathError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11503,33 +10608,20 @@ pub enum GetPatchBaselineError {
 
 impl GetPatchBaselineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPatchBaselineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
-                    return RusotoError::Service(GetPatchBaselineError::DoesNotExist(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPatchBaselineError::DoesNotExist(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetPatchBaselineError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceId" => {
-                    return RusotoError::Service(GetPatchBaselineError::InvalidResourceId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetPatchBaselineError::InvalidResourceId(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11561,25 +10653,14 @@ impl GetPatchBaselineForPatchGroupError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetPatchBaselineForPatchGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        GetPatchBaselineForPatchGroupError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        GetPatchBaselineForPatchGroupError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11615,47 +10696,34 @@ pub enum LabelParameterVersionError {
 
 impl LabelParameterVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LabelParameterVersionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(LabelParameterVersionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ParameterNotFound" => {
                     return RusotoError::Service(LabelParameterVersionError::ParameterNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ParameterVersionLabelLimitExceeded" => {
                     return RusotoError::Service(
-                        LabelParameterVersionError::ParameterVersionLabelLimitExceeded(
-                            String::from(error_message),
-                        ),
+                        LabelParameterVersionError::ParameterVersionLabelLimitExceeded(err.msg),
                     )
                 }
                 "ParameterVersionNotFound" => {
                     return RusotoError::Service(
-                        LabelParameterVersionError::ParameterVersionNotFound(String::from(
-                            error_message,
-                        )),
+                        LabelParameterVersionError::ParameterVersionNotFound(err.msg),
                     )
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(LabelParameterVersionError::TooManyUpdates(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11691,35 +10759,24 @@ pub enum ListAssociationVersionsError {
 
 impl ListAssociationVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssociationVersionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(
-                        ListAssociationVersionsError::AssociationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        ListAssociationVersionsError::AssociationDoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListAssociationVersionsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListAssociationVersionsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11751,28 +10808,17 @@ pub enum ListAssociationsError {
 
 impl ListAssociationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssociationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListAssociationsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(ListAssociationsError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAssociationsError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11809,43 +10855,34 @@ pub enum ListCommandInvocationsError {
 
 impl ListCommandInvocationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCommandInvocationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListCommandInvocationsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidCommandId" => {
                     return RusotoError::Service(ListCommandInvocationsError::InvalidCommandId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilterKey" => {
                     return RusotoError::Service(ListCommandInvocationsError::InvalidFilterKey(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(ListCommandInvocationsError::InvalidInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListCommandInvocationsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11885,43 +10922,24 @@ pub enum ListCommandsError {
 
 impl ListCommandsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCommandsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListCommandsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListCommandsError::InternalServerError(err.msg))
                 }
                 "InvalidCommandId" => {
-                    return RusotoError::Service(ListCommandsError::InvalidCommandId(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListCommandsError::InvalidCommandId(err.msg))
                 }
                 "InvalidFilterKey" => {
-                    return RusotoError::Service(ListCommandsError::InvalidFilterKey(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListCommandsError::InvalidFilterKey(err.msg))
                 }
                 "InvalidInstanceId" => {
-                    return RusotoError::Service(ListCommandsError::InvalidInstanceId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListCommandsError::InvalidInstanceId(err.msg))
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(ListCommandsError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListCommandsError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11961,43 +10979,32 @@ pub enum ListComplianceItemsError {
 
 impl ListComplianceItemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListComplianceItemsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListComplianceItemsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilter" => {
-                    return RusotoError::Service(ListComplianceItemsError::InvalidFilter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListComplianceItemsError::InvalidFilter(err.msg))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListComplianceItemsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(ListComplianceItemsError::InvalidResourceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(ListComplianceItemsError::InvalidResourceType(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12033,33 +11040,24 @@ pub enum ListComplianceSummariesError {
 
 impl ListComplianceSummariesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListComplianceSummariesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListComplianceSummariesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(ListComplianceSummariesError::InvalidFilter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListComplianceSummariesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12093,33 +11091,24 @@ pub enum ListDocumentVersionsError {
 
 impl ListDocumentVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDocumentVersionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListDocumentVersionsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(ListDocumentVersionsError::InvalidDocument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListDocumentVersionsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12153,33 +11142,18 @@ pub enum ListDocumentsError {
 
 impl ListDocumentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDocumentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListDocumentsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListDocumentsError::InternalServerError(err.msg))
                 }
                 "InvalidFilterKey" => {
-                    return RusotoError::Service(ListDocumentsError::InvalidFilterKey(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListDocumentsError::InvalidFilterKey(err.msg))
                 }
                 "InvalidNextToken" => {
-                    return RusotoError::Service(ListDocumentsError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListDocumentsError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12217,43 +11191,32 @@ pub enum ListInventoryEntriesError {
 
 impl ListInventoryEntriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInventoryEntriesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListInventoryEntriesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFilter" => {
-                    return RusotoError::Service(ListInventoryEntriesError::InvalidFilter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListInventoryEntriesError::InvalidFilter(err.msg))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(ListInventoryEntriesError::InvalidInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListInventoryEntriesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidTypeNameException" => {
                     return RusotoError::Service(ListInventoryEntriesError::InvalidTypeName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12291,39 +11254,24 @@ impl ListResourceComplianceSummariesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListResourceComplianceSummariesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        ListResourceComplianceSummariesError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        ListResourceComplianceSummariesError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidFilter" => {
                     return RusotoError::Service(
-                        ListResourceComplianceSummariesError::InvalidFilter(String::from(
-                            error_message,
-                        )),
+                        ListResourceComplianceSummariesError::InvalidFilter(err.msg),
                     )
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(
-                        ListResourceComplianceSummariesError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        ListResourceComplianceSummariesError::InvalidNextToken(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12355,28 +11303,19 @@ pub enum ListResourceDataSyncError {
 
 impl ListResourceDataSyncError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceDataSyncError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListResourceDataSyncError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextToken" => {
                     return RusotoError::Service(ListResourceDataSyncError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12409,33 +11348,24 @@ pub enum ListTagsForResourceError {
 
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidResourceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidResourceType(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12473,51 +11403,34 @@ pub enum ModifyDocumentPermissionError {
 
 impl ModifyDocumentPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDocumentPermissionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DocumentLimitExceeded" => {
                     return RusotoError::Service(
-                        ModifyDocumentPermissionError::DocumentLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        ModifyDocumentPermissionError::DocumentLimitExceeded(err.msg),
                     )
                 }
                 "DocumentPermissionLimit" => {
                     return RusotoError::Service(
-                        ModifyDocumentPermissionError::DocumentPermissionLimit(String::from(
-                            error_message,
-                        )),
+                        ModifyDocumentPermissionError::DocumentPermissionLimit(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        ModifyDocumentPermissionError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        ModifyDocumentPermissionError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(ModifyDocumentPermissionError::InvalidDocument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPermissionType" => {
                     return RusotoError::Service(
-                        ModifyDocumentPermissionError::InvalidPermissionType(String::from(
-                            error_message,
-                        )),
+                        ModifyDocumentPermissionError::InvalidPermissionType(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12561,55 +11474,44 @@ pub enum PutComplianceItemsError {
 
 impl PutComplianceItemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutComplianceItemsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ComplianceTypeCountLimitExceededException" => {
                     return RusotoError::Service(
-                        PutComplianceItemsError::ComplianceTypeCountLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        PutComplianceItemsError::ComplianceTypeCountLimitExceeded(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutComplianceItemsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidItemContentException" => {
                     return RusotoError::Service(PutComplianceItemsError::InvalidItemContent(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(PutComplianceItemsError::InvalidResourceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(PutComplianceItemsError::InvalidResourceType(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ItemSizeLimitExceededException" => {
                     return RusotoError::Service(PutComplianceItemsError::ItemSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TotalSizeLimitExceededException" => {
                     return RusotoError::Service(PutComplianceItemsError::TotalSizeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12665,82 +11567,55 @@ pub enum PutInventoryError {
 
 impl PutInventoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutInventoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CustomSchemaCountLimitExceededException" => {
                     return RusotoError::Service(PutInventoryError::CustomSchemaCountLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(PutInventoryError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInventoryError::InternalServerError(err.msg))
                 }
                 "InvalidInstanceId" => {
-                    return RusotoError::Service(PutInventoryError::InvalidInstanceId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInventoryError::InvalidInstanceId(err.msg))
                 }
                 "InvalidInventoryItemContextException" => {
                     return RusotoError::Service(PutInventoryError::InvalidInventoryItemContext(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidItemContentException" => {
-                    return RusotoError::Service(PutInventoryError::InvalidItemContent(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInventoryError::InvalidItemContent(err.msg))
                 }
                 "InvalidTypeNameException" => {
-                    return RusotoError::Service(PutInventoryError::InvalidTypeName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutInventoryError::InvalidTypeName(err.msg))
                 }
                 "ItemContentMismatchException" => {
-                    return RusotoError::Service(PutInventoryError::ItemContentMismatch(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInventoryError::ItemContentMismatch(err.msg))
                 }
                 "ItemSizeLimitExceededException" => {
-                    return RusotoError::Service(PutInventoryError::ItemSizeLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInventoryError::ItemSizeLimitExceeded(err.msg))
                 }
                 "SubTypeCountLimitExceededException" => {
                     return RusotoError::Service(PutInventoryError::SubTypeCountLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TotalSizeLimitExceededException" => {
-                    return RusotoError::Service(PutInventoryError::TotalSizeLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInventoryError::TotalSizeLimitExceeded(err.msg))
                 }
                 "UnsupportedInventoryItemContextException" => {
                     return RusotoError::Service(
-                        PutInventoryError::UnsupportedInventoryItemContext(String::from(
-                            error_message,
-                        )),
+                        PutInventoryError::UnsupportedInventoryItemContext(err.msg),
                     )
                 }
                 "UnsupportedInventorySchemaVersionException" => {
                     return RusotoError::Service(
-                        PutInventoryError::UnsupportedInventorySchemaVersion(String::from(
-                            error_message,
-                        )),
+                        PutInventoryError::UnsupportedInventorySchemaVersion(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12799,75 +11674,50 @@ pub enum PutParameterError {
 
 impl PutParameterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutParameterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "HierarchyLevelLimitExceededException" => {
                     return RusotoError::Service(PutParameterError::HierarchyLevelLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "HierarchyTypeMismatchException" => {
-                    return RusotoError::Service(PutParameterError::HierarchyTypeMismatch(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutParameterError::HierarchyTypeMismatch(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(PutParameterError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutParameterError::InternalServerError(err.msg))
                 }
                 "InvalidAllowedPatternException" => {
-                    return RusotoError::Service(PutParameterError::InvalidAllowedPattern(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutParameterError::InvalidAllowedPattern(err.msg))
                 }
                 "InvalidKeyId" => {
-                    return RusotoError::Service(PutParameterError::InvalidKeyId(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutParameterError::InvalidKeyId(err.msg))
                 }
                 "ParameterAlreadyExists" => {
-                    return RusotoError::Service(PutParameterError::ParameterAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutParameterError::ParameterAlreadyExists(err.msg))
                 }
                 "ParameterLimitExceeded" => {
-                    return RusotoError::Service(PutParameterError::ParameterLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutParameterError::ParameterLimitExceeded(err.msg))
                 }
                 "ParameterMaxVersionLimitExceeded" => {
                     return RusotoError::Service(
-                        PutParameterError::ParameterMaxVersionLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        PutParameterError::ParameterMaxVersionLimitExceeded(err.msg),
                     )
                 }
                 "ParameterPatternMismatchException" => {
                     return RusotoError::Service(PutParameterError::ParameterPatternMismatch(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyUpdates" => {
-                    return RusotoError::Service(PutParameterError::TooManyUpdates(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutParameterError::TooManyUpdates(err.msg))
                 }
                 "UnsupportedParameterType" => {
                     return RusotoError::Service(PutParameterError::UnsupportedParameterType(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12911,37 +11761,24 @@ impl RegisterDefaultPatchBaselineError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterDefaultPatchBaselineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(RegisterDefaultPatchBaselineError::DoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        RegisterDefaultPatchBaselineError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        RegisterDefaultPatchBaselineError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(
-                        RegisterDefaultPatchBaselineError::InvalidResourceId(String::from(
-                            error_message,
-                        )),
+                        RegisterDefaultPatchBaselineError::InvalidResourceId(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12981,53 +11818,34 @@ impl RegisterPatchBaselineForPatchGroupError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterPatchBaselineForPatchGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(
-                        RegisterPatchBaselineForPatchGroupError::AlreadyExists(String::from(
-                            error_message,
-                        )),
+                        RegisterPatchBaselineForPatchGroupError::AlreadyExists(err.msg),
                     )
                 }
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        RegisterPatchBaselineForPatchGroupError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        RegisterPatchBaselineForPatchGroupError::DoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        RegisterPatchBaselineForPatchGroupError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        RegisterPatchBaselineForPatchGroupError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(
-                        RegisterPatchBaselineForPatchGroupError::InvalidResourceId(String::from(
-                            error_message,
-                        )),
+                        RegisterPatchBaselineForPatchGroupError::InvalidResourceId(err.msg),
                     )
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
-                        RegisterPatchBaselineForPatchGroupError::ResourceLimitExceeded(
-                            String::from(error_message),
-                        ),
+                        RegisterPatchBaselineForPatchGroupError::ResourceLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13067,46 +11885,31 @@ impl RegisterTargetWithMaintenanceWindowError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterTargetWithMaintenanceWindowError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        RegisterTargetWithMaintenanceWindowError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        RegisterTargetWithMaintenanceWindowError::DoesNotExist(err.msg),
                     )
                 }
                 "IdempotentParameterMismatch" => {
                     return RusotoError::Service(
                         RegisterTargetWithMaintenanceWindowError::IdempotentParameterMismatch(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        RegisterTargetWithMaintenanceWindowError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        RegisterTargetWithMaintenanceWindowError::InternalServerError(err.msg),
                     )
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
-                        RegisterTargetWithMaintenanceWindowError::ResourceLimitExceeded(
-                            String::from(error_message),
-                        ),
+                        RegisterTargetWithMaintenanceWindowError::ResourceLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13149,53 +11952,36 @@ impl RegisterTaskWithMaintenanceWindowError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterTaskWithMaintenanceWindowError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(
-                        RegisterTaskWithMaintenanceWindowError::DoesNotExist(String::from(
-                            error_message,
-                        )),
+                        RegisterTaskWithMaintenanceWindowError::DoesNotExist(err.msg),
                     )
                 }
                 "FeatureNotAvailableException" => {
                     return RusotoError::Service(
-                        RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(String::from(
-                            error_message,
-                        )),
+                        RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(err.msg),
                     )
                 }
                 "IdempotentParameterMismatch" => {
                     return RusotoError::Service(
                         RegisterTaskWithMaintenanceWindowError::IdempotentParameterMismatch(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        RegisterTaskWithMaintenanceWindowError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        RegisterTaskWithMaintenanceWindowError::InternalServerError(err.msg),
                     )
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
-                        RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(
-                            String::from(error_message),
-                        ),
+                        RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13233,38 +12019,29 @@ pub enum RemoveTagsFromResourceError {
 
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceId" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InvalidResourceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceType" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InvalidResourceType(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::TooManyUpdates(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13297,28 +12074,15 @@ pub enum ResumeSessionError {
 
 impl ResumeSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResumeSessionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
-                    return RusotoError::Service(ResumeSessionError::DoesNotExist(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResumeSessionError::DoesNotExist(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(ResumeSessionError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResumeSessionError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13353,42 +12117,29 @@ pub enum SendAutomationSignalError {
 
 impl SendAutomationSignalError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendAutomationSignalError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AutomationExecutionNotFoundException" => {
                     return RusotoError::Service(
-                        SendAutomationSignalError::AutomationExecutionNotFound(String::from(
-                            error_message,
-                        )),
+                        SendAutomationSignalError::AutomationExecutionNotFound(err.msg),
                     )
                 }
                 "AutomationStepNotFoundException" => {
                     return RusotoError::Service(SendAutomationSignalError::AutomationStepNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(SendAutomationSignalError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidAutomationSignalException" => {
                     return RusotoError::Service(
-                        SendAutomationSignalError::InvalidAutomationSignal(String::from(
-                            error_message,
-                        )),
+                        SendAutomationSignalError::InvalidAutomationSignal(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13439,73 +12190,44 @@ pub enum SendCommandError {
 
 impl SendCommandError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendCommandError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateInstanceId" => {
-                    return RusotoError::Service(SendCommandError::DuplicateInstanceId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendCommandError::DuplicateInstanceId(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(SendCommandError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendCommandError::InternalServerError(err.msg))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(SendCommandError::InvalidDocument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendCommandError::InvalidDocument(err.msg))
                 }
                 "InvalidDocumentVersion" => {
-                    return RusotoError::Service(SendCommandError::InvalidDocumentVersion(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendCommandError::InvalidDocumentVersion(err.msg))
                 }
                 "InvalidInstanceId" => {
-                    return RusotoError::Service(SendCommandError::InvalidInstanceId(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendCommandError::InvalidInstanceId(err.msg))
                 }
                 "InvalidNotificationConfig" => {
                     return RusotoError::Service(SendCommandError::InvalidNotificationConfig(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidOutputFolder" => {
-                    return RusotoError::Service(SendCommandError::InvalidOutputFolder(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendCommandError::InvalidOutputFolder(err.msg))
                 }
                 "InvalidParameters" => {
-                    return RusotoError::Service(SendCommandError::InvalidParameters(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendCommandError::InvalidParameters(err.msg))
                 }
                 "InvalidRole" => {
-                    return RusotoError::Service(SendCommandError::InvalidRole(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendCommandError::InvalidRole(err.msg))
                 }
                 "MaxDocumentSizeExceeded" => {
-                    return RusotoError::Service(SendCommandError::MaxDocumentSizeExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendCommandError::MaxDocumentSizeExceeded(err.msg))
                 }
                 "UnsupportedPlatformType" => {
-                    return RusotoError::Service(SendCommandError::UnsupportedPlatformType(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendCommandError::UnsupportedPlatformType(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13545,30 +12267,19 @@ pub enum StartAssociationsOnceError {
 
 impl StartAssociationsOnceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartAssociationsOnceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(
-                        StartAssociationsOnceError::AssociationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        StartAssociationsOnceError::AssociationDoesNotExist(err.msg),
                     )
                 }
                 "InvalidAssociation" => {
                     return RusotoError::Service(StartAssociationsOnceError::InvalidAssociation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13609,65 +12320,46 @@ pub enum StartAutomationExecutionError {
 
 impl StartAutomationExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartAutomationExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AutomationDefinitionNotFoundException" => {
                     return RusotoError::Service(
-                        StartAutomationExecutionError::AutomationDefinitionNotFound(String::from(
-                            error_message,
-                        )),
+                        StartAutomationExecutionError::AutomationDefinitionNotFound(err.msg),
                     )
                 }
                 "AutomationDefinitionVersionNotFoundException" => {
                     return RusotoError::Service(
-                        StartAutomationExecutionError::AutomationDefinitionVersionNotFound(
-                            String::from(error_message),
-                        ),
+                        StartAutomationExecutionError::AutomationDefinitionVersionNotFound(err.msg),
                     )
                 }
                 "AutomationExecutionLimitExceededException" => {
                     return RusotoError::Service(
-                        StartAutomationExecutionError::AutomationExecutionLimitExceeded(
-                            String::from(error_message),
-                        ),
+                        StartAutomationExecutionError::AutomationExecutionLimitExceeded(err.msg),
                     )
                 }
                 "IdempotentParameterMismatch" => {
                     return RusotoError::Service(
-                        StartAutomationExecutionError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        )),
+                        StartAutomationExecutionError::IdempotentParameterMismatch(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        StartAutomationExecutionError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        StartAutomationExecutionError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidAutomationExecutionParametersException" => {
                     return RusotoError::Service(
                         StartAutomationExecutionError::InvalidAutomationExecutionParameters(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InvalidTarget" => {
                     return RusotoError::Service(StartAutomationExecutionError::InvalidTarget(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13705,33 +12397,18 @@ pub enum StartSessionError {
 
 impl StartSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSessionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(StartSessionError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartSessionError::InternalServerError(err.msg))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(StartSessionError::InvalidDocument(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartSessionError::InvalidDocument(err.msg))
                 }
                 "TargetNotConnected" => {
-                    return RusotoError::Service(StartSessionError::TargetNotConnected(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartSessionError::TargetNotConnected(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13765,37 +12442,24 @@ pub enum StopAutomationExecutionError {
 
 impl StopAutomationExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopAutomationExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AutomationExecutionNotFoundException" => {
                     return RusotoError::Service(
-                        StopAutomationExecutionError::AutomationExecutionNotFound(String::from(
-                            error_message,
-                        )),
+                        StopAutomationExecutionError::AutomationExecutionNotFound(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StopAutomationExecutionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidAutomationStatusUpdateException" => {
                     return RusotoError::Service(
-                        StopAutomationExecutionError::InvalidAutomationStatusUpdate(String::from(
-                            error_message,
-                        )),
+                        StopAutomationExecutionError::InvalidAutomationStatusUpdate(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13827,28 +12491,17 @@ pub enum TerminateSessionError {
 
 impl TerminateSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateSessionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
-                    return RusotoError::Service(TerminateSessionError::DoesNotExist(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TerminateSessionError::DoesNotExist(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(TerminateSessionError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13899,80 +12552,57 @@ pub enum UpdateAssociationError {
 
 impl UpdateAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAssociationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(UpdateAssociationError::AssociationDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AssociationVersionLimitExceeded" => {
                     return RusotoError::Service(
-                        UpdateAssociationError::AssociationVersionLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        UpdateAssociationError::AssociationVersionLimitExceeded(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateAssociationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidAssociationVersion" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidAssociationVersion(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(UpdateAssociationError::InvalidDocument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssociationError::InvalidDocument(err.msg))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidDocumentVersion(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidOutputLocation" => {
                     return RusotoError::Service(UpdateAssociationError::InvalidOutputLocation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameters" => {
-                    return RusotoError::Service(UpdateAssociationError::InvalidParameters(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssociationError::InvalidParameters(err.msg))
                 }
                 "InvalidSchedule" => {
-                    return RusotoError::Service(UpdateAssociationError::InvalidSchedule(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssociationError::InvalidSchedule(err.msg))
                 }
                 "InvalidTarget" => {
-                    return RusotoError::Service(UpdateAssociationError::InvalidTarget(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssociationError::InvalidTarget(err.msg))
                 }
                 "InvalidUpdate" => {
-                    return RusotoError::Service(UpdateAssociationError::InvalidUpdate(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssociationError::InvalidUpdate(err.msg))
                 }
                 "TooManyUpdates" => {
-                    return RusotoError::Service(UpdateAssociationError::TooManyUpdates(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssociationError::TooManyUpdates(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -14021,50 +12651,39 @@ pub enum UpdateAssociationStatusError {
 
 impl UpdateAssociationStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAssociationStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AssociationDoesNotExist" => {
                     return RusotoError::Service(
-                        UpdateAssociationStatusError::AssociationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        UpdateAssociationStatusError::AssociationDoesNotExist(err.msg),
                     )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateAssociationStatusError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(UpdateAssociationStatusError::InvalidDocument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(UpdateAssociationStatusError::InvalidInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "StatusUnchanged" => {
                     return RusotoError::Service(UpdateAssociationStatusError::StatusUnchanged(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyUpdates" => {
                     return RusotoError::Service(UpdateAssociationStatusError::TooManyUpdates(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -14115,68 +12734,55 @@ pub enum UpdateDocumentError {
 
 impl UpdateDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDocumentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DocumentVersionLimitExceeded" => {
                     return RusotoError::Service(UpdateDocumentError::DocumentVersionLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DuplicateDocumentContent" => {
                     return RusotoError::Service(UpdateDocumentError::DuplicateDocumentContent(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DuplicateDocumentVersionName" => {
                     return RusotoError::Service(UpdateDocumentError::DuplicateDocumentVersionName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(UpdateDocumentError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDocumentError::InternalServerError(err.msg))
                 }
                 "InvalidDocument" => {
-                    return RusotoError::Service(UpdateDocumentError::InvalidDocument(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDocumentError::InvalidDocument(err.msg))
                 }
                 "InvalidDocumentContent" => {
                     return RusotoError::Service(UpdateDocumentError::InvalidDocumentContent(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocumentOperation" => {
                     return RusotoError::Service(UpdateDocumentError::InvalidDocumentOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return RusotoError::Service(UpdateDocumentError::InvalidDocumentSchemaVersion(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(UpdateDocumentError::InvalidDocumentVersion(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MaxDocumentSizeExceeded" => {
                     return RusotoError::Service(UpdateDocumentError::MaxDocumentSizeExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -14221,46 +12827,29 @@ impl UpdateDocumentDefaultVersionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDocumentDefaultVersionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        UpdateDocumentDefaultVersionError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateDocumentDefaultVersionError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(
-                        UpdateDocumentDefaultVersionError::InvalidDocument(String::from(
-                            error_message,
-                        )),
+                        UpdateDocumentDefaultVersionError::InvalidDocument(err.msg),
                     )
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return RusotoError::Service(
-                        UpdateDocumentDefaultVersionError::InvalidDocumentSchemaVersion(
-                            String::from(error_message),
-                        ),
+                        UpdateDocumentDefaultVersionError::InvalidDocumentSchemaVersion(err.msg),
                     )
                 }
                 "InvalidDocumentVersion" => {
                     return RusotoError::Service(
-                        UpdateDocumentDefaultVersionError::InvalidDocumentVersion(String::from(
-                            error_message,
-                        )),
+                        UpdateDocumentDefaultVersionError::InvalidDocumentVersion(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -14293,28 +12882,19 @@ pub enum UpdateMaintenanceWindowError {
 
 impl UpdateMaintenanceWindowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMaintenanceWindowError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(UpdateMaintenanceWindowError::DoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateMaintenanceWindowError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -14347,30 +12927,19 @@ impl UpdateMaintenanceWindowTargetError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateMaintenanceWindowTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(UpdateMaintenanceWindowTargetError::DoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        UpdateMaintenanceWindowTargetError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateMaintenanceWindowTargetError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -14403,30 +12972,19 @@ impl UpdateMaintenanceWindowTaskError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateMaintenanceWindowTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
                     return RusotoError::Service(UpdateMaintenanceWindowTaskError::DoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        UpdateMaintenanceWindowTaskError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateMaintenanceWindowTaskError::InternalServerError(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -14457,30 +13015,19 @@ pub enum UpdateManagedInstanceRoleError {
 
 impl UpdateManagedInstanceRoleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateManagedInstanceRoleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        UpdateManagedInstanceRoleError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateManagedInstanceRoleError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidInstanceId" => {
                     return RusotoError::Service(UpdateManagedInstanceRoleError::InvalidInstanceId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -14511,28 +13058,17 @@ pub enum UpdatePatchBaselineError {
 
 impl UpdatePatchBaselineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePatchBaselineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DoesNotExistException" => {
-                    return RusotoError::Service(UpdatePatchBaselineError::DoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdatePatchBaselineError::DoesNotExist(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdatePatchBaselineError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

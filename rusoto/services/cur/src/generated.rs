@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Request of DeleteReportDefinition</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteReportDefinitionRequest {
@@ -110,23 +109,14 @@ pub enum DeleteReportDefinitionError {
 
 impl DeleteReportDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReportDefinitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteReportDefinitionError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -154,23 +144,14 @@ pub enum DescribeReportDefinitionsError {
 
 impl DescribeReportDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReportDefinitionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeReportDefinitionsError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -202,33 +183,22 @@ pub enum PutReportDefinitionError {
 
 impl PutReportDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutReportDefinitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateReportNameException" => {
                     return RusotoError::Service(PutReportDefinitionError::DuplicateReportName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(PutReportDefinitionError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutReportDefinitionError::InternalError(err.msg))
                 }
                 "ReportLimitReachedException" => {
                     return RusotoError::Service(PutReportDefinitionError::ReportLimitReached(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

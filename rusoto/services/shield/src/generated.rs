@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateDRTLogBucketRequest {
     /// <p>The Amazon S3 bucket that contains your flow logs.</p>
@@ -573,60 +572,47 @@ pub enum AssociateDRTLogBucketError {
 
 impl AssociateDRTLogBucketError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateDRTLogBucketError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedForDependencyException" => {
                     return RusotoError::Service(
-                        AssociateDRTLogBucketError::AccessDeniedForDependency(String::from(
-                            error_message,
-                        )),
+                        AssociateDRTLogBucketError::AccessDeniedForDependency(err.msg),
                     )
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(AssociateDRTLogBucketError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateDRTLogBucketError::InternalError(err.msg))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::InvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitsExceededException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::LimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoAssociatedRoleException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::NoAssociatedRole(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::OptimisticLock(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -671,48 +657,29 @@ pub enum AssociateDRTRoleError {
 
 impl AssociateDRTRoleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateDRTRoleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedForDependencyException" => {
                     return RusotoError::Service(AssociateDRTRoleError::AccessDeniedForDependency(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(AssociateDRTRoleError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateDRTRoleError::InternalError(err.msg))
                 }
                 "InvalidOperationException" => {
-                    return RusotoError::Service(AssociateDRTRoleError::InvalidOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateDRTRoleError::InvalidOperation(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AssociateDRTRoleError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateDRTRoleError::InvalidParameter(err.msg))
                 }
                 "OptimisticLockException" => {
-                    return RusotoError::Service(AssociateDRTRoleError::OptimisticLock(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateDRTRoleError::OptimisticLock(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AssociateDRTRoleError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateDRTRoleError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -757,53 +724,32 @@ pub enum CreateProtectionError {
 
 impl CreateProtectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProtectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateProtectionError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateProtectionError::InternalError(err.msg))
                 }
                 "InvalidOperationException" => {
-                    return RusotoError::Service(CreateProtectionError::InvalidOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateProtectionError::InvalidOperation(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(CreateProtectionError::InvalidResource(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateProtectionError::InvalidResource(err.msg))
                 }
                 "LimitsExceededException" => {
-                    return RusotoError::Service(CreateProtectionError::LimitsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateProtectionError::LimitsExceeded(err.msg))
                 }
                 "OptimisticLockException" => {
-                    return RusotoError::Service(CreateProtectionError::OptimisticLock(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateProtectionError::OptimisticLock(err.msg))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateProtectionError::ResourceAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(CreateProtectionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateProtectionError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -839,28 +785,17 @@ pub enum CreateSubscriptionError {
 
 impl CreateSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSubscriptionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateSubscriptionError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateSubscriptionError::InternalError(err.msg))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateSubscriptionError::ResourceAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -893,33 +828,18 @@ pub enum DeleteProtectionError {
 
 impl DeleteProtectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProtectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteProtectionError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteProtectionError::InternalError(err.msg))
                 }
                 "OptimisticLockException" => {
-                    return RusotoError::Service(DeleteProtectionError::OptimisticLock(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteProtectionError::OptimisticLock(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteProtectionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteProtectionError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -953,33 +873,20 @@ pub enum DeleteSubscriptionError {
 
 impl DeleteSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubscriptionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteSubscriptionError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteSubscriptionError::InternalError(err.msg))
                 }
                 "LockedSubscriptionException" => {
                     return RusotoError::Service(DeleteSubscriptionError::LockedSubscription(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteSubscriptionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteSubscriptionError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1011,28 +918,15 @@ pub enum DescribeAttackError {
 
 impl DescribeAttackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAttackError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeAttackError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeAttackError::AccessDenied(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeAttackError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeAttackError::InternalError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1063,28 +957,15 @@ pub enum DescribeDRTAccessError {
 
 impl DescribeDRTAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDRTAccessError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeDRTAccessError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeDRTAccessError::InternalError(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeDRTAccessError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeDRTAccessError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1117,32 +998,19 @@ impl DescribeEmergencyContactSettingsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEmergencyContactSettingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(
-                        DescribeEmergencyContactSettingsError::InternalError(String::from(
-                            error_message,
-                        )),
+                        DescribeEmergencyContactSettingsError::InternalError(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        DescribeEmergencyContactSettingsError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        DescribeEmergencyContactSettingsError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1175,33 +1043,18 @@ pub enum DescribeProtectionError {
 
 impl DescribeProtectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProtectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeProtectionError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeProtectionError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeProtectionError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeProtectionError::InvalidParameter(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeProtectionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeProtectionError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1233,28 +1086,17 @@ pub enum DescribeSubscriptionError {
 
 impl DescribeSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSubscriptionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeSubscriptionError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeSubscriptionError::InternalError(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeSubscriptionError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1293,50 +1135,39 @@ pub enum DisassociateDRTLogBucketError {
 
 impl DisassociateDRTLogBucketError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateDRTLogBucketError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedForDependencyException" => {
                     return RusotoError::Service(
-                        DisassociateDRTLogBucketError::AccessDeniedForDependency(String::from(
-                            error_message,
-                        )),
+                        DisassociateDRTLogBucketError::AccessDeniedForDependency(err.msg),
                     )
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::InvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoAssociatedRoleException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::NoAssociatedRole(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::OptimisticLock(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1375,38 +1206,25 @@ pub enum DisassociateDRTRoleError {
 
 impl DisassociateDRTRoleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateDRTRoleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DisassociateDRTRoleError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisassociateDRTRoleError::InternalError(err.msg))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DisassociateDRTRoleError::InvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OptimisticLockException" => {
-                    return RusotoError::Service(DisassociateDRTRoleError::OptimisticLock(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisassociateDRTRoleError::OptimisticLock(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateDRTRoleError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1437,23 +1255,12 @@ pub enum GetSubscriptionStateError {
 
 impl GetSubscriptionStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSubscriptionStateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetSubscriptionStateError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetSubscriptionStateError::InternalError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1485,33 +1292,18 @@ pub enum ListAttacksError {
 
 impl ListAttacksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttacksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListAttacksError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAttacksError::InternalError(err.msg))
                 }
                 "InvalidOperationException" => {
-                    return RusotoError::Service(ListAttacksError::InvalidOperation(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAttacksError::InvalidOperation(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListAttacksError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAttacksError::InvalidParameter(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1545,33 +1337,20 @@ pub enum ListProtectionsError {
 
 impl ListProtectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProtectionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListProtectionsError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListProtectionsError::InternalError(err.msg))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(ListProtectionsError::InvalidPaginationToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListProtectionsError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListProtectionsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1609,46 +1388,29 @@ impl UpdateEmergencyContactSettingsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateEmergencyContactSettingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(
-                        UpdateEmergencyContactSettingsError::InternalError(String::from(
-                            error_message,
-                        )),
+                        UpdateEmergencyContactSettingsError::InternalError(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        UpdateEmergencyContactSettingsError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        UpdateEmergencyContactSettingsError::InvalidParameter(err.msg),
                     )
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(
-                        UpdateEmergencyContactSettingsError::OptimisticLock(String::from(
-                            error_message,
-                        )),
+                        UpdateEmergencyContactSettingsError::OptimisticLock(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        UpdateEmergencyContactSettingsError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        UpdateEmergencyContactSettingsError::ResourceNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1687,43 +1449,26 @@ pub enum UpdateSubscriptionError {
 
 impl UpdateSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSubscriptionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateSubscriptionError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateSubscriptionError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UpdateSubscriptionError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateSubscriptionError::InvalidParameter(err.msg))
                 }
                 "LockedSubscriptionException" => {
                     return RusotoError::Service(UpdateSubscriptionError::LockedSubscription(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OptimisticLockException" => {
-                    return RusotoError::Service(UpdateSubscriptionError::OptimisticLock(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateSubscriptionError::OptimisticLock(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateSubscriptionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateSubscriptionError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

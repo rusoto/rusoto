@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>A BatchMeterUsageRequest contains UsageRecords, which indicate quantities of usage within your application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchMeterUsageRequest {
@@ -183,53 +182,38 @@ pub enum BatchMeterUsageError {
 
 impl BatchMeterUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchMeterUsageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DisabledApiException" => {
-                    return RusotoError::Service(BatchMeterUsageError::DisabledApi(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(BatchMeterUsageError::DisabledApi(err.msg))
                 }
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(BatchMeterUsageError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidCustomerIdentifierException" => {
                     return RusotoError::Service(BatchMeterUsageError::InvalidCustomerIdentifier(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidProductCodeException" => {
-                    return RusotoError::Service(BatchMeterUsageError::InvalidProductCode(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchMeterUsageError::InvalidProductCode(err.msg))
                 }
                 "InvalidUsageDimensionException" => {
                     return RusotoError::Service(BatchMeterUsageError::InvalidUsageDimension(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(BatchMeterUsageError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(BatchMeterUsageError::Throttling(err.msg))
                 }
                 "TimestampOutOfBoundsException" => {
                     return RusotoError::Service(BatchMeterUsageError::TimestampOutOfBounds(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -275,53 +259,30 @@ pub enum MeterUsageError {
 
 impl MeterUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MeterUsageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateRequestException" => {
-                    return RusotoError::Service(MeterUsageError::DuplicateRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(MeterUsageError::DuplicateRequest(err.msg))
                 }
                 "InternalServiceErrorException" => {
-                    return RusotoError::Service(MeterUsageError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(MeterUsageError::InternalServiceError(err.msg))
                 }
                 "InvalidEndpointRegionException" => {
-                    return RusotoError::Service(MeterUsageError::InvalidEndpointRegion(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(MeterUsageError::InvalidEndpointRegion(err.msg))
                 }
                 "InvalidProductCodeException" => {
-                    return RusotoError::Service(MeterUsageError::InvalidProductCode(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(MeterUsageError::InvalidProductCode(err.msg))
                 }
                 "InvalidUsageDimensionException" => {
-                    return RusotoError::Service(MeterUsageError::InvalidUsageDimension(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(MeterUsageError::InvalidUsageDimension(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(MeterUsageError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(MeterUsageError::Throttling(err.msg))
                 }
                 "TimestampOutOfBoundsException" => {
-                    return RusotoError::Service(MeterUsageError::TimestampOutOfBounds(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(MeterUsageError::TimestampOutOfBounds(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -369,58 +330,35 @@ pub enum RegisterUsageError {
 
 impl RegisterUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterUsageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CustomerNotEntitledException" => {
-                    return RusotoError::Service(RegisterUsageError::CustomerNotEntitled(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterUsageError::CustomerNotEntitled(err.msg))
                 }
                 "DisabledApiException" => {
-                    return RusotoError::Service(RegisterUsageError::DisabledApi(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RegisterUsageError::DisabledApi(err.msg))
                 }
                 "InternalServiceErrorException" => {
-                    return RusotoError::Service(RegisterUsageError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterUsageError::InternalServiceError(err.msg))
                 }
                 "InvalidProductCodeException" => {
-                    return RusotoError::Service(RegisterUsageError::InvalidProductCode(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterUsageError::InvalidProductCode(err.msg))
                 }
                 "InvalidPublicKeyVersionException" => {
                     return RusotoError::Service(RegisterUsageError::InvalidPublicKeyVersion(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRegionException" => {
-                    return RusotoError::Service(RegisterUsageError::InvalidRegion(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RegisterUsageError::InvalidRegion(err.msg))
                 }
                 "PlatformNotSupportedException" => {
-                    return RusotoError::Service(RegisterUsageError::PlatformNotSupported(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterUsageError::PlatformNotSupported(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(RegisterUsageError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RegisterUsageError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -463,43 +401,26 @@ pub enum ResolveCustomerError {
 
 impl ResolveCustomerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResolveCustomerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DisabledApiException" => {
-                    return RusotoError::Service(ResolveCustomerError::DisabledApi(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResolveCustomerError::DisabledApi(err.msg))
                 }
                 "ExpiredTokenException" => {
-                    return RusotoError::Service(ResolveCustomerError::ExpiredToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResolveCustomerError::ExpiredToken(err.msg))
                 }
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(ResolveCustomerError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidTokenException" => {
-                    return RusotoError::Service(ResolveCustomerError::InvalidToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResolveCustomerError::InvalidToken(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(ResolveCustomerError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResolveCustomerError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

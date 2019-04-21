@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDeleteBuildsInput {
     /// <p>The IDs of the builds to delete.</p>
@@ -1308,23 +1307,12 @@ pub enum BatchDeleteBuildsError {
 
 impl BatchDeleteBuildsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteBuildsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(BatchDeleteBuildsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDeleteBuildsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1352,23 +1340,12 @@ pub enum BatchGetBuildsError {
 
 impl BatchGetBuildsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetBuildsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(BatchGetBuildsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(BatchGetBuildsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1396,23 +1373,12 @@ pub enum BatchGetProjectsError {
 
 impl BatchGetProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetProjectsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(BatchGetProjectsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(BatchGetProjectsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1444,33 +1410,18 @@ pub enum CreateProjectError {
 
 impl CreateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccountLimitExceededException" => {
-                    return RusotoError::Service(CreateProjectError::AccountLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateProjectError::AccountLimitExceeded(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateProjectError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateProjectError::InvalidInput(err.msg))
                 }
                 "ResourceAlreadyExistsException" => {
-                    return RusotoError::Service(CreateProjectError::ResourceAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateProjectError::ResourceAlreadyExists(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1506,38 +1457,21 @@ pub enum CreateWebhookError {
 
 impl CreateWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWebhookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateWebhookError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateWebhookError::InvalidInput(err.msg))
                 }
                 "OAuthProviderException" => {
-                    return RusotoError::Service(CreateWebhookError::OAuthProvider(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateWebhookError::OAuthProvider(err.msg))
                 }
                 "ResourceAlreadyExistsException" => {
-                    return RusotoError::Service(CreateWebhookError::ResourceAlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateWebhookError::ResourceAlreadyExists(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(CreateWebhookError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateWebhookError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1568,23 +1502,12 @@ pub enum DeleteProjectError {
 
 impl DeleteProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteProjectError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteProjectError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1614,28 +1537,19 @@ pub enum DeleteSourceCredentialsError {
 
 impl DeleteSourceCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSourceCredentialsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteSourceCredentialsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteSourceCredentialsError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1668,33 +1582,18 @@ pub enum DeleteWebhookError {
 
 impl DeleteWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebhookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteWebhookError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteWebhookError::InvalidInput(err.msg))
                 }
                 "OAuthProviderException" => {
-                    return RusotoError::Service(DeleteWebhookError::OAuthProvider(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteWebhookError::OAuthProvider(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteWebhookError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteWebhookError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1726,30 +1625,19 @@ pub enum ImportSourceCredentialsError {
 
 impl ImportSourceCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportSourceCredentialsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccountLimitExceededException" => {
                     return RusotoError::Service(
-                        ImportSourceCredentialsError::AccountLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        ImportSourceCredentialsError::AccountLimitExceeded(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ImportSourceCredentialsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1780,28 +1668,17 @@ pub enum InvalidateProjectCacheError {
 
 impl InvalidateProjectCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvalidateProjectCacheError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(InvalidateProjectCacheError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(InvalidateProjectCacheError::InvalidInput(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InvalidateProjectCacheError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1830,23 +1707,12 @@ pub enum ListBuildsError {
 
 impl ListBuildsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBuildsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListBuildsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListBuildsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1876,28 +1742,17 @@ pub enum ListBuildsForProjectError {
 
 impl ListBuildsForProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBuildsForProjectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListBuildsForProjectError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListBuildsForProjectError::InvalidInput(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListBuildsForProjectError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1925,18 +1780,9 @@ impl ListCuratedEnvironmentImagesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCuratedEnvironmentImagesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1962,23 +1808,12 @@ pub enum ListProjectsError {
 
 impl ListProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListProjectsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListProjectsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2003,18 +1838,9 @@ pub enum ListSourceCredentialsError {}
 
 impl ListSourceCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSourceCredentialsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2044,33 +1870,18 @@ pub enum StartBuildError {
 
 impl StartBuildError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartBuildError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccountLimitExceededException" => {
-                    return RusotoError::Service(StartBuildError::AccountLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartBuildError::AccountLimitExceeded(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StartBuildError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartBuildError::InvalidInput(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(StartBuildError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartBuildError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2102,28 +1913,15 @@ pub enum StopBuildError {
 
 impl StopBuildError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopBuildError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(StopBuildError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopBuildError::InvalidInput(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(StopBuildError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopBuildError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2154,28 +1952,15 @@ pub enum UpdateProjectError {
 
 impl UpdateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateProjectError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateProjectError::InvalidInput(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateProjectError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateProjectError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2208,33 +1993,18 @@ pub enum UpdateWebhookError {
 
 impl UpdateWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWebhookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateWebhookError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateWebhookError::InvalidInput(err.msg))
                 }
                 "OAuthProviderException" => {
-                    return RusotoError::Service(UpdateWebhookError::OAuthProvider(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateWebhookError::OAuthProvider(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateWebhookError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateWebhookError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
