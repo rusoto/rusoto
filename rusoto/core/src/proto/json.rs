@@ -68,6 +68,6 @@ fn deserialize_dynamodb_error() {
 
     let error = Error::parse(&response).unwrap();
 
-    assert_eq!(error.error_type, "ResourceNotFoundException");
-    assert_eq!(error.error_message, "Requested resource not found: Table: tablename not found");
+    assert_eq!(error.typ, "ResourceNotFoundException");
+    assert_eq!(error.msg, "Requested resource not found: Table: tablename not found");
 }
