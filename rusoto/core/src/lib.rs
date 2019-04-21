@@ -37,6 +37,9 @@ extern crate hmac;
 extern crate md5;
 pub extern crate rusoto_credential as credential;
 extern crate serde;
+#[macro_use]
+extern crate serde_derive;
+extern crate serde_json;
 extern crate sha2;
 extern crate time;
 extern crate tokio;
@@ -59,9 +62,7 @@ pub use client::Client;
 #[doc(hidden)]
 pub mod serialization;
 #[doc(hidden)]
-pub mod xmlerror;
-#[doc(hidden)]
-pub mod xmlutil;
+pub mod proto;
 
 pub use credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
 pub use error::{RusotoError, RusotoResult};

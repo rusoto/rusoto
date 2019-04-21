@@ -76,9 +76,9 @@ impl GenerateProtocol for QueryGenerator {
             use xml::reader::ParserConfig;
             use rusoto_core::param::{{Params, ServiceParams}};
             use rusoto_core::signature::SignedRequest;
-            use rusoto_core::xmlutil::{{Next, Peek, XmlParseError, XmlResponse}};
-            use rusoto_core::xmlutil::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name, deserialize_elements}};
-            use rusoto_core::xmlerror::*;
+            use rusoto_core::proto::xml::util::{{Next, Peek, XmlParseError, XmlResponse}};
+            use rusoto_core::proto::xml::util::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name, deserialize_elements}};
+            use rusoto_core::proto::xml::error::*;
             use serde_urlencoded;
             ")
     }

@@ -5,7 +5,7 @@ use std::io;
 use credential::CredentialsError;
 
 use super::request::{BufferedHttpResponse, HttpDispatchError};
-use super::xmlutil::XmlParseError;
+use super::proto::xml::util::XmlParseError;
 
 /// Generic error type returned by all rusoto requests.
 #[derive(Debug, PartialEq)]
