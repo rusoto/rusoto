@@ -455,6 +455,12 @@
     "protocolVersion": "2018-05-14",
     "baseTypeName": "Iot1ClickProjects"
   },
+  "kafka": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2018-11-14",
+    "baseTypeName": "Kafka"
+  },
   "kinesis": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",
