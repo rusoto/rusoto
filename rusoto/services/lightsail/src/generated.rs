@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AllocateStaticIpRequest {
     /// <p>The name of the static IP address.</p>
@@ -3945,53 +3944,32 @@ pub enum AllocateStaticIpError {
 
 impl AllocateStaticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AllocateStaticIpError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(AllocateStaticIpError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AllocateStaticIpError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(AllocateStaticIpError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(AllocateStaticIpError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AllocateStaticIpError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(AllocateStaticIpError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AllocateStaticIpError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(AllocateStaticIpError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AllocateStaticIpError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(AllocateStaticIpError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AllocateStaticIpError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(AllocateStaticIpError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AllocateStaticIpError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4037,53 +4015,30 @@ pub enum AttachDiskError {
 
 impl AttachDiskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachDiskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(AttachDiskError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachDiskError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(AttachDiskError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AttachDiskError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(AttachDiskError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachDiskError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(AttachDiskError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachDiskError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(AttachDiskError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachDiskError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(AttachDiskError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachDiskError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(AttachDiskError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachDiskError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4131,59 +4086,44 @@ impl AttachInstancesToLoadBalancerError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AttachInstancesToLoadBalancerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachInstancesToLoadBalancerError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        AttachInstancesToLoadBalancerError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        AttachInstancesToLoadBalancerError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(AttachInstancesToLoadBalancerError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(AttachInstancesToLoadBalancerError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        AttachInstancesToLoadBalancerError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        AttachInstancesToLoadBalancerError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(AttachInstancesToLoadBalancerError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        AttachInstancesToLoadBalancerError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        AttachInstancesToLoadBalancerError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4231,63 +4171,44 @@ impl AttachLoadBalancerTlsCertificateError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AttachLoadBalancerTlsCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        AttachLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        AttachLoadBalancerTlsCertificateError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                            String::from(error_message),
-                        ),
+                        AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        AttachLoadBalancerTlsCertificateError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        AttachLoadBalancerTlsCertificateError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(AttachLoadBalancerTlsCertificateError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        AttachLoadBalancerTlsCertificateError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        AttachLoadBalancerTlsCertificateError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(AttachLoadBalancerTlsCertificateError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        AttachLoadBalancerTlsCertificateError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        AttachLoadBalancerTlsCertificateError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4333,53 +4254,32 @@ pub enum AttachStaticIpError {
 
 impl AttachStaticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachStaticIpError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(AttachStaticIpError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachStaticIpError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(AttachStaticIpError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(AttachStaticIpError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachStaticIpError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(AttachStaticIpError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachStaticIpError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(AttachStaticIpError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AttachStaticIpError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(AttachStaticIpError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachStaticIpError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(AttachStaticIpError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AttachStaticIpError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4425,55 +4325,40 @@ pub enum CloseInstancePublicPortsError {
 
 impl CloseInstancePublicPortsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CloseInstancePublicPortsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CloseInstancePublicPortsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        CloseInstancePublicPortsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        CloseInstancePublicPortsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CloseInstancePublicPortsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CloseInstancePublicPortsError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CloseInstancePublicPortsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(CloseInstancePublicPortsError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CloseInstancePublicPortsError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CloseInstancePublicPortsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(CloseInstancePublicPortsError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4519,53 +4404,30 @@ pub enum CopySnapshotError {
 
 impl CopySnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopySnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CopySnapshotError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CopySnapshotError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(CopySnapshotError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CopySnapshotError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CopySnapshotError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CopySnapshotError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CopySnapshotError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CopySnapshotError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(CopySnapshotError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CopySnapshotError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CopySnapshotError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CopySnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(CopySnapshotError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CopySnapshotError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4611,55 +4473,40 @@ pub enum CreateCloudFormationStackError {
 
 impl CreateCloudFormationStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCloudFormationStackError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateCloudFormationStackError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        CreateCloudFormationStackError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        CreateCloudFormationStackError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateCloudFormationStackError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateCloudFormationStackError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateCloudFormationStackError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(CreateCloudFormationStackError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateCloudFormationStackError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateCloudFormationStackError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(CreateCloudFormationStackError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4705,53 +4552,30 @@ pub enum CreateDiskError {
 
 impl CreateDiskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDiskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateDiskError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDiskError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(CreateDiskError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDiskError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateDiskError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDiskError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateDiskError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDiskError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(CreateDiskError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDiskError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateDiskError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDiskError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(CreateDiskError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDiskError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4797,55 +4621,36 @@ pub enum CreateDiskFromSnapshotError {
 
 impl CreateDiskFromSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDiskFromSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateDiskFromSnapshotError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDiskFromSnapshotError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        CreateDiskFromSnapshotError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        CreateDiskFromSnapshotError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateDiskFromSnapshotError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDiskFromSnapshotError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateDiskFromSnapshotError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDiskFromSnapshotError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(CreateDiskFromSnapshotError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateDiskFromSnapshotError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDiskFromSnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(CreateDiskFromSnapshotError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4891,53 +4696,32 @@ pub enum CreateDiskSnapshotError {
 
 impl CreateDiskSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDiskSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateDiskSnapshotError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDiskSnapshotError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(CreateDiskSnapshotError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateDiskSnapshotError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDiskSnapshotError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateDiskSnapshotError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDiskSnapshotError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(CreateDiskSnapshotError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDiskSnapshotError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateDiskSnapshotError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDiskSnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(CreateDiskSnapshotError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDiskSnapshotError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4983,53 +4767,30 @@ pub enum CreateDomainError {
 
 impl CreateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateDomainError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDomainError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(CreateDomainError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDomainError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateDomainError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDomainError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateDomainError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDomainError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(CreateDomainError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDomainError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateDomainError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDomainError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(CreateDomainError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDomainError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5075,53 +4836,32 @@ pub enum CreateDomainEntryError {
 
 impl CreateDomainEntryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainEntryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateDomainEntryError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDomainEntryError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(CreateDomainEntryError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateDomainEntryError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDomainEntryError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateDomainEntryError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDomainEntryError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(CreateDomainEntryError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDomainEntryError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateDomainEntryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDomainEntryError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(CreateDomainEntryError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDomainEntryError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5167,55 +4907,36 @@ pub enum CreateInstanceSnapshotError {
 
 impl CreateInstanceSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstanceSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateInstanceSnapshotError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstanceSnapshotError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        CreateInstanceSnapshotError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        CreateInstanceSnapshotError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateInstanceSnapshotError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstanceSnapshotError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateInstanceSnapshotError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstanceSnapshotError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(CreateInstanceSnapshotError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateInstanceSnapshotError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstanceSnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(CreateInstanceSnapshotError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5261,53 +4982,32 @@ pub enum CreateInstancesError {
 
 impl CreateInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateInstancesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateInstancesError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(CreateInstancesError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateInstancesError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateInstancesError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateInstancesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateInstancesError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(CreateInstancesError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstancesError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateInstancesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateInstancesError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(CreateInstancesError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstancesError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5355,57 +5055,42 @@ impl CreateInstancesFromSnapshotError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateInstancesFromSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateInstancesFromSnapshotError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        CreateInstancesFromSnapshotError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        CreateInstancesFromSnapshotError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateInstancesFromSnapshotError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateInstancesFromSnapshotError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        CreateInstancesFromSnapshotError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        CreateInstancesFromSnapshotError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateInstancesFromSnapshotError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInstancesFromSnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(CreateInstancesFromSnapshotError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5451,53 +5136,32 @@ pub enum CreateKeyPairError {
 
 impl CreateKeyPairError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateKeyPairError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateKeyPairError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateKeyPairError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(CreateKeyPairError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateKeyPairError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateKeyPairError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateKeyPairError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateKeyPairError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(CreateKeyPairError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateKeyPairError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateKeyPairError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateKeyPairError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(CreateKeyPairError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateKeyPairError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5543,53 +5207,32 @@ pub enum CreateLoadBalancerError {
 
 impl CreateLoadBalancerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLoadBalancerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateLoadBalancerError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateLoadBalancerError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(CreateLoadBalancerError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateLoadBalancerError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateLoadBalancerError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateLoadBalancerError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateLoadBalancerError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(CreateLoadBalancerError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateLoadBalancerError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateLoadBalancerError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateLoadBalancerError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(CreateLoadBalancerError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateLoadBalancerError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5637,63 +5280,44 @@ impl CreateLoadBalancerTlsCertificateError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateLoadBalancerTlsCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        CreateLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        CreateLoadBalancerTlsCertificateError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                            String::from(error_message),
-                        ),
+                        CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        CreateLoadBalancerTlsCertificateError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        CreateLoadBalancerTlsCertificateError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateLoadBalancerTlsCertificateError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        CreateLoadBalancerTlsCertificateError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        CreateLoadBalancerTlsCertificateError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateLoadBalancerTlsCertificateError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        CreateLoadBalancerTlsCertificateError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        CreateLoadBalancerTlsCertificateError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5739,55 +5363,40 @@ pub enum CreateRelationalDatabaseError {
 
 impl CreateRelationalDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRelationalDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateRelationalDatabaseError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateRelationalDatabaseError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateRelationalDatabaseError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRelationalDatabaseError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(CreateRelationalDatabaseError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateRelationalDatabaseError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRelationalDatabaseError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(CreateRelationalDatabaseError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5835,67 +5444,44 @@ impl CreateRelationalDatabaseFromSnapshotError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateRelationalDatabaseFromSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseFromSnapshotError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseFromSnapshotError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(
-                            String::from(error_message),
-                        ),
+                        CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseFromSnapshotError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseFromSnapshotError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseFromSnapshotError::NotFound(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseFromSnapshotError::NotFound(err.msg),
                     )
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseFromSnapshotError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseFromSnapshotError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseFromSnapshotError::Service(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseFromSnapshotError::Service(err.msg),
                     )
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseFromSnapshotError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseFromSnapshotError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5943,63 +5529,44 @@ impl CreateRelationalDatabaseSnapshotError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateRelationalDatabaseSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseSnapshotError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseSnapshotError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(
-                            String::from(error_message),
-                        ),
+                        CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseSnapshotError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseSnapshotError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateRelationalDatabaseSnapshotError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseSnapshotError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseSnapshotError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateRelationalDatabaseSnapshotError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        CreateRelationalDatabaseSnapshotError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        CreateRelationalDatabaseSnapshotError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6045,53 +5612,30 @@ pub enum DeleteDiskError {
 
 impl DeleteDiskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDiskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteDiskError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDiskError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(DeleteDiskError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDiskError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteDiskError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDiskError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteDiskError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDiskError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(DeleteDiskError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDiskError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteDiskError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDiskError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(DeleteDiskError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDiskError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6137,53 +5681,32 @@ pub enum DeleteDiskSnapshotError {
 
 impl DeleteDiskSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDiskSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteDiskSnapshotError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDiskSnapshotError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(DeleteDiskSnapshotError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteDiskSnapshotError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDiskSnapshotError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteDiskSnapshotError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDiskSnapshotError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(DeleteDiskSnapshotError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDiskSnapshotError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteDiskSnapshotError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDiskSnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(DeleteDiskSnapshotError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDiskSnapshotError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6229,53 +5752,30 @@ pub enum DeleteDomainError {
 
 impl DeleteDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteDomainError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDomainError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(DeleteDomainError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDomainError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteDomainError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDomainError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteDomainError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDomainError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(DeleteDomainError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDomainError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteDomainError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDomainError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(DeleteDomainError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDomainError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6321,53 +5821,32 @@ pub enum DeleteDomainEntryError {
 
 impl DeleteDomainEntryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainEntryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteDomainEntryError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDomainEntryError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(DeleteDomainEntryError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteDomainEntryError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDomainEntryError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteDomainEntryError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDomainEntryError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(DeleteDomainEntryError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDomainEntryError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteDomainEntryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDomainEntryError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(DeleteDomainEntryError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDomainEntryError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6413,53 +5892,32 @@ pub enum DeleteInstanceError {
 
 impl DeleteInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteInstanceError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInstanceError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(DeleteInstanceError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteInstanceError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInstanceError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteInstanceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInstanceError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(DeleteInstanceError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInstanceError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteInstanceError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInstanceError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(DeleteInstanceError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInstanceError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6505,55 +5963,36 @@ pub enum DeleteInstanceSnapshotError {
 
 impl DeleteInstanceSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteInstanceSnapshotError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInstanceSnapshotError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        DeleteInstanceSnapshotError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        DeleteInstanceSnapshotError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteInstanceSnapshotError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInstanceSnapshotError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteInstanceSnapshotError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInstanceSnapshotError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(DeleteInstanceSnapshotError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteInstanceSnapshotError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInstanceSnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(DeleteInstanceSnapshotError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6599,53 +6038,32 @@ pub enum DeleteKeyPairError {
 
 impl DeleteKeyPairError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteKeyPairError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteKeyPairError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteKeyPairError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(DeleteKeyPairError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteKeyPairError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteKeyPairError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteKeyPairError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteKeyPairError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(DeleteKeyPairError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteKeyPairError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteKeyPairError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteKeyPairError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(DeleteKeyPairError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteKeyPairError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6691,53 +6109,32 @@ pub enum DeleteLoadBalancerError {
 
 impl DeleteLoadBalancerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLoadBalancerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteLoadBalancerError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteLoadBalancerError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(DeleteLoadBalancerError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteLoadBalancerError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteLoadBalancerError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteLoadBalancerError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteLoadBalancerError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(DeleteLoadBalancerError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteLoadBalancerError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteLoadBalancerError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteLoadBalancerError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(DeleteLoadBalancerError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteLoadBalancerError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6785,63 +6182,44 @@ impl DeleteLoadBalancerTlsCertificateError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteLoadBalancerTlsCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        DeleteLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        DeleteLoadBalancerTlsCertificateError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                            String::from(error_message),
-                        ),
+                        DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        DeleteLoadBalancerTlsCertificateError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        DeleteLoadBalancerTlsCertificateError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteLoadBalancerTlsCertificateError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        DeleteLoadBalancerTlsCertificateError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        DeleteLoadBalancerTlsCertificateError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteLoadBalancerTlsCertificateError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        DeleteLoadBalancerTlsCertificateError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        DeleteLoadBalancerTlsCertificateError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6887,55 +6265,40 @@ pub enum DeleteRelationalDatabaseError {
 
 impl DeleteRelationalDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRelationalDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteRelationalDatabaseError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        DeleteRelationalDatabaseError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        DeleteRelationalDatabaseError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteRelationalDatabaseError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteRelationalDatabaseError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRelationalDatabaseError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(DeleteRelationalDatabaseError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteRelationalDatabaseError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRelationalDatabaseError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(DeleteRelationalDatabaseError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6983,63 +6346,44 @@ impl DeleteRelationalDatabaseSnapshotError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteRelationalDatabaseSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        DeleteRelationalDatabaseSnapshotError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        DeleteRelationalDatabaseSnapshotError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(
-                            String::from(error_message),
-                        ),
+                        DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        DeleteRelationalDatabaseSnapshotError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        DeleteRelationalDatabaseSnapshotError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteRelationalDatabaseSnapshotError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        DeleteRelationalDatabaseSnapshotError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        DeleteRelationalDatabaseSnapshotError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteRelationalDatabaseSnapshotError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        DeleteRelationalDatabaseSnapshotError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        DeleteRelationalDatabaseSnapshotError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7085,53 +6429,30 @@ pub enum DetachDiskError {
 
 impl DetachDiskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachDiskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DetachDiskError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachDiskError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(DetachDiskError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetachDiskError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DetachDiskError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachDiskError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DetachDiskError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachDiskError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(DetachDiskError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachDiskError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DetachDiskError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachDiskError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(DetachDiskError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachDiskError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7179,63 +6500,44 @@ impl DetachInstancesFromLoadBalancerError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DetachInstancesFromLoadBalancerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        DetachInstancesFromLoadBalancerError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        DetachInstancesFromLoadBalancerError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        DetachInstancesFromLoadBalancerError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        DetachInstancesFromLoadBalancerError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        DetachInstancesFromLoadBalancerError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        DetachInstancesFromLoadBalancerError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DetachInstancesFromLoadBalancerError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        DetachInstancesFromLoadBalancerError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        DetachInstancesFromLoadBalancerError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DetachInstancesFromLoadBalancerError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        DetachInstancesFromLoadBalancerError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        DetachInstancesFromLoadBalancerError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7281,53 +6583,32 @@ pub enum DetachStaticIpError {
 
 impl DetachStaticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachStaticIpError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DetachStaticIpError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachStaticIpError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(DetachStaticIpError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DetachStaticIpError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachStaticIpError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DetachStaticIpError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachStaticIpError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(DetachStaticIpError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetachStaticIpError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DetachStaticIpError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachStaticIpError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(DetachStaticIpError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetachStaticIpError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7373,55 +6654,36 @@ pub enum DownloadDefaultKeyPairError {
 
 impl DownloadDefaultKeyPairError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DownloadDefaultKeyPairError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DownloadDefaultKeyPairError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DownloadDefaultKeyPairError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        DownloadDefaultKeyPairError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        DownloadDefaultKeyPairError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DownloadDefaultKeyPairError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DownloadDefaultKeyPairError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DownloadDefaultKeyPairError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DownloadDefaultKeyPairError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(DownloadDefaultKeyPairError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DownloadDefaultKeyPairError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DownloadDefaultKeyPairError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(DownloadDefaultKeyPairError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7467,53 +6729,32 @@ pub enum ExportSnapshotError {
 
 impl ExportSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ExportSnapshotError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ExportSnapshotError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(ExportSnapshotError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ExportSnapshotError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ExportSnapshotError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ExportSnapshotError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ExportSnapshotError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(ExportSnapshotError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ExportSnapshotError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ExportSnapshotError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ExportSnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(ExportSnapshotError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ExportSnapshotError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7559,53 +6800,32 @@ pub enum GetActiveNamesError {
 
 impl GetActiveNamesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetActiveNamesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetActiveNamesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetActiveNamesError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetActiveNamesError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetActiveNamesError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetActiveNamesError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetActiveNamesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetActiveNamesError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetActiveNamesError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetActiveNamesError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetActiveNamesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetActiveNamesError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetActiveNamesError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetActiveNamesError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7651,53 +6871,32 @@ pub enum GetBlueprintsError {
 
 impl GetBlueprintsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBlueprintsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetBlueprintsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBlueprintsError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetBlueprintsError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetBlueprintsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBlueprintsError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetBlueprintsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBlueprintsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetBlueprintsError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetBlueprintsError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetBlueprintsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBlueprintsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetBlueprintsError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBlueprintsError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7743,53 +6942,30 @@ pub enum GetBundlesError {
 
 impl GetBundlesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBundlesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetBundlesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBundlesError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetBundlesError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetBundlesError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetBundlesError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBundlesError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetBundlesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBundlesError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetBundlesError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBundlesError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetBundlesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBundlesError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetBundlesError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetBundlesError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7837,59 +7013,44 @@ impl GetCloudFormationStackRecordsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCloudFormationStackRecordsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetCloudFormationStackRecordsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetCloudFormationStackRecordsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetCloudFormationStackRecordsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetCloudFormationStackRecordsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetCloudFormationStackRecordsError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetCloudFormationStackRecordsError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetCloudFormationStackRecordsError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetCloudFormationStackRecordsError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetCloudFormationStackRecordsError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetCloudFormationStackRecordsError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7935,51 +7096,28 @@ pub enum GetDiskError {
 
 impl GetDiskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDiskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetDiskError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetDiskError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDiskError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDiskError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDiskError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetDiskError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskError::OperationFailure(err.msg))
                 }
-                "ServiceException" => {
-                    return RusotoError::Service(GetDiskError::Service(String::from(error_message)))
-                }
+                "ServiceException" => return RusotoError::Service(GetDiskError::Service(err.msg)),
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetDiskError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8025,53 +7163,32 @@ pub enum GetDiskSnapshotError {
 
 impl GetDiskSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDiskSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetDiskSnapshotError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskSnapshotError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetDiskSnapshotError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDiskSnapshotError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskSnapshotError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDiskSnapshotError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskSnapshotError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetDiskSnapshotError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDiskSnapshotError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetDiskSnapshotError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskSnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetDiskSnapshotError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDiskSnapshotError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8117,53 +7234,32 @@ pub enum GetDiskSnapshotsError {
 
 impl GetDiskSnapshotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDiskSnapshotsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetDiskSnapshotsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskSnapshotsError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetDiskSnapshotsError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDiskSnapshotsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskSnapshotsError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDiskSnapshotsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskSnapshotsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetDiskSnapshotsError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDiskSnapshotsError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetDiskSnapshotsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDiskSnapshotsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetDiskSnapshotsError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDiskSnapshotsError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8209,53 +7305,28 @@ pub enum GetDisksError {
 
 impl GetDisksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDisksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetDisksError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDisksError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetDisksError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDisksError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDisksError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDisksError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDisksError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDisksError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetDisksError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDisksError::OperationFailure(err.msg))
                 }
-                "ServiceException" => {
-                    return RusotoError::Service(GetDisksError::Service(String::from(
-                        error_message,
-                    )))
-                }
+                "ServiceException" => return RusotoError::Service(GetDisksError::Service(err.msg)),
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetDisksError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDisksError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8301,53 +7372,30 @@ pub enum GetDomainError {
 
 impl GetDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetDomainError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetDomainError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDomainError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDomainError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDomainError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetDomainError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetDomainError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetDomainError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8393,53 +7441,30 @@ pub enum GetDomainsError {
 
 impl GetDomainsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetDomainsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainsError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetDomainsError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDomainsError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDomainsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainsError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDomainsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetDomainsError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainsError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetDomainsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetDomainsError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainsError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8485,55 +7510,40 @@ pub enum GetExportSnapshotRecordsError {
 
 impl GetExportSnapshotRecordsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetExportSnapshotRecordsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetExportSnapshotRecordsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetExportSnapshotRecordsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetExportSnapshotRecordsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetExportSnapshotRecordsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetExportSnapshotRecordsError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetExportSnapshotRecordsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetExportSnapshotRecordsError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetExportSnapshotRecordsError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetExportSnapshotRecordsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetExportSnapshotRecordsError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8579,53 +7589,30 @@ pub enum GetInstanceError {
 
 impl GetInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetInstanceError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetInstanceError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetInstanceError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetInstanceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetInstanceError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetInstanceError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetInstanceError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8671,55 +7658,40 @@ pub enum GetInstanceAccessDetailsError {
 
 impl GetInstanceAccessDetailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceAccessDetailsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetInstanceAccessDetailsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetInstanceAccessDetailsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetInstanceAccessDetailsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetInstanceAccessDetailsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetInstanceAccessDetailsError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceAccessDetailsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetInstanceAccessDetailsError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetInstanceAccessDetailsError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceAccessDetailsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetInstanceAccessDetailsError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8765,55 +7737,36 @@ pub enum GetInstanceMetricDataError {
 
 impl GetInstanceMetricDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceMetricDataError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetInstanceMetricDataError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceMetricDataError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetInstanceMetricDataError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetInstanceMetricDataError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetInstanceMetricDataError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceMetricDataError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetInstanceMetricDataError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceMetricDataError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetInstanceMetricDataError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetInstanceMetricDataError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceMetricDataError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetInstanceMetricDataError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8859,55 +7812,36 @@ pub enum GetInstancePortStatesError {
 
 impl GetInstancePortStatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstancePortStatesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetInstancePortStatesError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstancePortStatesError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetInstancePortStatesError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetInstancePortStatesError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetInstancePortStatesError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstancePortStatesError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetInstancePortStatesError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstancePortStatesError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetInstancePortStatesError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetInstancePortStatesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstancePortStatesError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetInstancePortStatesError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8953,53 +7887,34 @@ pub enum GetInstanceSnapshotError {
 
 impl GetInstanceSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetInstanceSnapshotError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceSnapshotError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetInstanceSnapshotError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetInstanceSnapshotError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceSnapshotError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetInstanceSnapshotError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceSnapshotError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetInstanceSnapshotError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetInstanceSnapshotError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceSnapshotError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetInstanceSnapshotError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceSnapshotError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9045,53 +7960,36 @@ pub enum GetInstanceSnapshotsError {
 
 impl GetInstanceSnapshotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceSnapshotsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetInstanceSnapshotsError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceSnapshotsError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetInstanceSnapshotsError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetInstanceSnapshotsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceSnapshotsError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetInstanceSnapshotsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceSnapshotsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetInstanceSnapshotsError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetInstanceSnapshotsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceSnapshotsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetInstanceSnapshotsError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9137,53 +8035,32 @@ pub enum GetInstanceStateError {
 
 impl GetInstanceStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceStateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetInstanceStateError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceStateError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetInstanceStateError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetInstanceStateError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceStateError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetInstanceStateError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceStateError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetInstanceStateError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceStateError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetInstanceStateError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstanceStateError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetInstanceStateError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstanceStateError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9229,53 +8106,30 @@ pub enum GetInstancesError {
 
 impl GetInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetInstancesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstancesError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetInstancesError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetInstancesError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetInstancesError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstancesError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetInstancesError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstancesError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetInstancesError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstancesError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetInstancesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstancesError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetInstancesError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetInstancesError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9321,53 +8175,30 @@ pub enum GetKeyPairError {
 
 impl GetKeyPairError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyPairError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetKeyPairError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetKeyPairError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetKeyPairError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetKeyPairError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetKeyPairError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetKeyPairError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetKeyPairError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetKeyPairError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9413,53 +8244,30 @@ pub enum GetKeyPairsError {
 
 impl GetKeyPairsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyPairsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetKeyPairsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairsError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetKeyPairsError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetKeyPairsError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetKeyPairsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairsError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetKeyPairsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetKeyPairsError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairsError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetKeyPairsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetKeyPairsError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetKeyPairsError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9505,53 +8313,32 @@ pub enum GetLoadBalancerError {
 
 impl GetLoadBalancerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoadBalancerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetLoadBalancerError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLoadBalancerError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetLoadBalancerError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetLoadBalancerError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLoadBalancerError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetLoadBalancerError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLoadBalancerError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetLoadBalancerError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLoadBalancerError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetLoadBalancerError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLoadBalancerError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetLoadBalancerError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLoadBalancerError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9597,55 +8384,40 @@ pub enum GetLoadBalancerMetricDataError {
 
 impl GetLoadBalancerMetricDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoadBalancerMetricDataError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetLoadBalancerMetricDataError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetLoadBalancerMetricDataError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetLoadBalancerMetricDataError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetLoadBalancerMetricDataError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetLoadBalancerMetricDataError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLoadBalancerMetricDataError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetLoadBalancerMetricDataError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetLoadBalancerMetricDataError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLoadBalancerMetricDataError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetLoadBalancerMetricDataError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9693,59 +8465,44 @@ impl GetLoadBalancerTlsCertificatesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetLoadBalancerTlsCertificatesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetLoadBalancerTlsCertificatesError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetLoadBalancerTlsCertificatesError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetLoadBalancerTlsCertificatesError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetLoadBalancerTlsCertificatesError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetLoadBalancerTlsCertificatesError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetLoadBalancerTlsCertificatesError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetLoadBalancerTlsCertificatesError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetLoadBalancerTlsCertificatesError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9791,53 +8548,32 @@ pub enum GetLoadBalancersError {
 
 impl GetLoadBalancersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoadBalancersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetLoadBalancersError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLoadBalancersError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetLoadBalancersError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetLoadBalancersError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLoadBalancersError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetLoadBalancersError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLoadBalancersError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetLoadBalancersError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLoadBalancersError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetLoadBalancersError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetLoadBalancersError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetLoadBalancersError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLoadBalancersError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9883,53 +8619,30 @@ pub enum GetOperationError {
 
 impl GetOperationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetOperationError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetOperationError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetOperationError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetOperationError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetOperationError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetOperationError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetOperationError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetOperationError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9975,53 +8688,32 @@ pub enum GetOperationsError {
 
 impl GetOperationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetOperationsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationsError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(GetOperationsError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetOperationsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationsError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetOperationsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetOperationsError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetOperationsError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetOperationsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetOperationsError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetOperationsError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10067,55 +8759,40 @@ pub enum GetOperationsForResourceError {
 
 impl GetOperationsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetOperationsForResourceError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetOperationsForResourceError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetOperationsForResourceError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetOperationsForResourceError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetOperationsForResourceError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetOperationsForResourceError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetOperationsForResourceError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetOperationsForResourceError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetOperationsForResourceError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetOperationsForResourceError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10161,53 +8838,30 @@ pub enum GetRegionsError {
 
 impl GetRegionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetRegionsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRegionsError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetRegionsError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRegionsError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetRegionsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRegionsError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetRegionsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRegionsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetRegionsError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRegionsError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetRegionsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRegionsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetRegionsError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRegionsError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10253,55 +8907,36 @@ pub enum GetRelationalDatabaseError {
 
 impl GetRelationalDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRelationalDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetRelationalDatabaseError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRelationalDatabaseError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetRelationalDatabaseError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRelationalDatabaseError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetRelationalDatabaseError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRelationalDatabaseError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetRelationalDatabaseError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetRelationalDatabaseError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRelationalDatabaseError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetRelationalDatabaseError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10349,63 +8984,44 @@ impl GetRelationalDatabaseBlueprintsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseBlueprintsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseBlueprintsError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseBlueprintsError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseBlueprintsError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseBlueprintsError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRelationalDatabaseBlueprintsError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseBlueprintsError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseBlueprintsError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetRelationalDatabaseBlueprintsError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseBlueprintsError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseBlueprintsError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10453,59 +9069,44 @@ impl GetRelationalDatabaseBundlesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseBundlesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetRelationalDatabaseBundlesError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseBundlesError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseBundlesError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetRelationalDatabaseBundlesError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRelationalDatabaseBundlesError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseBundlesError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseBundlesError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetRelationalDatabaseBundlesError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseBundlesError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseBundlesError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10553,57 +9154,42 @@ impl GetRelationalDatabaseEventsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseEventsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetRelationalDatabaseEventsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseEventsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseEventsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetRelationalDatabaseEventsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRelationalDatabaseEventsError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseEventsError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseEventsError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetRelationalDatabaseEventsError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRelationalDatabaseEventsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetRelationalDatabaseEventsError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10651,59 +9237,44 @@ impl GetRelationalDatabaseLogEventsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseLogEventsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetRelationalDatabaseLogEventsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseLogEventsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseLogEventsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetRelationalDatabaseLogEventsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRelationalDatabaseLogEventsError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseLogEventsError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseLogEventsError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetRelationalDatabaseLogEventsError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseLogEventsError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseLogEventsError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10751,63 +9322,44 @@ impl GetRelationalDatabaseLogStreamsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseLogStreamsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseLogStreamsError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseLogStreamsError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseLogStreamsError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseLogStreamsError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRelationalDatabaseLogStreamsError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseLogStreamsError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseLogStreamsError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetRelationalDatabaseLogStreamsError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseLogStreamsError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseLogStreamsError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10855,67 +9407,46 @@ impl GetRelationalDatabaseMasterUserPasswordError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseMasterUserPasswordError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMasterUserPasswordError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseMasterUserPasswordError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
                         GetRelationalDatabaseMasterUserPasswordError::AccountSetupInProgress(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMasterUserPasswordError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseMasterUserPasswordError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMasterUserPasswordError::NotFound(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseMasterUserPasswordError::NotFound(err.msg),
                     )
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMasterUserPasswordError::OperationFailure(
-                            String::from(error_message),
-                        ),
+                        GetRelationalDatabaseMasterUserPasswordError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMasterUserPasswordError::Service(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseMasterUserPasswordError::Service(err.msg),
                     )
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(
-                            String::from(error_message),
-                        ),
+                        GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10965,63 +9496,44 @@ impl GetRelationalDatabaseMetricDataError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseMetricDataError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMetricDataError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseMetricDataError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMetricDataError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseMetricDataError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMetricDataError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseMetricDataError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRelationalDatabaseMetricDataError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMetricDataError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseMetricDataError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetRelationalDatabaseMetricDataError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseMetricDataError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseMetricDataError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11069,63 +9581,44 @@ impl GetRelationalDatabaseParametersError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseParametersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseParametersError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseParametersError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseParametersError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseParametersError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseParametersError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseParametersError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRelationalDatabaseParametersError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseParametersError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseParametersError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetRelationalDatabaseParametersError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseParametersError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseParametersError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11173,59 +9666,44 @@ impl GetRelationalDatabaseSnapshotError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetRelationalDatabaseSnapshotError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseSnapshotError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseSnapshotError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetRelationalDatabaseSnapshotError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRelationalDatabaseSnapshotError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseSnapshotError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseSnapshotError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetRelationalDatabaseSnapshotError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseSnapshotError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseSnapshotError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11273,59 +9751,44 @@ impl GetRelationalDatabaseSnapshotsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRelationalDatabaseSnapshotsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetRelationalDatabaseSnapshotsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetRelationalDatabaseSnapshotsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRelationalDatabaseSnapshotsError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseSnapshotsError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseSnapshotsError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetRelationalDatabaseSnapshotsError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabaseSnapshotsError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabaseSnapshotsError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11371,55 +9834,36 @@ pub enum GetRelationalDatabasesError {
 
 impl GetRelationalDatabasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRelationalDatabasesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetRelationalDatabasesError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRelationalDatabasesError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        GetRelationalDatabasesError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        GetRelationalDatabasesError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetRelationalDatabasesError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRelationalDatabasesError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetRelationalDatabasesError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRelationalDatabasesError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(GetRelationalDatabasesError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetRelationalDatabasesError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRelationalDatabasesError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(GetRelationalDatabasesError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11465,53 +9909,30 @@ pub enum GetStaticIpError {
 
 impl GetStaticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStaticIpError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetStaticIpError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetStaticIpError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetStaticIpError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetStaticIpError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetStaticIpError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetStaticIpError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetStaticIpError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetStaticIpError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11557,53 +9978,30 @@ pub enum GetStaticIpsError {
 
 impl GetStaticIpsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStaticIpsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetStaticIpsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpsError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(GetStaticIpsError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetStaticIpsError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetStaticIpsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpsError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetStaticIpsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(GetStaticIpsError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpsError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetStaticIpsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(GetStaticIpsError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetStaticIpsError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11649,53 +10047,32 @@ pub enum ImportKeyPairError {
 
 impl ImportKeyPairError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportKeyPairError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ImportKeyPairError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ImportKeyPairError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(ImportKeyPairError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ImportKeyPairError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ImportKeyPairError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ImportKeyPairError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ImportKeyPairError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(ImportKeyPairError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportKeyPairError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ImportKeyPairError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ImportKeyPairError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(ImportKeyPairError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ImportKeyPairError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11741,53 +10118,30 @@ pub enum IsVpcPeeredError {
 
 impl IsVpcPeeredError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IsVpcPeeredError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(IsVpcPeeredError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IsVpcPeeredError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(IsVpcPeeredError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(IsVpcPeeredError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(IsVpcPeeredError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IsVpcPeeredError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(IsVpcPeeredError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IsVpcPeeredError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(IsVpcPeeredError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IsVpcPeeredError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(IsVpcPeeredError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IsVpcPeeredError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(IsVpcPeeredError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(IsVpcPeeredError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11833,55 +10187,40 @@ pub enum OpenInstancePublicPortsError {
 
 impl OpenInstancePublicPortsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<OpenInstancePublicPortsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(OpenInstancePublicPortsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        OpenInstancePublicPortsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        OpenInstancePublicPortsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(OpenInstancePublicPortsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(OpenInstancePublicPortsError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(OpenInstancePublicPortsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(OpenInstancePublicPortsError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(OpenInstancePublicPortsError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(OpenInstancePublicPortsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(OpenInstancePublicPortsError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11927,51 +10266,28 @@ pub enum PeerVpcError {
 
 impl PeerVpcError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PeerVpcError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(PeerVpcError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PeerVpcError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(PeerVpcError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PeerVpcError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(PeerVpcError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PeerVpcError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(PeerVpcError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PeerVpcError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(PeerVpcError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PeerVpcError::OperationFailure(err.msg))
                 }
-                "ServiceException" => {
-                    return RusotoError::Service(PeerVpcError::Service(String::from(error_message)))
-                }
+                "ServiceException" => return RusotoError::Service(PeerVpcError::Service(err.msg)),
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(PeerVpcError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PeerVpcError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12017,55 +10333,36 @@ pub enum PutInstancePublicPortsError {
 
 impl PutInstancePublicPortsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutInstancePublicPortsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(PutInstancePublicPortsError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInstancePublicPortsError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        PutInstancePublicPortsError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        PutInstancePublicPortsError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(PutInstancePublicPortsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInstancePublicPortsError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(PutInstancePublicPortsError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInstancePublicPortsError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(PutInstancePublicPortsError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(PutInstancePublicPortsError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutInstancePublicPortsError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(PutInstancePublicPortsError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12111,53 +10408,32 @@ pub enum RebootInstanceError {
 
 impl RebootInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(RebootInstanceError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RebootInstanceError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(RebootInstanceError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(RebootInstanceError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RebootInstanceError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(RebootInstanceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RebootInstanceError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(RebootInstanceError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RebootInstanceError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(RebootInstanceError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RebootInstanceError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(RebootInstanceError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RebootInstanceError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12203,55 +10479,40 @@ pub enum RebootRelationalDatabaseError {
 
 impl RebootRelationalDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootRelationalDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RebootRelationalDatabaseError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        RebootRelationalDatabaseError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        RebootRelationalDatabaseError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(RebootRelationalDatabaseError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(RebootRelationalDatabaseError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RebootRelationalDatabaseError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(RebootRelationalDatabaseError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(RebootRelationalDatabaseError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RebootRelationalDatabaseError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(RebootRelationalDatabaseError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12297,53 +10558,32 @@ pub enum ReleaseStaticIpError {
 
 impl ReleaseStaticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReleaseStaticIpError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ReleaseStaticIpError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReleaseStaticIpError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(ReleaseStaticIpError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ReleaseStaticIpError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReleaseStaticIpError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ReleaseStaticIpError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReleaseStaticIpError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(ReleaseStaticIpError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ReleaseStaticIpError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ReleaseStaticIpError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ReleaseStaticIpError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(ReleaseStaticIpError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ReleaseStaticIpError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12389,53 +10629,32 @@ pub enum StartInstanceError {
 
 impl StartInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StartInstanceError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartInstanceError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(StartInstanceError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StartInstanceError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartInstanceError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StartInstanceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartInstanceError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(StartInstanceError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartInstanceError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(StartInstanceError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartInstanceError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(StartInstanceError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartInstanceError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12481,55 +10700,40 @@ pub enum StartRelationalDatabaseError {
 
 impl StartRelationalDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartRelationalDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartRelationalDatabaseError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        StartRelationalDatabaseError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        StartRelationalDatabaseError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(StartRelationalDatabaseError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StartRelationalDatabaseError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartRelationalDatabaseError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(StartRelationalDatabaseError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(StartRelationalDatabaseError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartRelationalDatabaseError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(StartRelationalDatabaseError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12575,53 +10779,30 @@ pub enum StopInstanceError {
 
 impl StopInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StopInstanceError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopInstanceError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(StopInstanceError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopInstanceError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StopInstanceError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopInstanceError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StopInstanceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopInstanceError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(StopInstanceError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopInstanceError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(StopInstanceError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopInstanceError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(StopInstanceError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopInstanceError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12667,55 +10848,36 @@ pub enum StopRelationalDatabaseError {
 
 impl StopRelationalDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRelationalDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StopRelationalDatabaseError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopRelationalDatabaseError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        StopRelationalDatabaseError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        StopRelationalDatabaseError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StopRelationalDatabaseError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopRelationalDatabaseError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StopRelationalDatabaseError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopRelationalDatabaseError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(StopRelationalDatabaseError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(StopRelationalDatabaseError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopRelationalDatabaseError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(StopRelationalDatabaseError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12761,53 +10923,30 @@ pub enum TagResourceError {
 
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(TagResourceError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(TagResourceError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagResourceError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(TagResourceError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(TagResourceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(TagResourceError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(TagResourceError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(TagResourceError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12853,53 +10992,30 @@ pub enum UnpeerVpcError {
 
 impl UnpeerVpcError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnpeerVpcError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UnpeerVpcError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UnpeerVpcError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
-                    return RusotoError::Service(UnpeerVpcError::AccountSetupInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UnpeerVpcError::AccountSetupInProgress(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UnpeerVpcError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UnpeerVpcError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UnpeerVpcError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UnpeerVpcError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(UnpeerVpcError::OperationFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UnpeerVpcError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UnpeerVpcError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UnpeerVpcError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(UnpeerVpcError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UnpeerVpcError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12945,53 +11061,32 @@ pub enum UntagResourceError {
 
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UntagResourceError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(UntagResourceError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UntagResourceError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(UntagResourceError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UntagResourceError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(UntagResourceError::Unauthenticated(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13037,53 +11132,32 @@ pub enum UpdateDomainEntryError {
 
 impl UpdateDomainEntryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainEntryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UpdateDomainEntryError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDomainEntryError::AccessDenied(err.msg))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(UpdateDomainEntryError::AccountSetupInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateDomainEntryError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDomainEntryError::InvalidInput(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateDomainEntryError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDomainEntryError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
-                    return RusotoError::Service(UpdateDomainEntryError::OperationFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDomainEntryError::OperationFailure(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UpdateDomainEntryError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDomainEntryError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
-                    return RusotoError::Service(UpdateDomainEntryError::Unauthenticated(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDomainEntryError::Unauthenticated(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13131,57 +11205,42 @@ impl UpdateLoadBalancerAttributeError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateLoadBalancerAttributeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateLoadBalancerAttributeError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        UpdateLoadBalancerAttributeError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        UpdateLoadBalancerAttributeError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateLoadBalancerAttributeError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateLoadBalancerAttributeError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        UpdateLoadBalancerAttributeError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        UpdateLoadBalancerAttributeError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UpdateLoadBalancerAttributeError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateLoadBalancerAttributeError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(UpdateLoadBalancerAttributeError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13227,55 +11286,40 @@ pub enum UpdateRelationalDatabaseError {
 
 impl UpdateRelationalDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRelationalDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateRelationalDatabaseError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        UpdateRelationalDatabaseError::AccountSetupInProgress(String::from(
-                            error_message,
-                        )),
+                        UpdateRelationalDatabaseError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateRelationalDatabaseError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateRelationalDatabaseError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRelationalDatabaseError::NotFound(err.msg))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(UpdateRelationalDatabaseError::OperationFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UpdateRelationalDatabaseError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRelationalDatabaseError::Service(err.msg))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(UpdateRelationalDatabaseError::Unauthenticated(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13323,63 +11367,44 @@ impl UpdateRelationalDatabaseParametersError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateRelationalDatabaseParametersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        UpdateRelationalDatabaseParametersError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        UpdateRelationalDatabaseParametersError::AccessDenied(err.msg),
                     )
                 }
                 "AccountSetupInProgressException" => {
                     return RusotoError::Service(
-                        UpdateRelationalDatabaseParametersError::AccountSetupInProgress(
-                            String::from(error_message),
-                        ),
+                        UpdateRelationalDatabaseParametersError::AccountSetupInProgress(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        UpdateRelationalDatabaseParametersError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        UpdateRelationalDatabaseParametersError::InvalidInput(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateRelationalDatabaseParametersError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationFailureException" => {
                     return RusotoError::Service(
-                        UpdateRelationalDatabaseParametersError::OperationFailure(String::from(
-                            error_message,
-                        )),
+                        UpdateRelationalDatabaseParametersError::OperationFailure(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateRelationalDatabaseParametersError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnauthenticatedException" => {
                     return RusotoError::Service(
-                        UpdateRelationalDatabaseParametersError::Unauthenticated(String::from(
-                            error_message,
-                        )),
+                        UpdateRelationalDatabaseParametersError::Unauthenticated(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

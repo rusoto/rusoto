@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToOnPremisesInstancesInput {
@@ -2215,63 +2214,44 @@ impl AddTagsToOnPremisesInstancesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AddTagsToOnPremisesInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InstanceLimitExceededException" => {
                     return RusotoError::Service(
-                        AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(err.msg),
                     )
                 }
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
-                        AddTagsToOnPremisesInstancesError::InstanceNameRequired(String::from(
-                            error_message,
-                        )),
+                        AddTagsToOnPremisesInstancesError::InstanceNameRequired(err.msg),
                     )
                 }
                 "InstanceNotRegisteredException" => {
                     return RusotoError::Service(
-                        AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(
-                            error_message,
-                        )),
+                        AddTagsToOnPremisesInstancesError::InstanceNotRegistered(err.msg),
                     )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
-                        AddTagsToOnPremisesInstancesError::InvalidInstanceName(String::from(
-                            error_message,
-                        )),
+                        AddTagsToOnPremisesInstancesError::InvalidInstanceName(err.msg),
                     )
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(AddTagsToOnPremisesInstancesError::InvalidTag(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TagLimitExceededException" => {
                     return RusotoError::Service(
-                        AddTagsToOnPremisesInstancesError::TagLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        AddTagsToOnPremisesInstancesError::TagLimitExceeded(err.msg),
                     )
                 }
                 "TagRequiredException" => {
                     return RusotoError::Service(AddTagsToOnPremisesInstancesError::TagRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2317,60 +2297,39 @@ impl BatchGetApplicationRevisionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchGetApplicationRevisionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
-                        BatchGetApplicationRevisionsError::ApplicationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        BatchGetApplicationRevisionsError::ApplicationDoesNotExist(err.msg),
                     )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetApplicationRevisionsError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetApplicationRevisionsError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(
-                        BatchGetApplicationRevisionsError::BatchLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        BatchGetApplicationRevisionsError::BatchLimitExceeded(err.msg),
                     )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
-                        BatchGetApplicationRevisionsError::InvalidApplicationName(String::from(
-                            error_message,
-                        )),
+                        BatchGetApplicationRevisionsError::InvalidApplicationName(err.msg),
                     )
                 }
                 "InvalidRevisionException" => {
                     return RusotoError::Service(
-                        BatchGetApplicationRevisionsError::InvalidRevision(String::from(
-                            error_message,
-                        )),
+                        BatchGetApplicationRevisionsError::InvalidRevision(err.msg),
                     )
                 }
                 "RevisionRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetApplicationRevisionsError::RevisionRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetApplicationRevisionsError::RevisionRequired(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2409,42 +2368,29 @@ pub enum BatchGetApplicationsError {
 
 impl BatchGetApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetApplicationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
-                        BatchGetApplicationsError::ApplicationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        BatchGetApplicationsError::ApplicationDoesNotExist(err.msg),
                     )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetApplicationsError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetApplicationsError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(BatchGetApplicationsError::BatchLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(BatchGetApplicationsError::InvalidApplicationName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2487,65 +2433,44 @@ pub enum BatchGetDeploymentGroupsError {
 
 impl BatchGetDeploymentGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDeploymentGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentGroupsError::ApplicationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentGroupsError::ApplicationDoesNotExist(err.msg),
                     )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentGroupsError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentGroupsError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(BatchGetDeploymentGroupsError::BatchLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentGroupsError::DeploymentConfigDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentGroupsError::DeploymentConfigDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(err.msg),
                     )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentGroupsError::InvalidApplicationName(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentGroupsError::InvalidApplicationName(err.msg),
                     )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2593,67 +2518,44 @@ impl BatchGetDeploymentInstancesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchGetDeploymentInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentInstancesError::BatchLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentInstancesError::BatchLimitExceeded(err.msg),
                     )
                 }
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentInstancesError::DeploymentDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentInstancesError::DeploymentDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentInstancesError::DeploymentIdRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentInstancesError::DeploymentIdRequired(err.msg),
                     )
                 }
                 "InstanceIdRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentInstancesError::InstanceIdRequired(err.msg),
                     )
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentInstancesError::InvalidComputePlatform(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentInstancesError::InvalidComputePlatform(err.msg),
                     )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentInstancesError::InvalidDeploymentId(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentInstancesError::InvalidDeploymentId(err.msg),
                     )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentInstancesError::InvalidInstanceName(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentInstancesError::InvalidInstanceName(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2699,67 +2601,44 @@ pub enum BatchGetDeploymentTargetsError {
 
 impl BatchGetDeploymentTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDeploymentTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentTargetsError::DeploymentDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentTargetsError::DeploymentDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentTargetsError::DeploymentIdRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentTargetsError::DeploymentIdRequired(err.msg),
                     )
                 }
                 "DeploymentTargetDoesNotExistException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentTargetIdRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(err.msg),
                     )
                 }
                 "DeploymentTargetListSizeExceededException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(
-                            String::from(error_message),
-                        ),
+                        BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(err.msg),
                     )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentTargetsError::InvalidDeploymentId(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentTargetsError::InvalidDeploymentId(err.msg),
                     )
                 }
                 "InvalidDeploymentTargetIdException" => {
                     return RusotoError::Service(
-                        BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(String::from(
-                            error_message,
-                        )),
+                        BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2797,33 +2676,24 @@ pub enum BatchGetDeploymentsError {
 
 impl BatchGetDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDeploymentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(BatchGetDeploymentsError::BatchLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(BatchGetDeploymentsError::DeploymentIdRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(BatchGetDeploymentsError::InvalidDeploymentId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2859,39 +2729,24 @@ impl BatchGetOnPremisesInstancesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchGetOnPremisesInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(
-                        BatchGetOnPremisesInstancesError::BatchLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        BatchGetOnPremisesInstancesError::BatchLimitExceeded(err.msg),
                     )
                 }
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
-                        BatchGetOnPremisesInstancesError::InstanceNameRequired(String::from(
-                            error_message,
-                        )),
+                        BatchGetOnPremisesInstancesError::InstanceNameRequired(err.msg),
                     )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
-                        BatchGetOnPremisesInstancesError::InvalidInstanceName(String::from(
-                            error_message,
-                        )),
+                        BatchGetOnPremisesInstancesError::InvalidInstanceName(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2935,66 +2790,49 @@ pub enum ContinueDeploymentError {
 
 impl ContinueDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ContinueDeploymentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentAlreadyCompletedException" => {
                     return RusotoError::Service(
-                        ContinueDeploymentError::DeploymentAlreadyCompleted(String::from(
-                            error_message,
-                        )),
+                        ContinueDeploymentError::DeploymentAlreadyCompleted(err.msg),
                     )
                 }
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(ContinueDeploymentError::DeploymentDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(ContinueDeploymentError::DeploymentIdRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentIsNotInReadyStateException" => {
                     return RusotoError::Service(
-                        ContinueDeploymentError::DeploymentIsNotInReadyState(String::from(
-                            error_message,
-                        )),
+                        ContinueDeploymentError::DeploymentIsNotInReadyState(err.msg),
                     )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(ContinueDeploymentError::InvalidDeploymentId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentStatusException" => {
                     return RusotoError::Service(ContinueDeploymentError::InvalidDeploymentStatus(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentWaitTypeException" => {
                     return RusotoError::Service(
-                        ContinueDeploymentError::InvalidDeploymentWaitType(String::from(
-                            error_message,
-                        )),
+                        ContinueDeploymentError::InvalidDeploymentWaitType(err.msg),
                     )
                 }
                 "UnsupportedActionForDeploymentTypeException" => {
                     return RusotoError::Service(
-                        ContinueDeploymentError::UnsupportedActionForDeploymentType(String::from(
-                            error_message,
-                        )),
+                        ContinueDeploymentError::UnsupportedActionForDeploymentType(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3037,43 +2875,34 @@ pub enum CreateApplicationError {
 
 impl CreateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationAlreadyExistsException" => {
                     return RusotoError::Service(CreateApplicationError::ApplicationAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationLimitExceededException" => {
                     return RusotoError::Service(CreateApplicationError::ApplicationLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(CreateApplicationError::ApplicationNameRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(CreateApplicationError::InvalidApplicationName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(CreateApplicationError::InvalidComputePlatform(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3149,145 +2978,114 @@ pub enum CreateDeploymentError {
 
 impl CreateDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(CreateDeploymentError::ApplicationDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(CreateDeploymentError::ApplicationNameRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
-                        CreateDeploymentError::DeploymentConfigDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentError::DeploymentConfigDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return RusotoError::Service(
-                        CreateDeploymentError::DeploymentGroupDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentError::DeploymentGroupDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
-                        CreateDeploymentError::DeploymentGroupNameRequired(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentError::DeploymentGroupNameRequired(err.msg),
                     )
                 }
                 "DeploymentLimitExceededException" => {
                     return RusotoError::Service(CreateDeploymentError::DeploymentLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DescriptionTooLongException" => {
-                    return RusotoError::Service(CreateDeploymentError::DescriptionTooLong(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeploymentError::DescriptionTooLong(err.msg))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidApplicationName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidAutoRollbackConfigException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidAutoRollbackConfig(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidAutoScalingGroupException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidAutoScalingGroup(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
-                        CreateDeploymentError::InvalidDeploymentConfigName(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentError::InvalidDeploymentConfigName(err.msg),
                     )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidDeploymentGroupName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidFileExistsBehaviorException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidFileExistsBehavior(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGitHubAccountTokenException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidGitHubAccountToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidIgnoreApplicationStopFailuresValueException" => {
                     return RusotoError::Service(
-                        CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(
-                            String::from(error_message),
-                        ),
+                        CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(err.msg),
                     )
                 }
                 "InvalidLoadBalancerInfoException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidLoadBalancerInfo(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRevisionException" => {
-                    return RusotoError::Service(CreateDeploymentError::InvalidRevision(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeploymentError::InvalidRevision(err.msg))
                 }
                 "InvalidRoleException" => {
-                    return RusotoError::Service(CreateDeploymentError::InvalidRole(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDeploymentError::InvalidRole(err.msg))
                 }
                 "InvalidTargetInstancesException" => {
                     return RusotoError::Service(CreateDeploymentError::InvalidTargetInstances(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidUpdateOutdatedInstancesOnlyValueException" => {
                     return RusotoError::Service(
-                        CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(
-                            String::from(error_message),
-                        ),
+                        CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(err.msg),
                     )
                 }
                 "RevisionDoesNotExistException" => {
                     return RusotoError::Service(CreateDeploymentError::RevisionDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "RevisionRequiredException" => {
-                    return RusotoError::Service(CreateDeploymentError::RevisionRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeploymentError::RevisionRequired(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(CreateDeploymentError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDeploymentError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3349,67 +3147,44 @@ pub enum CreateDeploymentConfigError {
 
 impl CreateDeploymentConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentConfigError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentConfigAlreadyExistsException" => {
                     return RusotoError::Service(
-                        CreateDeploymentConfigError::DeploymentConfigAlreadyExists(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentConfigError::DeploymentConfigAlreadyExists(err.msg),
                     )
                 }
                 "DeploymentConfigLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateDeploymentConfigError::DeploymentConfigLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentConfigError::DeploymentConfigLimitExceeded(err.msg),
                     )
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return RusotoError::Service(
-                        CreateDeploymentConfigError::DeploymentConfigNameRequired(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentConfigError::DeploymentConfigNameRequired(err.msg),
                     )
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(
-                        CreateDeploymentConfigError::InvalidComputePlatform(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentConfigError::InvalidComputePlatform(err.msg),
                     )
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
-                        CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentConfigError::InvalidDeploymentConfigName(err.msg),
                     )
                 }
                 "InvalidMinimumHealthyHostValueException" => {
                     return RusotoError::Service(
-                        CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(err.msg),
                     )
                 }
                 "InvalidTrafficRoutingConfigurationException" => {
                     return RusotoError::Service(
-                        CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(
-                            String::from(error_message),
-                        ),
+                        CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3503,215 +3278,154 @@ pub enum CreateDeploymentGroupError {
 
 impl CreateDeploymentGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlarmsLimitExceededException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::AlarmsLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::ApplicationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::ApplicationDoesNotExist(err.msg),
                     )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::DeploymentConfigDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentGroupAlreadyExistsException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::DeploymentGroupAlreadyExists(err.msg),
                     )
                 }
                 "DeploymentGroupLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::DeploymentGroupLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::DeploymentGroupLimitExceeded(err.msg),
                     )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::DeploymentGroupNameRequired(err.msg),
                     )
                 }
                 "ECSServiceMappingLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::ECSServiceMappingLimitExceeded(err.msg),
                     )
                 }
                 "InvalidAlarmConfigException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidAlarmConfig(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidApplicationName(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidApplicationName(err.msg),
                     )
                 }
                 "InvalidAutoRollbackConfigException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidAutoRollbackConfig(err.msg),
                     )
                 }
                 "InvalidAutoScalingGroupException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidAutoScalingGroup(err.msg),
                     )
                 }
                 "InvalidBlueGreenDeploymentConfigurationException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidDeploymentConfigName(err.msg),
                     )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidDeploymentGroupName(err.msg),
                     )
                 }
                 "InvalidDeploymentStyleException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidDeploymentStyle(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidDeploymentStyle(err.msg),
                     )
                 }
                 "InvalidEC2TagCombinationException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidEC2TagCombination(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidEC2TagCombination(err.msg),
                     )
                 }
                 "InvalidEC2TagException" => {
-                    return RusotoError::Service(CreateDeploymentGroupError::InvalidEC2Tag(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidEC2Tag(err.msg))
                 }
                 "InvalidECSServiceException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidECSService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateDeploymentGroupError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidInput(err.msg))
                 }
                 "InvalidLoadBalancerInfoException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidLoadBalancerInfo(err.msg),
                     )
                 }
                 "InvalidOnPremisesTagCombinationException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidOnPremisesTagCombination(err.msg),
                     )
                 }
                 "InvalidRoleException" => {
-                    return RusotoError::Service(CreateDeploymentGroupError::InvalidRole(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidRole(err.msg))
                 }
                 "InvalidTagException" => {
-                    return RusotoError::Service(CreateDeploymentGroupError::InvalidTag(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidTag(err.msg))
                 }
                 "InvalidTargetGroupPairException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::InvalidTargetGroupPair(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::InvalidTargetGroupPair(err.msg),
                     )
                 }
                 "InvalidTriggerConfigException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidTriggerConfig(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LifecycleHookLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::LifecycleHookLimitExceeded(err.msg),
                     )
                 }
                 "RoleRequiredException" => {
-                    return RusotoError::Service(CreateDeploymentGroupError::RoleRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeploymentGroupError::RoleRequired(err.msg))
                 }
                 "TagSetListLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::TagSetListLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::TagSetListLimitExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(CreateDeploymentGroupError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDeploymentGroupError::Throttling(err.msg))
                 }
                 "TriggerTargetsLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateDeploymentGroupError::TriggerTargetsLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3771,28 +3485,19 @@ pub enum DeleteApplicationError {
 
 impl DeleteApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(DeleteApplicationError::ApplicationNameRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(DeleteApplicationError::InvalidApplicationName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3827,44 +3532,29 @@ pub enum DeleteDeploymentConfigError {
 
 impl DeleteDeploymentConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeploymentConfigError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentConfigInUseException" => {
                     return RusotoError::Service(
-                        DeleteDeploymentConfigError::DeploymentConfigInUse(String::from(
-                            error_message,
-                        )),
+                        DeleteDeploymentConfigError::DeploymentConfigInUse(err.msg),
                     )
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return RusotoError::Service(
-                        DeleteDeploymentConfigError::DeploymentConfigNameRequired(String::from(
-                            error_message,
-                        )),
+                        DeleteDeploymentConfigError::DeploymentConfigNameRequired(err.msg),
                     )
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
-                        DeleteDeploymentConfigError::InvalidDeploymentConfigName(String::from(
-                            error_message,
-                        )),
+                        DeleteDeploymentConfigError::InvalidDeploymentConfigName(err.msg),
                     )
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DeleteDeploymentConfigError::InvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3903,51 +3593,32 @@ pub enum DeleteDeploymentGroupError {
 
 impl DeleteDeploymentGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeploymentGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        DeleteDeploymentGroupError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        DeleteDeploymentGroupError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
-                        DeleteDeploymentGroupError::DeploymentGroupNameRequired(String::from(
-                            error_message,
-                        )),
+                        DeleteDeploymentGroupError::DeploymentGroupNameRequired(err.msg),
                     )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
-                        DeleteDeploymentGroupError::InvalidApplicationName(String::from(
-                            error_message,
-                        )),
+                        DeleteDeploymentGroupError::InvalidApplicationName(err.msg),
                     )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
-                        DeleteDeploymentGroupError::InvalidDeploymentGroupName(String::from(
-                            error_message,
-                        )),
+                        DeleteDeploymentGroupError::InvalidDeploymentGroupName(err.msg),
                     )
                 }
                 "InvalidRoleException" => {
-                    return RusotoError::Service(DeleteDeploymentGroupError::InvalidRole(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDeploymentGroupError::InvalidRole(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3987,51 +3658,34 @@ pub enum DeleteGitHubAccountTokenError {
 
 impl DeleteGitHubAccountTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGitHubAccountTokenError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "GitHubAccountTokenDoesNotExistException" => {
                     return RusotoError::Service(
-                        DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(
-                            String::from(error_message),
-                        ),
+                        DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(err.msg),
                     )
                 }
                 "GitHubAccountTokenNameRequiredException" => {
                     return RusotoError::Service(
-                        DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(
-                            String::from(error_message),
-                        ),
+                        DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(err.msg),
                     )
                 }
                 "InvalidGitHubAccountTokenNameException" => {
                     return RusotoError::Service(
-                        DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(String::from(
-                            error_message,
-                        )),
+                        DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(err.msg),
                     )
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
-                        DeleteGitHubAccountTokenError::OperationNotSupported(String::from(
-                            error_message,
-                        )),
+                        DeleteGitHubAccountTokenError::OperationNotSupported(err.msg),
                     )
                 }
                 "ResourceValidationException" => {
                     return RusotoError::Service(DeleteGitHubAccountTokenError::ResourceValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4067,32 +3721,19 @@ impl DeregisterOnPremisesInstanceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterOnPremisesInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
-                        DeregisterOnPremisesInstanceError::InstanceNameRequired(String::from(
-                            error_message,
-                        )),
+                        DeregisterOnPremisesInstanceError::InstanceNameRequired(err.msg),
                     )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
-                        DeregisterOnPremisesInstanceError::InvalidInstanceName(String::from(
-                            error_message,
-                        )),
+                        DeregisterOnPremisesInstanceError::InvalidInstanceName(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4125,33 +3766,24 @@ pub enum GetApplicationError {
 
 impl GetApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(GetApplicationError::ApplicationDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(GetApplicationError::ApplicationNameRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(GetApplicationError::InvalidApplicationName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4191,54 +3823,39 @@ pub enum GetApplicationRevisionError {
 
 impl GetApplicationRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationRevisionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
-                        GetApplicationRevisionError::ApplicationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        GetApplicationRevisionError::ApplicationDoesNotExist(err.msg),
                     )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        GetApplicationRevisionError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        GetApplicationRevisionError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
-                        GetApplicationRevisionError::InvalidApplicationName(String::from(
-                            error_message,
-                        )),
+                        GetApplicationRevisionError::InvalidApplicationName(err.msg),
                     )
                 }
                 "InvalidRevisionException" => {
                     return RusotoError::Service(GetApplicationRevisionError::InvalidRevision(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "RevisionDoesNotExistException" => {
                     return RusotoError::Service(GetApplicationRevisionError::RevisionDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "RevisionRequiredException" => {
                     return RusotoError::Service(GetApplicationRevisionError::RevisionRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4275,33 +3892,20 @@ pub enum GetDeploymentError {
 
 impl GetDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentError::DeploymentDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentIdRequiredException" => {
-                    return RusotoError::Service(GetDeploymentError::DeploymentIdRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDeploymentError::DeploymentIdRequired(err.msg))
                 }
                 "InvalidDeploymentIdException" => {
-                    return RusotoError::Service(GetDeploymentError::InvalidDeploymentId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDeploymentError::InvalidDeploymentId(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4337,44 +3941,29 @@ pub enum GetDeploymentConfigError {
 
 impl GetDeploymentConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentConfigError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
-                        GetDeploymentConfigError::DeploymentConfigDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentConfigError::DeploymentConfigDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return RusotoError::Service(
-                        GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentConfigError::DeploymentConfigNameRequired(err.msg),
                     )
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(GetDeploymentConfigError::InvalidComputePlatform(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
-                        GetDeploymentConfigError::InvalidDeploymentConfigName(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentConfigError::InvalidDeploymentConfigName(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4417,61 +4006,44 @@ pub enum GetDeploymentGroupError {
 
 impl GetDeploymentGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentGroupError::ApplicationDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(GetDeploymentGroupError::ApplicationNameRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
-                        GetDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentGroupError::DeploymentConfigDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return RusotoError::Service(
-                        GetDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentGroupError::DeploymentGroupDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
-                        GetDeploymentGroupError::DeploymentGroupNameRequired(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentGroupError::DeploymentGroupNameRequired(err.msg),
                     )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(GetDeploymentGroupError::InvalidApplicationName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
-                        GetDeploymentGroupError::InvalidDeploymentGroupName(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentGroupError::InvalidDeploymentGroupName(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4517,57 +4089,44 @@ pub enum GetDeploymentInstanceError {
 
 impl GetDeploymentInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
-                        GetDeploymentInstanceError::DeploymentDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentInstanceError::DeploymentDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::DeploymentIdRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InstanceDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::InstanceDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InstanceIdRequiredException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::InstanceIdRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(
-                        GetDeploymentInstanceError::InvalidComputePlatform(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentInstanceError::InvalidComputePlatform(err.msg),
                     )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::InvalidDeploymentId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(GetDeploymentInstanceError::InvalidInstanceName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4613,59 +4172,44 @@ pub enum GetDeploymentTargetError {
 
 impl GetDeploymentTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentTargetError::DeploymentDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(GetDeploymentTargetError::DeploymentIdRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentTargetDoesNotExistException" => {
                     return RusotoError::Service(
-                        GetDeploymentTargetError::DeploymentTargetDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentTargetError::DeploymentTargetDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentTargetIdRequiredException" => {
                     return RusotoError::Service(
-                        GetDeploymentTargetError::DeploymentTargetIdRequired(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentTargetError::DeploymentTargetIdRequired(err.msg),
                     )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(GetDeploymentTargetError::InvalidDeploymentId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentTargetIdException" => {
                     return RusotoError::Service(
-                        GetDeploymentTargetError::InvalidDeploymentTargetId(String::from(
-                            error_message,
-                        )),
+                        GetDeploymentTargetError::InvalidDeploymentTargetId(err.msg),
                     )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(GetDeploymentTargetError::InvalidInstanceName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4703,33 +4247,24 @@ pub enum GetOnPremisesInstanceError {
 
 impl GetOnPremisesInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOnPremisesInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(GetOnPremisesInstanceError::InstanceNameRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InstanceNotRegisteredException" => {
                     return RusotoError::Service(GetOnPremisesInstanceError::InstanceNotRegistered(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(GetOnPremisesInstanceError::InvalidInstanceName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4777,82 +4312,59 @@ pub enum ListApplicationRevisionsError {
 
 impl ListApplicationRevisionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationRevisionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
-                        ListApplicationRevisionsError::ApplicationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        ListApplicationRevisionsError::ApplicationDoesNotExist(err.msg),
                     )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        ListApplicationRevisionsError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        ListApplicationRevisionsError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "BucketNameFilterRequiredException" => {
                     return RusotoError::Service(
-                        ListApplicationRevisionsError::BucketNameFilterRequired(String::from(
-                            error_message,
-                        )),
+                        ListApplicationRevisionsError::BucketNameFilterRequired(err.msg),
                     )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
-                        ListApplicationRevisionsError::InvalidApplicationName(String::from(
-                            error_message,
-                        )),
+                        ListApplicationRevisionsError::InvalidApplicationName(err.msg),
                     )
                 }
                 "InvalidBucketNameFilterException" => {
                     return RusotoError::Service(
-                        ListApplicationRevisionsError::InvalidBucketNameFilter(String::from(
-                            error_message,
-                        )),
+                        ListApplicationRevisionsError::InvalidBucketNameFilter(err.msg),
                     )
                 }
                 "InvalidDeployedStateFilterException" => {
                     return RusotoError::Service(
-                        ListApplicationRevisionsError::InvalidDeployedStateFilter(String::from(
-                            error_message,
-                        )),
+                        ListApplicationRevisionsError::InvalidDeployedStateFilter(err.msg),
                     )
                 }
                 "InvalidKeyPrefixFilterException" => {
                     return RusotoError::Service(
-                        ListApplicationRevisionsError::InvalidKeyPrefixFilter(String::from(
-                            error_message,
-                        )),
+                        ListApplicationRevisionsError::InvalidKeyPrefixFilter(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListApplicationRevisionsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSortByException" => {
                     return RusotoError::Service(ListApplicationRevisionsError::InvalidSortBy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSortOrderException" => {
                     return RusotoError::Service(ListApplicationRevisionsError::InvalidSortOrder(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4889,23 +4401,12 @@ pub enum ListApplicationsError {
 
 impl ListApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListApplicationsError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListApplicationsError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4933,23 +4434,14 @@ pub enum ListDeploymentConfigsError {
 
 impl ListDeploymentConfigsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentConfigsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentConfigsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4983,42 +4475,29 @@ pub enum ListDeploymentGroupsError {
 
 impl ListDeploymentGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
-                        ListDeploymentGroupsError::ApplicationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentGroupsError::ApplicationDoesNotExist(err.msg),
                     )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        ListDeploymentGroupsError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentGroupsError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(ListDeploymentGroupsError::InvalidApplicationName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentGroupsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5067,82 +4546,59 @@ pub enum ListDeploymentInstancesError {
 
 impl ListDeploymentInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
-                        ListDeploymentInstancesError::DeploymentDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentInstancesError::DeploymentDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(
-                        ListDeploymentInstancesError::DeploymentIdRequired(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentInstancesError::DeploymentIdRequired(err.msg),
                     )
                 }
                 "DeploymentNotStartedException" => {
                     return RusotoError::Service(
-                        ListDeploymentInstancesError::DeploymentNotStarted(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentInstancesError::DeploymentNotStarted(err.msg),
                     )
                 }
                 "InvalidComputePlatformException" => {
                     return RusotoError::Service(
-                        ListDeploymentInstancesError::InvalidComputePlatform(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentInstancesError::InvalidComputePlatform(err.msg),
                     )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(ListDeploymentInstancesError::InvalidDeploymentId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentInstanceTypeException" => {
                     return RusotoError::Service(
-                        ListDeploymentInstancesError::InvalidDeploymentInstanceType(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentInstancesError::InvalidDeploymentInstanceType(err.msg),
                     )
                 }
                 "InvalidInstanceStatusException" => {
                     return RusotoError::Service(
-                        ListDeploymentInstancesError::InvalidInstanceStatus(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentInstancesError::InvalidInstanceStatus(err.msg),
                     )
                 }
                 "InvalidInstanceTypeException" => {
                     return RusotoError::Service(ListDeploymentInstancesError::InvalidInstanceType(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentInstancesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidTargetFilterNameException" => {
                     return RusotoError::Service(
-                        ListDeploymentInstancesError::InvalidTargetFilterName(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentInstancesError::InvalidTargetFilterName(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5193,62 +4649,49 @@ pub enum ListDeploymentTargetsError {
 
 impl ListDeploymentTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
-                        ListDeploymentTargetsError::DeploymentDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentTargetsError::DeploymentDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::DeploymentIdRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentNotStartedException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::DeploymentNotStarted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::InvalidDeploymentId(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentInstanceTypeException" => {
                     return RusotoError::Service(
-                        ListDeploymentTargetsError::InvalidDeploymentInstanceType(String::from(
-                            error_message,
-                        )),
+                        ListDeploymentTargetsError::InvalidDeploymentInstanceType(err.msg),
                     )
                 }
                 "InvalidInstanceStatusException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::InvalidInstanceStatus(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInstanceTypeException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::InvalidInstanceType(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentTargetsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5299,63 +4742,50 @@ pub enum ListDeploymentsError {
 
 impl ListDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(ListDeploymentsError::ApplicationDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(ListDeploymentsError::ApplicationNameRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return RusotoError::Service(ListDeploymentsError::DeploymentGroupDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(ListDeploymentsError::DeploymentGroupNameRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(ListDeploymentsError::InvalidApplicationName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(ListDeploymentsError::InvalidDeploymentGroupName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeploymentStatusException" => {
                     return RusotoError::Service(ListDeploymentsError::InvalidDeploymentStatus(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListDeploymentsError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListDeploymentsError::InvalidNextToken(err.msg))
                 }
                 "InvalidTimeRangeException" => {
-                    return RusotoError::Service(ListDeploymentsError::InvalidTimeRange(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListDeploymentsError::InvalidTimeRange(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5397,39 +4827,24 @@ impl ListGitHubAccountTokenNamesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListGitHubAccountTokenNamesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        ListGitHubAccountTokenNamesError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        ListGitHubAccountTokenNamesError::InvalidNextToken(err.msg),
                     )
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
-                        ListGitHubAccountTokenNamesError::OperationNotSupported(String::from(
-                            error_message,
-                        )),
+                        ListGitHubAccountTokenNamesError::OperationNotSupported(err.msg),
                     )
                 }
                 "ResourceValidationException" => {
                     return RusotoError::Service(
-                        ListGitHubAccountTokenNamesError::ResourceValidation(String::from(
-                            error_message,
-                        )),
+                        ListGitHubAccountTokenNamesError::ResourceValidation(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5463,35 +4878,24 @@ pub enum ListOnPremisesInstancesError {
 
 impl ListOnPremisesInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOnPremisesInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListOnPremisesInstancesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRegistrationStatusException" => {
                     return RusotoError::Service(
-                        ListOnPremisesInstancesError::InvalidRegistrationStatus(String::from(
-                            error_message,
-                        )),
+                        ListOnPremisesInstancesError::InvalidRegistrationStatus(err.msg),
                     )
                 }
                 "InvalidTagFilterException" => {
                     return RusotoError::Service(ListOnPremisesInstancesError::InvalidTagFilter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5535,25 +4939,16 @@ impl PutLifecycleEventHookExecutionStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<PutLifecycleEventHookExecutionStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                                "DeploymentDoesNotExistException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(String::from(error_message))),
-"DeploymentIdRequiredException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(String::from(error_message))),
-"InvalidDeploymentIdException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(String::from(error_message))),
-"InvalidLifecycleEventHookExecutionIdException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(String::from(error_message))),
-"InvalidLifecycleEventHookExecutionStatusException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionStatus(String::from(error_message))),
-"LifecycleEventAlreadyCompletedException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(String::from(error_message))),
-"UnsupportedActionForDeploymentTypeException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(String::from(error_message))),
-"ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                                "DeploymentDoesNotExistException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(err.msg)),
+"DeploymentIdRequiredException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(err.msg)),
+"InvalidDeploymentIdException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(err.msg)),
+"InvalidLifecycleEventHookExecutionIdException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(err.msg)),
+"InvalidLifecycleEventHookExecutionStatusException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionStatus(err.msg)),
+"LifecycleEventAlreadyCompletedException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(err.msg)),
+"UnsupportedActionForDeploymentTypeException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(err.msg)),
+"ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
                             }
         }
@@ -5607,58 +5002,39 @@ impl RegisterApplicationRevisionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterApplicationRevisionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
-                        RegisterApplicationRevisionError::ApplicationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        RegisterApplicationRevisionError::ApplicationDoesNotExist(err.msg),
                     )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        RegisterApplicationRevisionError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        RegisterApplicationRevisionError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "DescriptionTooLongException" => {
                     return RusotoError::Service(
-                        RegisterApplicationRevisionError::DescriptionTooLong(String::from(
-                            error_message,
-                        )),
+                        RegisterApplicationRevisionError::DescriptionTooLong(err.msg),
                     )
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
-                        RegisterApplicationRevisionError::InvalidApplicationName(String::from(
-                            error_message,
-                        )),
+                        RegisterApplicationRevisionError::InvalidApplicationName(err.msg),
                     )
                 }
                 "InvalidRevisionException" => {
                     return RusotoError::Service(RegisterApplicationRevisionError::InvalidRevision(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "RevisionRequiredException" => {
                     return RusotoError::Service(
-                        RegisterApplicationRevisionError::RevisionRequired(String::from(
-                            error_message,
-                        )),
+                        RegisterApplicationRevisionError::RevisionRequired(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5711,86 +5087,59 @@ impl RegisterOnPremisesInstanceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterOnPremisesInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "IamArnRequiredException" => {
                     return RusotoError::Service(RegisterOnPremisesInstanceError::IamArnRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "IamSessionArnAlreadyRegisteredException" => {
                     return RusotoError::Service(
-                        RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(
-                            String::from(error_message),
-                        ),
+                        RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(err.msg),
                     )
                 }
                 "IamUserArnAlreadyRegisteredException" => {
                     return RusotoError::Service(
-                        RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(String::from(
-                            error_message,
-                        )),
+                        RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(err.msg),
                     )
                 }
                 "IamUserArnRequiredException" => {
                     return RusotoError::Service(
-                        RegisterOnPremisesInstanceError::IamUserArnRequired(String::from(
-                            error_message,
-                        )),
+                        RegisterOnPremisesInstanceError::IamUserArnRequired(err.msg),
                     )
                 }
                 "InstanceNameAlreadyRegisteredException" => {
                     return RusotoError::Service(
-                        RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(
-                            String::from(error_message),
-                        ),
+                        RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(err.msg),
                     )
                 }
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
-                        RegisterOnPremisesInstanceError::InstanceNameRequired(String::from(
-                            error_message,
-                        )),
+                        RegisterOnPremisesInstanceError::InstanceNameRequired(err.msg),
                     )
                 }
                 "InvalidIamSessionArnException" => {
                     return RusotoError::Service(
-                        RegisterOnPremisesInstanceError::InvalidIamSessionArn(String::from(
-                            error_message,
-                        )),
+                        RegisterOnPremisesInstanceError::InvalidIamSessionArn(err.msg),
                     )
                 }
                 "InvalidIamUserArnException" => {
                     return RusotoError::Service(
-                        RegisterOnPremisesInstanceError::InvalidIamUserArn(String::from(
-                            error_message,
-                        )),
+                        RegisterOnPremisesInstanceError::InvalidIamUserArn(err.msg),
                     )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
-                        RegisterOnPremisesInstanceError::InvalidInstanceName(String::from(
-                            error_message,
-                        )),
+                        RegisterOnPremisesInstanceError::InvalidInstanceName(err.msg),
                     )
                 }
                 "MultipleIamArnsProvidedException" => {
                     return RusotoError::Service(
-                        RegisterOnPremisesInstanceError::MultipleIamArnsProvided(String::from(
-                            error_message,
-                        )),
+                        RegisterOnPremisesInstanceError::MultipleIamArnsProvided(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5841,67 +5190,44 @@ impl RemoveTagsFromOnPremisesInstancesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveTagsFromOnPremisesInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InstanceLimitExceededException" => {
                     return RusotoError::Service(
-                        RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(
-                            String::from(error_message),
-                        ),
+                        RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(err.msg),
                     )
                 }
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
-                        RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(String::from(
-                            error_message,
-                        )),
+                        RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(err.msg),
                     )
                 }
                 "InstanceNotRegisteredException" => {
                     return RusotoError::Service(
-                        RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(
-                            String::from(error_message),
-                        ),
+                        RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(err.msg),
                     )
                 }
                 "InvalidInstanceNameException" => {
                     return RusotoError::Service(
-                        RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(String::from(
-                            error_message,
-                        )),
+                        RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(err.msg),
                     )
                 }
                 "InvalidTagException" => {
                     return RusotoError::Service(
-                        RemoveTagsFromOnPremisesInstancesError::InvalidTag(String::from(
-                            error_message,
-                        )),
+                        RemoveTagsFromOnPremisesInstancesError::InvalidTag(err.msg),
                     )
                 }
                 "TagLimitExceededException" => {
                     return RusotoError::Service(
-                        RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(err.msg),
                     )
                 }
                 "TagRequiredException" => {
                     return RusotoError::Service(
-                        RemoveTagsFromOnPremisesInstancesError::TagRequired(String::from(
-                            error_message,
-                        )),
+                        RemoveTagsFromOnPremisesInstancesError::TagRequired(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5947,60 +5273,43 @@ impl SkipWaitTimeForInstanceTerminationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<SkipWaitTimeForInstanceTerminationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentAlreadyCompletedException" => {
                     return RusotoError::Service(
                         SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
-                        SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(
-                            String::from(error_message),
-                        ),
+                        SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(
-                        SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(
-                            String::from(error_message),
-                        ),
+                        SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(err.msg),
                     )
                 }
                 "DeploymentNotStartedException" => {
                     return RusotoError::Service(
-                        SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(
-                            String::from(error_message),
-                        ),
+                        SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(err.msg),
                     )
                 }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(
-                        SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(String::from(
-                            error_message,
-                        )),
+                        SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(err.msg),
                     )
                 }
                 "UnsupportedActionForDeploymentTypeException" => {
                     return RusotoError::Service(
                         SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6043,43 +5352,30 @@ pub enum StopDeploymentError {
 
 impl StopDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDeploymentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeploymentAlreadyCompletedException" => {
                     return RusotoError::Service(StopDeploymentError::DeploymentAlreadyCompleted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(StopDeploymentError::DeploymentDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return RusotoError::Service(StopDeploymentError::DeploymentGroupDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DeploymentIdRequiredException" => {
-                    return RusotoError::Service(StopDeploymentError::DeploymentIdRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopDeploymentError::DeploymentIdRequired(err.msg))
                 }
                 "InvalidDeploymentIdException" => {
-                    return RusotoError::Service(StopDeploymentError::InvalidDeploymentId(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopDeploymentError::InvalidDeploymentId(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6117,38 +5413,29 @@ pub enum UpdateApplicationError {
 
 impl UpdateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ApplicationAlreadyExistsException" => {
                     return RusotoError::Service(UpdateApplicationError::ApplicationAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(UpdateApplicationError::ApplicationDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(UpdateApplicationError::ApplicationNameRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(UpdateApplicationError::InvalidApplicationName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6237,210 +5524,151 @@ pub enum UpdateDeploymentGroupError {
 
 impl UpdateDeploymentGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeploymentGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlarmsLimitExceededException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::AlarmsLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::ApplicationDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::ApplicationDoesNotExist(err.msg),
                     )
                 }
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::ApplicationNameRequired(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::ApplicationNameRequired(err.msg),
                     )
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentGroupAlreadyExistsException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(err.msg),
                     )
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(err.msg),
                     )
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::DeploymentGroupNameRequired(err.msg),
                     )
                 }
                 "ECSServiceMappingLimitExceededException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::ECSServiceMappingLimitExceeded(err.msg),
                     )
                 }
                 "InvalidAlarmConfigException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidAlarmConfig(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidApplicationNameException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidApplicationName(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidApplicationName(err.msg),
                     )
                 }
                 "InvalidAutoRollbackConfigException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidAutoRollbackConfig(err.msg),
                     )
                 }
                 "InvalidAutoScalingGroupException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidAutoScalingGroup(err.msg),
                     )
                 }
                 "InvalidBlueGreenDeploymentConfigurationException" => {
                     return RusotoError::Service(
                         UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidDeploymentConfigName(err.msg),
                     )
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidDeploymentGroupName(err.msg),
                     )
                 }
                 "InvalidDeploymentStyleException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidDeploymentStyle(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidDeploymentStyle(err.msg),
                     )
                 }
                 "InvalidEC2TagCombinationException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidEC2TagCombination(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidEC2TagCombination(err.msg),
                     )
                 }
                 "InvalidEC2TagException" => {
-                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidEC2Tag(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidEC2Tag(err.msg))
                 }
                 "InvalidECSServiceException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidECSService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidInput(err.msg))
                 }
                 "InvalidLoadBalancerInfoException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidLoadBalancerInfo(err.msg),
                     )
                 }
                 "InvalidOnPremisesTagCombinationException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(err.msg),
                     )
                 }
                 "InvalidRoleException" => {
-                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidRole(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidRole(err.msg))
                 }
                 "InvalidTagException" => {
-                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidTag(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidTag(err.msg))
                 }
                 "InvalidTargetGroupPairException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::InvalidTargetGroupPair(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::InvalidTargetGroupPair(err.msg),
                     )
                 }
                 "InvalidTriggerConfigException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidTriggerConfig(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LifecycleHookLimitExceededException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::LifecycleHookLimitExceeded(err.msg),
                     )
                 }
                 "TagSetListLimitExceededException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::TagSetListLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::TagSetListLimitExceeded(err.msg),
                     )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(UpdateDeploymentGroupError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeploymentGroupError::Throttling(err.msg))
                 }
                 "TriggerTargetsLimitExceededException" => {
                     return RusotoError::Service(
-                        UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

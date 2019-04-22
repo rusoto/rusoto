@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GenerateDataSetRequest {
@@ -110,25 +109,14 @@ pub enum GenerateDataSetError {
 
 impl GenerateDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateDataSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "MarketplaceCommerceAnalyticsException" => {
                     return RusotoError::Service(
-                        GenerateDataSetError::MarketplaceCommerceAnalytics(String::from(
-                            error_message,
-                        )),
+                        GenerateDataSetError::MarketplaceCommerceAnalytics(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -156,25 +144,14 @@ pub enum StartSupportDataExportError {
 
 impl StartSupportDataExportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSupportDataExportError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "MarketplaceCommerceAnalyticsException" => {
                     return RusotoError::Service(
-                        StartSupportDataExportError::MarketplaceCommerceAnalytics(String::from(
-                            error_message,
-                        )),
+                        StartSupportDataExportError::MarketplaceCommerceAnalytics(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

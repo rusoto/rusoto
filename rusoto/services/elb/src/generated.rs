@@ -22,13 +22,13 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
-use rusoto_core::signature::SignedRequest;
-use rusoto_core::xmlerror::*;
-use rusoto_core::xmlutil::{
+use rusoto_core::proto::xml::error::*;
+use rusoto_core::proto::xml::util::{
     characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
     start_element,
 };
-use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::signature::SignedRequest;
 use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;

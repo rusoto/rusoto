@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Contains information about a backup of an AWS CloudHSM cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -511,43 +510,32 @@ pub enum CopyBackupToRegionError {
 
 impl CopyBackupToRegionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyBackupToRegionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmAccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmInternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmInvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(CopyBackupToRegionError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CopyBackupToRegionError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -587,43 +575,30 @@ pub enum CreateClusterError {
 
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(CreateClusterError::CloudHsmAccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateClusterError::CloudHsmAccessDenied(err.msg))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmInternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmInvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(CreateClusterError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateClusterError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -663,43 +638,24 @@ pub enum CreateHsmError {
 
 impl CreateHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHsmError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(CreateHsmError::CloudHsmAccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateHsmError::CloudHsmAccessDenied(err.msg))
                 }
                 "CloudHsmInternalFailureException" => {
-                    return RusotoError::Service(CreateHsmError::CloudHsmInternalFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateHsmError::CloudHsmInternalFailure(err.msg))
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return RusotoError::Service(CreateHsmError::CloudHsmInvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateHsmError::CloudHsmInvalidRequest(err.msg))
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return RusotoError::Service(CreateHsmError::CloudHsmResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateHsmError::CloudHsmResourceNotFound(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(CreateHsmError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateHsmError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -739,43 +695,28 @@ pub enum DeleteBackupError {
 
 impl DeleteBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(DeleteBackupError::CloudHsmAccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteBackupError::CloudHsmAccessDenied(err.msg))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(DeleteBackupError::CloudHsmInternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return RusotoError::Service(DeleteBackupError::CloudHsmInvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteBackupError::CloudHsmInvalidRequest(err.msg))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(DeleteBackupError::CloudHsmResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DeleteBackupError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteBackupError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -815,43 +756,30 @@ pub enum DeleteClusterError {
 
 impl DeleteClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(DeleteClusterError::CloudHsmAccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteClusterError::CloudHsmAccessDenied(err.msg))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmInternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmInvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DeleteClusterError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteClusterError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -891,43 +819,24 @@ pub enum DeleteHsmError {
 
 impl DeleteHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHsmError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(DeleteHsmError::CloudHsmAccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteHsmError::CloudHsmAccessDenied(err.msg))
                 }
                 "CloudHsmInternalFailureException" => {
-                    return RusotoError::Service(DeleteHsmError::CloudHsmInternalFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteHsmError::CloudHsmInternalFailure(err.msg))
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return RusotoError::Service(DeleteHsmError::CloudHsmInvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteHsmError::CloudHsmInvalidRequest(err.msg))
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteHsmError::CloudHsmResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteHsmError::CloudHsmResourceNotFound(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DeleteHsmError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteHsmError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -967,43 +876,32 @@ pub enum DescribeBackupsError {
 
 impl DescribeBackupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmAccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmInternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmInvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DescribeBackupsError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeBackupsError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1041,38 +939,27 @@ pub enum DescribeClustersError {
 
 impl DescribeClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DescribeClustersError::CloudHsmAccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(DescribeClustersError::CloudHsmInternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(DescribeClustersError::CloudHsmInvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DescribeClustersError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeClustersError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1111,43 +998,32 @@ pub enum InitializeClusterError {
 
 impl InitializeClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitializeClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmAccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmInternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmInvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(InitializeClusterError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(InitializeClusterError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1187,43 +1063,24 @@ pub enum ListTagsError {
 
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(ListTagsError::CloudHsmAccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::CloudHsmAccessDenied(err.msg))
                 }
                 "CloudHsmInternalFailureException" => {
-                    return RusotoError::Service(ListTagsError::CloudHsmInternalFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsError::CloudHsmInternalFailure(err.msg))
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return RusotoError::Service(ListTagsError::CloudHsmInvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsError::CloudHsmInvalidRequest(err.msg))
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return RusotoError::Service(ListTagsError::CloudHsmResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsError::CloudHsmResourceNotFound(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(ListTagsError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1263,43 +1120,30 @@ pub enum RestoreBackupError {
 
 impl RestoreBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreBackupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(RestoreBackupError::CloudHsmAccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RestoreBackupError::CloudHsmAccessDenied(err.msg))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(RestoreBackupError::CloudHsmInternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(RestoreBackupError::CloudHsmInvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(RestoreBackupError::CloudHsmResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(RestoreBackupError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RestoreBackupError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1339,43 +1183,26 @@ pub enum TagResourceError {
 
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(TagResourceError::CloudHsmAccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagResourceError::CloudHsmAccessDenied(err.msg))
                 }
                 "CloudHsmInternalFailureException" => {
-                    return RusotoError::Service(TagResourceError::CloudHsmInternalFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagResourceError::CloudHsmInternalFailure(err.msg))
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return RusotoError::Service(TagResourceError::CloudHsmInvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagResourceError::CloudHsmInvalidRequest(err.msg))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::CloudHsmResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(TagResourceError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1415,43 +1242,30 @@ pub enum UntagResourceError {
 
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(UntagResourceError::CloudHsmAccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::CloudHsmAccessDenied(err.msg))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmInternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmInvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(UntagResourceError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

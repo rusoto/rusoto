@@ -22,10 +22,9 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Placeholder documentation for AacSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AacSettings {
@@ -4642,73 +4641,38 @@ pub enum BatchUpdateScheduleError {
 }
 
 impl BatchUpdateScheduleError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdateScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(BatchUpdateScheduleError::BadGateway(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchUpdateScheduleError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(BatchUpdateScheduleError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchUpdateScheduleError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(BatchUpdateScheduleError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(BatchUpdateScheduleError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(BatchUpdateScheduleError::GatewayTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchUpdateScheduleError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(BatchUpdateScheduleError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(BatchUpdateScheduleError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(BatchUpdateScheduleError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(BatchUpdateScheduleError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchUpdateScheduleError::TooManyRequests(err.msg))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(BatchUpdateScheduleError::UnprocessableEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4756,73 +4720,34 @@ pub enum CreateChannelError {
 }
 
 impl CreateChannelError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(CreateChannelError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateChannelError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(CreateChannelError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateChannelError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(CreateChannelError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateChannelError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(CreateChannelError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateChannelError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(CreateChannelError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateChannelError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(CreateChannelError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateChannelError::InternalServerError(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreateChannelError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateChannelError::TooManyRequests(err.msg))
                 }
                 "UnprocessableEntityException" => {
-                    return RusotoError::Service(CreateChannelError::UnprocessableEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateChannelError::UnprocessableEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4866,63 +4791,28 @@ pub enum CreateInputError {
 }
 
 impl CreateInputError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInputError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(CreateInputError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateInputError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(CreateInputError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateInputError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(CreateInputError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateInputError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(CreateInputError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateInputError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(CreateInputError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInputError::InternalServerError(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreateInputError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateInputError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4964,65 +4854,34 @@ pub enum CreateInputSecurityGroupError {
 }
 
 impl CreateInputSecurityGroupError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInputSecurityGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(CreateInputSecurityGroupError::BadGateway(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInputSecurityGroupError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(CreateInputSecurityGroupError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInputSecurityGroupError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(CreateInputSecurityGroupError::Forbidden(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateInputSecurityGroupError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(CreateInputSecurityGroupError::GatewayTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
-                        CreateInputSecurityGroupError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        CreateInputSecurityGroupError::InternalServerError(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateInputSecurityGroupError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5060,53 +4919,22 @@ pub enum CreateTagsError {
 }
 
 impl CreateTagsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(CreateTagsError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTagsError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(CreateTagsError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTagsError::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(CreateTagsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTagsError::InternalServerError(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateTagsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTagsError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5150,73 +4978,34 @@ pub enum DeleteChannelError {
 }
 
 impl DeleteChannelError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DeleteChannelError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteChannelError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DeleteChannelError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteChannelError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(DeleteChannelError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteChannelError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DeleteChannelError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteChannelError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(DeleteChannelError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteChannelError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(DeleteChannelError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteChannelError::InternalServerError(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteChannelError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteChannelError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteChannelError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteChannelError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5264,73 +5053,34 @@ pub enum DeleteInputError {
 }
 
 impl DeleteInputError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInputError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DeleteInputError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInputError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DeleteInputError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInputError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(DeleteInputError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInputError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DeleteInputError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInputError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(DeleteInputError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInputError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(DeleteInputError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInputError::InternalServerError(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteInputError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInputError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteInputError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteInputError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5376,70 +5126,37 @@ pub enum DeleteInputSecurityGroupError {
 }
 
 impl DeleteInputSecurityGroupError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInputSecurityGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DeleteInputSecurityGroupError::BadGateway(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInputSecurityGroupError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DeleteInputSecurityGroupError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInputSecurityGroupError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DeleteInputSecurityGroupError::Forbidden(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInputSecurityGroupError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DeleteInputSecurityGroupError::GatewayTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
-                        DeleteInputSecurityGroupError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DeleteInputSecurityGroupError::InternalServerError(err.msg),
                     )
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteInputSecurityGroupError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteInputSecurityGroupError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteInputSecurityGroupError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5486,73 +5203,36 @@ pub enum DeleteReservationError {
 }
 
 impl DeleteReservationError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReservationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DeleteReservationError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteReservationError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DeleteReservationError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteReservationError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(DeleteReservationError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteReservationError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DeleteReservationError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteReservationError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(DeleteReservationError::GatewayTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteReservationError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteReservationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteReservationError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteReservationError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteReservationError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteReservationError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5592,53 +5272,22 @@ pub enum DeleteTagsError {
 }
 
 impl DeleteTagsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(DeleteTagsError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTagsError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DeleteTagsError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTagsError::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(DeleteTagsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTagsError::InternalServerError(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteTagsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTagsError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5680,68 +5329,31 @@ pub enum DescribeChannelError {
 }
 
 impl DescribeChannelError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DescribeChannelError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeChannelError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DescribeChannelError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeChannelError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DescribeChannelError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeChannelError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(DescribeChannelError::GatewayTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeChannelError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(DescribeChannelError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeChannelError::InternalServerError(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeChannelError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeChannelError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeChannelError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeChannelError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5786,68 +5398,31 @@ pub enum DescribeInputError {
 }
 
 impl DescribeInputError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInputError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DescribeInputError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeInputError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DescribeInputError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeInputError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DescribeInputError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeInputError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(DescribeInputError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeInputError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(DescribeInputError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeInputError::InternalServerError(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeInputError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeInputError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeInputError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeInputError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5892,72 +5467,45 @@ pub enum DescribeInputSecurityGroupError {
 }
 
 impl DescribeInputSecurityGroupError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInputSecurityGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::BadGateway(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::BadRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::Forbidden(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::GatewayTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
-                        DescribeInputSecurityGroupError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeInputSecurityGroupError::InternalServerError(err.msg),
                     )
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeInputSecurityGroupError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeInputSecurityGroupError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6002,68 +5550,33 @@ pub enum DescribeOfferingError {
 }
 
 impl DescribeOfferingError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOfferingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DescribeOfferingError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeOfferingError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DescribeOfferingError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeOfferingError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DescribeOfferingError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeOfferingError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(DescribeOfferingError::GatewayTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeOfferingError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeOfferingError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeOfferingError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeOfferingError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeOfferingError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeOfferingError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6108,68 +5621,33 @@ pub enum DescribeReservationError {
 }
 
 impl DescribeReservationError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReservationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DescribeReservationError::BadGateway(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeReservationError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DescribeReservationError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeReservationError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DescribeReservationError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeReservationError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(DescribeReservationError::GatewayTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeReservationError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeReservationError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeReservationError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeReservationError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeReservationError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeReservationError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6214,68 +5692,33 @@ pub enum DescribeScheduleError {
 }
 
 impl DescribeScheduleError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DescribeScheduleError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeScheduleError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DescribeScheduleError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeScheduleError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DescribeScheduleError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeScheduleError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(DescribeScheduleError::GatewayTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeScheduleError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeScheduleError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeScheduleError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeScheduleError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeScheduleError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeScheduleError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6318,63 +5761,28 @@ pub enum ListChannelsError {
 }
 
 impl ListChannelsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(ListChannelsError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChannelsError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(ListChannelsError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChannelsError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(ListChannelsError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChannelsError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(ListChannelsError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChannelsError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(ListChannelsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListChannelsError::InternalServerError(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListChannelsError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChannelsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6416,63 +5824,34 @@ pub enum ListInputSecurityGroupsError {
 }
 
 impl ListInputSecurityGroupsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInputSecurityGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(ListInputSecurityGroupsError::BadGateway(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListInputSecurityGroupsError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(ListInputSecurityGroupsError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListInputSecurityGroupsError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(ListInputSecurityGroupsError::Forbidden(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListInputSecurityGroupsError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::GatewayTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6514,63 +5893,28 @@ pub enum ListInputsError {
 }
 
 impl ListInputsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInputsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(ListInputsError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListInputsError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(ListInputsError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListInputsError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(ListInputsError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListInputsError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(ListInputsError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListInputsError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(ListInputsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListInputsError::InternalServerError(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListInputsError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListInputsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6612,63 +5956,28 @@ pub enum ListOfferingsError {
 }
 
 impl ListOfferingsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(ListOfferingsError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(ListOfferingsError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(ListOfferingsError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(ListOfferingsError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(ListOfferingsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListOfferingsError::InternalServerError(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListOfferingsError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOfferingsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6710,63 +6019,30 @@ pub enum ListReservationsError {
 }
 
 impl ListReservationsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReservationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(ListReservationsError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListReservationsError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(ListReservationsError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListReservationsError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(ListReservationsError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListReservationsError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(ListReservationsError::GatewayTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListReservationsError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListReservationsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListReservationsError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListReservationsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6804,53 +6080,24 @@ pub enum ListTagsForResourceError {
 }
 
 impl ListTagsForResourceError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(ListTagsForResourceError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(ListTagsForResourceError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsForResourceError::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListTagsForResourceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsForResourceError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6894,73 +6141,36 @@ pub enum PurchaseOfferingError {
 }
 
 impl PurchaseOfferingError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurchaseOfferingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(PurchaseOfferingError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PurchaseOfferingError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(PurchaseOfferingError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PurchaseOfferingError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(PurchaseOfferingError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PurchaseOfferingError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(PurchaseOfferingError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PurchaseOfferingError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(PurchaseOfferingError::GatewayTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PurchaseOfferingError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(PurchaseOfferingError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(PurchaseOfferingError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PurchaseOfferingError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(PurchaseOfferingError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PurchaseOfferingError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7008,73 +6218,34 @@ pub enum StartChannelError {
 }
 
 impl StartChannelError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartChannelError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(StartChannelError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartChannelError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(StartChannelError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartChannelError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(StartChannelError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartChannelError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(StartChannelError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartChannelError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(StartChannelError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartChannelError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(StartChannelError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartChannelError::InternalServerError(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StartChannelError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartChannelError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(StartChannelError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartChannelError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7122,73 +6293,34 @@ pub enum StopChannelError {
 }
 
 impl StopChannelError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopChannelError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(StopChannelError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopChannelError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(StopChannelError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopChannelError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(StopChannelError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopChannelError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(StopChannelError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopChannelError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(StopChannelError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopChannelError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(StopChannelError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopChannelError::InternalServerError(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(StopChannelError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopChannelError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(StopChannelError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopChannelError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7234,68 +6366,31 @@ pub enum UpdateChannelError {
 }
 
 impl UpdateChannelError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(UpdateChannelError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateChannelError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(UpdateChannelError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateChannelError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(UpdateChannelError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateChannelError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(UpdateChannelError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateChannelError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(UpdateChannelError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateChannelError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(UpdateChannelError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateChannelError::InternalServerError(err.msg))
                 }
                 "UnprocessableEntityException" => {
-                    return RusotoError::Service(UpdateChannelError::UnprocessableEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateChannelError::UnprocessableEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7340,68 +6435,31 @@ pub enum UpdateInputError {
 }
 
 impl UpdateInputError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInputError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(UpdateInputError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateInputError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(UpdateInputError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateInputError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(UpdateInputError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateInputError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(UpdateInputError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateInputError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(UpdateInputError::GatewayTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateInputError::GatewayTimeout(err.msg))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(UpdateInputError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateInputError::InternalServerError(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateInputError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateInputError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7446,70 +6504,35 @@ pub enum UpdateInputSecurityGroupError {
 }
 
 impl UpdateInputSecurityGroupError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInputSecurityGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(UpdateInputSecurityGroupError::BadGateway(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateInputSecurityGroupError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(UpdateInputSecurityGroupError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateInputSecurityGroupError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(UpdateInputSecurityGroupError::Conflict(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateInputSecurityGroupError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(UpdateInputSecurityGroupError::Forbidden(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateInputSecurityGroupError::Forbidden(err.msg))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(UpdateInputSecurityGroupError::GatewayTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
-                        UpdateInputSecurityGroupError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateInputSecurityGroupError::InternalServerError(err.msg),
                     )
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateInputSecurityGroupError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateInputSecurityGroupError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

@@ -22,10 +22,9 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeJobExecutionRequest {
     /// <p>Optional. A number that identifies a particular job execution on a particular device. If not specified, the latest job execution is returned.</p>
@@ -263,63 +262,34 @@ pub enum DescribeJobExecutionError {
 }
 
 impl DescribeJobExecutionError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(DescribeJobExecutionError::CertificateValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeJobExecutionError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeJobExecutionError::InvalidRequest(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeJobExecutionError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeJobExecutionError::ServiceUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TerminalStateException" => {
-                    return RusotoError::Service(DescribeJobExecutionError::TerminalState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeJobExecutionError::TerminalState(err.msg))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(DescribeJobExecutionError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeJobExecutionError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -359,60 +329,33 @@ pub enum GetPendingJobExecutionsError {
 }
 
 impl GetPendingJobExecutionsError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPendingJobExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(
-                        GetPendingJobExecutionsError::CertificateValidation(String::from(
-                            error_message,
-                        )),
+                        GetPendingJobExecutionsError::CertificateValidation(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetPendingJobExecutionsError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetPendingJobExecutionsError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetPendingJobExecutionsError::ServiceUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(GetPendingJobExecutionsError::Throttling(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetPendingJobExecutionsError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -451,66 +394,37 @@ pub enum StartNextPendingJobExecutionError {
 }
 
 impl StartNextPendingJobExecutionError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartNextPendingJobExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(
-                        StartNextPendingJobExecutionError::CertificateValidation(String::from(
-                            error_message,
-                        )),
+                        StartNextPendingJobExecutionError::CertificateValidation(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartNextPendingJobExecutionError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        StartNextPendingJobExecutionError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        StartNextPendingJobExecutionError::ResourceNotFound(err.msg),
                     )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
-                        StartNextPendingJobExecutionError::ServiceUnavailable(String::from(
-                            error_message,
-                        )),
+                        StartNextPendingJobExecutionError::ServiceUnavailable(err.msg),
                     )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(StartNextPendingJobExecutionError::Throttling(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -551,63 +465,34 @@ pub enum UpdateJobExecutionError {
 }
 
 impl UpdateJobExecutionError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(UpdateJobExecutionError::CertificateValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(UpdateJobExecutionError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateJobExecutionError::InvalidRequest(err.msg))
                 }
                 "InvalidStateTransitionException" => {
                     return RusotoError::Service(UpdateJobExecutionError::InvalidStateTransition(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateJobExecutionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateJobExecutionError::ResourceNotFound(err.msg))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateJobExecutionError::ServiceUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(UpdateJobExecutionError::Throttling(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateJobExecutionError::Throttling(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

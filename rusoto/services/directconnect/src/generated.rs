@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AllocateConnectionOnInterconnectRequest {
     /// <p>The bandwidth of the connection, in Mbps. The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, and 500Mbps.</p>
@@ -1445,32 +1444,19 @@ impl AllocateConnectionOnInterconnectError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AllocateConnectionOnInterconnectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        AllocateConnectionOnInterconnectError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        AllocateConnectionOnInterconnectError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1501,32 +1487,19 @@ pub enum AllocateHostedConnectionError {
 
 impl AllocateHostedConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AllocateHostedConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        AllocateHostedConnectionError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        AllocateHostedConnectionError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        AllocateHostedConnectionError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        AllocateHostedConnectionError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1559,32 +1532,19 @@ impl AllocatePrivateVirtualInterfaceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AllocatePrivateVirtualInterfaceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        AllocatePrivateVirtualInterfaceError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        AllocatePrivateVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1617,32 +1577,19 @@ impl AllocatePublicVirtualInterfaceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AllocatePublicVirtualInterfaceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        AllocatePublicVirtualInterfaceError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        AllocatePublicVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1675,32 +1622,19 @@ impl AssociateConnectionWithLagError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateConnectionWithLagError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        AssociateConnectionWithLagError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        AssociateConnectionWithLagError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        AssociateConnectionWithLagError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        AssociateConnectionWithLagError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1731,32 +1665,19 @@ pub enum AssociateHostedConnectionError {
 
 impl AssociateHostedConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateHostedConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        AssociateHostedConnectionError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        AssociateHostedConnectionError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        AssociateHostedConnectionError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        AssociateHostedConnectionError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1787,32 +1708,19 @@ pub enum AssociateVirtualInterfaceError {
 
 impl AssociateVirtualInterfaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateVirtualInterfaceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        AssociateVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        AssociateVirtualInterfaceError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        AssociateVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        AssociateVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1843,28 +1751,19 @@ pub enum ConfirmConnectionError {
 
 impl ConfirmConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(ConfirmConnectionError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(ConfirmConnectionError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1897,32 +1796,19 @@ impl ConfirmPrivateVirtualInterfaceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ConfirmPrivateVirtualInterfaceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        ConfirmPrivateVirtualInterfaceError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        ConfirmPrivateVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1955,32 +1841,19 @@ impl ConfirmPublicVirtualInterfaceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ConfirmPublicVirtualInterfaceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        ConfirmPublicVirtualInterfaceError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        ConfirmPublicVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2011,28 +1884,15 @@ pub enum CreateBGPPeerError {
 
 impl CreateBGPPeerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBGPPeerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(CreateBGPPeerError::DirectConnectClient(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateBGPPeerError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(CreateBGPPeerError::DirectConnectServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateBGPPeerError::DirectConnectServer(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2063,28 +1923,19 @@ pub enum CreateConnectionError {
 
 impl CreateConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateConnectionError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(CreateConnectionError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2117,32 +1968,19 @@ impl CreateDirectConnectGatewayError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDirectConnectGatewayError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        CreateDirectConnectGatewayError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        CreateDirectConnectGatewayError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        CreateDirectConnectGatewayError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        CreateDirectConnectGatewayError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2175,32 +2013,19 @@ impl CreateDirectConnectGatewayAssociationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDirectConnectGatewayAssociationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        CreateDirectConnectGatewayAssociationError::DirectConnectClient(
-                            String::from(error_message),
-                        ),
+                        CreateDirectConnectGatewayAssociationError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        CreateDirectConnectGatewayAssociationError::DirectConnectServer(
-                            String::from(error_message),
-                        ),
+                        CreateDirectConnectGatewayAssociationError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2231,28 +2056,19 @@ pub enum CreateInterconnectError {
 
 impl CreateInterconnectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInterconnectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateInterconnectError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(CreateInterconnectError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2283,28 +2099,15 @@ pub enum CreateLagError {
 
 impl CreateLagError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLagError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(CreateLagError::DirectConnectClient(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateLagError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(CreateLagError::DirectConnectServer(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateLagError::DirectConnectServer(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2337,32 +2140,19 @@ impl CreatePrivateVirtualInterfaceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreatePrivateVirtualInterfaceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        CreatePrivateVirtualInterfaceError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        CreatePrivateVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2395,32 +2185,19 @@ impl CreatePublicVirtualInterfaceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreatePublicVirtualInterfaceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        CreatePublicVirtualInterfaceError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        CreatePublicVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2451,28 +2228,15 @@ pub enum DeleteBGPPeerError {
 
 impl DeleteBGPPeerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBGPPeerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(DeleteBGPPeerError::DirectConnectClient(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteBGPPeerError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(DeleteBGPPeerError::DirectConnectServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteBGPPeerError::DirectConnectServer(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2503,28 +2267,19 @@ pub enum DeleteConnectionError {
 
 impl DeleteConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteConnectionError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DeleteConnectionError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2557,32 +2312,19 @@ impl DeleteDirectConnectGatewayError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDirectConnectGatewayError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        DeleteDirectConnectGatewayError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        DeleteDirectConnectGatewayError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        DeleteDirectConnectGatewayError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        DeleteDirectConnectGatewayError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2615,32 +2357,19 @@ impl DeleteDirectConnectGatewayAssociationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDirectConnectGatewayAssociationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        DeleteDirectConnectGatewayAssociationError::DirectConnectClient(
-                            String::from(error_message),
-                        ),
+                        DeleteDirectConnectGatewayAssociationError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        DeleteDirectConnectGatewayAssociationError::DirectConnectServer(
-                            String::from(error_message),
-                        ),
+                        DeleteDirectConnectGatewayAssociationError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2671,28 +2400,19 @@ pub enum DeleteInterconnectError {
 
 impl DeleteInterconnectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInterconnectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteInterconnectError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DeleteInterconnectError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2723,28 +2443,15 @@ pub enum DeleteLagError {
 
 impl DeleteLagError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLagError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(DeleteLagError::DirectConnectClient(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteLagError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(DeleteLagError::DirectConnectServer(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteLagError::DirectConnectServer(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2775,28 +2482,19 @@ pub enum DeleteVirtualInterfaceError {
 
 impl DeleteVirtualInterfaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVirtualInterfaceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteVirtualInterfaceError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DeleteVirtualInterfaceError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2827,28 +2525,19 @@ pub enum DescribeConnectionLoaError {
 
 impl DescribeConnectionLoaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionLoaError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeConnectionLoaError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeConnectionLoaError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2879,28 +2568,19 @@ pub enum DescribeConnectionsError {
 
 impl DescribeConnectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeConnectionsError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeConnectionsError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2933,32 +2613,19 @@ impl DescribeConnectionsOnInterconnectError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConnectionsOnInterconnectError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        DescribeConnectionsOnInterconnectError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        DescribeConnectionsOnInterconnectError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        DescribeConnectionsOnInterconnectError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        DescribeConnectionsOnInterconnectError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2991,32 +2658,19 @@ impl DescribeDirectConnectGatewayAssociationsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDirectConnectGatewayAssociationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(
-                            String::from(error_message),
-                        ),
+                        DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(
-                            String::from(error_message),
-                        ),
+                        DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3049,32 +2703,19 @@ impl DescribeDirectConnectGatewayAttachmentsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDirectConnectGatewayAttachmentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(
-                            String::from(error_message),
-                        ),
+                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(
-                            String::from(error_message),
-                        ),
+                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3107,32 +2748,19 @@ impl DescribeDirectConnectGatewaysError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDirectConnectGatewaysError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        DescribeDirectConnectGatewaysError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        DescribeDirectConnectGatewaysError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        DescribeDirectConnectGatewaysError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        DescribeDirectConnectGatewaysError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3163,32 +2791,19 @@ pub enum DescribeHostedConnectionsError {
 
 impl DescribeHostedConnectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHostedConnectionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        DescribeHostedConnectionsError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        DescribeHostedConnectionsError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        DescribeHostedConnectionsError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        DescribeHostedConnectionsError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3219,28 +2834,19 @@ pub enum DescribeInterconnectLoaError {
 
 impl DescribeInterconnectLoaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInterconnectLoaError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeInterconnectLoaError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeInterconnectLoaError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3271,28 +2877,19 @@ pub enum DescribeInterconnectsError {
 
 impl DescribeInterconnectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInterconnectsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeInterconnectsError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeInterconnectsError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3323,28 +2920,15 @@ pub enum DescribeLagsError {
 
 impl DescribeLagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(DescribeLagsError::DirectConnectClient(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeLagsError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(DescribeLagsError::DirectConnectServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeLagsError::DirectConnectServer(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3375,28 +2959,15 @@ pub enum DescribeLoaError {
 
 impl DescribeLoaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoaError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(DescribeLoaError::DirectConnectClient(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeLoaError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(DescribeLoaError::DirectConnectServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeLoaError::DirectConnectServer(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3427,28 +2998,19 @@ pub enum DescribeLocationsError {
 
 impl DescribeLocationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLocationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeLocationsError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeLocationsError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3479,28 +3041,15 @@ pub enum DescribeTagsError {
 
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(DescribeTagsError::DirectConnectClient(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTagsError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(DescribeTagsError::DirectConnectServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTagsError::DirectConnectServer(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3531,28 +3080,19 @@ pub enum DescribeVirtualGatewaysError {
 
 impl DescribeVirtualGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualGatewaysError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeVirtualGatewaysError::DirectConnectClient(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(DescribeVirtualGatewaysError::DirectConnectServer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3583,32 +3123,19 @@ pub enum DescribeVirtualInterfacesError {
 
 impl DescribeVirtualInterfacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualInterfacesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        DescribeVirtualInterfacesError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        DescribeVirtualInterfacesError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        DescribeVirtualInterfacesError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        DescribeVirtualInterfacesError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3641,32 +3168,19 @@ impl DisassociateConnectionFromLagError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateConnectionFromLagError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        DisassociateConnectionFromLagError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        DisassociateConnectionFromLagError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        DisassociateConnectionFromLagError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        DisassociateConnectionFromLagError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3701,38 +3215,21 @@ pub enum TagResourceError {
 
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(TagResourceError::DirectConnectClient(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagResourceError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(TagResourceError::DirectConnectServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TagResourceError::DirectConnectServer(err.msg))
                 }
                 "DuplicateTagKeysException" => {
-                    return RusotoError::Service(TagResourceError::DuplicateTagKeys(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::DuplicateTagKeys(err.msg))
                 }
                 "TooManyTagsException" => {
-                    return RusotoError::Service(TagResourceError::TooManyTags(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3765,28 +3262,15 @@ pub enum UntagResourceError {
 
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(UntagResourceError::DirectConnectClient(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(UntagResourceError::DirectConnectServer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::DirectConnectServer(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3817,28 +3301,15 @@ pub enum UpdateLagError {
 
 impl UpdateLagError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLagError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
-                    return RusotoError::Service(UpdateLagError::DirectConnectClient(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateLagError::DirectConnectClient(err.msg))
                 }
                 "DirectConnectServerException" => {
-                    return RusotoError::Service(UpdateLagError::DirectConnectServer(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateLagError::DirectConnectServer(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3871,32 +3342,19 @@ impl UpdateVirtualInterfaceAttributesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateVirtualInterfaceAttributesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
-                        UpdateVirtualInterfaceAttributesError::DirectConnectClient(String::from(
-                            error_message,
-                        )),
+                        UpdateVirtualInterfaceAttributesError::DirectConnectClient(err.msg),
                     )
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(
-                        UpdateVirtualInterfaceAttributesError::DirectConnectServer(String::from(
-                            error_message,
-                        )),
+                        UpdateVirtualInterfaceAttributesError::DirectConnectServer(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

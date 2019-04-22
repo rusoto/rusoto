@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>The address that you want the Snowball or Snowballs associated with a specific job to be shipped to. Addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. Although no individual elements of the <code>Address</code> are required, if the address is invalid or unsupported, then an exception is thrown.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Address {
@@ -924,33 +923,18 @@ pub enum CancelClusterError {
 
 impl CancelClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidJobStateException" => {
-                    return RusotoError::Service(CancelClusterError::InvalidJobState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelClusterError::InvalidJobState(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(CancelClusterError::InvalidResource(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelClusterError::InvalidResource(err.msg))
                 }
                 "KMSRequestFailedException" => {
-                    return RusotoError::Service(CancelClusterError::KMSRequestFailed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelClusterError::KMSRequestFailed(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -984,33 +968,18 @@ pub enum CancelJobError {
 
 impl CancelJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidJobStateException" => {
-                    return RusotoError::Service(CancelJobError::InvalidJobState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelJobError::InvalidJobState(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(CancelJobError::InvalidResource(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelJobError::InvalidResource(err.msg))
                 }
                 "KMSRequestFailedException" => {
-                    return RusotoError::Service(CancelJobError::KMSRequestFailed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelJobError::KMSRequestFailed(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1042,28 +1011,15 @@ pub enum CreateAddressError {
 
 impl CreateAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAddressError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidAddressException" => {
-                    return RusotoError::Service(CreateAddressError::InvalidAddress(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAddressError::InvalidAddress(err.msg))
                 }
                 "UnsupportedAddressException" => {
-                    return RusotoError::Service(CreateAddressError::UnsupportedAddress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAddressError::UnsupportedAddress(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1098,38 +1054,23 @@ pub enum CreateClusterError {
 
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "Ec2RequestFailedException" => {
-                    return RusotoError::Service(CreateClusterError::Ec2RequestFailed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateClusterError::Ec2RequestFailed(err.msg))
                 }
                 "InvalidInputCombinationException" => {
                     return RusotoError::Service(CreateClusterError::InvalidInputCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(CreateClusterError::InvalidResource(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateClusterError::InvalidResource(err.msg))
                 }
                 "KMSRequestFailedException" => {
-                    return RusotoError::Service(CreateClusterError::KMSRequestFailed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateClusterError::KMSRequestFailed(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1168,43 +1109,24 @@ pub enum CreateJobError {
 
 impl CreateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterLimitExceededException" => {
-                    return RusotoError::Service(CreateJobError::ClusterLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateJobError::ClusterLimitExceeded(err.msg))
                 }
                 "Ec2RequestFailedException" => {
-                    return RusotoError::Service(CreateJobError::Ec2RequestFailed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateJobError::Ec2RequestFailed(err.msg))
                 }
                 "InvalidInputCombinationException" => {
-                    return RusotoError::Service(CreateJobError::InvalidInputCombination(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateJobError::InvalidInputCombination(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(CreateJobError::InvalidResource(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateJobError::InvalidResource(err.msg))
                 }
                 "KMSRequestFailedException" => {
-                    return RusotoError::Service(CreateJobError::KMSRequestFailed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateJobError::KMSRequestFailed(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1236,23 +1158,12 @@ pub enum DescribeAddressError {
 
 impl DescribeAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddressError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidResourceException" => {
-                    return RusotoError::Service(DescribeAddressError::InvalidResource(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeAddressError::InvalidResource(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1282,28 +1193,15 @@ pub enum DescribeAddressesError {
 
 impl DescribeAddressesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddressesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(DescribeAddressesError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeAddressesError::InvalidNextToken(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(DescribeAddressesError::InvalidResource(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeAddressesError::InvalidResource(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1332,23 +1230,12 @@ pub enum DescribeClusterError {
 
 impl DescribeClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidResourceException" => {
-                    return RusotoError::Service(DescribeClusterError::InvalidResource(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeClusterError::InvalidResource(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1376,23 +1263,12 @@ pub enum DescribeJobError {
 
 impl DescribeJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidResourceException" => {
-                    return RusotoError::Service(DescribeJobError::InvalidResource(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeJobError::InvalidResource(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1422,28 +1298,15 @@ pub enum GetJobManifestError {
 
 impl GetJobManifestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobManifestError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidJobStateException" => {
-                    return RusotoError::Service(GetJobManifestError::InvalidJobState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetJobManifestError::InvalidJobState(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(GetJobManifestError::InvalidResource(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetJobManifestError::InvalidResource(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1474,28 +1337,15 @@ pub enum GetJobUnlockCodeError {
 
 impl GetJobUnlockCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobUnlockCodeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidJobStateException" => {
-                    return RusotoError::Service(GetJobUnlockCodeError::InvalidJobState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetJobUnlockCodeError::InvalidJobState(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(GetJobUnlockCodeError::InvalidResource(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetJobUnlockCodeError::InvalidResource(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1521,18 +1371,9 @@ pub enum GetSnowballUsageError {}
 
 impl GetSnowballUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSnowballUsageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1560,28 +1401,15 @@ pub enum ListClusterJobsError {
 
 impl ListClusterJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClusterJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListClusterJobsError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListClusterJobsError::InvalidNextToken(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(ListClusterJobsError::InvalidResource(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListClusterJobsError::InvalidResource(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1610,23 +1438,12 @@ pub enum ListClustersError {
 
 impl ListClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClustersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListClustersError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListClustersError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1656,28 +1473,19 @@ pub enum ListCompatibleImagesError {
 
 impl ListCompatibleImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCompatibleImagesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "Ec2RequestFailedException" => {
                     return RusotoError::Service(ListCompatibleImagesError::Ec2RequestFailed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListCompatibleImagesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1706,23 +1514,12 @@ pub enum ListJobsError {
 
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListJobsError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListJobsError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1758,43 +1555,26 @@ pub enum UpdateClusterError {
 
 impl UpdateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "Ec2RequestFailedException" => {
-                    return RusotoError::Service(UpdateClusterError::Ec2RequestFailed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateClusterError::Ec2RequestFailed(err.msg))
                 }
                 "InvalidInputCombinationException" => {
                     return RusotoError::Service(UpdateClusterError::InvalidInputCombination(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidJobStateException" => {
-                    return RusotoError::Service(UpdateClusterError::InvalidJobState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateClusterError::InvalidJobState(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(UpdateClusterError::InvalidResource(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateClusterError::InvalidResource(err.msg))
                 }
                 "KMSRequestFailedException" => {
-                    return RusotoError::Service(UpdateClusterError::KMSRequestFailed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateClusterError::KMSRequestFailed(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1836,48 +1616,27 @@ pub enum UpdateJobError {
 
 impl UpdateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterLimitExceededException" => {
-                    return RusotoError::Service(UpdateJobError::ClusterLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateJobError::ClusterLimitExceeded(err.msg))
                 }
                 "Ec2RequestFailedException" => {
-                    return RusotoError::Service(UpdateJobError::Ec2RequestFailed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateJobError::Ec2RequestFailed(err.msg))
                 }
                 "InvalidInputCombinationException" => {
-                    return RusotoError::Service(UpdateJobError::InvalidInputCombination(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateJobError::InvalidInputCombination(err.msg))
                 }
                 "InvalidJobStateException" => {
-                    return RusotoError::Service(UpdateJobError::InvalidJobState(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateJobError::InvalidJobState(err.msg))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(UpdateJobError::InvalidResource(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateJobError::InvalidResource(err.msg))
                 }
                 "KMSRequestFailedException" => {
-                    return RusotoError::Service(UpdateJobError::KMSRequestFailed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateJobError::KMSRequestFailed(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

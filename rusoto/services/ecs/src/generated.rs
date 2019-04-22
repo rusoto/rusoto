@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>An object representing a container instance or task attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2749,33 +2748,18 @@ pub enum CreateClusterError {
 
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(CreateClusterError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateClusterError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateClusterError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateClusterError::InvalidParameter(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(CreateClusterError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateClusterError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2819,60 +2803,35 @@ pub enum CreateServiceError {
 
 impl CreateServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateServiceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateServiceError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateServiceError::AccessDenied(err.msg))
                 }
                 "ClientException" => {
-                    return RusotoError::Service(CreateServiceError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateServiceError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(CreateServiceError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateServiceError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateServiceError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateServiceError::InvalidParameter(err.msg))
                 }
                 "PlatformTaskDefinitionIncompatibilityException" => {
                     return RusotoError::Service(
-                        CreateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
-                            error_message,
-                        )),
+                        CreateServiceError::PlatformTaskDefinitionIncompatibility(err.msg),
                     )
                 }
                 "PlatformUnknownException" => {
-                    return RusotoError::Service(CreateServiceError::PlatformUnknown(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateServiceError::PlatformUnknown(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(CreateServiceError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateServiceError::Server(err.msg))
                 }
                 "UnsupportedFeatureException" => {
-                    return RusotoError::Service(CreateServiceError::UnsupportedFeature(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateServiceError::UnsupportedFeature(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2911,33 +2870,20 @@ pub enum DeleteAccountSettingError {
 
 impl DeleteAccountSettingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccountSettingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeleteAccountSettingError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAccountSettingError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteAccountSettingError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DeleteAccountSettingError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAccountSettingError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2971,33 +2917,18 @@ pub enum DeleteAttributesError {
 
 impl DeleteAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAttributesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(DeleteAttributesError::ClusterNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAttributesError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteAttributesError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAttributesError::InvalidParameter(err.msg))
                 }
                 "TargetNotFoundException" => {
-                    return RusotoError::Service(DeleteAttributesError::TargetNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAttributesError::TargetNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3039,55 +2970,34 @@ pub enum DeleteClusterError {
 
 impl DeleteClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeleteClusterError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteClusterError::Client(err.msg))
                 }
                 "ClusterContainsContainerInstancesException" => {
                     return RusotoError::Service(
-                        DeleteClusterError::ClusterContainsContainerInstances(String::from(
-                            error_message,
-                        )),
+                        DeleteClusterError::ClusterContainsContainerInstances(err.msg),
                     )
                 }
                 "ClusterContainsServicesException" => {
                     return RusotoError::Service(DeleteClusterError::ClusterContainsServices(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ClusterContainsTasksException" => {
-                    return RusotoError::Service(DeleteClusterError::ClusterContainsTasks(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteClusterError::ClusterContainsTasks(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(DeleteClusterError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteClusterError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteClusterError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteClusterError::InvalidParameter(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DeleteClusterError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteClusterError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3129,43 +3039,24 @@ pub enum DeleteServiceError {
 
 impl DeleteServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServiceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeleteServiceError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteServiceError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(DeleteServiceError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteServiceError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteServiceError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteServiceError::InvalidParameter(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DeleteServiceError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteServiceError::Server(err.msg))
                 }
                 "ServiceNotFoundException" => {
-                    return RusotoError::Service(DeleteServiceError::ServiceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteServiceError::ServiceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3205,40 +3096,25 @@ impl DeregisterContainerInstanceError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterContainerInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeregisterContainerInstanceError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeregisterContainerInstanceError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DeregisterContainerInstanceError::ClusterNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        DeregisterContainerInstanceError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        DeregisterContainerInstanceError::InvalidParameter(err.msg),
                     )
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DeregisterContainerInstanceError::Server(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeregisterContainerInstanceError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3273,33 +3149,20 @@ pub enum DeregisterTaskDefinitionError {
 
 impl DeregisterTaskDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterTaskDefinitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DeregisterTaskDefinitionError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeregisterTaskDefinitionError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeregisterTaskDefinitionError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DeregisterTaskDefinitionError::Server(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeregisterTaskDefinitionError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3333,33 +3196,18 @@ pub enum DescribeClustersError {
 
 impl DescribeClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeClustersError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeClustersError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeClustersError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeClustersError::InvalidParameter(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DescribeClustersError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeClustersError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3397,38 +3245,25 @@ impl DescribeContainerInstancesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeContainerInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeContainerInstancesError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeContainerInstancesError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DescribeContainerInstancesError::ClusterNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeContainerInstancesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DescribeContainerInstancesError::Server(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeContainerInstancesError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3465,38 +3300,21 @@ pub enum DescribeServicesError {
 
 impl DescribeServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeServicesError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeServicesError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(DescribeServicesError::ClusterNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeServicesError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeServicesError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeServicesError::InvalidParameter(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DescribeServicesError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeServicesError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3531,33 +3349,20 @@ pub enum DescribeTaskDefinitionError {
 
 impl DescribeTaskDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTaskDefinitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeTaskDefinitionError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeTaskDefinitionError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeTaskDefinitionError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DescribeTaskDefinitionError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeTaskDefinitionError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3593,38 +3398,21 @@ pub enum DescribeTasksError {
 
 impl DescribeTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTasksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DescribeTasksError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeTasksError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(DescribeTasksError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeTasksError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeTasksError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTasksError::InvalidParameter(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DescribeTasksError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeTasksError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3657,28 +3445,15 @@ pub enum DiscoverPollEndpointError {
 
 impl DiscoverPollEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DiscoverPollEndpointError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(DiscoverPollEndpointError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DiscoverPollEndpointError::Client(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DiscoverPollEndpointError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DiscoverPollEndpointError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3711,33 +3486,20 @@ pub enum ListAccountSettingsError {
 
 impl ListAccountSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountSettingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListAccountSettingsError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAccountSettingsError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListAccountSettingsError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(ListAccountSettingsError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAccountSettingsError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3769,28 +3531,15 @@ pub enum ListAttributesError {
 
 impl ListAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttributesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(ListAttributesError::ClusterNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAttributesError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListAttributesError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAttributesError::InvalidParameter(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3823,33 +3572,18 @@ pub enum ListClustersError {
 
 impl ListClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClustersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListClustersError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListClustersError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListClustersError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListClustersError::InvalidParameter(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(ListClustersError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListClustersError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3885,38 +3619,25 @@ pub enum ListContainerInstancesError {
 
 impl ListContainerInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContainerInstancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListContainerInstancesError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListContainerInstancesError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(ListContainerInstancesError::ClusterNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListContainerInstancesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(ListContainerInstancesError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListContainerInstancesError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3953,38 +3674,21 @@ pub enum ListServicesError {
 
 impl ListServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListServicesError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListServicesError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(ListServicesError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListServicesError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListServicesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListServicesError::InvalidParameter(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(ListServicesError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListServicesError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4021,38 +3725,23 @@ pub enum ListTagsForResourceError {
 
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListTagsForResourceError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsForResourceError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(ListTagsForResourceError::ClusterNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForResourceError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(ListTagsForResourceError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsForResourceError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4089,33 +3778,20 @@ impl ListTaskDefinitionFamiliesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTaskDefinitionFamiliesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListTaskDefinitionFamiliesError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTaskDefinitionFamiliesError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTaskDefinitionFamiliesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(ListTaskDefinitionFamiliesError::Server(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTaskDefinitionFamiliesError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4149,33 +3825,20 @@ pub enum ListTaskDefinitionsError {
 
 impl ListTaskDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTaskDefinitionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(ListTaskDefinitionsError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTaskDefinitionsError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTaskDefinitionsError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(ListTaskDefinitionsError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTaskDefinitionsError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4213,43 +3876,20 @@ pub enum ListTasksError {
 
 impl ListTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTasksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ClientException" => {
-                    return RusotoError::Service(ListTasksError::Client(String::from(
-                        error_message,
-                    )))
-                }
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => return RusotoError::Service(ListTasksError::Client(err.msg)),
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(ListTasksError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTasksError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListTasksError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTasksError::InvalidParameter(err.msg))
                 }
-                "ServerException" => {
-                    return RusotoError::Service(ListTasksError::Server(String::from(
-                        error_message,
-                    )))
-                }
+                "ServerException" => return RusotoError::Service(ListTasksError::Server(err.msg)),
                 "ServiceNotFoundException" => {
-                    return RusotoError::Service(ListTasksError::ServiceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTasksError::ServiceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4285,33 +3925,18 @@ pub enum PutAccountSettingError {
 
 impl PutAccountSettingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAccountSettingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(PutAccountSettingError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutAccountSettingError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(PutAccountSettingError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutAccountSettingError::InvalidParameter(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(PutAccountSettingError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutAccountSettingError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4345,33 +3970,20 @@ pub enum PutAccountSettingDefaultError {
 
 impl PutAccountSettingDefaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAccountSettingDefaultError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(PutAccountSettingDefaultError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutAccountSettingDefaultError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutAccountSettingDefaultError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(PutAccountSettingDefaultError::Server(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutAccountSettingDefaultError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4407,38 +4019,23 @@ pub enum PutAttributesError {
 
 impl PutAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAttributesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AttributeLimitExceededException" => {
                     return RusotoError::Service(PutAttributesError::AttributeLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(PutAttributesError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutAttributesError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(PutAttributesError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutAttributesError::InvalidParameter(err.msg))
                 }
                 "TargetNotFoundException" => {
-                    return RusotoError::Service(PutAttributesError::TargetNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutAttributesError::TargetNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4473,33 +4070,20 @@ pub enum RegisterContainerInstanceError {
 
 impl RegisterContainerInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterContainerInstanceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(RegisterContainerInstanceError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterContainerInstanceError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RegisterContainerInstanceError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(RegisterContainerInstanceError::Server(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterContainerInstanceError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4533,33 +4117,20 @@ pub enum RegisterTaskDefinitionError {
 
 impl RegisterTaskDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterTaskDefinitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(RegisterTaskDefinitionError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RegisterTaskDefinitionError::Client(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RegisterTaskDefinitionError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(RegisterTaskDefinitionError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RegisterTaskDefinitionError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4605,59 +4176,32 @@ pub enum RunTaskError {
 
 impl RunTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RunTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(RunTaskError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RunTaskError::AccessDenied(err.msg))
                 }
-                "BlockedException" => {
-                    return RusotoError::Service(RunTaskError::Blocked(String::from(error_message)))
-                }
-                "ClientException" => {
-                    return RusotoError::Service(RunTaskError::Client(String::from(error_message)))
-                }
+                "BlockedException" => return RusotoError::Service(RunTaskError::Blocked(err.msg)),
+                "ClientException" => return RusotoError::Service(RunTaskError::Client(err.msg)),
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(RunTaskError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RunTaskError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(RunTaskError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RunTaskError::InvalidParameter(err.msg))
                 }
                 "PlatformTaskDefinitionIncompatibilityException" => {
                     return RusotoError::Service(
-                        RunTaskError::PlatformTaskDefinitionIncompatibility(String::from(
-                            error_message,
-                        )),
+                        RunTaskError::PlatformTaskDefinitionIncompatibility(err.msg),
                     )
                 }
                 "PlatformUnknownException" => {
-                    return RusotoError::Service(RunTaskError::PlatformUnknown(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RunTaskError::PlatformUnknown(err.msg))
                 }
-                "ServerException" => {
-                    return RusotoError::Service(RunTaskError::Server(String::from(error_message)))
-                }
+                "ServerException" => return RusotoError::Service(RunTaskError::Server(err.msg)),
                 "UnsupportedFeatureException" => {
-                    return RusotoError::Service(RunTaskError::UnsupportedFeature(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RunTaskError::UnsupportedFeature(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4699,38 +4243,17 @@ pub enum StartTaskError {
 
 impl StartTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ClientException" => {
-                    return RusotoError::Service(StartTaskError::Client(String::from(
-                        error_message,
-                    )))
-                }
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => return RusotoError::Service(StartTaskError::Client(err.msg)),
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(StartTaskError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartTaskError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(StartTaskError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartTaskError::InvalidParameter(err.msg))
                 }
-                "ServerException" => {
-                    return RusotoError::Service(StartTaskError::Server(String::from(
-                        error_message,
-                    )))
-                }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ServerException" => return RusotoError::Service(StartTaskError::Server(err.msg)),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4767,34 +4290,17 @@ pub enum StopTaskError {
 
 impl StopTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ClientException" => {
-                    return RusotoError::Service(StopTaskError::Client(String::from(error_message)))
-                }
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => return RusotoError::Service(StopTaskError::Client(err.msg)),
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(StopTaskError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopTaskError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(StopTaskError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopTaskError::InvalidParameter(err.msg))
                 }
-                "ServerException" => {
-                    return RusotoError::Service(StopTaskError::Server(String::from(error_message)))
-                }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ServerException" => return RusotoError::Service(StopTaskError::Server(err.msg)),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4831,33 +4337,20 @@ impl SubmitContainerStateChangeError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<SubmitContainerStateChangeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SubmitContainerStateChangeError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ClientException" => {
-                    return RusotoError::Service(SubmitContainerStateChangeError::Client(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SubmitContainerStateChangeError::Client(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(SubmitContainerStateChangeError::Server(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SubmitContainerStateChangeError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4891,33 +4384,18 @@ pub enum SubmitTaskStateChangeError {
 
 impl SubmitTaskStateChangeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubmitTaskStateChangeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(SubmitTaskStateChangeError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SubmitTaskStateChangeError::AccessDenied(err.msg))
                 }
                 "ClientException" => {
-                    return RusotoError::Service(SubmitTaskStateChangeError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SubmitTaskStateChangeError::Client(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(SubmitTaskStateChangeError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SubmitTaskStateChangeError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4955,43 +4433,24 @@ pub enum TagResourceError {
 
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(TagResourceError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(TagResourceError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(TagResourceError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::InvalidParameter(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(TagResourceError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5031,43 +4490,24 @@ pub enum UntagResourceError {
 
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(UntagResourceError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UntagResourceError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(UntagResourceError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::Server(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5111,53 +4551,38 @@ pub enum UpdateContainerAgentError {
 
 impl UpdateContainerAgentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContainerAgentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
-                    return RusotoError::Service(UpdateContainerAgentError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateContainerAgentError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(UpdateContainerAgentError::ClusterNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateContainerAgentError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingVersionException" => {
-                    return RusotoError::Service(UpdateContainerAgentError::MissingVersion(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateContainerAgentError::MissingVersion(err.msg))
                 }
                 "NoUpdateAvailableException" => {
                     return RusotoError::Service(UpdateContainerAgentError::NoUpdateAvailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(UpdateContainerAgentError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateContainerAgentError::Server(err.msg))
                 }
                 "UpdateInProgressException" => {
                     return RusotoError::Service(UpdateContainerAgentError::UpdateInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5199,42 +4624,29 @@ impl UpdateContainerInstancesStateError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateContainerInstancesStateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateContainerInstancesStateError::Client(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(
-                        UpdateContainerInstancesStateError::ClusterNotFound(String::from(
-                            error_message,
-                        )),
+                        UpdateContainerInstancesStateError::ClusterNotFound(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        UpdateContainerInstancesStateError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        UpdateContainerInstancesStateError::InvalidParameter(err.msg),
                     )
                 }
                 "ServerException" => {
                     return RusotoError::Service(UpdateContainerInstancesStateError::Server(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5281,65 +4693,38 @@ pub enum UpdateServiceError {
 
 impl UpdateServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateServiceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UpdateServiceError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateServiceError::AccessDenied(err.msg))
                 }
                 "ClientException" => {
-                    return RusotoError::Service(UpdateServiceError::Client(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateServiceError::Client(err.msg))
                 }
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(UpdateServiceError::ClusterNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateServiceError::ClusterNotFound(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UpdateServiceError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateServiceError::InvalidParameter(err.msg))
                 }
                 "PlatformTaskDefinitionIncompatibilityException" => {
                     return RusotoError::Service(
-                        UpdateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
-                            error_message,
-                        )),
+                        UpdateServiceError::PlatformTaskDefinitionIncompatibility(err.msg),
                     )
                 }
                 "PlatformUnknownException" => {
-                    return RusotoError::Service(UpdateServiceError::PlatformUnknown(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateServiceError::PlatformUnknown(err.msg))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(UpdateServiceError::Server(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateServiceError::Server(err.msg))
                 }
                 "ServiceNotActiveException" => {
-                    return RusotoError::Service(UpdateServiceError::ServiceNotActive(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateServiceError::ServiceNotActive(err.msg))
                 }
                 "ServiceNotFoundException" => {
-                    return RusotoError::Service(UpdateServiceError::ServiceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateServiceError::ServiceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

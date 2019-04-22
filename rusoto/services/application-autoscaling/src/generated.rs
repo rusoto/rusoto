@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Represents a CloudWatch alarm associated with a scaling policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -641,33 +640,20 @@ pub enum DeleteScalingPolicyError {
 
 impl DeleteScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScalingPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::ConcurrentUpdate(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeleteScalingPolicyError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteScalingPolicyError::InternalService(err.msg))
                 }
                 "ObjectNotFoundException" => {
-                    return RusotoError::Service(DeleteScalingPolicyError::ObjectNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteScalingPolicyError::ObjectNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -701,33 +687,24 @@ pub enum DeleteScheduledActionError {
 
 impl DeleteScheduledActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScheduledActionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeleteScheduledActionError::ConcurrentUpdate(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteScheduledActionError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ObjectNotFoundException" => {
                     return RusotoError::Service(DeleteScheduledActionError::ObjectNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -761,33 +738,24 @@ pub enum DeregisterScalableTargetError {
 
 impl DeregisterScalableTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterScalableTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeregisterScalableTargetError::ConcurrentUpdate(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeregisterScalableTargetError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ObjectNotFoundException" => {
                     return RusotoError::Service(DeregisterScalableTargetError::ObjectNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -821,33 +789,24 @@ pub enum DescribeScalableTargetsError {
 
 impl DescribeScalableTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalableTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalableTargetsError::ConcurrentUpdate(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScalableTargetsError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeScalableTargetsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -881,33 +840,24 @@ pub enum DescribeScalingActivitiesError {
 
 impl DescribeScalingActivitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingActivitiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalingActivitiesError::ConcurrentUpdate(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScalingActivitiesError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeScalingActivitiesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -943,40 +893,29 @@ pub enum DescribeScalingPoliciesError {
 
 impl DescribeScalingPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingPoliciesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::ConcurrentUpdate(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "FailedResourceAccessException" => {
                     return RusotoError::Service(
-                        DescribeScalingPoliciesError::FailedResourceAccess(String::from(
-                            error_message,
-                        )),
+                        DescribeScalingPoliciesError::FailedResourceAccess(err.msg),
                     )
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1011,33 +950,24 @@ pub enum DescribeScheduledActionsError {
 
 impl DescribeScheduledActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScheduledActionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScheduledActionsError::ConcurrentUpdate(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScheduledActionsError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeScheduledActionsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1075,43 +1005,26 @@ pub enum PutScalingPolicyError {
 
 impl PutScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutScalingPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
-                    return RusotoError::Service(PutScalingPolicyError::ConcurrentUpdate(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutScalingPolicyError::ConcurrentUpdate(err.msg))
                 }
                 "FailedResourceAccessException" => {
                     return RusotoError::Service(PutScalingPolicyError::FailedResourceAccess(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(PutScalingPolicyError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutScalingPolicyError::InternalService(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PutScalingPolicyError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutScalingPolicyError::LimitExceeded(err.msg))
                 }
                 "ObjectNotFoundException" => {
-                    return RusotoError::Service(PutScalingPolicyError::ObjectNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutScalingPolicyError::ObjectNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1149,38 +1062,21 @@ pub enum PutScheduledActionError {
 
 impl PutScheduledActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutScheduledActionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
-                    return RusotoError::Service(PutScheduledActionError::ConcurrentUpdate(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutScheduledActionError::ConcurrentUpdate(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(PutScheduledActionError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutScheduledActionError::InternalService(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PutScheduledActionError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutScheduledActionError::LimitExceeded(err.msg))
                 }
                 "ObjectNotFoundException" => {
-                    return RusotoError::Service(PutScheduledActionError::ObjectNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutScheduledActionError::ObjectNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1215,33 +1111,24 @@ pub enum RegisterScalableTargetError {
 
 impl RegisterScalableTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterScalableTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(RegisterScalableTargetError::ConcurrentUpdate(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(RegisterScalableTargetError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RegisterScalableTargetError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Information for one billing record.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -881,28 +880,19 @@ pub enum CheckDomainAvailabilityError {
 
 impl CheckDomainAvailabilityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CheckDomainAvailabilityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(CheckDomainAvailabilityError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(CheckDomainAvailabilityError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -935,28 +925,19 @@ impl CheckDomainTransferabilityError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CheckDomainTransferabilityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(CheckDomainTransferabilityError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(CheckDomainTransferabilityError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -989,33 +970,20 @@ pub enum DeleteTagsForDomainError {
 
 impl DeleteTagsForDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsForDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(DeleteTagsForDomainError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTagsForDomainError::InvalidInput(err.msg))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(DeleteTagsForDomainError::OperationLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(DeleteTagsForDomainError::UnsupportedTLD(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTagsForDomainError::UnsupportedTLD(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1047,28 +1015,17 @@ pub enum DisableDomainAutoRenewError {
 
 impl DisableDomainAutoRenewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableDomainAutoRenewError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(DisableDomainAutoRenewError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisableDomainAutoRenewError::InvalidInput(err.msg))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(DisableDomainAutoRenewError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1105,45 +1062,34 @@ pub enum DisableDomainTransferLockError {
 
 impl DisableDomainTransferLockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableDomainTransferLockError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(DisableDomainTransferLockError::DuplicateRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(DisableDomainTransferLockError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
-                        DisableDomainTransferLockError::OperationLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        DisableDomainTransferLockError::OperationLimitExceeded(err.msg),
                     )
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(DisableDomainTransferLockError::TLDRulesViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(DisableDomainTransferLockError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1179,33 +1125,22 @@ pub enum EnableDomainAutoRenewError {
 
 impl EnableDomainAutoRenewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableDomainAutoRenewError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(EnableDomainAutoRenewError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableDomainAutoRenewError::InvalidInput(err.msg))
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(EnableDomainAutoRenewError::TLDRulesViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(EnableDomainAutoRenewError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1243,45 +1178,34 @@ pub enum EnableDomainTransferLockError {
 
 impl EnableDomainTransferLockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableDomainTransferLockError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(EnableDomainTransferLockError::DuplicateRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(EnableDomainTransferLockError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
-                        EnableDomainTransferLockError::OperationLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        EnableDomainTransferLockError::OperationLimitExceeded(err.msg),
                     )
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(EnableDomainTransferLockError::TLDRulesViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(EnableDomainTransferLockError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1319,35 +1243,24 @@ impl GetContactReachabilityStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetContactReachabilityStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(GetContactReachabilityStatusError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
-                        GetContactReachabilityStatusError::OperationLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        GetContactReachabilityStatusError::OperationLimitExceeded(err.msg),
                     )
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(GetContactReachabilityStatusError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1379,28 +1292,15 @@ pub enum GetDomainDetailError {
 
 impl GetDomainDetailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainDetailError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(GetDomainDetailError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDomainDetailError::InvalidInput(err.msg))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(GetDomainDetailError::UnsupportedTLD(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDomainDetailError::UnsupportedTLD(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1431,28 +1331,15 @@ pub enum GetDomainSuggestionsError {
 
 impl GetDomainSuggestionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainSuggestionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(GetDomainSuggestionsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDomainSuggestionsError::InvalidInput(err.msg))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(GetDomainSuggestionsError::UnsupportedTLD(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDomainSuggestionsError::UnsupportedTLD(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1481,23 +1368,12 @@ pub enum GetOperationDetailError {
 
 impl GetOperationDetailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationDetailError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(GetOperationDetailError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetOperationDetailError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1525,23 +1401,12 @@ pub enum ListDomainsError {
 
 impl ListDomainsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(ListDomainsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDomainsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1569,23 +1434,12 @@ pub enum ListOperationsError {
 
 impl ListOperationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOperationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(ListOperationsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListOperationsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1617,33 +1471,20 @@ pub enum ListTagsForDomainError {
 
 impl ListTagsForDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(ListTagsForDomainError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForDomainError::InvalidInput(err.msg))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(ListTagsForDomainError::OperationLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(ListTagsForDomainError::UnsupportedTLD(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForDomainError::UnsupportedTLD(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1683,48 +1524,29 @@ pub enum RegisterDomainError {
 
 impl RegisterDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DomainLimitExceeded" => {
-                    return RusotoError::Service(RegisterDomainError::DomainLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterDomainError::DomainLimitExceeded(err.msg))
                 }
                 "DuplicateRequest" => {
-                    return RusotoError::Service(RegisterDomainError::DuplicateRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterDomainError::DuplicateRequest(err.msg))
                 }
                 "InvalidInput" => {
-                    return RusotoError::Service(RegisterDomainError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RegisterDomainError::InvalidInput(err.msg))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(RegisterDomainError::OperationLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TLDRulesViolation" => {
-                    return RusotoError::Service(RegisterDomainError::TLDRulesViolation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterDomainError::TLDRulesViolation(err.msg))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(RegisterDomainError::UnsupportedTLD(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RegisterDomainError::UnsupportedTLD(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1765,43 +1587,24 @@ pub enum RenewDomainError {
 
 impl RenewDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RenewDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateRequest" => {
-                    return RusotoError::Service(RenewDomainError::DuplicateRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RenewDomainError::DuplicateRequest(err.msg))
                 }
                 "InvalidInput" => {
-                    return RusotoError::Service(RenewDomainError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RenewDomainError::InvalidInput(err.msg))
                 }
                 "OperationLimitExceeded" => {
-                    return RusotoError::Service(RenewDomainError::OperationLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RenewDomainError::OperationLimitExceeded(err.msg))
                 }
                 "TLDRulesViolation" => {
-                    return RusotoError::Service(RenewDomainError::TLDRulesViolation(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RenewDomainError::TLDRulesViolation(err.msg))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(RenewDomainError::UnsupportedTLD(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RenewDomainError::UnsupportedTLD(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1839,37 +1642,24 @@ impl ResendContactReachabilityEmailError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ResendContactReachabilityEmailError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ResendContactReachabilityEmailError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
-                        ResendContactReachabilityEmailError::OperationLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        ResendContactReachabilityEmailError::OperationLimitExceeded(err.msg),
                     )
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(
-                        ResendContactReachabilityEmailError::UnsupportedTLD(String::from(
-                            error_message,
-                        )),
+                        ResendContactReachabilityEmailError::UnsupportedTLD(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1901,28 +1691,17 @@ pub enum RetrieveDomainAuthCodeError {
 
 impl RetrieveDomainAuthCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetrieveDomainAuthCodeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(RetrieveDomainAuthCodeError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RetrieveDomainAuthCodeError::InvalidInput(err.msg))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(RetrieveDomainAuthCodeError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1961,48 +1740,29 @@ pub enum TransferDomainError {
 
 impl TransferDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransferDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DomainLimitExceeded" => {
-                    return RusotoError::Service(TransferDomainError::DomainLimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TransferDomainError::DomainLimitExceeded(err.msg))
                 }
                 "DuplicateRequest" => {
-                    return RusotoError::Service(TransferDomainError::DuplicateRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TransferDomainError::DuplicateRequest(err.msg))
                 }
                 "InvalidInput" => {
-                    return RusotoError::Service(TransferDomainError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TransferDomainError::InvalidInput(err.msg))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(TransferDomainError::OperationLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TLDRulesViolation" => {
-                    return RusotoError::Service(TransferDomainError::TLDRulesViolation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(TransferDomainError::TLDRulesViolation(err.msg))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(TransferDomainError::UnsupportedTLD(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TransferDomainError::UnsupportedTLD(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2043,43 +1803,30 @@ pub enum UpdateDomainContactError {
 
 impl UpdateDomainContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainContactError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateDomainContactError::DuplicateRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInput" => {
-                    return RusotoError::Service(UpdateDomainContactError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDomainContactError::InvalidInput(err.msg))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(UpdateDomainContactError::OperationLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(UpdateDomainContactError::TLDRulesViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(UpdateDomainContactError::UnsupportedTLD(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDomainContactError::UnsupportedTLD(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2121,47 +1868,34 @@ impl UpdateDomainContactPrivacyError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDomainContactPrivacyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateDomainContactPrivacyError::DuplicateRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(UpdateDomainContactPrivacyError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
-                        UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        UpdateDomainContactPrivacyError::OperationLimitExceeded(err.msg),
                     )
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(
-                        UpdateDomainContactPrivacyError::TLDRulesViolation(String::from(
-                            error_message,
-                        )),
+                        UpdateDomainContactPrivacyError::TLDRulesViolation(err.msg),
                     )
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(UpdateDomainContactPrivacyError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2201,45 +1935,34 @@ pub enum UpdateDomainNameserversError {
 
 impl UpdateDomainNameserversError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainNameserversError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateDomainNameserversError::DuplicateRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(UpdateDomainNameserversError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(
-                        UpdateDomainNameserversError::OperationLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        UpdateDomainNameserversError::OperationLimitExceeded(err.msg),
                     )
                 }
                 "TLDRulesViolation" => {
                     return RusotoError::Service(UpdateDomainNameserversError::TLDRulesViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
                     return RusotoError::Service(UpdateDomainNameserversError::UnsupportedTLD(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2275,33 +1998,20 @@ pub enum UpdateTagsForDomainError {
 
 impl UpdateTagsForDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTagsForDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(UpdateTagsForDomainError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTagsForDomainError::InvalidInput(err.msg))
                 }
                 "OperationLimitExceeded" => {
                     return RusotoError::Service(UpdateTagsForDomainError::OperationLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedTLD" => {
-                    return RusotoError::Service(UpdateTagsForDomainError::UnsupportedTLD(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTagsForDomainError::UnsupportedTLD(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2331,23 +2041,12 @@ pub enum ViewBillingError {
 
 impl ViewBillingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ViewBillingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidInput" => {
-                    return RusotoError::Service(ViewBillingError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ViewBillingError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

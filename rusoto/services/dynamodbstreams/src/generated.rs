@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -389,28 +388,15 @@ pub enum DescribeStreamError {
 
 impl DescribeStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DescribeStreamError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeStreamError::InternalServerError(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeStreamError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeStreamError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -447,43 +433,24 @@ pub enum GetRecordsError {
 
 impl GetRecordsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRecordsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ExpiredIteratorException" => {
-                    return RusotoError::Service(GetRecordsError::ExpiredIterator(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRecordsError::ExpiredIterator(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(GetRecordsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRecordsError::InternalServerError(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetRecordsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRecordsError::LimitExceeded(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetRecordsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRecordsError::ResourceNotFound(err.msg))
                 }
                 "TrimmedDataAccessException" => {
-                    return RusotoError::Service(GetRecordsError::TrimmedDataAccess(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRecordsError::TrimmedDataAccess(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -519,33 +486,20 @@ pub enum GetShardIteratorError {
 
 impl GetShardIteratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetShardIteratorError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetShardIteratorError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetShardIteratorError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetShardIteratorError::ResourceNotFound(err.msg))
                 }
                 "TrimmedDataAccessException" => {
-                    return RusotoError::Service(GetShardIteratorError::TrimmedDataAccess(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetShardIteratorError::TrimmedDataAccess(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -577,28 +531,15 @@ pub enum ListStreamsError {
 
 impl ListStreamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListStreamsError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListStreamsError::InternalServerError(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListStreamsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListStreamsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

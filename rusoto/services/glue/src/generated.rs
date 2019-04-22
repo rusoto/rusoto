@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Action {
@@ -3883,55 +3882,36 @@ pub enum BatchCreatePartitionError {
 
 impl BatchCreatePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchCreatePartitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(BatchCreatePartitionError::AlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchCreatePartitionError::AlreadyExists(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(BatchCreatePartitionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchCreatePartitionError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(BatchCreatePartitionError::GlueEncryption(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchCreatePartitionError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchCreatePartitionError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(BatchCreatePartitionError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchCreatePartitionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchCreatePartitionError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(
-                        BatchCreatePartitionError::ResourceNumberLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        BatchCreatePartitionError::ResourceNumberLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3967,28 +3947,19 @@ pub enum BatchDeleteConnectionError {
 
 impl BatchDeleteConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchDeleteConnectionError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchDeleteConnectionError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4023,38 +3994,25 @@ pub enum BatchDeletePartitionError {
 
 impl BatchDeletePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeletePartitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(BatchDeletePartitionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDeletePartitionError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchDeletePartitionError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(BatchDeletePartitionError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDeletePartitionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchDeletePartitionError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4091,38 +4049,21 @@ pub enum BatchDeleteTableError {
 
 impl BatchDeleteTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteTableError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(BatchDeleteTableError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDeleteTableError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(BatchDeleteTableError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDeleteTableError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(BatchDeleteTableError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(BatchDeleteTableError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(BatchDeleteTableError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchDeleteTableError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4159,38 +4100,29 @@ pub enum BatchDeleteTableVersionError {
 
 impl BatchDeleteTableVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteTableVersionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchDeleteTableVersionError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchDeleteTableVersionError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchDeleteTableVersionError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(BatchDeleteTableVersionError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4229,43 +4161,24 @@ pub enum BatchGetPartitionError {
 
 impl BatchGetPartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetPartitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(BatchGetPartitionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchGetPartitionError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(BatchGetPartitionError::GlueEncryption(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchGetPartitionError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(BatchGetPartitionError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchGetPartitionError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(BatchGetPartitionError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchGetPartitionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(BatchGetPartitionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(BatchGetPartitionError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4301,33 +4214,20 @@ pub enum GlueBatchStopJobRunError {
 
 impl GlueBatchStopJobRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GlueBatchStopJobRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(GlueBatchStopJobRunError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GlueBatchStopJobRunError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GlueBatchStopJobRunError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GlueBatchStopJobRunError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GlueBatchStopJobRunError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4361,33 +4261,18 @@ pub enum CreateClassifierError {
 
 impl CreateClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClassifierError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateClassifierError::AlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateClassifierError::AlreadyExists(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateClassifierError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateClassifierError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateClassifierError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateClassifierError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4425,45 +4310,26 @@ pub enum CreateConnectionError {
 
 impl CreateConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateConnectionError::AlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateConnectionError::AlreadyExists(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(CreateConnectionError::GlueEncryption(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateConnectionError::GlueEncryption(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateConnectionError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateConnectionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateConnectionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateConnectionError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateConnectionError::ResourceNumberLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateConnectionError::ResourceNumberLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4501,38 +4367,23 @@ pub enum CreateCrawlerError {
 
 impl CreateCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCrawlerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateCrawlerError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateCrawlerError::AlreadyExists(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateCrawlerError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateCrawlerError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateCrawlerError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateCrawlerError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateCrawlerError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4573,48 +4424,29 @@ pub enum CreateDatabaseError {
 
 impl CreateDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateDatabaseError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDatabaseError::AlreadyExists(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(CreateDatabaseError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDatabaseError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(CreateDatabaseError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDatabaseError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateDatabaseError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateDatabaseError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateDatabaseError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDatabaseError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateDatabaseError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4659,57 +4491,34 @@ pub enum CreateDevEndpointError {
 
 impl CreateDevEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDevEndpointError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateDevEndpointError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDevEndpointError::AccessDenied(err.msg))
                 }
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateDevEndpointError::AlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDevEndpointError::AlreadyExists(err.msg))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
-                        CreateDevEndpointError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        )),
+                        CreateDevEndpointError::IdempotentParameterMismatch(err.msg),
                     )
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(CreateDevEndpointError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDevEndpointError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateDevEndpointError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDevEndpointError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateDevEndpointError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateDevEndpointError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateDevEndpointError::ResourceNumberLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateDevEndpointError::ResourceNumberLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4755,53 +4564,34 @@ pub enum CreateJobError {
 
 impl CreateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateJobError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateJobError::AlreadyExists(err.msg))
                 }
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(CreateJobError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateJobError::ConcurrentModification(err.msg))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(CreateJobError::IdempotentParameterMismatch(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(CreateJobError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateJobError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateJobError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateJobError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateJobError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateJobError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateJobError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4847,53 +4637,32 @@ pub enum CreatePartitionError {
 
 impl CreatePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePartitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreatePartitionError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreatePartitionError::AlreadyExists(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(CreatePartitionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreatePartitionError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(CreatePartitionError::GlueEncryption(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreatePartitionError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(CreatePartitionError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreatePartitionError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreatePartitionError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreatePartitionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreatePartitionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreatePartitionError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreatePartitionError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4931,33 +4700,18 @@ pub enum CreateScriptError {
 
 impl CreateScriptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateScriptError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(CreateScriptError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateScriptError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateScriptError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateScriptError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateScriptError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateScriptError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4997,47 +4751,34 @@ impl CreateSecurityConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSecurityConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::AlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(
-                        CreateSecurityConfigurationError::OperationTimeout(String::from(
-                            error_message,
-                        )),
+                        CreateSecurityConfigurationError::OperationTimeout(err.msg),
                     )
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateSecurityConfigurationError::ResourceNumberLimitExceeded(
-                            String::from(error_message),
-                        ),
+                        CreateSecurityConfigurationError::ResourceNumberLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5081,53 +4822,32 @@ pub enum CreateTableError {
 
 impl CreateTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTableError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateTableError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTableError::AlreadyExists(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(CreateTableError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTableError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(CreateTableError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTableError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(CreateTableError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTableError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateTableError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTableError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateTableError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTableError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateTableError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5173,53 +4893,36 @@ pub enum CreateTriggerError {
 
 impl CreateTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTriggerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateTriggerError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTriggerError::AlreadyExists(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateTriggerError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(CreateTriggerError::IdempotentParameterMismatch(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(CreateTriggerError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTriggerError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateTriggerError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateTriggerError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(CreateTriggerError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTriggerError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(CreateTriggerError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5265,55 +4968,44 @@ pub enum CreateUserDefinedFunctionError {
 
 impl CreateUserDefinedFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserDefinedFunctionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::AlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "EntityNotFoundException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::GlueEncryption(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(
-                        CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5349,28 +5041,15 @@ pub enum DeleteClassifierError {
 
 impl DeleteClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClassifierError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeleteClassifierError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteClassifierError::EntityNotFound(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteClassifierError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteClassifierError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5401,28 +5080,15 @@ pub enum DeleteConnectionError {
 
 impl DeleteConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeleteConnectionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteConnectionError::EntityNotFound(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteConnectionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteConnectionError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5457,38 +5123,23 @@ pub enum DeleteCrawlerError {
 
 impl DeleteCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCrawlerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CrawlerRunningException" => {
-                    return RusotoError::Service(DeleteCrawlerError::CrawlerRunning(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteCrawlerError::CrawlerRunning(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeleteCrawlerError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteCrawlerError::EntityNotFound(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteCrawlerError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteCrawlerError::OperationTimeout(err.msg))
                 }
                 "SchedulerTransitioningException" => {
                     return RusotoError::Service(DeleteCrawlerError::SchedulerTransitioning(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5525,38 +5176,21 @@ pub enum DeleteDatabaseError {
 
 impl DeleteDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeleteDatabaseError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDatabaseError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeleteDatabaseError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDatabaseError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteDatabaseError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDatabaseError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteDatabaseError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDatabaseError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5593,38 +5227,21 @@ pub enum DeleteDevEndpointError {
 
 impl DeleteDevEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDevEndpointError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeleteDevEndpointError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDevEndpointError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeleteDevEndpointError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDevEndpointError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteDevEndpointError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDevEndpointError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteDevEndpointError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDevEndpointError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5659,33 +5276,18 @@ pub enum DeleteJobError {
 
 impl DeleteJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeleteJobError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteJobError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteJobError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteJobError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteJobError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteJobError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5721,38 +5323,21 @@ pub enum DeletePartitionError {
 
 impl DeletePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePartitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeletePartitionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeletePartitionError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeletePartitionError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeletePartitionError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeletePartitionError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeletePartitionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeletePartitionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeletePartitionError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5791,43 +5376,30 @@ pub enum DeleteResourcePolicyError {
 
 impl DeleteResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourcePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConditionCheckFailureException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::ConditionCheckFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeleteResourcePolicyError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteResourcePolicyError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteResourcePolicyError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteResourcePolicyError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5867,40 +5439,29 @@ impl DeleteSecurityConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteSecurityConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(
-                        DeleteSecurityConfigurationError::OperationTimeout(String::from(
-                            error_message,
-                        )),
+                        DeleteSecurityConfigurationError::OperationTimeout(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5937,38 +5498,21 @@ pub enum DeleteTableError {
 
 impl DeleteTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTableError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeleteTableError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTableError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeleteTableError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTableError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteTableError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTableError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteTableError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTableError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6005,38 +5549,21 @@ pub enum DeleteTableVersionError {
 
 impl DeleteTableVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTableVersionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(DeleteTableVersionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTableVersionError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeleteTableVersionError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTableVersionError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteTableVersionError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTableVersionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteTableVersionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTableVersionError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6073,38 +5600,23 @@ pub enum DeleteTriggerError {
 
 impl DeleteTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTriggerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteTriggerError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeleteTriggerError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTriggerError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteTriggerError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteTriggerError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(DeleteTriggerError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTriggerError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6141,38 +5653,29 @@ pub enum DeleteUserDefinedFunctionError {
 
 impl DeleteUserDefinedFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserDefinedFunctionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteUserDefinedFunctionError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteUserDefinedFunctionError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteUserDefinedFunctionError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(DeleteUserDefinedFunctionError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6205,28 +5708,19 @@ pub enum GetCatalogImportStatusError {
 
 impl GetCatalogImportStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCatalogImportStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetCatalogImportStatusError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetCatalogImportStatusError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6257,28 +5751,15 @@ pub enum GetClassifierError {
 
 impl GetClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClassifierError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetClassifierError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetClassifierError::EntityNotFound(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetClassifierError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetClassifierError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6307,23 +5788,12 @@ pub enum GetClassifiersError {
 
 impl GetClassifiersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClassifiersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetClassifiersError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetClassifiersError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6357,38 +5827,21 @@ pub enum GetConnectionError {
 
 impl GetConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetConnectionError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetConnectionError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetConnectionError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetConnectionError::GlueEncryption(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetConnectionError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetConnectionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetConnectionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetConnectionError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6425,38 +5878,21 @@ pub enum GetConnectionsError {
 
 impl GetConnectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetConnectionsError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetConnectionsError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetConnectionsError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetConnectionsError::GlueEncryption(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetConnectionsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetConnectionsError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetConnectionsError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetConnectionsError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6489,28 +5925,15 @@ pub enum GetCrawlerError {
 
 impl GetCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCrawlerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetCrawlerError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCrawlerError::EntityNotFound(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetCrawlerError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCrawlerError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6539,23 +5962,12 @@ pub enum GetCrawlerMetricsError {
 
 impl GetCrawlerMetricsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCrawlerMetricsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetCrawlerMetricsError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCrawlerMetricsError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6583,23 +5995,12 @@ pub enum GetCrawlersError {
 
 impl GetCrawlersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCrawlersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetCrawlersError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCrawlersError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6633,39 +6034,24 @@ impl GetDataCatalogEncryptionSettingsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDataCatalogEncryptionSettingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
-                        GetDataCatalogEncryptionSettingsError::InternalService(String::from(
-                            error_message,
-                        )),
+                        GetDataCatalogEncryptionSettingsError::InternalService(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        GetDataCatalogEncryptionSettingsError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        GetDataCatalogEncryptionSettingsError::InvalidInput(err.msg),
                     )
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(
-                        GetDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
-                            error_message,
-                        )),
+                        GetDataCatalogEncryptionSettingsError::OperationTimeout(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6703,43 +6089,24 @@ pub enum GetDatabaseError {
 
 impl GetDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetDatabaseError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDatabaseError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetDatabaseError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDatabaseError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetDatabaseError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDatabaseError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDatabaseError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDatabaseError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetDatabaseError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDatabaseError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6777,38 +6144,21 @@ pub enum GetDatabasesError {
 
 impl GetDatabasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDatabasesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetDatabasesError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDatabasesError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetDatabasesError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDatabasesError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDatabasesError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDatabasesError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetDatabasesError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDatabasesError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6843,33 +6193,18 @@ pub enum GetDataflowGraphError {
 
 impl GetDataflowGraphError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataflowGraphError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetDataflowGraphError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDataflowGraphError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDataflowGraphError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDataflowGraphError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetDataflowGraphError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDataflowGraphError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6905,38 +6240,21 @@ pub enum GetDevEndpointError {
 
 impl GetDevEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevEndpointError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetDevEndpointError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDevEndpointError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetDevEndpointError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDevEndpointError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDevEndpointError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDevEndpointError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetDevEndpointError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDevEndpointError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6973,38 +6291,21 @@ pub enum GetDevEndpointsError {
 
 impl GetDevEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevEndpointsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetDevEndpointsError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDevEndpointsError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetDevEndpointsError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDevEndpointsError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetDevEndpointsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDevEndpointsError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetDevEndpointsError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDevEndpointsError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7041,38 +6342,21 @@ pub enum GetJobError {
 
 impl GetJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetJobError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetJobError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetJobError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetJobError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7109,38 +6393,21 @@ pub enum GetJobRunError {
 
 impl GetJobRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetJobRunError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobRunError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetJobRunError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobRunError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetJobRunError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobRunError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetJobRunError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobRunError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7177,38 +6444,21 @@ pub enum GetJobRunsError {
 
 impl GetJobRunsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobRunsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetJobRunsError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobRunsError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetJobRunsError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobRunsError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetJobRunsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobRunsError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetJobRunsError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobRunsError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7245,38 +6495,21 @@ pub enum GetJobsError {
 
 impl GetJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetJobsError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobsError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetJobsError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobsError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetJobsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobsError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetJobsError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobsError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7313,38 +6546,21 @@ pub enum GetMappingError {
 
 impl GetMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMappingError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetMappingError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetMappingError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetMappingError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetMappingError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetMappingError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetMappingError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetMappingError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetMappingError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7383,43 +6599,24 @@ pub enum GetPartitionError {
 
 impl GetPartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPartitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetPartitionError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPartitionError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetPartitionError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPartitionError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetPartitionError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPartitionError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetPartitionError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPartitionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetPartitionError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPartitionError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7459,43 +6656,24 @@ pub enum GetPartitionsError {
 
 impl GetPartitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPartitionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetPartitionsError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPartitionsError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetPartitionsError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPartitionsError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetPartitionsError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPartitionsError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetPartitionsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPartitionsError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetPartitionsError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetPartitionsError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7531,33 +6709,18 @@ pub enum GetPlanError {
 
 impl GetPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPlanError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetPlanError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPlanError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetPlanError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPlanError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetPlanError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPlanError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7593,38 +6756,21 @@ pub enum GetResourcePolicyError {
 
 impl GetResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetResourcePolicyError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetResourcePolicyError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetResourcePolicyError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetResourcePolicyError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetResourcePolicyError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetResourcePolicyError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetResourcePolicyError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetResourcePolicyError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7661,38 +6807,29 @@ pub enum GetSecurityConfigurationError {
 
 impl GetSecurityConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSecurityConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetSecurityConfigurationError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetSecurityConfigurationError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetSecurityConfigurationError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetSecurityConfigurationError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7729,38 +6866,29 @@ pub enum GetSecurityConfigurationsError {
 
 impl GetSecurityConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSecurityConfigurationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetSecurityConfigurationsError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetSecurityConfigurationsError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetSecurityConfigurationsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetSecurityConfigurationsError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7799,43 +6927,24 @@ pub enum GetTableError {
 
 impl GetTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetTableError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTableError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetTableError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTableError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetTableError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTableError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetTableError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTableError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetTableError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTableError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7875,43 +6984,24 @@ pub enum GetTableVersionError {
 
 impl GetTableVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableVersionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetTableVersionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTableVersionError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetTableVersionError::GlueEncryption(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTableVersionError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetTableVersionError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTableVersionError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetTableVersionError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTableVersionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetTableVersionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTableVersionError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7951,43 +7041,24 @@ pub enum GetTableVersionsError {
 
 impl GetTableVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableVersionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetTableVersionsError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTableVersionsError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetTableVersionsError::GlueEncryption(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTableVersionsError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetTableVersionsError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTableVersionsError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetTableVersionsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTableVersionsError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetTableVersionsError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTableVersionsError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8027,43 +7098,24 @@ pub enum GetTablesError {
 
 impl GetTablesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTablesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetTablesError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTablesError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(GetTablesError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTablesError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetTablesError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTablesError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetTablesError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTablesError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetTablesError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTablesError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8101,38 +7153,21 @@ pub enum GetTriggerError {
 
 impl GetTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTriggerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetTriggerError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTriggerError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetTriggerError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTriggerError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetTriggerError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTriggerError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetTriggerError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTriggerError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8169,38 +7204,21 @@ pub enum GetTriggersError {
 
 impl GetTriggersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTriggersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(GetTriggersError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTriggersError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetTriggersError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTriggersError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetTriggersError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTriggersError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(GetTriggersError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTriggersError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8239,43 +7257,32 @@ pub enum GetUserDefinedFunctionError {
 
 impl GetUserDefinedFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserDefinedFunctionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::GlueEncryption(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetUserDefinedFunctionError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetUserDefinedFunctionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8315,43 +7322,34 @@ pub enum GetUserDefinedFunctionsError {
 
 impl GetUserDefinedFunctionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserDefinedFunctionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::GlueEncryption(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8385,28 +7383,17 @@ pub enum ImportCatalogToGlueError {
 
 impl ImportCatalogToGlueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportCatalogToGlueError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(ImportCatalogToGlueError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ImportCatalogToGlueError::InternalService(err.msg))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(ImportCatalogToGlueError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8441,39 +7428,24 @@ impl PutDataCatalogEncryptionSettingsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<PutDataCatalogEncryptionSettingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
-                        PutDataCatalogEncryptionSettingsError::InternalService(String::from(
-                            error_message,
-                        )),
+                        PutDataCatalogEncryptionSettingsError::InternalService(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        PutDataCatalogEncryptionSettingsError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        PutDataCatalogEncryptionSettingsError::InvalidInput(err.msg),
                     )
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(
-                        PutDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
-                            error_message,
-                        )),
+                        PutDataCatalogEncryptionSettingsError::OperationTimeout(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8511,43 +7483,26 @@ pub enum PutResourcePolicyError {
 
 impl PutResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourcePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConditionCheckFailureException" => {
                     return RusotoError::Service(PutResourcePolicyError::ConditionCheckFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(PutResourcePolicyError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutResourcePolicyError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(PutResourcePolicyError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutResourcePolicyError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(PutResourcePolicyError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutResourcePolicyError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(PutResourcePolicyError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutResourcePolicyError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8585,38 +7540,21 @@ pub enum ResetJobBookmarkError {
 
 impl ResetJobBookmarkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetJobBookmarkError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(ResetJobBookmarkError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResetJobBookmarkError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(ResetJobBookmarkError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResetJobBookmarkError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ResetJobBookmarkError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResetJobBookmarkError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(ResetJobBookmarkError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResetJobBookmarkError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8651,33 +7589,18 @@ pub enum StartCrawlerError {
 
 impl StartCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartCrawlerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CrawlerRunningException" => {
-                    return RusotoError::Service(StartCrawlerError::CrawlerRunning(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartCrawlerError::CrawlerRunning(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(StartCrawlerError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartCrawlerError::EntityNotFound(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(StartCrawlerError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartCrawlerError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8715,43 +7638,30 @@ pub enum StartCrawlerScheduleError {
 
 impl StartCrawlerScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartCrawlerScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(StartCrawlerScheduleError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartCrawlerScheduleError::EntityNotFound(err.msg))
                 }
                 "NoScheduleException" => {
-                    return RusotoError::Service(StartCrawlerScheduleError::NoSchedule(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartCrawlerScheduleError::NoSchedule(err.msg))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(StartCrawlerScheduleError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SchedulerRunningException" => {
                     return RusotoError::Service(StartCrawlerScheduleError::SchedulerRunning(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SchedulerTransitioningException" => {
                     return RusotoError::Service(StartCrawlerScheduleError::SchedulerTransitioning(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8793,48 +7703,29 @@ pub enum StartJobRunError {
 
 impl StartJobRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartJobRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentRunsExceededException" => {
-                    return RusotoError::Service(StartJobRunError::ConcurrentRunsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartJobRunError::ConcurrentRunsExceeded(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(StartJobRunError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartJobRunError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(StartJobRunError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartJobRunError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StartJobRunError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartJobRunError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(StartJobRunError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartJobRunError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(StartJobRunError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8877,48 +7768,29 @@ pub enum StartTriggerError {
 
 impl StartTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTriggerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentRunsExceededException" => {
-                    return RusotoError::Service(StartTriggerError::ConcurrentRunsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartTriggerError::ConcurrentRunsExceeded(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(StartTriggerError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartTriggerError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(StartTriggerError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartTriggerError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StartTriggerError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartTriggerError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(StartTriggerError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartTriggerError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(StartTriggerError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8957,38 +7829,21 @@ pub enum StopCrawlerError {
 
 impl StopCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopCrawlerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CrawlerNotRunningException" => {
-                    return RusotoError::Service(StopCrawlerError::CrawlerNotRunning(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopCrawlerError::CrawlerNotRunning(err.msg))
                 }
                 "CrawlerStoppingException" => {
-                    return RusotoError::Service(StopCrawlerError::CrawlerStopping(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopCrawlerError::CrawlerStopping(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(StopCrawlerError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopCrawlerError::EntityNotFound(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(StopCrawlerError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopCrawlerError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9025,38 +7880,27 @@ pub enum StopCrawlerScheduleError {
 
 impl StopCrawlerScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopCrawlerScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(StopCrawlerScheduleError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopCrawlerScheduleError::EntityNotFound(err.msg))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(StopCrawlerScheduleError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SchedulerNotRunningException" => {
                     return RusotoError::Service(StopCrawlerScheduleError::SchedulerNotRunning(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SchedulerTransitioningException" => {
                     return RusotoError::Service(StopCrawlerScheduleError::SchedulerTransitioning(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9095,43 +7939,24 @@ pub enum StopTriggerError {
 
 impl StopTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopTriggerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(StopTriggerError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopTriggerError::ConcurrentModification(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(StopTriggerError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopTriggerError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(StopTriggerError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopTriggerError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StopTriggerError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopTriggerError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(StopTriggerError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopTriggerError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9169,38 +7994,21 @@ pub enum UpdateClassifierError {
 
 impl UpdateClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClassifierError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdateClassifierError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateClassifierError::EntityNotFound(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateClassifierError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateClassifierError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateClassifierError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateClassifierError::OperationTimeout(err.msg))
                 }
                 "VersionMismatchException" => {
-                    return RusotoError::Service(UpdateClassifierError::VersionMismatch(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateClassifierError::VersionMismatch(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9237,38 +8045,21 @@ pub enum UpdateConnectionError {
 
 impl UpdateConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConnectionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdateConnectionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateConnectionError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(UpdateConnectionError::GlueEncryption(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateConnectionError::GlueEncryption(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateConnectionError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateConnectionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateConnectionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateConnectionError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9307,43 +8098,24 @@ pub enum UpdateCrawlerError {
 
 impl UpdateCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCrawlerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CrawlerRunningException" => {
-                    return RusotoError::Service(UpdateCrawlerError::CrawlerRunning(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateCrawlerError::CrawlerRunning(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdateCrawlerError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateCrawlerError::EntityNotFound(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateCrawlerError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateCrawlerError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateCrawlerError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateCrawlerError::OperationTimeout(err.msg))
                 }
                 "VersionMismatchException" => {
-                    return RusotoError::Service(UpdateCrawlerError::VersionMismatch(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateCrawlerError::VersionMismatch(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9383,45 +8155,32 @@ pub enum UpdateCrawlerScheduleError {
 
 impl UpdateCrawlerScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCrawlerScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateCrawlerScheduleError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateCrawlerScheduleError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateCrawlerScheduleError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateCrawlerScheduleError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SchedulerTransitioningException" => {
                     return RusotoError::Service(
-                        UpdateCrawlerScheduleError::SchedulerTransitioning(String::from(
-                            error_message,
-                        )),
+                        UpdateCrawlerScheduleError::SchedulerTransitioning(err.msg),
                     )
                 }
                 "VersionMismatchException" => {
                     return RusotoError::Service(UpdateCrawlerScheduleError::VersionMismatch(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9461,43 +8220,24 @@ pub enum UpdateDatabaseError {
 
 impl UpdateDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDatabaseError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdateDatabaseError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDatabaseError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(UpdateDatabaseError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDatabaseError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(UpdateDatabaseError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDatabaseError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateDatabaseError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDatabaseError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateDatabaseError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDatabaseError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9535,38 +8275,21 @@ pub enum UpdateDevEndpointError {
 
 impl UpdateDevEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDevEndpointError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdateDevEndpointError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDevEndpointError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(UpdateDevEndpointError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDevEndpointError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateDevEndpointError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDevEndpointError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateDevEndpointError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDevEndpointError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9605,43 +8328,24 @@ pub enum UpdateJobError {
 
 impl UpdateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(UpdateJobError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateJobError::ConcurrentModification(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdateJobError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateJobError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(UpdateJobError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateJobError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateJobError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateJobError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateJobError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateJobError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9681,43 +8385,24 @@ pub enum UpdatePartitionError {
 
 impl UpdatePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePartitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdatePartitionError::EntityNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdatePartitionError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(UpdatePartitionError::GlueEncryption(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdatePartitionError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(UpdatePartitionError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdatePartitionError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdatePartitionError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdatePartitionError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdatePartitionError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdatePartitionError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9761,53 +8446,32 @@ pub enum UpdateTableError {
 
 impl UpdateTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTableError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(UpdateTableError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTableError::ConcurrentModification(err.msg))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdateTableError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTableError::EntityNotFound(err.msg))
                 }
                 "GlueEncryptionException" => {
-                    return RusotoError::Service(UpdateTableError::GlueEncryption(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTableError::GlueEncryption(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(UpdateTableError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTableError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateTableError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTableError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateTableError::OperationTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTableError::OperationTimeout(err.msg))
                 }
                 "ResourceNumberLimitExceededException" => {
                     return RusotoError::Service(UpdateTableError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9849,43 +8513,26 @@ pub enum UpdateTriggerError {
 
 impl UpdateTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTriggerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateTriggerError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "EntityNotFoundException" => {
-                    return RusotoError::Service(UpdateTriggerError::EntityNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTriggerError::EntityNotFound(err.msg))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(UpdateTriggerError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTriggerError::InternalService(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateTriggerError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateTriggerError::InvalidInput(err.msg))
                 }
                 "OperationTimeoutException" => {
-                    return RusotoError::Service(UpdateTriggerError::OperationTimeout(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateTriggerError::OperationTimeout(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9925,43 +8572,34 @@ pub enum UpdateUserDefinedFunctionError {
 
 impl UpdateUserDefinedFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserDefinedFunctionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::EntityNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "GlueEncryptionException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::GlueEncryption(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::InternalService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationTimeoutException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::OperationTimeout(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

@@ -51,7 +51,7 @@ lazy_static! {
 }
 
 /// HTTP headers
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Default)]
 pub struct Headers(HashMap<String, String>);
 
 impl Headers {

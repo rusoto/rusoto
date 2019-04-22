@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddAttributesToFindingsRequest {
     /// <p>The array of attributes that you want to assign to specified findings.</p>
@@ -1515,45 +1514,32 @@ pub enum AddAttributesToFindingsError {
 
 impl AddAttributesToFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddAttributesToFindingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AddAttributesToFindingsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(AddAttributesToFindingsError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddAttributesToFindingsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(AddAttributesToFindingsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(AddAttributesToFindingsError::NoSuchEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        AddAttributesToFindingsError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        AddAttributesToFindingsError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1597,57 +1583,36 @@ pub enum CreateAssessmentTargetError {
 
 impl CreateAssessmentTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAssessmentTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateAssessmentTargetError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssessmentTargetError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(CreateAssessmentTargetError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssessmentTargetError::Internal(err.msg))
                 }
                 "InvalidCrossAccountRoleException" => {
                     return RusotoError::Service(
-                        CreateAssessmentTargetError::InvalidCrossAccountRole(String::from(
-                            error_message,
-                        )),
+                        CreateAssessmentTargetError::InvalidCrossAccountRole(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateAssessmentTargetError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssessmentTargetError::InvalidInput(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAssessmentTargetError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(CreateAssessmentTargetError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssessmentTargetError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        CreateAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        CreateAssessmentTargetError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1691,50 +1656,37 @@ pub enum CreateAssessmentTemplateError {
 
 impl CreateAssessmentTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAssessmentTemplateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateAssessmentTemplateError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(CreateAssessmentTemplateError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAssessmentTemplateError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateAssessmentTemplateError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAssessmentTemplateError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(CreateAssessmentTemplateError::NoSuchEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        CreateAssessmentTemplateError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        CreateAssessmentTemplateError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1777,52 +1729,37 @@ pub enum CreateExclusionsPreviewError {
 
 impl CreateExclusionsPreviewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateExclusionsPreviewError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateExclusionsPreviewError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(CreateExclusionsPreviewError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateExclusionsPreviewError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateExclusionsPreviewError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(CreateExclusionsPreviewError::NoSuchEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PreviewGenerationInProgressException" => {
                     return RusotoError::Service(
-                        CreateExclusionsPreviewError::PreviewGenerationInProgress(String::from(
-                            error_message,
-                        )),
+                        CreateExclusionsPreviewError::PreviewGenerationInProgress(err.msg),
                     )
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        CreateExclusionsPreviewError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        CreateExclusionsPreviewError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1863,45 +1800,26 @@ pub enum CreateResourceGroupError {
 
 impl CreateResourceGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateResourceGroupError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateResourceGroupError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(CreateResourceGroupError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateResourceGroupError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateResourceGroupError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateResourceGroupError::InvalidInput(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateResourceGroupError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateResourceGroupError::LimitExceeded(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        CreateResourceGroupError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        CreateResourceGroupError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1943,50 +1861,31 @@ pub enum DeleteAssessmentRunError {
 
 impl DeleteAssessmentRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAssessmentRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteAssessmentRunError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssessmentRunError::AccessDenied(err.msg))
                 }
                 "AssessmentRunInProgressException" => {
                     return RusotoError::Service(DeleteAssessmentRunError::AssessmentRunInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(DeleteAssessmentRunError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAssessmentRunError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteAssessmentRunError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssessmentRunError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(DeleteAssessmentRunError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssessmentRunError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        DeleteAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        DeleteAssessmentRunError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2029,52 +1928,31 @@ pub enum DeleteAssessmentTargetError {
 
 impl DeleteAssessmentTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAssessmentTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteAssessmentTargetError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssessmentTargetError::AccessDenied(err.msg))
                 }
                 "AssessmentRunInProgressException" => {
                     return RusotoError::Service(
-                        DeleteAssessmentTargetError::AssessmentRunInProgress(String::from(
-                            error_message,
-                        )),
+                        DeleteAssessmentTargetError::AssessmentRunInProgress(err.msg),
                     )
                 }
                 "InternalException" => {
-                    return RusotoError::Service(DeleteAssessmentTargetError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssessmentTargetError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteAssessmentTargetError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssessmentTargetError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(DeleteAssessmentTargetError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssessmentTargetError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        DeleteAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        DeleteAssessmentTargetError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2117,52 +1995,37 @@ pub enum DeleteAssessmentTemplateError {
 
 impl DeleteAssessmentTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAssessmentTemplateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteAssessmentTemplateError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AssessmentRunInProgressException" => {
                     return RusotoError::Service(
-                        DeleteAssessmentTemplateError::AssessmentRunInProgress(String::from(
-                            error_message,
-                        )),
+                        DeleteAssessmentTemplateError::AssessmentRunInProgress(err.msg),
                     )
                 }
                 "InternalException" => {
-                    return RusotoError::Service(DeleteAssessmentTemplateError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteAssessmentTemplateError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteAssessmentTemplateError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(DeleteAssessmentTemplateError::NoSuchEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        DeleteAssessmentTemplateError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        DeleteAssessmentTemplateError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2197,28 +2060,15 @@ pub enum DescribeAssessmentRunsError {
 
 impl DescribeAssessmentRunsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAssessmentRunsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(DescribeAssessmentRunsError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeAssessmentRunsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DescribeAssessmentRunsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeAssessmentRunsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2249,28 +2099,17 @@ pub enum DescribeAssessmentTargetsError {
 
 impl DescribeAssessmentTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAssessmentTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(DescribeAssessmentTargetsError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeAssessmentTargetsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeAssessmentTargetsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2303,28 +2142,19 @@ impl DescribeAssessmentTemplatesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAssessmentTemplatesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeAssessmentTemplatesError::Internal(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeAssessmentTemplatesError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2355,23 +2185,14 @@ impl DescribeCrossAccountAccessRoleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCrossAccountAccessRoleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeCrossAccountAccessRoleError::Internal(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2401,28 +2222,15 @@ pub enum DescribeExclusionsError {
 
 impl DescribeExclusionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExclusionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(DescribeExclusionsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeExclusionsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DescribeExclusionsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeExclusionsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2453,28 +2261,15 @@ pub enum DescribeFindingsError {
 
 impl DescribeFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFindingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(DescribeFindingsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeFindingsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DescribeFindingsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeFindingsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2505,28 +2300,15 @@ pub enum DescribeResourceGroupsError {
 
 impl DescribeResourceGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResourceGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(DescribeResourceGroupsError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeResourceGroupsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DescribeResourceGroupsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeResourceGroupsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2557,28 +2339,15 @@ pub enum DescribeRulesPackagesError {
 
 impl DescribeRulesPackagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRulesPackagesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(DescribeRulesPackagesError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeRulesPackagesError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DescribeRulesPackagesError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeRulesPackagesError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2619,55 +2388,36 @@ pub enum GetAssessmentReportError {
 
 impl GetAssessmentReportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAssessmentReportError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetAssessmentReportError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAssessmentReportError::AccessDenied(err.msg))
                 }
                 "AssessmentRunInProgressException" => {
                     return RusotoError::Service(GetAssessmentReportError::AssessmentRunInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(GetAssessmentReportError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetAssessmentReportError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetAssessmentReportError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAssessmentReportError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(GetAssessmentReportError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetAssessmentReportError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        GetAssessmentReportError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        GetAssessmentReportError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
                 "UnsupportedFeatureException" => {
                     return RusotoError::Service(GetAssessmentReportError::UnsupportedFeature(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2707,38 +2457,21 @@ pub enum GetExclusionsPreviewError {
 
 impl GetExclusionsPreviewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetExclusionsPreviewError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetExclusionsPreviewError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetExclusionsPreviewError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(GetExclusionsPreviewError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetExclusionsPreviewError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetExclusionsPreviewError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetExclusionsPreviewError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(GetExclusionsPreviewError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetExclusionsPreviewError::NoSuchEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2775,38 +2508,21 @@ pub enum GetTelemetryMetadataError {
 
 impl GetTelemetryMetadataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTelemetryMetadataError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetTelemetryMetadataError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTelemetryMetadataError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(GetTelemetryMetadataError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTelemetryMetadataError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(GetTelemetryMetadataError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTelemetryMetadataError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(GetTelemetryMetadataError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTelemetryMetadataError::NoSuchEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2843,38 +2559,27 @@ pub enum ListAssessmentRunAgentsError {
 
 impl ListAssessmentRunAgentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssessmentRunAgentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAssessmentRunAgentsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListAssessmentRunAgentsError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAssessmentRunAgentsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListAssessmentRunAgentsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(ListAssessmentRunAgentsError::NoSuchEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2911,38 +2616,21 @@ pub enum ListAssessmentRunsError {
 
 impl ListAssessmentRunsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssessmentRunsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListAssessmentRunsError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAssessmentRunsError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListAssessmentRunsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAssessmentRunsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListAssessmentRunsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAssessmentRunsError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(ListAssessmentRunsError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAssessmentRunsError::NoSuchEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2977,33 +2665,18 @@ pub enum ListAssessmentTargetsError {
 
 impl ListAssessmentTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssessmentTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListAssessmentTargetsError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAssessmentTargetsError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListAssessmentTargetsError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAssessmentTargetsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListAssessmentTargetsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAssessmentTargetsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3039,38 +2712,27 @@ pub enum ListAssessmentTemplatesError {
 
 impl ListAssessmentTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssessmentTemplatesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAssessmentTemplatesError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListAssessmentTemplatesError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAssessmentTemplatesError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListAssessmentTemplatesError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(ListAssessmentTemplatesError::NoSuchEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3107,38 +2769,21 @@ pub enum ListEventSubscriptionsError {
 
 impl ListEventSubscriptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEventSubscriptionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListEventSubscriptionsError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListEventSubscriptionsError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListEventSubscriptionsError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListEventSubscriptionsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListEventSubscriptionsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListEventSubscriptionsError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(ListEventSubscriptionsError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListEventSubscriptionsError::NoSuchEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3175,38 +2820,21 @@ pub enum ListExclusionsError {
 
 impl ListExclusionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListExclusionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListExclusionsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListExclusionsError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListExclusionsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListExclusionsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListExclusionsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListExclusionsError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(ListExclusionsError::NoSuchEntity(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListExclusionsError::NoSuchEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3243,38 +2871,21 @@ pub enum ListFindingsError {
 
 impl ListFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFindingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListFindingsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFindingsError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListFindingsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFindingsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListFindingsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFindingsError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(ListFindingsError::NoSuchEntity(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListFindingsError::NoSuchEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3309,33 +2920,18 @@ pub enum ListRulesPackagesError {
 
 impl ListRulesPackagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRulesPackagesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListRulesPackagesError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRulesPackagesError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListRulesPackagesError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRulesPackagesError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListRulesPackagesError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRulesPackagesError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3371,38 +2967,21 @@ pub enum ListTagsForResourceError {
 
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListTagsForResourceError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListTagsForResourceError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsForResourceError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListTagsForResourceError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForResourceError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(ListTagsForResourceError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForResourceError::NoSuchEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3441,43 +3020,26 @@ pub enum PreviewAgentsError {
 
 impl PreviewAgentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PreviewAgentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(PreviewAgentsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PreviewAgentsError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(PreviewAgentsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PreviewAgentsError::Internal(err.msg))
                 }
                 "InvalidCrossAccountRoleException" => {
                     return RusotoError::Service(PreviewAgentsError::InvalidCrossAccountRole(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(PreviewAgentsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PreviewAgentsError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(PreviewAgentsError::NoSuchEntity(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PreviewAgentsError::NoSuchEntity(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3519,47 +3081,34 @@ impl RegisterCrossAccountAccessRoleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterCrossAccountAccessRoleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RegisterCrossAccountAccessRoleError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(RegisterCrossAccountAccessRoleError::Internal(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidCrossAccountRoleException" => {
                     return RusotoError::Service(
-                        RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(String::from(
-                            error_message,
-                        )),
+                        RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(RegisterCrossAccountAccessRoleError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        RegisterCrossAccountAccessRoleError::ServiceTemporarilyUnavailable(
-                            String::from(error_message),
-                        ),
+                        RegisterCrossAccountAccessRoleError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3601,45 +3150,34 @@ impl RemoveAttributesFromFindingsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveAttributesFromFindingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveAttributesFromFindingsError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(RemoveAttributesFromFindingsError::Internal(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(RemoveAttributesFromFindingsError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(RemoveAttributesFromFindingsError::NoSuchEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        RemoveAttributesFromFindingsError::ServiceTemporarilyUnavailable(
-                            String::from(error_message),
-                        ),
+                        RemoveAttributesFromFindingsError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3679,45 +3217,26 @@ pub enum SetTagsForResourceError {
 
 impl SetTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetTagsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(SetTagsForResourceError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetTagsForResourceError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(SetTagsForResourceError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetTagsForResourceError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(SetTagsForResourceError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetTagsForResourceError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(SetTagsForResourceError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetTagsForResourceError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        SetTagsForResourceError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        SetTagsForResourceError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3763,62 +3282,39 @@ pub enum StartAssessmentRunError {
 
 impl StartAssessmentRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartAssessmentRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StartAssessmentRunError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartAssessmentRunError::AccessDenied(err.msg))
                 }
                 "AgentsAlreadyRunningAssessmentException" => {
                     return RusotoError::Service(
-                        StartAssessmentRunError::AgentsAlreadyRunningAssessment(String::from(
-                            error_message,
-                        )),
+                        StartAssessmentRunError::AgentsAlreadyRunningAssessment(err.msg),
                     )
                 }
                 "InternalException" => {
-                    return RusotoError::Service(StartAssessmentRunError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartAssessmentRunError::Internal(err.msg))
                 }
                 "InvalidCrossAccountRoleException" => {
                     return RusotoError::Service(StartAssessmentRunError::InvalidCrossAccountRole(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StartAssessmentRunError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartAssessmentRunError::InvalidInput(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(StartAssessmentRunError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartAssessmentRunError::LimitExceeded(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(StartAssessmentRunError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartAssessmentRunError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        StartAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        StartAssessmentRunError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3861,45 +3357,26 @@ pub enum StopAssessmentRunError {
 
 impl StopAssessmentRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopAssessmentRunError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StopAssessmentRunError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopAssessmentRunError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(StopAssessmentRunError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopAssessmentRunError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StopAssessmentRunError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopAssessmentRunError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(StopAssessmentRunError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopAssessmentRunError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        StopAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        StopAssessmentRunError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3941,50 +3418,29 @@ pub enum SubscribeToEventError {
 
 impl SubscribeToEventError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubscribeToEventError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(SubscribeToEventError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SubscribeToEventError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(SubscribeToEventError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SubscribeToEventError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(SubscribeToEventError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SubscribeToEventError::InvalidInput(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(SubscribeToEventError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SubscribeToEventError::LimitExceeded(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(SubscribeToEventError::NoSuchEntity(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SubscribeToEventError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        SubscribeToEventError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        SubscribeToEventError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4025,45 +3481,26 @@ pub enum UnsubscribeFromEventError {
 
 impl UnsubscribeFromEventError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnsubscribeFromEventError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UnsubscribeFromEventError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UnsubscribeFromEventError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(UnsubscribeFromEventError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UnsubscribeFromEventError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UnsubscribeFromEventError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UnsubscribeFromEventError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(UnsubscribeFromEventError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UnsubscribeFromEventError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        UnsubscribeFromEventError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        UnsubscribeFromEventError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4103,45 +3540,26 @@ pub enum UpdateAssessmentTargetError {
 
 impl UpdateAssessmentTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAssessmentTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UpdateAssessmentTargetError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssessmentTargetError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(UpdateAssessmentTargetError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssessmentTargetError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateAssessmentTargetError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssessmentTargetError::InvalidInput(err.msg))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(UpdateAssessmentTargetError::NoSuchEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateAssessmentTargetError::NoSuchEntity(err.msg))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
-                        UpdateAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
-                            error_message,
-                        )),
+                        UpdateAssessmentTargetError::ServiceTemporarilyUnavailable(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

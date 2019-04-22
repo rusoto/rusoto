@@ -75,8 +75,7 @@ impl GenerateProtocol for JsonGenerator {
             writer,
             "use serde_json;
         use rusoto_core::signature::SignedRequest;
-        use serde_json::Value as SerdeJsonValue;
-        use serde_json::from_slice;"
+        use rusoto_core::proto;"
         )
     }
 

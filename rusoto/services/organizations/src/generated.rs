@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptHandshakeRequest {
     /// <p>The unique identifier (ID) of the handshake that you want to accept.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
@@ -1173,75 +1172,54 @@ pub enum AcceptHandshakeError {
 
 impl AcceptHandshakeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptHandshakeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(AcceptHandshakeError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(AcceptHandshakeError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AcceptHandshakeError::AccessDenied(err.msg))
                 }
                 "AccessDeniedForDependencyException" => {
                     return RusotoError::Service(AcceptHandshakeError::AccessDeniedForDependency(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AcceptHandshakeError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "HandshakeAlreadyInStateException" => {
                     return RusotoError::Service(AcceptHandshakeError::HandshakeAlreadyInState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "HandshakeConstraintViolationException" => {
                     return RusotoError::Service(
-                        AcceptHandshakeError::HandshakeConstraintViolation(String::from(
-                            error_message,
-                        )),
+                        AcceptHandshakeError::HandshakeConstraintViolation(err.msg),
                     )
                 }
                 "HandshakeNotFoundException" => {
-                    return RusotoError::Service(AcceptHandshakeError::HandshakeNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AcceptHandshakeError::HandshakeNotFound(err.msg))
                 }
                 "InvalidHandshakeTransitionException" => {
                     return RusotoError::Service(AcceptHandshakeError::InvalidHandshakeTransition(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(AcceptHandshakeError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AcceptHandshakeError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(AcceptHandshakeError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AcceptHandshakeError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AcceptHandshakeError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AcceptHandshakeError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1299,73 +1277,46 @@ pub enum AttachPolicyError {
 
 impl AttachPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(AttachPolicyError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(AttachPolicyError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachPolicyError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(AttachPolicyError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AttachPolicyError::ConcurrentModification(err.msg))
                 }
                 "ConstraintViolationException" => {
-                    return RusotoError::Service(AttachPolicyError::ConstraintViolation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AttachPolicyError::ConstraintViolation(err.msg))
                 }
                 "DuplicatePolicyAttachmentException" => {
                     return RusotoError::Service(AttachPolicyError::DuplicatePolicyAttachment(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(AttachPolicyError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachPolicyError::InvalidInput(err.msg))
                 }
                 "PolicyNotFoundException" => {
-                    return RusotoError::Service(AttachPolicyError::PolicyNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachPolicyError::PolicyNotFound(err.msg))
                 }
                 "PolicyTypeNotEnabledException" => {
-                    return RusotoError::Service(AttachPolicyError::PolicyTypeNotEnabled(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AttachPolicyError::PolicyTypeNotEnabled(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(AttachPolicyError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachPolicyError::Service(err.msg))
                 }
                 "TargetNotFoundException" => {
-                    return RusotoError::Service(AttachPolicyError::TargetNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachPolicyError::TargetNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AttachPolicyError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AttachPolicyError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1417,58 +1368,39 @@ pub enum CancelHandshakeError {
 
 impl CancelHandshakeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelHandshakeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CancelHandshakeError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelHandshakeError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CancelHandshakeError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "HandshakeAlreadyInStateException" => {
                     return RusotoError::Service(CancelHandshakeError::HandshakeAlreadyInState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "HandshakeNotFoundException" => {
-                    return RusotoError::Service(CancelHandshakeError::HandshakeNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelHandshakeError::HandshakeNotFound(err.msg))
                 }
                 "InvalidHandshakeTransitionException" => {
                     return RusotoError::Service(CancelHandshakeError::InvalidHandshakeTransition(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CancelHandshakeError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelHandshakeError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CancelHandshakeError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CancelHandshakeError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CancelHandshakeError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelHandshakeError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1517,58 +1449,39 @@ pub enum CreateAccountError {
 
 impl CreateAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAccountError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(CreateAccountError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateAccountError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAccountError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateAccountError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConstraintViolationException" => {
-                    return RusotoError::Service(CreateAccountError::ConstraintViolation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAccountError::ConstraintViolation(err.msg))
                 }
                 "FinalizingOrganizationException" => {
                     return RusotoError::Service(CreateAccountError::FinalizingOrganization(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateAccountError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAccountError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateAccountError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAccountError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreateAccountError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateAccountError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1617,60 +1530,41 @@ pub enum CreateOrganizationError {
 
 impl CreateOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOrganizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreateOrganizationError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateOrganizationError::AccessDenied(err.msg))
                 }
                 "AccessDeniedForDependencyException" => {
                     return RusotoError::Service(
-                        CreateOrganizationError::AccessDeniedForDependency(String::from(
-                            error_message,
-                        )),
+                        CreateOrganizationError::AccessDeniedForDependency(err.msg),
                     )
                 }
                 "AlreadyInOrganizationException" => {
                     return RusotoError::Service(CreateOrganizationError::AlreadyInOrganization(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateOrganizationError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(CreateOrganizationError::ConstraintViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreateOrganizationError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateOrganizationError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateOrganizationError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateOrganizationError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreateOrganizationError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateOrganizationError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1721,71 +1615,52 @@ pub enum CreateOrganizationalUnitError {
 
 impl CreateOrganizationalUnitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOrganizationalUnitError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        CreateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        CreateOrganizationalUnitError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateOrganizationalUnitError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        CreateOrganizationalUnitError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        CreateOrganizationalUnitError::ConcurrentModification(err.msg),
                     )
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(
-                        CreateOrganizationalUnitError::ConstraintViolation(String::from(
-                            error_message,
-                        )),
+                        CreateOrganizationalUnitError::ConstraintViolation(err.msg),
                     )
                 }
                 "DuplicateOrganizationalUnitException" => {
                     return RusotoError::Service(
-                        CreateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
-                            error_message,
-                        )),
+                        CreateOrganizationalUnitError::DuplicateOrganizationalUnit(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateOrganizationalUnitError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ParentNotFoundException" => {
                     return RusotoError::Service(CreateOrganizationalUnitError::ParentNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreateOrganizationalUnitError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateOrganizationalUnitError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateOrganizationalUnitError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1839,70 +1714,45 @@ pub enum CreatePolicyError {
 
 impl CreatePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(CreatePolicyError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(CreatePolicyError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreatePolicyError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(CreatePolicyError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreatePolicyError::ConcurrentModification(err.msg))
                 }
                 "ConstraintViolationException" => {
-                    return RusotoError::Service(CreatePolicyError::ConstraintViolation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreatePolicyError::ConstraintViolation(err.msg))
                 }
                 "DuplicatePolicyException" => {
-                    return RusotoError::Service(CreatePolicyError::DuplicatePolicy(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreatePolicyError::DuplicatePolicy(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(CreatePolicyError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreatePolicyError::InvalidInput(err.msg))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(CreatePolicyError::MalformedPolicyDocument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PolicyTypeNotAvailableForOrganizationException" => {
                     return RusotoError::Service(
-                        CreatePolicyError::PolicyTypeNotAvailableForOrganization(String::from(
-                            error_message,
-                        )),
+                        CreatePolicyError::PolicyTypeNotAvailableForOrganization(err.msg),
                     )
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(CreatePolicyError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreatePolicyError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreatePolicyError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreatePolicyError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1953,58 +1803,39 @@ pub enum DeclineHandshakeError {
 
 impl DeclineHandshakeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeclineHandshakeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeclineHandshakeError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeclineHandshakeError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeclineHandshakeError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "HandshakeAlreadyInStateException" => {
                     return RusotoError::Service(DeclineHandshakeError::HandshakeAlreadyInState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "HandshakeNotFoundException" => {
-                    return RusotoError::Service(DeclineHandshakeError::HandshakeNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeclineHandshakeError::HandshakeNotFound(err.msg))
                 }
                 "InvalidHandshakeTransitionException" => {
                     return RusotoError::Service(DeclineHandshakeError::InvalidHandshakeTransition(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeclineHandshakeError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeclineHandshakeError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeclineHandshakeError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeclineHandshakeError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeclineHandshakeError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeclineHandshakeError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2051,53 +1882,36 @@ pub enum DeleteOrganizationError {
 
 impl DeleteOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOrganizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DeleteOrganizationError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteOrganizationError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteOrganizationError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteOrganizationError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeleteOrganizationError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteOrganizationError::InvalidInput(err.msg))
                 }
                 "OrganizationNotEmptyException" => {
                     return RusotoError::Service(DeleteOrganizationError::OrganizationNotEmpty(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteOrganizationError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteOrganizationError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteOrganizationError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteOrganizationError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2145,66 +1959,47 @@ pub enum DeleteOrganizationalUnitError {
 
 impl DeleteOrganizationalUnitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOrganizationalUnitError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteOrganizationalUnitError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DeleteOrganizationalUnitError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DeleteOrganizationalUnitError::ConcurrentModification(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteOrganizationalUnitError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OrganizationalUnitNotEmptyException" => {
                     return RusotoError::Service(
-                        DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(String::from(
-                            error_message,
-                        )),
+                        DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(err.msg),
                     )
                 }
                 "OrganizationalUnitNotFoundException" => {
                     return RusotoError::Service(
-                        DeleteOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
-                            error_message,
-                        )),
+                        DeleteOrganizationalUnitError::OrganizationalUnitNotFound(err.msg),
                     )
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeleteOrganizationalUnitError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteOrganizationalUnitError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteOrganizationalUnitError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2253,58 +2048,35 @@ pub enum DeletePolicyError {
 
 impl DeletePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DeletePolicyError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DeletePolicyError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeletePolicyError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(DeletePolicyError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeletePolicyError::ConcurrentModification(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DeletePolicyError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeletePolicyError::InvalidInput(err.msg))
                 }
                 "PolicyInUseException" => {
-                    return RusotoError::Service(DeletePolicyError::PolicyInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeletePolicyError::PolicyInUse(err.msg))
                 }
                 "PolicyNotFoundException" => {
-                    return RusotoError::Service(DeletePolicyError::PolicyNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeletePolicyError::PolicyNotFound(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DeletePolicyError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeletePolicyError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeletePolicyError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeletePolicyError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2349,48 +2121,29 @@ pub enum DescribeAccountError {
 
 impl DescribeAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DescribeAccountError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeAccountError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeAccountError::AccessDenied(err.msg))
                 }
                 "AccountNotFoundException" => {
-                    return RusotoError::Service(DescribeAccountError::AccountNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeAccountError::AccountNotFound(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DescribeAccountError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeAccountError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeAccountError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeAccountError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeAccountError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeAccountError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2435,52 +2188,37 @@ impl DescribeCreateAccountStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCreateAccountStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeCreateAccountStatusError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CreateAccountStatusNotFoundException" => {
                     return RusotoError::Service(
-                        DescribeCreateAccountStatusError::CreateAccountStatusNotFound(
-                            String::from(error_message),
-                        ),
+                        DescribeCreateAccountStatusError::CreateAccountStatusNotFound(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeCreateAccountStatusError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeCreateAccountStatusError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeCreateAccountStatusError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeCreateAccountStatusError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2523,48 +2261,29 @@ pub enum DescribeHandshakeError {
 
 impl DescribeHandshakeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHandshakeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeHandshakeError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeHandshakeError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DescribeHandshakeError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "HandshakeNotFoundException" => {
-                    return RusotoError::Service(DescribeHandshakeError::HandshakeNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeHandshakeError::HandshakeNotFound(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DescribeHandshakeError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeHandshakeError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeHandshakeError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeHandshakeError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeHandshakeError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeHandshakeError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2605,45 +2324,30 @@ pub enum DescribeOrganizationError {
 
 impl DescribeOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOrganizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        DescribeOrganizationError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        DescribeOrganizationError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeOrganizationError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeOrganizationError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DescribeOrganizationError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeOrganizationError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeOrganizationError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeOrganizationError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2687,52 +2391,37 @@ impl DescribeOrganizationalUnitError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrganizationalUnitError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeOrganizationalUnitError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeOrganizationalUnitError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OrganizationalUnitNotFoundException" => {
                     return RusotoError::Service(
-                        DescribeOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
-                            error_message,
-                        )),
+                        DescribeOrganizationalUnitError::OrganizationalUnitNotFound(err.msg),
                     )
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribeOrganizationalUnitError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeOrganizationalUnitError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeOrganizationalUnitError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2775,48 +2464,29 @@ pub enum DescribePolicyError {
 
 impl DescribePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DescribePolicyError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DescribePolicyError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribePolicyError::AccessDenied(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DescribePolicyError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribePolicyError::InvalidInput(err.msg))
                 }
                 "PolicyNotFoundException" => {
-                    return RusotoError::Service(DescribePolicyError::PolicyNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribePolicyError::PolicyNotFound(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DescribePolicyError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribePolicyError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribePolicyError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribePolicyError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2867,68 +2537,41 @@ pub enum DetachPolicyError {
 
 impl DetachPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DetachPolicyError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DetachPolicyError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachPolicyError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(DetachPolicyError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetachPolicyError::ConcurrentModification(err.msg))
                 }
                 "ConstraintViolationException" => {
-                    return RusotoError::Service(DetachPolicyError::ConstraintViolation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetachPolicyError::ConstraintViolation(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DetachPolicyError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachPolicyError::InvalidInput(err.msg))
                 }
                 "PolicyNotAttachedException" => {
-                    return RusotoError::Service(DetachPolicyError::PolicyNotAttached(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetachPolicyError::PolicyNotAttached(err.msg))
                 }
                 "PolicyNotFoundException" => {
-                    return RusotoError::Service(DetachPolicyError::PolicyNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachPolicyError::PolicyNotFound(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DetachPolicyError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachPolicyError::Service(err.msg))
                 }
                 "TargetNotFoundException" => {
-                    return RusotoError::Service(DetachPolicyError::TargetNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachPolicyError::TargetNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DetachPolicyError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DetachPolicyError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2977,57 +2620,42 @@ pub enum DisableAWSServiceAccessError {
 
 impl DisableAWSServiceAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableAWSServiceAccessError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        DisableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        DisableAWSServiceAccessError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisableAWSServiceAccessError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DisableAWSServiceAccessError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DisableAWSServiceAccessError::ConcurrentModification(err.msg),
                     )
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(DisableAWSServiceAccessError::ConstraintViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DisableAWSServiceAccessError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DisableAWSServiceAccessError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisableAWSServiceAccessError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DisableAWSServiceAccessError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3077,63 +2705,44 @@ pub enum DisablePolicyTypeError {
 
 impl DisablePolicyTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisablePolicyTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DisablePolicyTypeError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DisablePolicyTypeError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisablePolicyTypeError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DisablePolicyTypeError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(DisablePolicyTypeError::ConstraintViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DisablePolicyTypeError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisablePolicyTypeError::InvalidInput(err.msg))
                 }
                 "PolicyTypeNotEnabledException" => {
                     return RusotoError::Service(DisablePolicyTypeError::PolicyTypeNotEnabled(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "RootNotFoundException" => {
-                    return RusotoError::Service(DisablePolicyTypeError::RootNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisablePolicyTypeError::RootNotFound(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(DisablePolicyTypeError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisablePolicyTypeError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DisablePolicyTypeError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisablePolicyTypeError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3181,57 +2790,38 @@ pub enum EnableAWSServiceAccessError {
 
 impl EnableAWSServiceAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableAWSServiceAccessError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        EnableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        EnableAWSServiceAccessError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(EnableAWSServiceAccessError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableAWSServiceAccessError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        EnableAWSServiceAccessError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        EnableAWSServiceAccessError::ConcurrentModification(err.msg),
                     )
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(EnableAWSServiceAccessError::ConstraintViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(EnableAWSServiceAccessError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableAWSServiceAccessError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(EnableAWSServiceAccessError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableAWSServiceAccessError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(EnableAWSServiceAccessError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3277,55 +2867,36 @@ pub enum EnableAllFeaturesError {
 
 impl EnableAllFeaturesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableAllFeaturesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(EnableAllFeaturesError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(EnableAllFeaturesError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableAllFeaturesError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(EnableAllFeaturesError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "HandshakeConstraintViolationException" => {
                     return RusotoError::Service(
-                        EnableAllFeaturesError::HandshakeConstraintViolation(String::from(
-                            error_message,
-                        )),
+                        EnableAllFeaturesError::HandshakeConstraintViolation(err.msg),
                     )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(EnableAllFeaturesError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableAllFeaturesError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(EnableAllFeaturesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableAllFeaturesError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(EnableAllFeaturesError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableAllFeaturesError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3377,70 +2948,49 @@ pub enum EnablePolicyTypeError {
 
 impl EnablePolicyTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnablePolicyTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(EnablePolicyTypeError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(EnablePolicyTypeError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnablePolicyTypeError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(EnablePolicyTypeError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(EnablePolicyTypeError::ConstraintViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(EnablePolicyTypeError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnablePolicyTypeError::InvalidInput(err.msg))
                 }
                 "PolicyTypeAlreadyEnabledException" => {
                     return RusotoError::Service(EnablePolicyTypeError::PolicyTypeAlreadyEnabled(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PolicyTypeNotAvailableForOrganizationException" => {
                     return RusotoError::Service(
-                        EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(String::from(
-                            error_message,
-                        )),
+                        EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(err.msg),
                     )
                 }
                 "RootNotFoundException" => {
-                    return RusotoError::Service(EnablePolicyTypeError::RootNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnablePolicyTypeError::RootNotFound(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(EnablePolicyTypeError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnablePolicyTypeError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(EnablePolicyTypeError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnablePolicyTypeError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3497,80 +3047,57 @@ impl InviteAccountToOrganizationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<InviteAccountToOrganizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        InviteAccountToOrganizationError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        InviteAccountToOrganizationError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(InviteAccountToOrganizationError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountOwnerNotVerifiedException" => {
                     return RusotoError::Service(
-                        InviteAccountToOrganizationError::AccountOwnerNotVerified(String::from(
-                            error_message,
-                        )),
+                        InviteAccountToOrganizationError::AccountOwnerNotVerified(err.msg),
                     )
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        InviteAccountToOrganizationError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        InviteAccountToOrganizationError::ConcurrentModification(err.msg),
                     )
                 }
                 "DuplicateHandshakeException" => {
                     return RusotoError::Service(
-                        InviteAccountToOrganizationError::DuplicateHandshake(String::from(
-                            error_message,
-                        )),
+                        InviteAccountToOrganizationError::DuplicateHandshake(err.msg),
                     )
                 }
                 "FinalizingOrganizationException" => {
                     return RusotoError::Service(
-                        InviteAccountToOrganizationError::FinalizingOrganization(String::from(
-                            error_message,
-                        )),
+                        InviteAccountToOrganizationError::FinalizingOrganization(err.msg),
                     )
                 }
                 "HandshakeConstraintViolationException" => {
                     return RusotoError::Service(
-                        InviteAccountToOrganizationError::HandshakeConstraintViolation(
-                            String::from(error_message),
-                        ),
+                        InviteAccountToOrganizationError::HandshakeConstraintViolation(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(InviteAccountToOrganizationError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(InviteAccountToOrganizationError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(InviteAccountToOrganizationError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(InviteAccountToOrganizationError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3623,65 +3150,44 @@ pub enum LeaveOrganizationError {
 
 impl LeaveOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LeaveOrganizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(LeaveOrganizationError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(LeaveOrganizationError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(LeaveOrganizationError::AccessDenied(err.msg))
                 }
                 "AccountNotFoundException" => {
-                    return RusotoError::Service(LeaveOrganizationError::AccountNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(LeaveOrganizationError::AccountNotFound(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(LeaveOrganizationError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(LeaveOrganizationError::ConstraintViolation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(LeaveOrganizationError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(LeaveOrganizationError::InvalidInput(err.msg))
                 }
                 "MasterCannotLeaveOrganizationException" => {
                     return RusotoError::Service(
-                        LeaveOrganizationError::MasterCannotLeaveOrganization(String::from(
-                            error_message,
-                        )),
+                        LeaveOrganizationError::MasterCannotLeaveOrganization(err.msg),
                     )
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(LeaveOrganizationError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(LeaveOrganizationError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(LeaveOrganizationError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(LeaveOrganizationError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3729,58 +3235,39 @@ impl ListAWSServiceAccessForOrganizationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAWSServiceAccessForOrganizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        ListAWSServiceAccessForOrganizationError::AWSOrganizationsNotInUse(
-                            String::from(error_message),
-                        ),
+                        ListAWSServiceAccessForOrganizationError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        ListAWSServiceAccessForOrganizationError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        ListAWSServiceAccessForOrganizationError::AccessDenied(err.msg),
                     )
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(
-                        ListAWSServiceAccessForOrganizationError::ConstraintViolation(
-                            String::from(error_message),
-                        ),
+                        ListAWSServiceAccessForOrganizationError::ConstraintViolation(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        ListAWSServiceAccessForOrganizationError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        ListAWSServiceAccessForOrganizationError::InvalidInput(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListAWSServiceAccessForOrganizationError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        ListAWSServiceAccessForOrganizationError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        ListAWSServiceAccessForOrganizationError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3821,43 +3308,26 @@ pub enum ListAccountsError {
 
 impl ListAccountsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListAccountsError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListAccountsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAccountsError::AccessDenied(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListAccountsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAccountsError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListAccountsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAccountsError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListAccountsError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAccountsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3899,50 +3369,33 @@ pub enum ListAccountsForParentError {
 
 impl ListAccountsForParentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountsForParentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        ListAccountsForParentError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        ListAccountsForParentError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListAccountsForParentError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAccountsForParentError::AccessDenied(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListAccountsForParentError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAccountsForParentError::InvalidInput(err.msg))
                 }
                 "ParentNotFoundException" => {
                     return RusotoError::Service(ListAccountsForParentError::ParentNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListAccountsForParentError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListAccountsForParentError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListAccountsForParentError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3985,48 +3438,29 @@ pub enum ListChildrenError {
 
 impl ListChildrenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChildrenError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListChildrenError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListChildrenError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChildrenError::AccessDenied(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListChildrenError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChildrenError::InvalidInput(err.msg))
                 }
                 "ParentNotFoundException" => {
-                    return RusotoError::Service(ListChildrenError::ParentNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChildrenError::ParentNotFound(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListChildrenError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChildrenError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListChildrenError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListChildrenError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4067,45 +3501,32 @@ pub enum ListCreateAccountStatusError {
 
 impl ListCreateAccountStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCreateAccountStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        ListCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        ListCreateAccountStatusError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListCreateAccountStatusError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListCreateAccountStatusError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListCreateAccountStatusError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListCreateAccountStatusError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListCreateAccountStatusError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4145,45 +3566,32 @@ pub enum ListHandshakesForAccountError {
 
 impl ListHandshakesForAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHandshakesForAccountError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListHandshakesForAccountError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        ListHandshakesForAccountError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        ListHandshakesForAccountError::ConcurrentModification(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListHandshakesForAccountError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListHandshakesForAccountError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListHandshakesForAccountError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListHandshakesForAccountError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4227,54 +3635,39 @@ impl ListHandshakesForOrganizationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListHandshakesForOrganizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListHandshakesForOrganizationError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        ListHandshakesForOrganizationError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        ListHandshakesForOrganizationError::ConcurrentModification(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListHandshakesForOrganizationError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListHandshakesForOrganizationError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        ListHandshakesForOrganizationError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        ListHandshakesForOrganizationError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4319,58 +3712,39 @@ impl ListOrganizationalUnitsForParentError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListOrganizationalUnitsForParentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(
-                            String::from(error_message),
-                        ),
+                        ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(
-                        ListOrganizationalUnitsForParentError::AccessDenied(String::from(
-                            error_message,
-                        )),
+                        ListOrganizationalUnitsForParentError::AccessDenied(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
-                        ListOrganizationalUnitsForParentError::InvalidInput(String::from(
-                            error_message,
-                        )),
+                        ListOrganizationalUnitsForParentError::InvalidInput(err.msg),
                     )
                 }
                 "ParentNotFoundException" => {
                     return RusotoError::Service(
-                        ListOrganizationalUnitsForParentError::ParentNotFound(String::from(
-                            error_message,
-                        )),
+                        ListOrganizationalUnitsForParentError::ParentNotFound(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListOrganizationalUnitsForParentError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        ListOrganizationalUnitsForParentError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        ListOrganizationalUnitsForParentError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4413,48 +3787,29 @@ pub enum ListParentsError {
 
 impl ListParentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListParentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListParentsError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListParentsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListParentsError::AccessDenied(err.msg))
                 }
                 "ChildNotFoundException" => {
-                    return RusotoError::Service(ListParentsError::ChildNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListParentsError::ChildNotFound(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListParentsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListParentsError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListParentsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListParentsError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListParentsError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListParentsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4495,43 +3850,26 @@ pub enum ListPoliciesError {
 
 impl ListPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListPoliciesError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListPoliciesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListPoliciesError::AccessDenied(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListPoliciesError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListPoliciesError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListPoliciesError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListPoliciesError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListPoliciesError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListPoliciesError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4573,50 +3911,33 @@ pub enum ListPoliciesForTargetError {
 
 impl ListPoliciesForTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesForTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        ListPoliciesForTargetError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        ListPoliciesForTargetError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListPoliciesForTargetError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListPoliciesForTargetError::AccessDenied(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListPoliciesForTargetError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListPoliciesForTargetError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListPoliciesForTargetError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListPoliciesForTargetError::Service(err.msg))
                 }
                 "TargetNotFoundException" => {
                     return RusotoError::Service(ListPoliciesForTargetError::TargetNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListPoliciesForTargetError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4657,43 +3978,24 @@ pub enum ListRootsError {
 
 impl ListRootsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRootsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
-                    return RusotoError::Service(ListRootsError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRootsError::AWSOrganizationsNotInUse(err.msg))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListRootsError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRootsError::AccessDenied(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListRootsError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRootsError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListRootsError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRootsError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListRootsError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRootsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4735,50 +4037,31 @@ pub enum ListTargetsForPolicyError {
 
 impl ListTargetsForPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTargetsForPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        ListTargetsForPolicyError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        ListTargetsForPolicyError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListTargetsForPolicyError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTargetsForPolicyError::AccessDenied(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListTargetsForPolicyError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTargetsForPolicyError::InvalidInput(err.msg))
                 }
                 "PolicyNotFoundException" => {
-                    return RusotoError::Service(ListTargetsForPolicyError::PolicyNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTargetsForPolicyError::PolicyNotFound(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListTargetsForPolicyError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTargetsForPolicyError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListTargetsForPolicyError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4829,68 +4112,43 @@ pub enum MoveAccountError {
 
 impl MoveAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MoveAccountError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(MoveAccountError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(MoveAccountError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(MoveAccountError::AccessDenied(err.msg))
                 }
                 "AccountNotFoundException" => {
-                    return RusotoError::Service(MoveAccountError::AccountNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(MoveAccountError::AccountNotFound(err.msg))
                 }
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(MoveAccountError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(MoveAccountError::ConcurrentModification(err.msg))
                 }
                 "DestinationParentNotFoundException" => {
                     return RusotoError::Service(MoveAccountError::DestinationParentNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "DuplicateAccountException" => {
-                    return RusotoError::Service(MoveAccountError::DuplicateAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(MoveAccountError::DuplicateAccount(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(MoveAccountError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(MoveAccountError::InvalidInput(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(MoveAccountError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(MoveAccountError::Service(err.msg))
                 }
                 "SourceParentNotFoundException" => {
-                    return RusotoError::Service(MoveAccountError::SourceParentNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(MoveAccountError::SourceParentNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(MoveAccountError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(MoveAccountError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4945,75 +4203,54 @@ impl RemoveAccountFromOrganizationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveAccountFromOrganizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveAccountFromOrganizationError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccountNotFoundException" => {
                     return RusotoError::Service(
-                        RemoveAccountFromOrganizationError::AccountNotFound(String::from(
-                            error_message,
-                        )),
+                        RemoveAccountFromOrganizationError::AccountNotFound(err.msg),
                     )
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        RemoveAccountFromOrganizationError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        RemoveAccountFromOrganizationError::ConcurrentModification(err.msg),
                     )
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(
-                        RemoveAccountFromOrganizationError::ConstraintViolation(String::from(
-                            error_message,
-                        )),
+                        RemoveAccountFromOrganizationError::ConstraintViolation(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(RemoveAccountFromOrganizationError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MasterCannotLeaveOrganizationException" => {
                     return RusotoError::Service(
-                        RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(
-                            String::from(error_message),
-                        ),
+                        RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(err.msg),
                     )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(RemoveAccountFromOrganizationError::Service(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        RemoveAccountFromOrganizationError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        RemoveAccountFromOrganizationError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5063,66 +4300,47 @@ pub enum UpdateOrganizationalUnitError {
 
 impl UpdateOrganizationalUnitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateOrganizationalUnitError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
-                        UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
-                            error_message,
-                        )),
+                        UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(err.msg),
                     )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateOrganizationalUnitError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        UpdateOrganizationalUnitError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        UpdateOrganizationalUnitError::ConcurrentModification(err.msg),
                     )
                 }
                 "DuplicateOrganizationalUnitException" => {
                     return RusotoError::Service(
-                        UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
-                            error_message,
-                        )),
+                        UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(err.msg),
                     )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateOrganizationalUnitError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OrganizationalUnitNotFoundException" => {
                     return RusotoError::Service(
-                        UpdateOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
-                            error_message,
-                        )),
+                        UpdateOrganizationalUnitError::OrganizationalUnitNotFound(err.msg),
                     )
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UpdateOrganizationalUnitError::Service(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateOrganizationalUnitError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateOrganizationalUnitError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5175,68 +4393,43 @@ pub enum UpdatePolicyError {
 
 impl UpdatePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(UpdatePolicyError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UpdatePolicyError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdatePolicyError::AccessDenied(err.msg))
                 }
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(UpdatePolicyError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdatePolicyError::ConcurrentModification(err.msg))
                 }
                 "ConstraintViolationException" => {
-                    return RusotoError::Service(UpdatePolicyError::ConstraintViolation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdatePolicyError::ConstraintViolation(err.msg))
                 }
                 "DuplicatePolicyException" => {
-                    return RusotoError::Service(UpdatePolicyError::DuplicatePolicy(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdatePolicyError::DuplicatePolicy(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdatePolicyError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdatePolicyError::InvalidInput(err.msg))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(UpdatePolicyError::MalformedPolicyDocument(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PolicyNotFoundException" => {
-                    return RusotoError::Service(UpdatePolicyError::PolicyNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdatePolicyError::PolicyNotFound(err.msg))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(UpdatePolicyError::Service(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdatePolicyError::Service(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(UpdatePolicyError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdatePolicyError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

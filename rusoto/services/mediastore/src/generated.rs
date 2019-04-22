@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>This section describes operations that you can perform on an AWS Elemental MediaStore container.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -274,33 +273,18 @@ pub enum CreateContainerError {
 
 impl CreateContainerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContainerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(CreateContainerError::ContainerInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateContainerError::ContainerInUse(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(CreateContainerError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateContainerError::InternalServerError(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateContainerError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateContainerError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -334,33 +318,18 @@ pub enum DeleteContainerError {
 
 impl DeleteContainerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContainerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(DeleteContainerError::ContainerInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteContainerError::ContainerInUse(err.msg))
                 }
                 "ContainerNotFoundException" => {
-                    return RusotoError::Service(DeleteContainerError::ContainerNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteContainerError::ContainerNotFound(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteContainerError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteContainerError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -396,38 +365,29 @@ pub enum DeleteContainerPolicyError {
 
 impl DeleteContainerPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContainerPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteContainerPolicyError::ContainerInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(DeleteContainerPolicyError::ContainerNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteContainerPolicyError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(DeleteContainerPolicyError::PolicyNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -464,38 +424,23 @@ pub enum DeleteCorsPolicyError {
 
 impl DeleteCorsPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCorsPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(DeleteCorsPolicyError::ContainerInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteCorsPolicyError::ContainerInUse(err.msg))
                 }
                 "ContainerNotFoundException" => {
-                    return RusotoError::Service(DeleteCorsPolicyError::ContainerNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteCorsPolicyError::ContainerNotFound(err.msg))
                 }
                 "CorsPolicyNotFoundException" => {
-                    return RusotoError::Service(DeleteCorsPolicyError::CorsPolicyNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteCorsPolicyError::CorsPolicyNotFound(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteCorsPolicyError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -532,38 +477,29 @@ pub enum DeleteLifecyclePolicyError {
 
 impl DeleteLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLifecyclePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::ContainerInUse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::ContainerNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::PolicyNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -596,28 +532,17 @@ pub enum DescribeContainerError {
 
 impl DescribeContainerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContainerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerNotFoundException" => {
-                    return RusotoError::Service(DescribeContainerError::ContainerNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeContainerError::ContainerNotFound(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeContainerError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -652,38 +577,25 @@ pub enum GetContainerPolicyError {
 
 impl GetContainerPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContainerPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(GetContainerPolicyError::ContainerInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetContainerPolicyError::ContainerInUse(err.msg))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(GetContainerPolicyError::ContainerNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetContainerPolicyError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PolicyNotFoundException" => {
-                    return RusotoError::Service(GetContainerPolicyError::PolicyNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetContainerPolicyError::PolicyNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -720,38 +632,21 @@ pub enum GetCorsPolicyError {
 
 impl GetCorsPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCorsPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(GetCorsPolicyError::ContainerInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCorsPolicyError::ContainerInUse(err.msg))
                 }
                 "ContainerNotFoundException" => {
-                    return RusotoError::Service(GetCorsPolicyError::ContainerNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCorsPolicyError::ContainerNotFound(err.msg))
                 }
                 "CorsPolicyNotFoundException" => {
-                    return RusotoError::Service(GetCorsPolicyError::CorsPolicyNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCorsPolicyError::CorsPolicyNotFound(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(GetCorsPolicyError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCorsPolicyError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -788,38 +683,25 @@ pub enum GetLifecyclePolicyError {
 
 impl GetLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLifecyclePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(GetLifecyclePolicyError::ContainerInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLifecyclePolicyError::ContainerInUse(err.msg))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::ContainerNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetLifecyclePolicyError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PolicyNotFoundException" => {
-                    return RusotoError::Service(GetLifecyclePolicyError::PolicyNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetLifecyclePolicyError::PolicyNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -850,23 +732,12 @@ pub enum ListContainersError {
 
 impl ListContainersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContainersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListContainersError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListContainersError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -898,33 +769,22 @@ pub enum PutContainerPolicyError {
 
 impl PutContainerPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutContainerPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(PutContainerPolicyError::ContainerInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutContainerPolicyError::ContainerInUse(err.msg))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(PutContainerPolicyError::ContainerNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutContainerPolicyError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -958,33 +818,18 @@ pub enum PutCorsPolicyError {
 
 impl PutCorsPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutCorsPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(PutCorsPolicyError::ContainerInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutCorsPolicyError::ContainerInUse(err.msg))
                 }
                 "ContainerNotFoundException" => {
-                    return RusotoError::Service(PutCorsPolicyError::ContainerNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutCorsPolicyError::ContainerNotFound(err.msg))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(PutCorsPolicyError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutCorsPolicyError::InternalServerError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1018,33 +863,22 @@ pub enum PutLifecyclePolicyError {
 
 impl PutLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLifecyclePolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(PutLifecyclePolicyError::ContainerInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutLifecyclePolicyError::ContainerInUse(err.msg))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(PutLifecyclePolicyError::ContainerNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutLifecyclePolicyError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

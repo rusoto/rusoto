@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Represents an option to be shown on the client platform (Facebook, Slack, etc.)</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -230,88 +229,43 @@ pub enum PostContentError {
 }
 
 impl PostContentError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostContentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(PostContentError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(PostContentError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(PostContentError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::Conflict(err.msg))
                 }
                 "DependencyFailedException" => {
-                    return RusotoError::Service(PostContentError::DependencyFailed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::DependencyFailed(err.msg))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(PostContentError::InternalFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::InternalFailure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PostContentError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::LimitExceeded(err.msg))
                 }
                 "LoopDetectedException" => {
-                    return RusotoError::Service(PostContentError::LoopDetected(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::LoopDetected(err.msg))
                 }
                 "NotAcceptableException" => {
-                    return RusotoError::Service(PostContentError::NotAcceptable(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::NotAcceptable(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(PostContentError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::NotFound(err.msg))
                 }
                 "RequestTimeoutException" => {
-                    return RusotoError::Service(PostContentError::RequestTimeout(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostContentError::RequestTimeout(err.msg))
                 }
                 "UnsupportedMediaTypeException" => {
-                    return RusotoError::Service(PostContentError::UnsupportedMediaType(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PostContentError::UnsupportedMediaType(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -362,73 +316,34 @@ pub enum PostTextError {
 }
 
 impl PostTextError {
-    // see boto RestJSONParser impl for parsing errors
-    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostTextError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let error_type = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => raw_error_type
-                    .split(':')
-                    .next()
-                    .unwrap_or_else(|| "Unknown"),
-                _ => json
-                    .get("code")
-                    .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or_else(|| "Unknown"),
-            };
-
-            // message can come in either "message" or "Message"
-            // see boto BaseJSONParser impl for parsing message
-            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let error_message = json
-                .get("message")
-                .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
-                .unwrap_or("");
-
-            match error_type {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
                 "BadGatewayException" => {
-                    return RusotoError::Service(PostTextError::BadGateway(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostTextError::BadGateway(err.msg))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(PostTextError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostTextError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(PostTextError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostTextError::Conflict(err.msg))
                 }
                 "DependencyFailedException" => {
-                    return RusotoError::Service(PostTextError::DependencyFailed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostTextError::DependencyFailed(err.msg))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(PostTextError::InternalFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostTextError::InternalFailure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PostTextError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostTextError::LimitExceeded(err.msg))
                 }
                 "LoopDetectedException" => {
-                    return RusotoError::Service(PostTextError::LoopDetected(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostTextError::LoopDetected(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(PostTextError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PostTextError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

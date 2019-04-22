@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Contains details about an activity that failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1087,28 +1086,17 @@ pub enum CreateActivityError {
 
 impl CreateActivityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateActivityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ActivityLimitExceeded" => {
                     return RusotoError::Service(CreateActivityError::ActivityLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidName" => {
-                    return RusotoError::Service(CreateActivityError::InvalidName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateActivityError::InvalidName(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1147,52 +1135,35 @@ pub enum CreateStateMachineError {
 
 impl CreateStateMachineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStateMachineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArn" => {
-                    return RusotoError::Service(CreateStateMachineError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateStateMachineError::InvalidArn(err.msg))
                 }
                 "InvalidDefinition" => {
                     return RusotoError::Service(CreateStateMachineError::InvalidDefinition(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidName" => {
-                    return RusotoError::Service(CreateStateMachineError::InvalidName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateStateMachineError::InvalidName(err.msg))
                 }
                 "StateMachineAlreadyExists" => {
                     return RusotoError::Service(
-                        CreateStateMachineError::StateMachineAlreadyExists(String::from(
-                            error_message,
-                        )),
+                        CreateStateMachineError::StateMachineAlreadyExists(err.msg),
                     )
                 }
                 "StateMachineDeleting" => {
                     return RusotoError::Service(CreateStateMachineError::StateMachineDeleting(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "StateMachineLimitExceeded" => {
                     return RusotoError::Service(
-                        CreateStateMachineError::StateMachineLimitExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateStateMachineError::StateMachineLimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1225,23 +1196,12 @@ pub enum DeleteActivityError {
 
 impl DeleteActivityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteActivityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArn" => {
-                    return RusotoError::Service(DeleteActivityError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteActivityError::InvalidArn(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1269,23 +1229,12 @@ pub enum DeleteStateMachineError {
 
 impl DeleteStateMachineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStateMachineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArn" => {
-                    return RusotoError::Service(DeleteStateMachineError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteStateMachineError::InvalidArn(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1315,28 +1264,17 @@ pub enum DescribeActivityError {
 
 impl DescribeActivityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActivityError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ActivityDoesNotExist" => {
                     return RusotoError::Service(DescribeActivityError::ActivityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArn" => {
-                    return RusotoError::Service(DescribeActivityError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeActivityError::InvalidArn(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1367,28 +1305,17 @@ pub enum DescribeExecutionError {
 
 impl DescribeExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(DescribeExecutionError::ExecutionDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArn" => {
-                    return RusotoError::Service(DescribeExecutionError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeExecutionError::InvalidArn(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1419,30 +1346,17 @@ pub enum DescribeStateMachineError {
 
 impl DescribeStateMachineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStateMachineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArn" => {
-                    return RusotoError::Service(DescribeStateMachineError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeStateMachineError::InvalidArn(err.msg))
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(
-                        DescribeStateMachineError::StateMachineDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeStateMachineError::StateMachineDoesNotExist(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1475,30 +1389,19 @@ impl DescribeStateMachineForExecutionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeStateMachineForExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(
-                        DescribeStateMachineForExecutionError::ExecutionDoesNotExist(String::from(
-                            error_message,
-                        )),
+                        DescribeStateMachineForExecutionError::ExecutionDoesNotExist(err.msg),
                     )
                 }
                 "InvalidArn" => {
                     return RusotoError::Service(DescribeStateMachineForExecutionError::InvalidArn(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1531,33 +1434,22 @@ pub enum GetActivityTaskError {
 
 impl GetActivityTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetActivityTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ActivityDoesNotExist" => {
                     return RusotoError::Service(GetActivityTaskError::ActivityDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ActivityWorkerLimitExceeded" => {
                     return RusotoError::Service(GetActivityTaskError::ActivityWorkerLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArn" => {
-                    return RusotoError::Service(GetActivityTaskError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetActivityTaskError::InvalidArn(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1591,33 +1483,20 @@ pub enum GetExecutionHistoryError {
 
 impl GetExecutionHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetExecutionHistoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(GetExecutionHistoryError::ExecutionDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArn" => {
-                    return RusotoError::Service(GetExecutionHistoryError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetExecutionHistoryError::InvalidArn(err.msg))
                 }
                 "InvalidToken" => {
-                    return RusotoError::Service(GetExecutionHistoryError::InvalidToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetExecutionHistoryError::InvalidToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1647,23 +1526,12 @@ pub enum ListActivitiesError {
 
 impl ListActivitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActivitiesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidToken" => {
-                    return RusotoError::Service(ListActivitiesError::InvalidToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListActivitiesError::InvalidToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1695,33 +1563,20 @@ pub enum ListExecutionsError {
 
 impl ListExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArn" => {
-                    return RusotoError::Service(ListExecutionsError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListExecutionsError::InvalidArn(err.msg))
                 }
                 "InvalidToken" => {
-                    return RusotoError::Service(ListExecutionsError::InvalidToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListExecutionsError::InvalidToken(err.msg))
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(ListExecutionsError::StateMachineDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1751,23 +1606,12 @@ pub enum ListStateMachinesError {
 
 impl ListStateMachinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStateMachinesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidToken" => {
-                    return RusotoError::Service(ListStateMachinesError::InvalidToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListStateMachinesError::InvalidToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1797,28 +1641,17 @@ pub enum ListTagsForResourceError {
 
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArn" => {
-                    return RusotoError::Service(ListTagsForResourceError::InvalidArn(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForResourceError::InvalidArn(err.msg))
                 }
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1851,33 +1684,18 @@ pub enum SendTaskFailureError {
 
 impl SendTaskFailureError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTaskFailureError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidToken" => {
-                    return RusotoError::Service(SendTaskFailureError::InvalidToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendTaskFailureError::InvalidToken(err.msg))
                 }
                 "TaskDoesNotExist" => {
-                    return RusotoError::Service(SendTaskFailureError::TaskDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendTaskFailureError::TaskDoesNotExist(err.msg))
                 }
                 "TaskTimedOut" => {
-                    return RusotoError::Service(SendTaskFailureError::TaskTimedOut(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendTaskFailureError::TaskTimedOut(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1911,33 +1729,18 @@ pub enum SendTaskHeartbeatError {
 
 impl SendTaskHeartbeatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTaskHeartbeatError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidToken" => {
-                    return RusotoError::Service(SendTaskHeartbeatError::InvalidToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendTaskHeartbeatError::InvalidToken(err.msg))
                 }
                 "TaskDoesNotExist" => {
-                    return RusotoError::Service(SendTaskHeartbeatError::TaskDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendTaskHeartbeatError::TaskDoesNotExist(err.msg))
                 }
                 "TaskTimedOut" => {
-                    return RusotoError::Service(SendTaskHeartbeatError::TaskTimedOut(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendTaskHeartbeatError::TaskTimedOut(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1973,38 +1776,21 @@ pub enum SendTaskSuccessError {
 
 impl SendTaskSuccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTaskSuccessError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidOutput" => {
-                    return RusotoError::Service(SendTaskSuccessError::InvalidOutput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendTaskSuccessError::InvalidOutput(err.msg))
                 }
                 "InvalidToken" => {
-                    return RusotoError::Service(SendTaskSuccessError::InvalidToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendTaskSuccessError::InvalidToken(err.msg))
                 }
                 "TaskDoesNotExist" => {
-                    return RusotoError::Service(SendTaskSuccessError::TaskDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendTaskSuccessError::TaskDoesNotExist(err.msg))
                 }
                 "TaskTimedOut" => {
-                    return RusotoError::Service(SendTaskSuccessError::TaskTimedOut(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendTaskSuccessError::TaskTimedOut(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2047,53 +1833,38 @@ pub enum StartExecutionError {
 
 impl StartExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ExecutionAlreadyExists" => {
                     return RusotoError::Service(StartExecutionError::ExecutionAlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ExecutionLimitExceeded" => {
                     return RusotoError::Service(StartExecutionError::ExecutionLimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidArn" => {
-                    return RusotoError::Service(StartExecutionError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartExecutionError::InvalidArn(err.msg))
                 }
                 "InvalidExecutionInput" => {
                     return RusotoError::Service(StartExecutionError::InvalidExecutionInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidName" => {
-                    return RusotoError::Service(StartExecutionError::InvalidName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StartExecutionError::InvalidName(err.msg))
                 }
                 "StateMachineDeleting" => {
-                    return RusotoError::Service(StartExecutionError::StateMachineDeleting(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartExecutionError::StateMachineDeleting(err.msg))
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(StartExecutionError::StateMachineDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2129,28 +1900,15 @@ pub enum StopExecutionError {
 
 impl StopExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ExecutionDoesNotExist" => {
-                    return RusotoError::Service(StopExecutionError::ExecutionDoesNotExist(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopExecutionError::ExecutionDoesNotExist(err.msg))
                 }
                 "InvalidArn" => {
-                    return RusotoError::Service(StopExecutionError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(StopExecutionError::InvalidArn(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2183,33 +1941,16 @@ pub enum TagResourceError {
 
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "InvalidArn" => {
-                    return RusotoError::Service(TagResourceError::InvalidArn(String::from(
-                        error_message,
-                    )))
-                }
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidArn" => return RusotoError::Service(TagResourceError::InvalidArn(err.msg)),
                 "ResourceNotFound" => {
-                    return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
                 }
                 "TooManyTags" => {
-                    return RusotoError::Service(TagResourceError::TooManyTags(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2241,28 +1982,15 @@ pub enum UntagResourceError {
 
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArn" => {
-                    return RusotoError::Service(UntagResourceError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::InvalidArn(err.msg))
                 }
                 "ResourceNotFound" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2299,43 +2027,32 @@ pub enum UpdateStateMachineError {
 
 impl UpdateStateMachineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStateMachineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidArn" => {
-                    return RusotoError::Service(UpdateStateMachineError::InvalidArn(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateStateMachineError::InvalidArn(err.msg))
                 }
                 "InvalidDefinition" => {
                     return RusotoError::Service(UpdateStateMachineError::InvalidDefinition(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "MissingRequiredParameter" => {
                     return RusotoError::Service(UpdateStateMachineError::MissingRequiredParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "StateMachineDeleting" => {
                     return RusotoError::Service(UpdateStateMachineError::StateMachineDeleting(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(UpdateStateMachineError::StateMachineDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

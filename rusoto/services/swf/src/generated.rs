@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Unit of work sent to an activity worker.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2829,32 +2828,19 @@ impl CountClosedWorkflowExecutionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CountClosedWorkflowExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        CountClosedWorkflowExecutionsError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        ),
+                        CountClosedWorkflowExecutionsError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        CountClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        CountClosedWorkflowExecutionsError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2887,32 +2873,19 @@ impl CountOpenWorkflowExecutionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CountOpenWorkflowExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        CountOpenWorkflowExecutionsError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        CountOpenWorkflowExecutionsError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        CountOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        CountOpenWorkflowExecutionsError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2943,32 +2916,19 @@ pub enum CountPendingActivityTasksError {
 
 impl CountPendingActivityTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CountPendingActivityTasksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        CountPendingActivityTasksError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        CountPendingActivityTasksError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        CountPendingActivityTasksError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        CountPendingActivityTasksError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2999,32 +2959,19 @@ pub enum CountPendingDecisionTasksError {
 
 impl CountPendingDecisionTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CountPendingDecisionTasksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        CountPendingDecisionTasksError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        CountPendingDecisionTasksError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        CountPendingDecisionTasksError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        CountPendingDecisionTasksError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3057,35 +3004,24 @@ pub enum DeprecateActivityTypeError {
 
 impl DeprecateActivityTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateActivityTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        DeprecateActivityTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        DeprecateActivityTypeError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "TypeDeprecatedFault" => {
                     return RusotoError::Service(DeprecateActivityTypeError::TypeDeprecatedFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DeprecateActivityTypeError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3119,33 +3055,24 @@ pub enum DeprecateDomainError {
 
 impl DeprecateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DomainDeprecatedFault" => {
                     return RusotoError::Service(DeprecateDomainError::DomainDeprecatedFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(DeprecateDomainError::OperationNotPermittedFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DeprecateDomainError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3179,35 +3106,24 @@ pub enum DeprecateWorkflowTypeError {
 
 impl DeprecateWorkflowTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateWorkflowTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        DeprecateWorkflowTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        DeprecateWorkflowTypeError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "TypeDeprecatedFault" => {
                     return RusotoError::Service(DeprecateWorkflowTypeError::TypeDeprecatedFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DeprecateWorkflowTypeError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3239,30 +3155,19 @@ pub enum DescribeActivityTypeError {
 
 impl DescribeActivityTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActivityTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        DescribeActivityTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        DescribeActivityTypeError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DescribeActivityTypeError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3293,28 +3198,17 @@ pub enum DescribeDomainError {
 
 impl DescribeDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(DescribeDomainError::OperationNotPermittedFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnknownResourceFault" => {
-                    return RusotoError::Service(DescribeDomainError::UnknownResourceFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeDomainError::UnknownResourceFault(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3345,32 +3239,19 @@ pub enum DescribeWorkflowExecutionError {
 
 impl DescribeWorkflowExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkflowExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        DescribeWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        DescribeWorkflowExecutionError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        DescribeWorkflowExecutionError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        DescribeWorkflowExecutionError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3401,30 +3282,19 @@ pub enum DescribeWorkflowTypeError {
 
 impl DescribeWorkflowTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkflowTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        DescribeWorkflowTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        DescribeWorkflowTypeError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(DescribeWorkflowTypeError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3457,32 +3327,19 @@ impl GetWorkflowExecutionHistoryError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetWorkflowExecutionHistoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        GetWorkflowExecutionHistoryError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        GetWorkflowExecutionHistoryError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        GetWorkflowExecutionHistoryError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        GetWorkflowExecutionHistoryError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3513,30 +3370,19 @@ pub enum ListActivityTypesError {
 
 impl ListActivityTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActivityTypesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        ListActivityTypesError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        ListActivityTypesError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(ListActivityTypesError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3569,32 +3415,19 @@ impl ListClosedWorkflowExecutionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListClosedWorkflowExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        ListClosedWorkflowExecutionsError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        ),
+                        ListClosedWorkflowExecutionsError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        ListClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        ListClosedWorkflowExecutionsError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3623,23 +3456,14 @@ pub enum ListDomainsError {
 
 impl ListDomainsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(ListDomainsError::OperationNotPermittedFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3671,32 +3495,19 @@ impl ListOpenWorkflowExecutionsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListOpenWorkflowExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        ListOpenWorkflowExecutionsError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        ListOpenWorkflowExecutionsError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        ListOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        ListOpenWorkflowExecutionsError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3727,30 +3538,19 @@ pub enum ListWorkflowTypesError {
 
 impl ListWorkflowTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkflowTypesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        ListWorkflowTypesError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        ListWorkflowTypesError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(ListWorkflowTypesError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3783,35 +3583,24 @@ pub enum PollForActivityTaskError {
 
 impl PollForActivityTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForActivityTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(PollForActivityTaskError::LimitExceededFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        PollForActivityTaskError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        PollForActivityTaskError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(PollForActivityTaskError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3845,35 +3634,24 @@ pub enum PollForDecisionTaskError {
 
 impl PollForDecisionTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForDecisionTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(PollForDecisionTaskError::LimitExceededFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        PollForDecisionTaskError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        PollForDecisionTaskError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(PollForDecisionTaskError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3907,32 +3685,19 @@ impl RecordActivityTaskHeartbeatError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RecordActivityTaskHeartbeatError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        RecordActivityTaskHeartbeatError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        RecordActivityTaskHeartbeatError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        RecordActivityTaskHeartbeatError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        RecordActivityTaskHeartbeatError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3967,40 +3732,29 @@ pub enum RegisterActivityTypeError {
 
 impl RegisterActivityTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterActivityTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(RegisterActivityTypeError::LimitExceededFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        RegisterActivityTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        RegisterActivityTypeError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "TypeAlreadyExistsFault" => {
                     return RusotoError::Service(RegisterActivityTypeError::TypeAlreadyExistsFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(RegisterActivityTypeError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4035,33 +3789,22 @@ pub enum RegisterDomainError {
 
 impl RegisterDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DomainAlreadyExistsFault" => {
                     return RusotoError::Service(RegisterDomainError::DomainAlreadyExistsFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededFault" => {
-                    return RusotoError::Service(RegisterDomainError::LimitExceededFault(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterDomainError::LimitExceededFault(err.msg))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(RegisterDomainError::OperationNotPermittedFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4097,40 +3840,29 @@ pub enum RegisterWorkflowTypeError {
 
 impl RegisterWorkflowTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterWorkflowTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(RegisterWorkflowTypeError::LimitExceededFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        RegisterWorkflowTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        RegisterWorkflowTypeError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "TypeAlreadyExistsFault" => {
                     return RusotoError::Service(RegisterWorkflowTypeError::TypeAlreadyExistsFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(RegisterWorkflowTypeError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4165,32 +3897,19 @@ impl RequestCancelWorkflowExecutionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RequestCancelWorkflowExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        RequestCancelWorkflowExecutionError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        ),
+                        RequestCancelWorkflowExecutionError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        RequestCancelWorkflowExecutionError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        RequestCancelWorkflowExecutionError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4223,32 +3942,19 @@ impl RespondActivityTaskCanceledError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RespondActivityTaskCanceledError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        RespondActivityTaskCanceledError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        RespondActivityTaskCanceledError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        RespondActivityTaskCanceledError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        RespondActivityTaskCanceledError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4281,32 +3987,19 @@ impl RespondActivityTaskCompletedError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RespondActivityTaskCompletedError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        RespondActivityTaskCompletedError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        ),
+                        RespondActivityTaskCompletedError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        RespondActivityTaskCompletedError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        RespondActivityTaskCompletedError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4337,32 +4030,19 @@ pub enum RespondActivityTaskFailedError {
 
 impl RespondActivityTaskFailedError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RespondActivityTaskFailedError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        RespondActivityTaskFailedError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        RespondActivityTaskFailedError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        RespondActivityTaskFailedError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        RespondActivityTaskFailedError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4395,32 +4075,19 @@ impl RespondDecisionTaskCompletedError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RespondDecisionTaskCompletedError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        RespondDecisionTaskCompletedError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        ),
+                        RespondDecisionTaskCompletedError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        RespondDecisionTaskCompletedError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        RespondDecisionTaskCompletedError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4451,32 +4118,19 @@ pub enum SignalWorkflowExecutionError {
 
 impl SignalWorkflowExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SignalWorkflowExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        SignalWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        SignalWorkflowExecutionError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        SignalWorkflowExecutionError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        SignalWorkflowExecutionError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4515,54 +4169,39 @@ pub enum StartWorkflowExecutionError {
 
 impl StartWorkflowExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartWorkflowExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DefaultUndefinedFault" => {
                     return RusotoError::Service(
-                        StartWorkflowExecutionError::DefaultUndefinedFault(String::from(
-                            error_message,
-                        )),
+                        StartWorkflowExecutionError::DefaultUndefinedFault(err.msg),
                     )
                 }
                 "LimitExceededFault" => {
                     return RusotoError::Service(StartWorkflowExecutionError::LimitExceededFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        StartWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        StartWorkflowExecutionError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "TypeDeprecatedFault" => {
                     return RusotoError::Service(StartWorkflowExecutionError::TypeDeprecatedFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(StartWorkflowExecutionError::UnknownResourceFault(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WorkflowExecutionAlreadyStartedFault" => {
                     return RusotoError::Service(
-                        StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(
-                            String::from(error_message),
-                        ),
+                        StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4599,32 +4238,19 @@ impl TerminateWorkflowExecutionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<TerminateWorkflowExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
-                        TerminateWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        )),
+                        TerminateWorkflowExecutionError::OperationNotPermittedFault(err.msg),
                     )
                 }
                 "UnknownResourceFault" => {
                     return RusotoError::Service(
-                        TerminateWorkflowExecutionError::UnknownResourceFault(String::from(
-                            error_message,
-                        )),
+                        TerminateWorkflowExecutionError::UnknownResourceFault(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

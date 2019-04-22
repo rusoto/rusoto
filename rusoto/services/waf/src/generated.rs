@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>The <code>ActivatedRule</code> object in an <a>UpdateWebACL</a> request specifies a <code>Rule</code> that you want to insert or delete, the priority of the <code>Rule</code> in the <code>WebACL</code>, and the action that you want AWS WAF to take when a web request matches the <code>Rule</code> (<code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>).</p> <p>To specify whether to insert or delete a <code>Rule</code>, use the <code>Action</code> parameter in the <a>WebACLUpdate</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActivatedRule {
@@ -2357,48 +2356,35 @@ pub enum CreateByteMatchSetError {
 
 impl CreateByteMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateByteMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFDisallowedName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(CreateByteMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateByteMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateByteMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateByteMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2441,48 +2427,29 @@ pub enum CreateGeoMatchSetError {
 
 impl CreateGeoMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGeoMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
-                    return RusotoError::Service(CreateGeoMatchSetError::WAFDisallowedName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFDisallowedName(err.msg))
                 }
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(CreateGeoMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(CreateGeoMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateGeoMatchSetError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(CreateGeoMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateGeoMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2525,48 +2492,27 @@ pub enum CreateIPSetError {
 
 impl CreateIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIPSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
-                    return RusotoError::Service(CreateIPSetError::WAFDisallowedName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateIPSetError::WAFDisallowedName(err.msg))
                 }
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(CreateIPSetError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateIPSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(CreateIPSetError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateIPSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFInvalidParameterException" => {
-                    return RusotoError::Service(CreateIPSetError::WAFInvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateIPSetError::WAFInvalidParameter(err.msg))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(CreateIPSetError::WAFLimitsExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateIPSetError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateIPSetError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateIPSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2607,43 +2553,32 @@ pub enum CreateRateBasedRuleError {
 
 impl CreateRateBasedRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRateBasedRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFDisallowedName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateRateBasedRuleError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRateBasedRuleError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2681,38 +2616,27 @@ pub enum CreateRegexMatchSetError {
 
 impl CreateRegexMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRegexMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRegexMatchSetError::WAFDisallowedName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateRegexMatchSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateRegexMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateRegexMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRegexMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2749,38 +2673,27 @@ pub enum CreateRegexPatternSetError {
 
 impl CreateRegexPatternSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRegexPatternSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRegexPatternSetError::WAFDisallowedName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateRegexPatternSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateRegexPatternSetError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateRegexPatternSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRegexPatternSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2819,43 +2732,24 @@ pub enum CreateRuleError {
 
 impl CreateRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
-                    return RusotoError::Service(CreateRuleError::WAFDisallowedName(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateRuleError::WAFDisallowedName(err.msg))
                 }
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(CreateRuleError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateRuleError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidParameterException" => {
-                    return RusotoError::Service(CreateRuleError::WAFInvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRuleError::WAFInvalidParameter(err.msg))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(CreateRuleError::WAFLimitsExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateRuleError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateRuleError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateRuleError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2893,38 +2787,21 @@ pub enum CreateRuleGroupError {
 
 impl CreateRuleGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
-                    return RusotoError::Service(CreateRuleGroupError::WAFDisallowedName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRuleGroupError::WAFDisallowedName(err.msg))
                 }
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(CreateRuleGroupError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRuleGroupError::WAFInternalError(err.msg))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(CreateRuleGroupError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateRuleGroupError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateRuleGroupError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateRuleGroupError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2965,48 +2842,39 @@ pub enum CreateSizeConstraintSetError {
 
 impl CreateSizeConstraintSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSizeConstraintSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFDisallowedName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFStaleData(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3051,56 +2919,39 @@ impl CreateSqlInjectionMatchSetError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSqlInjectionMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(
-                        CreateSqlInjectionMatchSetError::WAFDisallowedName(String::from(
-                            error_message,
-                        )),
+                        CreateSqlInjectionMatchSetError::WAFDisallowedName(err.msg),
                     )
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(
-                        CreateSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
-                            error_message,
-                        )),
+                        CreateSqlInjectionMatchSetError::WAFInvalidAccount(err.msg),
                     )
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
-                        CreateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
-                            error_message,
-                        )),
+                        CreateSqlInjectionMatchSetError::WAFInvalidParameter(err.msg),
                     )
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(
-                        CreateSqlInjectionMatchSetError::WAFLimitsExceeded(String::from(
-                            error_message,
-                        )),
+                        CreateSqlInjectionMatchSetError::WAFLimitsExceeded(err.msg),
                     )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFStaleData(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3143,48 +2994,27 @@ pub enum CreateWebACLError {
 
 impl CreateWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWebACLError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
-                    return RusotoError::Service(CreateWebACLError::WAFDisallowedName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateWebACLError::WAFDisallowedName(err.msg))
                 }
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(CreateWebACLError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateWebACLError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(CreateWebACLError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateWebACLError::WAFInvalidAccount(err.msg))
                 }
                 "WAFInvalidParameterException" => {
-                    return RusotoError::Service(CreateWebACLError::WAFInvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateWebACLError::WAFInvalidParameter(err.msg))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(CreateWebACLError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateWebACLError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateWebACLError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateWebACLError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3227,48 +3057,29 @@ pub enum CreateXssMatchSetError {
 
 impl CreateXssMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateXssMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
-                    return RusotoError::Service(CreateXssMatchSetError::WAFDisallowedName(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateXssMatchSetError::WAFDisallowedName(err.msg))
                 }
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(CreateXssMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateXssMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(CreateXssMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateXssMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(CreateXssMatchSetError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(CreateXssMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateXssMatchSetError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(CreateXssMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateXssMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3311,48 +3122,35 @@ pub enum DeleteByteMatchSetError {
 
 impl DeleteByteMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteByteMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(DeleteByteMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteByteMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFNonEmptyEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFReferencedItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteByteMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteByteMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3395,48 +3193,29 @@ pub enum DeleteGeoMatchSetError {
 
 impl DeleteGeoMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGeoMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(DeleteGeoMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(DeleteGeoMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonEmptyEntityException" => {
-                    return RusotoError::Service(DeleteGeoMatchSetError::WAFNonEmptyEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFNonEmptyEntity(err.msg))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteGeoMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(DeleteGeoMatchSetError::WAFReferencedItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteGeoMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3479,48 +3258,27 @@ pub enum DeleteIPSetError {
 
 impl DeleteIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIPSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(DeleteIPSetError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteIPSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(DeleteIPSetError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteIPSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonEmptyEntityException" => {
-                    return RusotoError::Service(DeleteIPSetError::WAFNonEmptyEntity(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteIPSetError::WAFNonEmptyEntity(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(DeleteIPSetError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteIPSetError::WAFNonexistentItem(err.msg))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(DeleteIPSetError::WAFReferencedItem(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteIPSetError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteIPSetError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteIPSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3559,35 +3317,24 @@ impl DeleteLoggingConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteLoggingConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteLoggingConfigurationError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
-                        DeleteLoggingConfigurationError::WAFNonexistentItem(String::from(
-                            error_message,
-                        )),
+                        DeleteLoggingConfigurationError::WAFNonexistentItem(err.msg),
                     )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteLoggingConfigurationError::WAFStaleData(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3621,33 +3368,22 @@ pub enum DeletePermissionPolicyError {
 
 impl DeletePermissionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePermissionPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeletePermissionPolicyError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeletePermissionPolicyError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeletePermissionPolicyError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeletePermissionPolicyError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3687,48 +3423,37 @@ pub enum DeleteRateBasedRuleError {
 
 impl DeleteRateBasedRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRateBasedRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFNonEmptyEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFReferencedItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteRateBasedRuleError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRateBasedRuleError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3771,48 +3496,37 @@ pub enum DeleteRegexMatchSetError {
 
 impl DeleteRegexMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegexMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFNonEmptyEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFReferencedItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteRegexMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRegexMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3855,48 +3569,37 @@ pub enum DeleteRegexPatternSetError {
 
 impl DeleteRegexPatternSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegexPatternSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFNonEmptyEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFReferencedItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteRegexPatternSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRegexPatternSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3939,48 +3642,27 @@ pub enum DeleteRuleError {
 
 impl DeleteRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(DeleteRuleError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRuleError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(DeleteRuleError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRuleError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonEmptyEntityException" => {
-                    return RusotoError::Service(DeleteRuleError::WAFNonEmptyEntity(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRuleError::WAFNonEmptyEntity(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(DeleteRuleError::WAFNonexistentItem(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRuleError::WAFNonexistentItem(err.msg))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(DeleteRuleError::WAFReferencedItem(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRuleError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteRuleError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRuleError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4023,48 +3705,27 @@ pub enum DeleteRuleGroupError {
 
 impl DeleteRuleGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(DeleteRuleGroupError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRuleGroupError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidOperationException" => {
-                    return RusotoError::Service(DeleteRuleGroupError::WAFInvalidOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRuleGroupError::WAFInvalidOperation(err.msg))
                 }
                 "WAFNonEmptyEntityException" => {
-                    return RusotoError::Service(DeleteRuleGroupError::WAFNonEmptyEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRuleGroupError::WAFNonEmptyEntity(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(DeleteRuleGroupError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRuleGroupError::WAFNonexistentItem(err.msg))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(DeleteRuleGroupError::WAFReferencedItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRuleGroupError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteRuleGroupError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRuleGroupError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4107,48 +3768,39 @@ pub enum DeleteSizeConstraintSetError {
 
 impl DeleteSizeConstraintSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSizeConstraintSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFNonEmptyEntity(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFReferencedItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFStaleData(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4193,56 +3845,39 @@ impl DeleteSqlInjectionMatchSetError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteSqlInjectionMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(
-                        DeleteSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
-                            error_message,
-                        )),
+                        DeleteSqlInjectionMatchSetError::WAFInvalidAccount(err.msg),
                     )
                 }
                 "WAFNonEmptyEntityException" => {
                     return RusotoError::Service(
-                        DeleteSqlInjectionMatchSetError::WAFNonEmptyEntity(String::from(
-                            error_message,
-                        )),
+                        DeleteSqlInjectionMatchSetError::WAFNonEmptyEntity(err.msg),
                     )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
-                        DeleteSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
-                            error_message,
-                        )),
+                        DeleteSqlInjectionMatchSetError::WAFNonexistentItem(err.msg),
                     )
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(
-                        DeleteSqlInjectionMatchSetError::WAFReferencedItem(String::from(
-                            error_message,
-                        )),
+                        DeleteSqlInjectionMatchSetError::WAFReferencedItem(err.msg),
                     )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFStaleData(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4285,48 +3920,27 @@ pub enum DeleteWebACLError {
 
 impl DeleteWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebACLError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(DeleteWebACLError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteWebACLError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(DeleteWebACLError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteWebACLError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonEmptyEntityException" => {
-                    return RusotoError::Service(DeleteWebACLError::WAFNonEmptyEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteWebACLError::WAFNonEmptyEntity(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(DeleteWebACLError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteWebACLError::WAFNonexistentItem(err.msg))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(DeleteWebACLError::WAFReferencedItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteWebACLError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteWebACLError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteWebACLError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4369,48 +3983,29 @@ pub enum DeleteXssMatchSetError {
 
 impl DeleteXssMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteXssMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(DeleteXssMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(DeleteXssMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonEmptyEntityException" => {
-                    return RusotoError::Service(DeleteXssMatchSetError::WAFNonEmptyEntity(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFNonEmptyEntity(err.msg))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(DeleteXssMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(DeleteXssMatchSetError::WAFReferencedItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(DeleteXssMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4447,33 +4042,18 @@ pub enum GetByteMatchSetError {
 
 impl GetByteMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetByteMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetByteMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetByteMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(GetByteMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetByteMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(GetByteMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetByteMatchSetError::WAFNonexistentItem(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4503,23 +4083,12 @@ pub enum GetChangeTokenError {
 
 impl GetChangeTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChangeTokenError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetChangeTokenError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetChangeTokenError::WAFInternalError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4549,28 +4118,19 @@ pub enum GetChangeTokenStatusError {
 
 impl GetChangeTokenStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChangeTokenStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetChangeTokenStatusError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetChangeTokenStatusError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4603,33 +4163,18 @@ pub enum GetGeoMatchSetError {
 
 impl GetGeoMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGeoMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetGeoMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetGeoMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(GetGeoMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetGeoMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(GetGeoMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetGeoMatchSetError::WAFNonexistentItem(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4663,33 +4208,18 @@ pub enum GetIPSetError {
 
 impl GetIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIPSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetIPSetError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetIPSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(GetIPSetError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetIPSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(GetIPSetError::WAFNonexistentItem(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetIPSetError::WAFNonexistentItem(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4721,28 +4251,19 @@ pub enum GetLoggingConfigurationError {
 
 impl GetLoggingConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoggingConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetLoggingConfigurationError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetLoggingConfigurationError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4773,28 +4294,19 @@ pub enum GetPermissionPolicyError {
 
 impl GetPermissionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPermissionPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetPermissionPolicyError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetPermissionPolicyError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4827,33 +4339,18 @@ pub enum GetRateBasedRuleError {
 
 impl GetRateBasedRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRateBasedRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetRateBasedRuleError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRateBasedRuleError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(GetRateBasedRuleError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRateBasedRuleError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(GetRateBasedRuleError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRateBasedRuleError::WAFNonexistentItem(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4891,46 +4388,29 @@ impl GetRateBasedRuleManagedKeysError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRateBasedRuleManagedKeysError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(
-                        GetRateBasedRuleManagedKeysError::WAFInternalError(String::from(
-                            error_message,
-                        )),
+                        GetRateBasedRuleManagedKeysError::WAFInternalError(err.msg),
                     )
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(
-                        GetRateBasedRuleManagedKeysError::WAFInvalidAccount(String::from(
-                            error_message,
-                        )),
+                        GetRateBasedRuleManagedKeysError::WAFInvalidAccount(err.msg),
                     )
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
-                        GetRateBasedRuleManagedKeysError::WAFInvalidParameter(String::from(
-                            error_message,
-                        )),
+                        GetRateBasedRuleManagedKeysError::WAFInvalidParameter(err.msg),
                     )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
-                        GetRateBasedRuleManagedKeysError::WAFNonexistentItem(String::from(
-                            error_message,
-                        )),
+                        GetRateBasedRuleManagedKeysError::WAFNonexistentItem(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4965,33 +4445,18 @@ pub enum GetRegexMatchSetError {
 
 impl GetRegexMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegexMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetRegexMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRegexMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(GetRegexMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRegexMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(GetRegexMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRegexMatchSetError::WAFNonexistentItem(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5025,33 +4490,22 @@ pub enum GetRegexPatternSetError {
 
 impl GetRegexPatternSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegexPatternSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetRegexPatternSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRegexPatternSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetRegexPatternSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetRegexPatternSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5085,33 +4539,18 @@ pub enum GetRuleError {
 
 impl GetRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetRuleError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRuleError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(GetRuleError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRuleError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(GetRuleError::WAFNonexistentItem(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRuleError::WAFNonexistentItem(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5143,28 +4582,15 @@ pub enum GetRuleGroupError {
 
 impl GetRuleGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRuleGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetRuleGroupError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRuleGroupError::WAFInternalError(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(GetRuleGroupError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRuleGroupError::WAFNonexistentItem(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5195,28 +4621,17 @@ pub enum GetSampledRequestsError {
 
 impl GetSampledRequestsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSampledRequestsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetSampledRequestsError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetSampledRequestsError::WAFInternalError(err.msg))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetSampledRequestsError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5249,33 +4664,24 @@ pub enum GetSizeConstraintSetError {
 
 impl GetSizeConstraintSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSizeConstraintSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetSizeConstraintSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetSizeConstraintSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetSizeConstraintSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5309,33 +4715,24 @@ pub enum GetSqlInjectionMatchSetError {
 
 impl GetSqlInjectionMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSqlInjectionMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetSqlInjectionMatchSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(GetSqlInjectionMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(GetSqlInjectionMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5369,33 +4766,18 @@ pub enum GetWebACLError {
 
 impl GetWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWebACLError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetWebACLError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetWebACLError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(GetWebACLError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetWebACLError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(GetWebACLError::WAFNonexistentItem(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetWebACLError::WAFNonexistentItem(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5429,33 +4811,18 @@ pub enum GetXssMatchSetError {
 
 impl GetXssMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetXssMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(GetXssMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetXssMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(GetXssMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetXssMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(GetXssMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetXssMatchSetError::WAFNonexistentItem(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5491,39 +4858,24 @@ impl ListActivatedRulesInRuleGroupError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListActivatedRulesInRuleGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(
-                        ListActivatedRulesInRuleGroupError::WAFInternalError(String::from(
-                            error_message,
-                        )),
+                        ListActivatedRulesInRuleGroupError::WAFInternalError(err.msg),
                     )
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
-                        ListActivatedRulesInRuleGroupError::WAFInvalidParameter(String::from(
-                            error_message,
-                        )),
+                        ListActivatedRulesInRuleGroupError::WAFInvalidParameter(err.msg),
                     )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
-                        ListActivatedRulesInRuleGroupError::WAFNonexistentItem(String::from(
-                            error_message,
-                        )),
+                        ListActivatedRulesInRuleGroupError::WAFNonexistentItem(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5555,28 +4907,15 @@ pub enum ListByteMatchSetsError {
 
 impl ListByteMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListByteMatchSetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(ListByteMatchSetsError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListByteMatchSetsError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(ListByteMatchSetsError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListByteMatchSetsError::WAFInvalidAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5607,28 +4946,15 @@ pub enum ListGeoMatchSetsError {
 
 impl ListGeoMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGeoMatchSetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(ListGeoMatchSetsError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListGeoMatchSetsError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(ListGeoMatchSetsError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListGeoMatchSetsError::WAFInvalidAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5659,28 +4985,15 @@ pub enum ListIPSetsError {
 
 impl ListIPSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIPSetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(ListIPSetsError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListIPSetsError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(ListIPSetsError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListIPSetsError::WAFInvalidAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5713,37 +5026,24 @@ pub enum ListLoggingConfigurationsError {
 
 impl ListLoggingConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLoggingConfigurationsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListLoggingConfigurationsError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
-                        ListLoggingConfigurationsError::WAFInvalidParameter(String::from(
-                            error_message,
-                        )),
+                        ListLoggingConfigurationsError::WAFInvalidParameter(err.msg),
                     )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
-                        ListLoggingConfigurationsError::WAFNonexistentItem(String::from(
-                            error_message,
-                        )),
+                        ListLoggingConfigurationsError::WAFNonexistentItem(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5775,28 +5075,17 @@ pub enum ListRateBasedRulesError {
 
 impl ListRateBasedRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRateBasedRulesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(ListRateBasedRulesError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRateBasedRulesError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListRateBasedRulesError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5827,28 +5116,17 @@ pub enum ListRegexMatchSetsError {
 
 impl ListRegexMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRegexMatchSetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(ListRegexMatchSetsError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRegexMatchSetsError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListRegexMatchSetsError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5879,28 +5157,19 @@ pub enum ListRegexPatternSetsError {
 
 impl ListRegexPatternSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRegexPatternSetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRegexPatternSetsError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListRegexPatternSetsError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5929,23 +5198,12 @@ pub enum ListRuleGroupsError {
 
 impl ListRuleGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRuleGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(ListRuleGroupsError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRuleGroupsError::WAFInternalError(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5975,28 +5233,15 @@ pub enum ListRulesError {
 
 impl ListRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRulesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(ListRulesError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRulesError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(ListRulesError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRulesError::WAFInvalidAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6027,28 +5272,19 @@ pub enum ListSizeConstraintSetsError {
 
 impl ListSizeConstraintSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSizeConstraintSetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListSizeConstraintSetsError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListSizeConstraintSetsError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6079,28 +5315,19 @@ pub enum ListSqlInjectionMatchSetsError {
 
 impl ListSqlInjectionMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSqlInjectionMatchSetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListSqlInjectionMatchSetsError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(ListSqlInjectionMatchSetsError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6131,28 +5358,19 @@ pub enum ListSubscribedRuleGroupsError {
 
 impl ListSubscribedRuleGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSubscribedRuleGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListSubscribedRuleGroupsError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(ListSubscribedRuleGroupsError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6183,28 +5401,15 @@ pub enum ListWebACLsError {
 
 impl ListWebACLsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWebACLsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(ListWebACLsError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListWebACLsError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(ListWebACLsError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListWebACLsError::WAFInvalidAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6235,28 +5440,15 @@ pub enum ListXssMatchSetsError {
 
 impl ListXssMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListXssMatchSetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(ListXssMatchSetsError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListXssMatchSetsError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(ListXssMatchSetsError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListXssMatchSetsError::WAFInvalidAccount(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6291,40 +5483,29 @@ pub enum PutLoggingConfigurationError {
 
 impl PutLoggingConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLoggingConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(PutLoggingConfigurationError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(PutLoggingConfigurationError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFServiceLinkedRoleErrorException" => {
                     return RusotoError::Service(
-                        PutLoggingConfigurationError::WAFServiceLinkedRoleError(String::from(
-                            error_message,
-                        )),
+                        PutLoggingConfigurationError::WAFServiceLinkedRoleError(err.msg),
                     )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(PutLoggingConfigurationError::WAFStaleData(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6361,40 +5542,27 @@ pub enum PutPermissionPolicyError {
 
 impl PutPermissionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPermissionPolicyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(PutPermissionPolicyError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidPermissionPolicyException" => {
                     return RusotoError::Service(
-                        PutPermissionPolicyError::WAFInvalidPermissionPolicy(String::from(
-                            error_message,
-                        )),
+                        PutPermissionPolicyError::WAFInvalidPermissionPolicy(err.msg),
                     )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(PutPermissionPolicyError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(PutPermissionPolicyError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutPermissionPolicyError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6439,58 +5607,45 @@ pub enum UpdateByteMatchSetError {
 
 impl UpdateByteMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateByteMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(UpdateByteMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFInvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFNonexistentContainer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateByteMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6541,63 +5696,44 @@ pub enum UpdateGeoMatchSetError {
 
 impl UpdateGeoMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGeoMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(UpdateGeoMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(UpdateGeoMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFNonexistentContainer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(UpdateGeoMatchSetError::WAFReferencedItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateGeoMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6649,63 +5785,36 @@ pub enum UpdateIPSetError {
 
 impl UpdateIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIPSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateIPSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateIPSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFInvalidOperationException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFInvalidOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateIPSetError::WAFInvalidOperation(err.msg))
                 }
                 "WAFInvalidParameterException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFInvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateIPSetError::WAFInvalidParameter(err.msg))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFLimitsExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateIPSetError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFNonexistentContainerException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFNonexistentContainer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateIPSetError::WAFNonexistentContainer(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateIPSetError::WAFNonexistentItem(err.msg))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFReferencedItem(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateIPSetError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateIPSetError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateIPSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6757,63 +5866,52 @@ pub enum UpdateRateBasedRuleError {
 
 impl UpdateRateBasedRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRateBasedRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFInvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFNonexistentContainer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFReferencedItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateRateBasedRuleError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6863,58 +5961,47 @@ pub enum UpdateRegexMatchSetError {
 
 impl UpdateRegexMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegexMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFDisallowedName(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFInvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFNonexistentContainer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateRegexMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRegexMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6963,62 +6050,47 @@ pub enum UpdateRegexPatternSetError {
 
 impl UpdateRegexPatternSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegexPatternSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFInvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidRegexPatternException" => {
                     return RusotoError::Service(
-                        UpdateRegexPatternSetError::WAFInvalidRegexPattern(String::from(
-                            error_message,
-                        )),
+                        UpdateRegexPatternSetError::WAFInvalidRegexPattern(err.msg),
                     )
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(
-                        UpdateRegexPatternSetError::WAFNonexistentContainer(String::from(
-                            error_message,
-                        )),
+                        UpdateRegexPatternSetError::WAFNonexistentContainer(err.msg),
                     )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateRegexPatternSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRegexPatternSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7069,63 +6141,36 @@ pub enum UpdateRuleError {
 
 impl UpdateRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRuleError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFInvalidAccount(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRuleError::WAFInvalidAccount(err.msg))
                 }
                 "WAFInvalidOperationException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFInvalidOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRuleError::WAFInvalidOperation(err.msg))
                 }
                 "WAFInvalidParameterException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFInvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRuleError::WAFInvalidParameter(err.msg))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFLimitsExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRuleError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFNonexistentContainerException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFNonexistentContainer(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRuleError::WAFNonexistentContainer(err.msg))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFNonexistentItem(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRuleError::WAFNonexistentItem(err.msg))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFReferencedItem(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRuleError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateRuleError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRuleError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7173,53 +6218,32 @@ pub enum UpdateRuleGroupError {
 
 impl UpdateRuleGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRuleGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(UpdateRuleGroupError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRuleGroupError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidOperationException" => {
-                    return RusotoError::Service(UpdateRuleGroupError::WAFInvalidOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRuleGroupError::WAFInvalidOperation(err.msg))
                 }
                 "WAFInvalidParameterException" => {
-                    return RusotoError::Service(UpdateRuleGroupError::WAFInvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRuleGroupError::WAFInvalidParameter(err.msg))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(UpdateRuleGroupError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRuleGroupError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateRuleGroupError::WAFNonexistentContainer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(UpdateRuleGroupError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateRuleGroupError::WAFNonexistentItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateRuleGroupError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRuleGroupError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7269,65 +6293,54 @@ pub enum UpdateSizeConstraintSetError {
 
 impl UpdateSizeConstraintSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSizeConstraintSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFInvalidAccount(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFInvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFLimitsExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(
-                        UpdateSizeConstraintSetError::WAFNonexistentContainer(String::from(
-                            error_message,
-                        )),
+                        UpdateSizeConstraintSetError::WAFNonexistentContainer(err.msg),
                     )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFReferencedItemException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFReferencedItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFStaleData(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7379,70 +6392,49 @@ impl UpdateSqlInjectionMatchSetError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateSqlInjectionMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFInternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidAccountException" => {
                     return RusotoError::Service(
-                        UpdateSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
-                            error_message,
-                        )),
+                        UpdateSqlInjectionMatchSetError::WAFInvalidAccount(err.msg),
                     )
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(
-                        UpdateSqlInjectionMatchSetError::WAFInvalidOperation(String::from(
-                            error_message,
-                        )),
+                        UpdateSqlInjectionMatchSetError::WAFInvalidOperation(err.msg),
                     )
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(
-                        UpdateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
-                            error_message,
-                        )),
+                        UpdateSqlInjectionMatchSetError::WAFInvalidParameter(err.msg),
                     )
                 }
                 "WAFLimitsExceededException" => {
                     return RusotoError::Service(
-                        UpdateSqlInjectionMatchSetError::WAFLimitsExceeded(String::from(
-                            error_message,
-                        )),
+                        UpdateSqlInjectionMatchSetError::WAFLimitsExceeded(err.msg),
                     )
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(
-                        UpdateSqlInjectionMatchSetError::WAFNonexistentContainer(String::from(
-                            error_message,
-                        )),
+                        UpdateSqlInjectionMatchSetError::WAFNonexistentContainer(err.msg),
                     )
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(
-                        UpdateSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
-                            error_message,
-                        )),
+                        UpdateSqlInjectionMatchSetError::WAFNonexistentItem(err.msg),
                     )
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFStaleData(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7495,68 +6487,43 @@ pub enum UpdateWebACLError {
 
 impl UpdateWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWebACLError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFInternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateWebACLError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateWebACLError::WAFInvalidAccount(err.msg))
                 }
                 "WAFInvalidOperationException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFInvalidOperation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateWebACLError::WAFInvalidOperation(err.msg))
                 }
                 "WAFInvalidParameterException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFInvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateWebACLError::WAFInvalidParameter(err.msg))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateWebACLError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFNonexistentContainer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFNonexistentItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateWebACLError::WAFNonexistentItem(err.msg))
                 }
                 "WAFReferencedItemException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFReferencedItem(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateWebACLError::WAFReferencedItem(err.msg))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateWebACLError::WAFStaleData(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateWebACLError::WAFStaleData(err.msg))
                 }
                 "WAFSubscriptionNotFoundException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFSubscriptionNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7607,58 +6574,41 @@ pub enum UpdateXssMatchSetError {
 
 impl UpdateXssMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateXssMatchSetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WAFInternalErrorException" => {
-                    return RusotoError::Service(UpdateXssMatchSetError::WAFInternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFInternalError(err.msg))
                 }
                 "WAFInvalidAccountException" => {
-                    return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidAccount(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidAccount(err.msg))
                 }
                 "WAFInvalidOperationException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidOperation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFInvalidParameterException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFLimitsExceededException" => {
-                    return RusotoError::Service(UpdateXssMatchSetError::WAFLimitsExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFLimitsExceeded(err.msg))
                 }
                 "WAFNonexistentContainerException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFNonexistentContainer(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFNonexistentItemException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFNonexistentItem(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "WAFStaleDataException" => {
-                    return RusotoError::Service(UpdateXssMatchSetError::WAFStaleData(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFStaleData(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

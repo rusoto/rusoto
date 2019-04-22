@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Details of the common errors that all actions return.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -217,38 +216,21 @@ pub enum GetResourcesError {
 
 impl GetResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetResourcesError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetResourcesError::InternalService(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetResourcesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetResourcesError::InvalidParameter(err.msg))
                 }
                 "PaginationTokenExpiredException" => {
-                    return RusotoError::Service(GetResourcesError::PaginationTokenExpired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetResourcesError::PaginationTokenExpired(err.msg))
                 }
                 "ThrottledException" => {
-                    return RusotoError::Service(GetResourcesError::Throttled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetResourcesError::Throttled(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -285,38 +267,21 @@ pub enum GetTagKeysError {
 
 impl GetTagKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagKeysError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetTagKeysError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagKeysError::InternalService(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetTagKeysError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagKeysError::InvalidParameter(err.msg))
                 }
                 "PaginationTokenExpiredException" => {
-                    return RusotoError::Service(GetTagKeysError::PaginationTokenExpired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTagKeysError::PaginationTokenExpired(err.msg))
                 }
                 "ThrottledException" => {
-                    return RusotoError::Service(GetTagKeysError::Throttled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagKeysError::Throttled(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -353,38 +318,21 @@ pub enum GetTagValuesError {
 
 impl GetTagValuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagValuesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetTagValuesError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagValuesError::InternalService(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetTagValuesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagValuesError::InvalidParameter(err.msg))
                 }
                 "PaginationTokenExpiredException" => {
-                    return RusotoError::Service(GetTagValuesError::PaginationTokenExpired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTagValuesError::PaginationTokenExpired(err.msg))
                 }
                 "ThrottledException" => {
-                    return RusotoError::Service(GetTagValuesError::Throttled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagValuesError::Throttled(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -419,33 +367,18 @@ pub enum TagResourcesError {
 
 impl TagResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourcesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(TagResourcesError::InternalService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourcesError::InternalService(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(TagResourcesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourcesError::InvalidParameter(err.msg))
                 }
                 "ThrottledException" => {
-                    return RusotoError::Service(TagResourcesError::Throttled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourcesError::Throttled(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -479,33 +412,18 @@ pub enum UntagResourcesError {
 
 impl UntagResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourcesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceException" => {
-                    return RusotoError::Service(UntagResourcesError::InternalService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourcesError::InternalService(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UntagResourcesError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UntagResourcesError::InvalidParameter(err.msg))
                 }
                 "ThrottledException" => {
-                    return RusotoError::Service(UntagResourcesError::Throttled(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourcesError::Throttled(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource to tag.</p>
@@ -606,33 +605,18 @@ pub enum AddTagsToResourceError {
 
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(AddTagsToResourceError::CloudHsmInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToResourceError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(AddTagsToResourceError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToResourceError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(AddTagsToResourceError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddTagsToResourceError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -666,33 +650,18 @@ pub enum CreateHapgError {
 
 impl CreateHapgError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHapgError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(CreateHapgError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateHapgError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(CreateHapgError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateHapgError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(CreateHapgError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateHapgError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -726,33 +695,18 @@ pub enum CreateHsmError {
 
 impl CreateHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHsmError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(CreateHsmError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateHsmError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(CreateHsmError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateHsmError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(CreateHsmError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateHsmError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -786,33 +740,18 @@ pub enum CreateLunaClientError {
 
 impl CreateLunaClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLunaClientError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(CreateLunaClientError::CloudHsmInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateLunaClientError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(CreateLunaClientError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateLunaClientError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(CreateLunaClientError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateLunaClientError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -846,33 +785,18 @@ pub enum DeleteHapgError {
 
 impl DeleteHapgError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHapgError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(DeleteHapgError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteHapgError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DeleteHapgError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteHapgError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteHapgError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteHapgError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -906,33 +830,18 @@ pub enum DeleteHsmError {
 
 impl DeleteHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHsmError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(DeleteHsmError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteHsmError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DeleteHsmError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteHsmError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteHsmError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteHsmError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -966,33 +875,18 @@ pub enum DeleteLunaClientError {
 
 impl DeleteLunaClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLunaClientError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(DeleteLunaClientError::CloudHsmInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteLunaClientError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DeleteLunaClientError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteLunaClientError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteLunaClientError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteLunaClientError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1026,33 +920,18 @@ pub enum DescribeHapgError {
 
 impl DescribeHapgError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHapgError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(DescribeHapgError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeHapgError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DescribeHapgError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeHapgError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeHapgError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeHapgError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1086,33 +965,18 @@ pub enum DescribeHsmError {
 
 impl DescribeHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHsmError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(DescribeHsmError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeHsmError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DescribeHsmError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeHsmError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeHsmError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeHsmError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1146,33 +1010,18 @@ pub enum DescribeLunaClientError {
 
 impl DescribeLunaClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLunaClientError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(DescribeLunaClientError::CloudHsmInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeLunaClientError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(DescribeLunaClientError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeLunaClientError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeLunaClientError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeLunaClientError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1206,33 +1055,18 @@ pub enum GetConfigError {
 
 impl GetConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConfigError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(GetConfigError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetConfigError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(GetConfigError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetConfigError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(GetConfigError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetConfigError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1266,33 +1100,18 @@ pub enum ListAvailableZonesError {
 
 impl ListAvailableZonesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAvailableZonesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(ListAvailableZonesError::CloudHsmInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAvailableZonesError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(ListAvailableZonesError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAvailableZonesError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ListAvailableZonesError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListAvailableZonesError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1326,33 +1145,18 @@ pub enum ListHapgsError {
 
 impl ListHapgsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHapgsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(ListHapgsError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListHapgsError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(ListHapgsError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListHapgsError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ListHapgsError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListHapgsError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1386,33 +1190,18 @@ pub enum ListHsmsError {
 
 impl ListHsmsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHsmsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(ListHsmsError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListHsmsError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(ListHsmsError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListHsmsError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ListHsmsError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListHsmsError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1446,33 +1235,18 @@ pub enum ListLunaClientsError {
 
 impl ListLunaClientsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLunaClientsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(ListLunaClientsError::CloudHsmInternal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListLunaClientsError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(ListLunaClientsError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListLunaClientsError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ListLunaClientsError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListLunaClientsError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1506,33 +1280,20 @@ pub enum ListTagsForResourceError {
 
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListTagsForResourceError::CloudHsmInternal(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(ListTagsForResourceError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForResourceError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1566,33 +1327,18 @@ pub enum ModifyHapgError {
 
 impl ModifyHapgError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyHapgError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(ModifyHapgError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ModifyHapgError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(ModifyHapgError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ModifyHapgError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ModifyHapgError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ModifyHapgError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1626,33 +1372,18 @@ pub enum ModifyHsmError {
 
 impl ModifyHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyHsmError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
-                    return RusotoError::Service(ModifyHsmError::CloudHsmInternal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ModifyHsmError::CloudHsmInternal(err.msg))
                 }
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(ModifyHsmError::CloudHsmService(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ModifyHsmError::CloudHsmService(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ModifyHsmError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ModifyHsmError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1682,23 +1413,12 @@ pub enum ModifyLunaClientError {
 
 impl ModifyLunaClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyLunaClientError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmServiceException" => {
-                    return RusotoError::Service(ModifyLunaClientError::CloudHsmService(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ModifyLunaClientError::CloudHsmService(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1730,33 +1450,24 @@ pub enum RemoveTagsFromResourceError {
 
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::CloudHsmInternal(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::CloudHsmService(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

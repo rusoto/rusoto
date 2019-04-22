@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>The amount of instance usage that a reservation covered.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1056,43 +1055,24 @@ pub enum GetCostAndUsageError {
 
 impl GetCostAndUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCostAndUsageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BillExpirationException" => {
-                    return RusotoError::Service(GetCostAndUsageError::BillExpiration(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCostAndUsageError::BillExpiration(err.msg))
                 }
                 "DataUnavailableException" => {
-                    return RusotoError::Service(GetCostAndUsageError::DataUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCostAndUsageError::DataUnavailable(err.msg))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(GetCostAndUsageError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCostAndUsageError::InvalidNextToken(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetCostAndUsageError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCostAndUsageError::LimitExceeded(err.msg))
                 }
                 "RequestChangedException" => {
-                    return RusotoError::Service(GetCostAndUsageError::RequestChanged(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCostAndUsageError::RequestChanged(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1126,28 +1106,15 @@ pub enum GetCostForecastError {
 
 impl GetCostForecastError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCostForecastError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DataUnavailableException" => {
-                    return RusotoError::Service(GetCostForecastError::DataUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetCostForecastError::DataUnavailable(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetCostForecastError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCostForecastError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1184,43 +1151,24 @@ pub enum GetDimensionValuesError {
 
 impl GetDimensionValuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDimensionValuesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BillExpirationException" => {
-                    return RusotoError::Service(GetDimensionValuesError::BillExpiration(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDimensionValuesError::BillExpiration(err.msg))
                 }
                 "DataUnavailableException" => {
-                    return RusotoError::Service(GetDimensionValuesError::DataUnavailable(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDimensionValuesError::DataUnavailable(err.msg))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(GetDimensionValuesError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDimensionValuesError::InvalidNextToken(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetDimensionValuesError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDimensionValuesError::LimitExceeded(err.msg))
                 }
                 "RequestChangedException" => {
-                    return RusotoError::Service(GetDimensionValuesError::RequestChanged(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDimensionValuesError::RequestChanged(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1256,33 +1204,24 @@ pub enum GetReservationCoverageError {
 
 impl GetReservationCoverageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReservationCoverageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetReservationCoverageError::DataUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetReservationCoverageError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetReservationCoverageError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1318,39 +1257,24 @@ impl GetReservationPurchaseRecommendationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetReservationPurchaseRecommendationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(
-                        GetReservationPurchaseRecommendationError::DataUnavailable(String::from(
-                            error_message,
-                        )),
+                        GetReservationPurchaseRecommendationError::DataUnavailable(err.msg),
                     )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
-                        GetReservationPurchaseRecommendationError::InvalidNextToken(String::from(
-                            error_message,
-                        )),
+                        GetReservationPurchaseRecommendationError::InvalidNextToken(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(
-                        GetReservationPurchaseRecommendationError::LimitExceeded(String::from(
-                            error_message,
-                        )),
+                        GetReservationPurchaseRecommendationError::LimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1384,33 +1308,24 @@ pub enum GetReservationUtilizationError {
 
 impl GetReservationUtilizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReservationUtilizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetReservationUtilizationError::DataUnavailable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetReservationUtilizationError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetReservationUtilizationError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1448,43 +1363,24 @@ pub enum GetTagsError {
 
 impl GetTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BillExpirationException" => {
-                    return RusotoError::Service(GetTagsError::BillExpiration(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagsError::BillExpiration(err.msg))
                 }
                 "DataUnavailableException" => {
-                    return RusotoError::Service(GetTagsError::DataUnavailable(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagsError::DataUnavailable(err.msg))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(GetTagsError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagsError::InvalidNextToken(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetTagsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagsError::LimitExceeded(err.msg))
                 }
                 "RequestChangedException" => {
-                    return RusotoError::Service(GetTagsError::RequestChanged(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTagsError::RequestChanged(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

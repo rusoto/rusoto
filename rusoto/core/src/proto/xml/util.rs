@@ -331,7 +331,7 @@ mod tests {
 
     #[test]
     fn test_find_start_element() {
-        let body = include_bytes!("../test_resources/list_queues_with_queue.xml");
+        let body = include_bytes!("../../../test_resources/list_queues_with_queue.xml");
         let parser = EventReader::new(&body[..]);
         let stack = parser.into_iter().peekable();
         let mut reader = XmlResponse::new(stack);

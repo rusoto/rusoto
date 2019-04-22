@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Contains the parameters for ActivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ActivatePipelineInput {
@@ -713,38 +712,23 @@ pub enum ActivatePipelineError {
 
 impl ActivatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ActivatePipelineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(ActivatePipelineError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ActivatePipelineError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ActivatePipelineError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(ActivatePipelineError::PipelineDeleted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ActivatePipelineError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(ActivatePipelineError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ActivatePipelineError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -781,38 +765,21 @@ pub enum AddTagsError {
 
 impl AddTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
-                    return RusotoError::Service(AddTagsError::InternalServiceError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::InternalServiceError(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(AddTagsError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(AddTagsError::PipelineDeleted(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(AddTagsError::PipelineNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddTagsError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -845,28 +812,15 @@ pub enum CreatePipelineError {
 
 impl CreatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
-                    return RusotoError::Service(CreatePipelineError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreatePipelineError::InternalServiceError(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(CreatePipelineError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreatePipelineError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -901,38 +855,23 @@ pub enum DeactivatePipelineError {
 
 impl DeactivatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeactivatePipelineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DeactivatePipelineError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DeactivatePipelineError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeactivatePipelineError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(DeactivatePipelineError::PipelineDeleted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeactivatePipelineError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(DeactivatePipelineError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeactivatePipelineError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -967,33 +906,18 @@ pub enum DeletePipelineError {
 
 impl DeletePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
-                    return RusotoError::Service(DeletePipelineError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeletePipelineError::InternalServiceError(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DeletePipelineError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeletePipelineError::InvalidRequest(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(DeletePipelineError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeletePipelineError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1029,38 +953,23 @@ pub enum DescribeObjectsError {
 
 impl DescribeObjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeObjectsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribeObjectsError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeObjectsError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeObjectsError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(DescribeObjectsError::PipelineDeleted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeObjectsError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(DescribeObjectsError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeObjectsError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1097,38 +1006,23 @@ pub enum DescribePipelinesError {
 
 impl DescribePipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePipelinesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribePipelinesError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribePipelinesError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribePipelinesError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(DescribePipelinesError::PipelineDeleted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribePipelinesError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(DescribePipelinesError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribePipelinesError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1167,43 +1061,26 @@ pub enum EvaluateExpressionError {
 
 impl EvaluateExpressionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EvaluateExpressionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(EvaluateExpressionError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(EvaluateExpressionError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EvaluateExpressionError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(EvaluateExpressionError::PipelineDeleted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EvaluateExpressionError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(EvaluateExpressionError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EvaluateExpressionError::PipelineNotFound(err.msg))
                 }
                 "TaskNotFoundException" => {
-                    return RusotoError::Service(EvaluateExpressionError::TaskNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EvaluateExpressionError::TaskNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1241,38 +1118,29 @@ pub enum GetPipelineDefinitionError {
 
 impl GetPipelineDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineDefinitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetPipelineDefinitionError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetPipelineDefinitionError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(GetPipelineDefinitionError::PipelineDeleted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(GetPipelineDefinitionError::PipelineNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1305,28 +1173,15 @@ pub enum ListPipelinesError {
 
 impl ListPipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
-                    return RusotoError::Service(ListPipelinesError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListPipelinesError::InternalServiceError(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ListPipelinesError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListPipelinesError::InvalidRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1359,33 +1214,18 @@ pub enum PollForTaskError {
 
 impl PollForTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForTaskError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
-                    return RusotoError::Service(PollForTaskError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PollForTaskError::InternalServiceError(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(PollForTaskError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PollForTaskError::InvalidRequest(err.msg))
                 }
                 "TaskNotFoundException" => {
-                    return RusotoError::Service(PollForTaskError::TaskNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PollForTaskError::TaskNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1421,38 +1261,29 @@ pub enum PutPipelineDefinitionError {
 
 impl PutPipelineDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPipelineDefinitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(PutPipelineDefinitionError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutPipelineDefinitionError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(PutPipelineDefinitionError::PipelineDeleted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(PutPipelineDefinitionError::PipelineNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1489,38 +1320,21 @@ pub enum QueryObjectsError {
 
 impl QueryObjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<QueryObjectsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
-                    return RusotoError::Service(QueryObjectsError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(QueryObjectsError::InternalServiceError(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(QueryObjectsError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(QueryObjectsError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(QueryObjectsError::PipelineDeleted(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(QueryObjectsError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(QueryObjectsError::PipelineNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(QueryObjectsError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1557,38 +1371,21 @@ pub enum RemoveTagsError {
 
 impl RemoveTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
-                    return RusotoError::Service(RemoveTagsError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveTagsError::InternalServiceError(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(RemoveTagsError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveTagsError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(RemoveTagsError::PipelineDeleted(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveTagsError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(RemoveTagsError::PipelineNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveTagsError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1627,43 +1424,26 @@ pub enum ReportTaskProgressError {
 
 impl ReportTaskProgressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReportTaskProgressError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(ReportTaskProgressError::InternalServiceError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ReportTaskProgressError::InvalidRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ReportTaskProgressError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(ReportTaskProgressError::PipelineDeleted(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ReportTaskProgressError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(ReportTaskProgressError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ReportTaskProgressError::PipelineNotFound(err.msg))
                 }
                 "TaskNotFoundException" => {
-                    return RusotoError::Service(ReportTaskProgressError::TaskNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ReportTaskProgressError::TaskNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1697,30 +1477,19 @@ pub enum ReportTaskRunnerHeartbeatError {
 
 impl ReportTaskRunnerHeartbeatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReportTaskRunnerHeartbeatError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(
-                        ReportTaskRunnerHeartbeatError::InternalServiceError(String::from(
-                            error_message,
-                        )),
+                        ReportTaskRunnerHeartbeatError::InternalServiceError(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ReportTaskRunnerHeartbeatError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1755,38 +1524,21 @@ pub enum SetStatusError {
 
 impl SetStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
-                    return RusotoError::Service(SetStatusError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetStatusError::InternalServiceError(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(SetStatusError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetStatusError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(SetStatusError::PipelineDeleted(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetStatusError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(SetStatusError::PipelineNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetStatusError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1825,43 +1577,24 @@ pub enum SetTaskStatusError {
 
 impl SetTaskStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetTaskStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
-                    return RusotoError::Service(SetTaskStatusError::InternalServiceError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetTaskStatusError::InternalServiceError(err.msg))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(SetTaskStatusError::InvalidRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetTaskStatusError::InvalidRequest(err.msg))
                 }
                 "PipelineDeletedException" => {
-                    return RusotoError::Service(SetTaskStatusError::PipelineDeleted(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetTaskStatusError::PipelineDeleted(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(SetTaskStatusError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetTaskStatusError::PipelineNotFound(err.msg))
                 }
                 "TaskNotFoundException" => {
-                    return RusotoError::Service(SetTaskStatusError::TaskNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetTaskStatusError::TaskNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1901,40 +1634,29 @@ impl ValidatePipelineDefinitionError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ValidatePipelineDefinitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(
-                        ValidatePipelineDefinitionError::InternalServiceError(String::from(
-                            error_message,
-                        )),
+                        ValidatePipelineDefinitionError::InternalServiceError(err.msg),
                     )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ValidatePipelineDefinitionError::InvalidRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(ValidatePipelineDefinitionError::PipelineDeleted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(ValidatePipelineDefinitionError::PipelineNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

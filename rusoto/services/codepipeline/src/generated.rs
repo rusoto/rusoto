@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1626,28 +1625,15 @@ pub enum AcknowledgeJobError {
 
 impl AcknowledgeJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcknowledgeJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNonceException" => {
-                    return RusotoError::Service(AcknowledgeJobError::InvalidNonce(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AcknowledgeJobError::InvalidNonce(err.msg))
                 }
                 "JobNotFoundException" => {
-                    return RusotoError::Service(AcknowledgeJobError::JobNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AcknowledgeJobError::JobNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1680,33 +1666,24 @@ pub enum AcknowledgeThirdPartyJobError {
 
 impl AcknowledgeThirdPartyJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcknowledgeThirdPartyJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(AcknowledgeThirdPartyJobError::InvalidClientToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidNonceException" => {
                     return RusotoError::Service(AcknowledgeThirdPartyJobError::InvalidNonce(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(AcknowledgeThirdPartyJobError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1736,23 +1713,14 @@ pub enum CreateCustomActionTypeError {
 
 impl CreateCustomActionTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomActionTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateCustomActionTypeError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1790,48 +1758,33 @@ pub enum CreatePipelineError {
 
 impl CreatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidActionDeclarationException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidActionDeclaration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidBlockerDeclarationException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidBlockerDeclaration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidStageDeclarationException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidStageDeclaration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidStructureException" => {
-                    return RusotoError::Service(CreatePipelineError::InvalidStructure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreatePipelineError::InvalidStructure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreatePipelineError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreatePipelineError::LimitExceeded(err.msg))
                 }
                 "PipelineNameInUseException" => {
-                    return RusotoError::Service(CreatePipelineError::PipelineNameInUse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreatePipelineError::PipelineNameInUse(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1861,18 +1814,9 @@ pub enum DeleteCustomActionTypeError {}
 
 impl DeleteCustomActionTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomActionTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1895,18 +1839,9 @@ pub enum DeletePipelineError {}
 
 impl DeletePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1929,18 +1864,9 @@ pub enum DeleteWebhookError {}
 
 impl DeleteWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebhookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1968,25 +1894,14 @@ impl DeregisterWebhookWithThirdPartyError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterWebhookWithThirdPartyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WebhookNotFoundException" => {
                     return RusotoError::Service(
-                        DeregisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
-                            error_message,
-                        )),
+                        DeregisterWebhookWithThirdPartyError::WebhookNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2016,28 +1931,19 @@ pub enum DisableStageTransitionError {
 
 impl DisableStageTransitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableStageTransitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(DisableStageTransitionError::PipelineNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "StageNotFoundException" => {
                     return RusotoError::Service(DisableStageTransitionError::StageNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2068,28 +1974,17 @@ pub enum EnableStageTransitionError {
 
 impl EnableStageTransitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableStageTransitionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(EnableStageTransitionError::PipelineNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "StageNotFoundException" => {
-                    return RusotoError::Service(EnableStageTransitionError::StageNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableStageTransitionError::StageNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2118,23 +2013,12 @@ pub enum GetJobDetailsError {
 
 impl GetJobDetailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobDetailsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "JobNotFoundException" => {
-                    return RusotoError::Service(GetJobDetailsError::JobNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetJobDetailsError::JobNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2164,28 +2048,15 @@ pub enum GetPipelineError {
 
 impl GetPipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(GetPipelineError::PipelineNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetPipelineError::PipelineNotFound(err.msg))
                 }
                 "PipelineVersionNotFoundException" => {
-                    return RusotoError::Service(GetPipelineError::PipelineVersionNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetPipelineError::PipelineVersionNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2216,30 +2087,19 @@ pub enum GetPipelineExecutionError {
 
 impl GetPipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "PipelineExecutionNotFoundException" => {
                     return RusotoError::Service(
-                        GetPipelineExecutionError::PipelineExecutionNotFound(String::from(
-                            error_message,
-                        )),
+                        GetPipelineExecutionError::PipelineExecutionNotFound(err.msg),
                     )
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(GetPipelineExecutionError::PipelineNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2268,23 +2128,12 @@ pub enum GetPipelineStateError {
 
 impl GetPipelineStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineStateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(GetPipelineStateError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetPipelineStateError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2316,33 +2165,20 @@ pub enum GetThirdPartyJobDetailsError {
 
 impl GetThirdPartyJobDetailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetThirdPartyJobDetailsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(GetThirdPartyJobDetailsError::InvalidClientToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidJobException" => {
-                    return RusotoError::Service(GetThirdPartyJobDetailsError::InvalidJob(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetThirdPartyJobDetailsError::InvalidJob(err.msg))
                 }
                 "JobNotFoundException" => {
-                    return RusotoError::Service(GetThirdPartyJobDetailsError::JobNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetThirdPartyJobDetailsError::JobNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2372,23 +2208,12 @@ pub enum ListActionTypesError {
 
 impl ListActionTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActionTypesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListActionTypesError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListActionTypesError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2418,28 +2243,19 @@ pub enum ListPipelineExecutionsError {
 
 impl ListPipelineExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelineExecutionsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListPipelineExecutionsError::InvalidNextToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(ListPipelineExecutionsError::PipelineNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2468,23 +2284,12 @@ pub enum ListPipelinesError {
 
 impl ListPipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListPipelinesError::InvalidNextToken(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListPipelinesError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2512,23 +2317,12 @@ pub enum ListWebhooksError {
 
 impl ListWebhooksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWebhooksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListWebhooksError::InvalidNextToken(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListWebhooksError::InvalidNextToken(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2556,23 +2350,12 @@ pub enum PollForJobsError {
 
 impl PollForJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ActionTypeNotFoundException" => {
-                    return RusotoError::Service(PollForJobsError::ActionTypeNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PollForJobsError::ActionTypeNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2600,23 +2383,14 @@ pub enum PollForThirdPartyJobsError {
 
 impl PollForThirdPartyJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForThirdPartyJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ActionTypeNotFoundException" => {
                     return RusotoError::Service(PollForThirdPartyJobsError::ActionTypeNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2648,33 +2422,18 @@ pub enum PutActionRevisionError {
 
 impl PutActionRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutActionRevisionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ActionNotFoundException" => {
-                    return RusotoError::Service(PutActionRevisionError::ActionNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutActionRevisionError::ActionNotFound(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(PutActionRevisionError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutActionRevisionError::PipelineNotFound(err.msg))
                 }
                 "StageNotFoundException" => {
-                    return RusotoError::Service(PutActionRevisionError::StageNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutActionRevisionError::StageNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2712,43 +2471,28 @@ pub enum PutApprovalResultError {
 
 impl PutApprovalResultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutApprovalResultError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ActionNotFoundException" => {
-                    return RusotoError::Service(PutApprovalResultError::ActionNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutApprovalResultError::ActionNotFound(err.msg))
                 }
                 "ApprovalAlreadyCompletedException" => {
                     return RusotoError::Service(PutApprovalResultError::ApprovalAlreadyCompleted(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidApprovalTokenException" => {
                     return RusotoError::Service(PutApprovalResultError::InvalidApprovalToken(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(PutApprovalResultError::PipelineNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutApprovalResultError::PipelineNotFound(err.msg))
                 }
                 "StageNotFoundException" => {
-                    return RusotoError::Service(PutApprovalResultError::StageNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutApprovalResultError::StageNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2782,28 +2526,15 @@ pub enum PutJobFailureResultError {
 
 impl PutJobFailureResultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutJobFailureResultError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidJobStateException" => {
-                    return RusotoError::Service(PutJobFailureResultError::InvalidJobState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutJobFailureResultError::InvalidJobState(err.msg))
                 }
                 "JobNotFoundException" => {
-                    return RusotoError::Service(PutJobFailureResultError::JobNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutJobFailureResultError::JobNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2834,28 +2565,15 @@ pub enum PutJobSuccessResultError {
 
 impl PutJobSuccessResultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutJobSuccessResultError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidJobStateException" => {
-                    return RusotoError::Service(PutJobSuccessResultError::InvalidJobState(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutJobSuccessResultError::InvalidJobState(err.msg))
                 }
                 "JobNotFoundException" => {
-                    return RusotoError::Service(PutJobSuccessResultError::JobNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutJobSuccessResultError::JobNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2890,37 +2608,24 @@ impl PutThirdPartyJobFailureResultError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<PutThirdPartyJobFailureResultError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(
-                        PutThirdPartyJobFailureResultError::InvalidClientToken(String::from(
-                            error_message,
-                        )),
+                        PutThirdPartyJobFailureResultError::InvalidClientToken(err.msg),
                     )
                 }
                 "InvalidJobStateException" => {
                     return RusotoError::Service(
-                        PutThirdPartyJobFailureResultError::InvalidJobState(String::from(
-                            error_message,
-                        )),
+                        PutThirdPartyJobFailureResultError::InvalidJobState(err.msg),
                     )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(PutThirdPartyJobFailureResultError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2956,37 +2661,24 @@ impl PutThirdPartyJobSuccessResultError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<PutThirdPartyJobSuccessResultError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(
-                        PutThirdPartyJobSuccessResultError::InvalidClientToken(String::from(
-                            error_message,
-                        )),
+                        PutThirdPartyJobSuccessResultError::InvalidClientToken(err.msg),
                     )
                 }
                 "InvalidJobStateException" => {
                     return RusotoError::Service(
-                        PutThirdPartyJobSuccessResultError::InvalidJobState(String::from(
-                            error_message,
-                        )),
+                        PutThirdPartyJobSuccessResultError::InvalidJobState(err.msg),
                     )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(PutThirdPartyJobSuccessResultError::JobNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3022,40 +2714,25 @@ pub enum PutWebhookError {
 
 impl PutWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutWebhookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidWebhookAuthenticationParametersException" => {
                     return RusotoError::Service(
-                        PutWebhookError::InvalidWebhookAuthenticationParameters(String::from(
-                            error_message,
-                        )),
+                        PutWebhookError::InvalidWebhookAuthenticationParameters(err.msg),
                     )
                 }
                 "InvalidWebhookFilterPatternException" => {
                     return RusotoError::Service(PutWebhookError::InvalidWebhookFilterPattern(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PutWebhookError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutWebhookError::LimitExceeded(err.msg))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(PutWebhookError::PipelineNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutWebhookError::PipelineNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3088,25 +2765,14 @@ impl RegisterWebhookWithThirdPartyError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterWebhookWithThirdPartyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "WebhookNotFoundException" => {
                     return RusotoError::Service(
-                        RegisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
-                            error_message,
-                        )),
+                        RegisterWebhookWithThirdPartyError::WebhookNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3140,40 +2806,27 @@ pub enum RetryStageExecutionError {
 
 impl RetryStageExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetryStageExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotLatestPipelineExecutionException" => {
                     return RusotoError::Service(
-                        RetryStageExecutionError::NotLatestPipelineExecution(String::from(
-                            error_message,
-                        )),
+                        RetryStageExecutionError::NotLatestPipelineExecution(err.msg),
                     )
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(RetryStageExecutionError::PipelineNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "StageNotFoundException" => {
-                    return RusotoError::Service(RetryStageExecutionError::StageNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RetryStageExecutionError::StageNotFound(err.msg))
                 }
                 "StageNotRetryableException" => {
                     return RusotoError::Service(RetryStageExecutionError::StageNotRetryable(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3204,23 +2857,14 @@ pub enum StartPipelineExecutionError {
 
 impl StartPipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPipelineExecutionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(StartPipelineExecutionError::PipelineNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3256,43 +2900,30 @@ pub enum UpdatePipelineError {
 
 impl UpdatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InvalidActionDeclarationException" => {
                     return RusotoError::Service(UpdatePipelineError::InvalidActionDeclaration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidBlockerDeclarationException" => {
                     return RusotoError::Service(UpdatePipelineError::InvalidBlockerDeclaration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidStageDeclarationException" => {
                     return RusotoError::Service(UpdatePipelineError::InvalidStageDeclaration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidStructureException" => {
-                    return RusotoError::Service(UpdatePipelineError::InvalidStructure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdatePipelineError::InvalidStructure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdatePipelineError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdatePipelineError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateVocabularyRequest {
     /// <p>The language code of the vocabulary entries.</p>
@@ -435,38 +434,21 @@ pub enum CreateVocabularyError {
 
 impl CreateVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVocabularyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(CreateVocabularyError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateVocabularyError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(CreateVocabularyError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateVocabularyError::Conflict(err.msg))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(CreateVocabularyError::InternalFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateVocabularyError::InternalFailure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateVocabularyError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateVocabularyError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -501,33 +483,22 @@ pub enum DeleteTranscriptionJobError {
 
 impl DeleteTranscriptionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTranscriptionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(DeleteTranscriptionJobError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTranscriptionJobError::BadRequest(err.msg))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteTranscriptionJobError::InternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteTranscriptionJobError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -563,38 +534,21 @@ pub enum DeleteVocabularyError {
 
 impl DeleteVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVocabularyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(DeleteVocabularyError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteVocabularyError::BadRequest(err.msg))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(DeleteVocabularyError::InternalFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteVocabularyError::InternalFailure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteVocabularyError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteVocabularyError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteVocabularyError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteVocabularyError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -631,38 +585,21 @@ pub enum GetTranscriptionJobError {
 
 impl GetTranscriptionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTranscriptionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(GetTranscriptionJobError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTranscriptionJobError::BadRequest(err.msg))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(GetTranscriptionJobError::InternalFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTranscriptionJobError::InternalFailure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetTranscriptionJobError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetTranscriptionJobError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetTranscriptionJobError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetTranscriptionJobError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -699,38 +636,21 @@ pub enum GetVocabularyError {
 
 impl GetVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVocabularyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(GetVocabularyError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetVocabularyError::BadRequest(err.msg))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(GetVocabularyError::InternalFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetVocabularyError::InternalFailure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(GetVocabularyError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetVocabularyError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetVocabularyError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetVocabularyError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -765,33 +685,20 @@ pub enum ListTranscriptionJobsError {
 
 impl ListTranscriptionJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTranscriptionJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(ListTranscriptionJobsError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTranscriptionJobsError::BadRequest(err.msg))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTranscriptionJobsError::InternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListTranscriptionJobsError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTranscriptionJobsError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -825,33 +732,18 @@ pub enum ListVocabulariesError {
 
 impl ListVocabulariesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVocabulariesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(ListVocabulariesError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListVocabulariesError::BadRequest(err.msg))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(ListVocabulariesError::InternalFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListVocabulariesError::InternalFailure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListVocabulariesError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListVocabulariesError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -887,38 +779,23 @@ pub enum StartTranscriptionJobError {
 
 impl StartTranscriptionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTranscriptionJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(StartTranscriptionJobError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartTranscriptionJobError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(StartTranscriptionJobError::Conflict(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartTranscriptionJobError::Conflict(err.msg))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(StartTranscriptionJobError::InternalFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(StartTranscriptionJobError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartTranscriptionJobError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -957,43 +834,24 @@ pub enum UpdateVocabularyError {
 
 impl UpdateVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVocabularyError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(UpdateVocabularyError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateVocabularyError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(UpdateVocabularyError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateVocabularyError::Conflict(err.msg))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(UpdateVocabularyError::InternalFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateVocabularyError::InternalFailure(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateVocabularyError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateVocabularyError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateVocabularyError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateVocabularyError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

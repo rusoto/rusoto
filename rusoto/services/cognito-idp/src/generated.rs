@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>Account takeover action type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccountTakeoverActionType {
@@ -3877,48 +3876,33 @@ pub enum AddCustomAttributesError {
 
 impl AddCustomAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCustomAttributesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AddCustomAttributesError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddCustomAttributesError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AddCustomAttributesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AddCustomAttributesError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddCustomAttributesError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddCustomAttributesError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AddCustomAttributesError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddCustomAttributesError::TooManyRequests(err.msg))
                 }
                 "UserImportInProgressException" => {
                     return RusotoError::Service(AddCustomAttributesError::UserImportInProgress(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3961,48 +3945,31 @@ pub enum AdminAddUserToGroupError {
 
 impl AdminAddUserToGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminAddUserToGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminAddUserToGroupError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminAddUserToGroupError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminAddUserToGroupError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminAddUserToGroupError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminAddUserToGroupError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminAddUserToGroupError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminAddUserToGroupError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminAddUserToGroupError::TooManyRequests(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminAddUserToGroupError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminAddUserToGroupError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4055,73 +4022,48 @@ pub enum AdminConfirmSignUpError {
 
 impl AdminConfirmSignUpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminConfirmSignUpError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminConfirmSignUpError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminConfirmSignUpError::InternalError(err.msg))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::InvalidLambdaResponse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminConfirmSignUpError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminConfirmSignUpError::InvalidParameter(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(AdminConfirmSignUpError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminConfirmSignUpError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminConfirmSignUpError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminConfirmSignUpError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminConfirmSignUpError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminConfirmSignUpError::ResourceNotFound(err.msg))
                 }
                 "TooManyFailedAttemptsException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::TooManyFailedAttempts(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminConfirmSignUpError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminConfirmSignUpError::TooManyRequests(err.msg))
                 }
                 "UnexpectedLambdaException" => {
-                    return RusotoError::Service(AdminConfirmSignUpError::UnexpectedLambda(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminConfirmSignUpError::UnexpectedLambda(err.msg))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::UserLambdaValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminConfirmSignUpError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminConfirmSignUpError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4189,100 +4131,67 @@ pub enum AdminCreateUserError {
 
 impl AdminCreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminCreateUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
-                    return RusotoError::Service(AdminCreateUserError::CodeDeliveryFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminCreateUserError::CodeDeliveryFailure(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminCreateUserError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminCreateUserError::InternalError(err.msg))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(AdminCreateUserError::InvalidLambdaResponse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminCreateUserError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminCreateUserError::InvalidParameter(err.msg))
                 }
                 "InvalidPasswordException" => {
-                    return RusotoError::Service(AdminCreateUserError::InvalidPassword(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminCreateUserError::InvalidPassword(err.msg))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(AdminCreateUserError::InvalidSmsRoleAccessPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        AdminCreateUserError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        AdminCreateUserError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminCreateUserError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminCreateUserError::NotAuthorized(err.msg))
                 }
                 "PreconditionNotMetException" => {
-                    return RusotoError::Service(AdminCreateUserError::PreconditionNotMet(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminCreateUserError::PreconditionNotMet(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminCreateUserError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminCreateUserError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminCreateUserError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminCreateUserError::TooManyRequests(err.msg))
                 }
                 "UnexpectedLambdaException" => {
-                    return RusotoError::Service(AdminCreateUserError::UnexpectedLambda(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminCreateUserError::UnexpectedLambda(err.msg))
                 }
                 "UnsupportedUserStateException" => {
                     return RusotoError::Service(AdminCreateUserError::UnsupportedUserState(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(AdminCreateUserError::UserLambdaValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminCreateUserError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminCreateUserError::UserNotFound(err.msg))
                 }
                 "UsernameExistsException" => {
-                    return RusotoError::Service(AdminCreateUserError::UsernameExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminCreateUserError::UsernameExists(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4335,48 +4244,27 @@ pub enum AdminDeleteUserError {
 
 impl AdminDeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminDeleteUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminDeleteUserError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminDeleteUserError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminDeleteUserError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminDeleteUserError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminDeleteUserError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminDeleteUserError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminDeleteUserError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminDeleteUserError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminDeleteUserError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminDeleteUserError::TooManyRequests(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminDeleteUserError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminDeleteUserError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4419,48 +4307,39 @@ pub enum AdminDeleteUserAttributesError {
 
 impl AdminDeleteUserAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminDeleteUserAttributesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4507,57 +4386,44 @@ impl AdminDisableProviderForUserError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AdminDisableProviderForUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::AliasExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        AdminDisableProviderForUserError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        AdminDisableProviderForUserError::InvalidParameter(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        AdminDisableProviderForUserError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        AdminDisableProviderForUserError::ResourceNotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4601,48 +4467,27 @@ pub enum AdminDisableUserError {
 
 impl AdminDisableUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminDisableUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminDisableUserError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminDisableUserError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminDisableUserError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminDisableUserError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminDisableUserError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminDisableUserError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminDisableUserError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminDisableUserError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminDisableUserError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminDisableUserError::TooManyRequests(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminDisableUserError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminDisableUserError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4685,48 +4530,27 @@ pub enum AdminEnableUserError {
 
 impl AdminEnableUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminEnableUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminEnableUserError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminEnableUserError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminEnableUserError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminEnableUserError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminEnableUserError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminEnableUserError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminEnableUserError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminEnableUserError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminEnableUserError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminEnableUserError::TooManyRequests(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminEnableUserError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminEnableUserError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4771,55 +4595,32 @@ pub enum AdminForgetDeviceError {
 
 impl AdminForgetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminForgetDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminForgetDeviceError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminForgetDeviceError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminForgetDeviceError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminForgetDeviceError::InvalidParameter(err.msg))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
-                        AdminForgetDeviceError::InvalidUserPoolConfiguration(String::from(
-                            error_message,
-                        )),
+                        AdminForgetDeviceError::InvalidUserPoolConfiguration(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminForgetDeviceError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminForgetDeviceError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminForgetDeviceError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminForgetDeviceError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminForgetDeviceError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminForgetDeviceError::TooManyRequests(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminForgetDeviceError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminForgetDeviceError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4863,48 +4664,29 @@ pub enum AdminGetDeviceError {
 
 impl AdminGetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminGetDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminGetDeviceError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminGetDeviceError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminGetDeviceError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminGetDeviceError::InvalidParameter(err.msg))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(AdminGetDeviceError::InvalidUserPoolConfiguration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminGetDeviceError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminGetDeviceError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminGetDeviceError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminGetDeviceError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminGetDeviceError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminGetDeviceError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4947,48 +4729,27 @@ pub enum AdminGetUserError {
 
 impl AdminGetUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminGetUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminGetUserError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminGetUserError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminGetUserError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminGetUserError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminGetUserError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminGetUserError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminGetUserError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminGetUserError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminGetUserError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminGetUserError::TooManyRequests(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminGetUserError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AdminGetUserError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5049,99 +4810,66 @@ pub enum AdminInitiateAuthError {
 
 impl AdminInitiateAuthError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminInitiateAuthError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminInitiateAuthError::InternalError(err.msg))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(AdminInitiateAuthError::InvalidLambdaResponse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminInitiateAuthError::InvalidParameter(err.msg))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
-                        AdminInitiateAuthError::InvalidUserPoolConfiguration(String::from(
-                            error_message,
-                        )),
+                        AdminInitiateAuthError::InvalidUserPoolConfiguration(err.msg),
                     )
                 }
                 "MFAMethodNotFoundException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::MFAMethodNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminInitiateAuthError::MFAMethodNotFound(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminInitiateAuthError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(AdminInitiateAuthError::PasswordResetRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminInitiateAuthError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminInitiateAuthError::TooManyRequests(err.msg))
                 }
                 "UnexpectedLambdaException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::UnexpectedLambda(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminInitiateAuthError::UnexpectedLambda(err.msg))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(AdminInitiateAuthError::UserLambdaValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::UserNotConfirmed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminInitiateAuthError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminInitiateAuthError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5195,53 +4923,44 @@ pub enum AdminLinkProviderForUserError {
 
 impl AdminLinkProviderForUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminLinkProviderForUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::AliasExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5285,50 +5004,29 @@ pub enum AdminListDevicesError {
 
 impl AdminListDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminListDevicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminListDevicesError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminListDevicesError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminListDevicesError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminListDevicesError::InvalidParameter(err.msg))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
-                        AdminListDevicesError::InvalidUserPoolConfiguration(String::from(
-                            error_message,
-                        )),
+                        AdminListDevicesError::InvalidUserPoolConfiguration(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminListDevicesError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminListDevicesError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminListDevicesError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminListDevicesError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminListDevicesError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminListDevicesError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5371,48 +5069,37 @@ pub enum AdminListGroupsForUserError {
 
 impl AdminListGroupsForUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminListGroupsForUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminListGroupsForUserError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminListGroupsForUserError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5457,55 +5144,44 @@ pub enum AdminListUserAuthEventsError {
 
 impl AdminListUserAuthEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminListUserAuthEventsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return RusotoError::Service(
-                        AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(String::from(
-                            error_message,
-                        )),
+                        AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5549,48 +5225,39 @@ pub enum AdminRemoveUserFromGroupError {
 
 impl AdminRemoveUserFromGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminRemoveUserFromGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5647,91 +5314,72 @@ pub enum AdminResetUserPasswordError {
 
 impl AdminResetUserPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminResetUserPasswordError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
-                        AdminResetUserPasswordError::InvalidLambdaResponse(String::from(
-                            error_message,
-                        )),
+                        AdminResetUserPasswordError::InvalidLambdaResponse(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::UnexpectedLambda(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::UserLambdaValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminResetUserPasswordError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminResetUserPasswordError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5811,142 +5459,109 @@ impl AdminRespondToAuthChallengeError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AdminRespondToAuthChallengeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::AliasExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CodeMismatchException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::CodeMismatch(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ExpiredCodeException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::ExpiredCode(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::InvalidLambdaResponse(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::InvalidLambdaResponse(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::InvalidParameter(err.msg),
                     )
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::InvalidPassword(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(
-                            String::from(error_message),
-                        ),
+                        AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(
-                            String::from(error_message),
-                        ),
+                        AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(err.msg),
                     )
                 }
                 "MFAMethodNotFoundException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::MFAMethodNotFound(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::MFAMethodNotFound(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::PasswordResetRequired(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::PasswordResetRequired(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::ResourceNotFound(err.msg),
                     )
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::UnexpectedLambda(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::UnexpectedLambda(err.msg),
                     )
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::UserLambdaValidation(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::UserLambdaValidation(err.msg),
                     )
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(
-                        AdminRespondToAuthChallengeError::UserNotConfirmed(String::from(
-                            error_message,
-                        )),
+                        AdminRespondToAuthChallengeError::UserNotConfirmed(err.msg),
                     )
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6005,55 +5620,44 @@ pub enum AdminSetUserMFAPreferenceError {
 
 impl AdminSetUserMFAPreferenceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminSetUserMFAPreferenceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(
-                        AdminSetUserMFAPreferenceError::PasswordResetRequired(String::from(
-                            error_message,
-                        )),
+                        AdminSetUserMFAPreferenceError::PasswordResetRequired(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::UserNotConfirmed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6095,43 +5699,28 @@ pub enum AdminSetUserSettingsError {
 
 impl AdminSetUserSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminSetUserSettingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminSetUserSettingsError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminSetUserSettingsError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminSetUserSettingsError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminSetUserSettingsError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminSetUserSettingsError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminSetUserSettingsError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminSetUserSettingsError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminSetUserSettingsError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6177,61 +5766,44 @@ impl AdminUpdateAuthEventFeedbackError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AdminUpdateAuthEventFeedbackError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUpdateAuthEventFeedbackError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        AdminUpdateAuthEventFeedbackError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        AdminUpdateAuthEventFeedbackError::InvalidParameter(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminUpdateAuthEventFeedbackError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        AdminUpdateAuthEventFeedbackError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        AdminUpdateAuthEventFeedbackError::ResourceNotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        AdminUpdateAuthEventFeedbackError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        AdminUpdateAuthEventFeedbackError::TooManyRequests(err.msg),
                     )
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminUpdateAuthEventFeedbackError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return RusotoError::Service(
-                        AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
-                            error_message,
-                        )),
+                        AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6277,55 +5849,44 @@ pub enum AdminUpdateDeviceStatusError {
 
 impl AdminUpdateDeviceStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminUpdateDeviceStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
-                        AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
-                            error_message,
-                        )),
+                        AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6377,72 +5938,59 @@ pub enum AdminUpdateUserAttributesError {
 
 impl AdminUpdateUserAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminUpdateUserAttributesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::AliasExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
-                        AdminUpdateUserAttributesError::InvalidLambdaResponse(String::from(
-                            error_message,
-                        )),
+                        AdminUpdateUserAttributesError::InvalidLambdaResponse(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::UnexpectedLambda(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(
-                        AdminUpdateUserAttributesError::UserLambdaValidation(String::from(
-                            error_message,
-                        )),
+                        AdminUpdateUserAttributesError::UserLambdaValidation(err.msg),
                     )
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6489,48 +6037,37 @@ pub enum AdminUserGlobalSignOutError {
 
 impl AdminUserGlobalSignOutError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminUserGlobalSignOutError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminUserGlobalSignOutError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AdminUserGlobalSignOutError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6571,45 +6108,34 @@ pub enum AssociateSoftwareTokenError {
 
 impl AssociateSoftwareTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateSoftwareTokenError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AssociateSoftwareTokenError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AssociateSoftwareTokenError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AssociateSoftwareTokenError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssociateSoftwareTokenError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return RusotoError::Service(
-                        AssociateSoftwareTokenError::SoftwareTokenMFANotFound(String::from(
-                            error_message,
-                        )),
+                        AssociateSoftwareTokenError::SoftwareTokenMFANotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6659,68 +6185,41 @@ pub enum ChangePasswordError {
 
 impl ChangePasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangePasswordError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ChangePasswordError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ChangePasswordError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ChangePasswordError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ChangePasswordError::InvalidParameter(err.msg))
                 }
                 "InvalidPasswordException" => {
-                    return RusotoError::Service(ChangePasswordError::InvalidPassword(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ChangePasswordError::InvalidPassword(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ChangePasswordError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ChangePasswordError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ChangePasswordError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ChangePasswordError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(ChangePasswordError::PasswordResetRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ChangePasswordError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ChangePasswordError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ChangePasswordError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ChangePasswordError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(ChangePasswordError::UserNotConfirmed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ChangePasswordError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(ChangePasswordError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ChangePasswordError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6779,78 +6278,47 @@ pub enum ConfirmDeviceError {
 
 impl ConfirmDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ConfirmDeviceError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmDeviceError::InternalError(err.msg))
                 }
                 "InvalidLambdaResponseException" => {
-                    return RusotoError::Service(ConfirmDeviceError::InvalidLambdaResponse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmDeviceError::InvalidLambdaResponse(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ConfirmDeviceError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmDeviceError::InvalidParameter(err.msg))
                 }
                 "InvalidPasswordException" => {
-                    return RusotoError::Service(ConfirmDeviceError::InvalidPassword(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmDeviceError::InvalidPassword(err.msg))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(ConfirmDeviceError::InvalidUserPoolConfiguration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ConfirmDeviceError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmDeviceError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
-                    return RusotoError::Service(ConfirmDeviceError::PasswordResetRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmDeviceError::PasswordResetRequired(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ConfirmDeviceError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmDeviceError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ConfirmDeviceError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmDeviceError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(ConfirmDeviceError::UserNotConfirmed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmDeviceError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(ConfirmDeviceError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmDeviceError::UserNotFound(err.msg))
                 }
                 "UsernameExistsException" => {
-                    return RusotoError::Service(ConfirmDeviceError::UsernameExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmDeviceError::UsernameExists(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6917,93 +6385,72 @@ pub enum ConfirmForgotPasswordError {
 
 impl ConfirmForgotPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmForgotPasswordError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CodeMismatchException" => {
-                    return RusotoError::Service(ConfirmForgotPasswordError::CodeMismatch(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmForgotPasswordError::CodeMismatch(err.msg))
                 }
                 "ExpiredCodeException" => {
-                    return RusotoError::Service(ConfirmForgotPasswordError::ExpiredCode(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmForgotPasswordError::ExpiredCode(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(ConfirmForgotPasswordError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmForgotPasswordError::InternalError(err.msg))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::InvalidLambdaResponse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::InvalidPassword(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ConfirmForgotPasswordError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmForgotPasswordError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ConfirmForgotPasswordError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmForgotPasswordError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyFailedAttemptsException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::TooManyFailedAttempts(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::UnexpectedLambda(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::UserLambdaValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::UserNotConfirmed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(ConfirmForgotPasswordError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmForgotPasswordError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7071,88 +6518,51 @@ pub enum ConfirmSignUpError {
 
 impl ConfirmSignUpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmSignUpError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AliasExistsException" => {
-                    return RusotoError::Service(ConfirmSignUpError::AliasExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmSignUpError::AliasExists(err.msg))
                 }
                 "CodeMismatchException" => {
-                    return RusotoError::Service(ConfirmSignUpError::CodeMismatch(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmSignUpError::CodeMismatch(err.msg))
                 }
                 "ExpiredCodeException" => {
-                    return RusotoError::Service(ConfirmSignUpError::ExpiredCode(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmSignUpError::ExpiredCode(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(ConfirmSignUpError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmSignUpError::InternalError(err.msg))
                 }
                 "InvalidLambdaResponseException" => {
-                    return RusotoError::Service(ConfirmSignUpError::InvalidLambdaResponse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmSignUpError::InvalidLambdaResponse(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ConfirmSignUpError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmSignUpError::InvalidParameter(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ConfirmSignUpError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmSignUpError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ConfirmSignUpError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmSignUpError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ConfirmSignUpError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmSignUpError::ResourceNotFound(err.msg))
                 }
                 "TooManyFailedAttemptsException" => {
-                    return RusotoError::Service(ConfirmSignUpError::TooManyFailedAttempts(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmSignUpError::TooManyFailedAttempts(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ConfirmSignUpError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmSignUpError::TooManyRequests(err.msg))
                 }
                 "UnexpectedLambdaException" => {
-                    return RusotoError::Service(ConfirmSignUpError::UnexpectedLambda(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmSignUpError::UnexpectedLambda(err.msg))
                 }
                 "UserLambdaValidationException" => {
-                    return RusotoError::Service(ConfirmSignUpError::UserLambdaValidation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ConfirmSignUpError::UserLambdaValidation(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(ConfirmSignUpError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ConfirmSignUpError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7205,53 +6615,30 @@ pub enum CreateGroupError {
 
 impl CreateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "GroupExistsException" => {
-                    return RusotoError::Service(CreateGroupError::GroupExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGroupError::GroupExists(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateGroupError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGroupError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateGroupError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGroupError::InvalidParameter(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateGroupError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGroupError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(CreateGroupError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGroupError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(CreateGroupError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGroupError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreateGroupError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateGroupError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7297,53 +6684,44 @@ pub enum CreateIdentityProviderError {
 
 impl CreateIdentityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIdentityProviderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DuplicateProviderException" => {
                     return RusotoError::Service(CreateIdentityProviderError::DuplicateProvider(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateIdentityProviderError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateIdentityProviderError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateIdentityProviderError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(CreateIdentityProviderError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateIdentityProviderError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateIdentityProviderError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7387,48 +6765,33 @@ pub enum CreateResourceServerError {
 
 impl CreateResourceServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceServerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateResourceServerError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateResourceServerError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateResourceServerError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateResourceServerError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateResourceServerError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(CreateResourceServerError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateResourceServerError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateResourceServerError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateResourceServerError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7473,53 +6836,36 @@ pub enum CreateUserImportJobError {
 
 impl CreateUserImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserImportJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateUserImportJobError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserImportJobError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateUserImportJobError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateUserImportJobError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserImportJobError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(CreateUserImportJobError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserImportJobError::NotAuthorized(err.msg))
                 }
                 "PreconditionNotMetException" => {
                     return RusotoError::Service(CreateUserImportJobError::PreconditionNotMet(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateUserImportJobError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreateUserImportJobError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserImportJobError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7569,65 +6915,42 @@ pub enum CreateUserPoolError {
 
 impl CreateUserPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserPoolError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateUserPoolError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateUserPoolError::InternalError(err.msg))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(CreateUserPoolError::InvalidEmailRoleAccessPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateUserPoolError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserPoolError::InvalidParameter(err.msg))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(CreateUserPoolError::InvalidSmsRoleAccessPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        CreateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        CreateUserPoolError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateUserPoolError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateUserPoolError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(CreateUserPoolError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateUserPoolError::NotAuthorized(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreateUserPoolError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserPoolError::TooManyRequests(err.msg))
                 }
                 "UserPoolTaggingException" => {
-                    return RusotoError::Service(CreateUserPoolError::UserPoolTagging(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserPoolError::UserPoolTagging(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7677,58 +7000,43 @@ pub enum CreateUserPoolClientError {
 
 impl CreateUserPoolClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserPoolClientError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateUserPoolClientError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserPoolClientError::InternalError(err.msg))
                 }
                 "InvalidOAuthFlowException" => {
                     return RusotoError::Service(CreateUserPoolClientError::InvalidOAuthFlow(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateUserPoolClientError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateUserPoolClientError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserPoolClientError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(CreateUserPoolClientError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserPoolClientError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateUserPoolClientError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ScopeDoesNotExistException" => {
                     return RusotoError::Service(CreateUserPoolClientError::ScopeDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateUserPoolClientError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7771,43 +7079,28 @@ pub enum CreateUserPoolDomainError {
 
 impl CreateUserPoolDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserPoolDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateUserPoolDomainError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserPoolDomainError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateUserPoolDomainError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateUserPoolDomainError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserPoolDomainError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(CreateUserPoolDomainError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserPoolDomainError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateUserPoolDomainError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7847,43 +7140,24 @@ pub enum DeleteGroupError {
 
 impl DeleteGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteGroupError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteGroupError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteGroupError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteGroupError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DeleteGroupError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteGroupError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteGroupError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteGroupError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteGroupError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteGroupError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -7925,50 +7199,39 @@ pub enum DeleteIdentityProviderError {
 
 impl DeleteIdentityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentityProviderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedIdentityProviderException" => {
                     return RusotoError::Service(
-                        DeleteIdentityProviderError::UnsupportedIdentityProvider(String::from(
-                            error_message,
-                        )),
+                        DeleteIdentityProviderError::UnsupportedIdentityProvider(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8009,43 +7272,30 @@ pub enum DeleteResourceServerError {
 
 impl DeleteResourceServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceServerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteResourceServerError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteResourceServerError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteResourceServerError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DeleteResourceServerError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteResourceServerError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteResourceServerError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteResourceServerError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8091,58 +7341,33 @@ pub enum DeleteUserError {
 
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteUserError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteUserError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DeleteUserError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
-                    return RusotoError::Service(DeleteUserError::PasswordResetRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserError::PasswordResetRequired(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteUserError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteUserError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(DeleteUserError::UserNotConfirmed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(DeleteUserError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8191,58 +7416,43 @@ pub enum DeleteUserAttributesError {
 
 impl DeleteUserAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserAttributesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteUserAttributesError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserAttributesError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserAttributesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DeleteUserAttributesError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserAttributesError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(DeleteUserAttributesError::PasswordResetRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserAttributesError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteUserAttributesError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(DeleteUserAttributesError::UserNotConfirmed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(DeleteUserAttributesError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserAttributesError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8287,48 +7497,27 @@ pub enum DeleteUserPoolError {
 
 impl DeleteUserPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPoolError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteUserPoolError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserPoolError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteUserPoolError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserPoolError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DeleteUserPoolError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserPoolError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteUserPoolError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserPoolError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteUserPoolError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserPoolError::TooManyRequests(err.msg))
                 }
                 "UserImportInProgressException" => {
-                    return RusotoError::Service(DeleteUserPoolError::UserImportInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserPoolError::UserImportInProgress(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8369,43 +7558,30 @@ pub enum DeleteUserPoolClientError {
 
 impl DeleteUserPoolClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPoolClientError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteUserPoolClientError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserPoolClientError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserPoolClientError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DeleteUserPoolClientError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserPoolClientError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserPoolClientError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteUserPoolClientError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8443,38 +7619,25 @@ pub enum DeleteUserPoolDomainError {
 
 impl DeleteUserPoolDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPoolDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteUserPoolDomainError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserPoolDomainError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserPoolDomainError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DeleteUserPoolDomainError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserPoolDomainError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserPoolDomainError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8513,43 +7676,34 @@ pub enum DescribeIdentityProviderError {
 
 impl DescribeIdentityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityProviderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8589,43 +7743,34 @@ pub enum DescribeResourceServerError {
 
 impl DescribeResourceServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResourceServerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeResourceServerError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeResourceServerError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeResourceServerError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeResourceServerError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeResourceServerError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8667,50 +7812,39 @@ pub enum DescribeRiskConfigurationError {
 
 impl DescribeRiskConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRiskConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return RusotoError::Service(
-                        DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
-                            error_message,
-                        )),
+                        DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8751,43 +7885,30 @@ pub enum DescribeUserImportJobError {
 
 impl DescribeUserImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserImportJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeUserImportJobError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeUserImportJobError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserImportJobError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DescribeUserImportJobError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeUserImportJobError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserImportJobError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeUserImportJobError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8829,48 +7950,27 @@ pub enum DescribeUserPoolError {
 
 impl DescribeUserPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserPoolError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeUserPoolError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeUserPoolError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeUserPoolError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeUserPoolError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DescribeUserPoolError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeUserPoolError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeUserPoolError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeUserPoolError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeUserPoolError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeUserPoolError::TooManyRequests(err.msg))
                 }
                 "UserPoolTaggingException" => {
-                    return RusotoError::Service(DescribeUserPoolError::UserPoolTagging(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeUserPoolError::UserPoolTagging(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8911,43 +8011,34 @@ pub enum DescribeUserPoolClientError {
 
 impl DescribeUserPoolClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserPoolClientError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -8985,38 +8076,29 @@ pub enum DescribeUserPoolDomainError {
 
 impl DescribeUserPoolDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserPoolDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeUserPoolDomainError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserPoolDomainError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeUserPoolDomainError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserPoolDomainError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9063,63 +8145,38 @@ pub enum ForgetDeviceError {
 
 impl ForgetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ForgetDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ForgetDeviceError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgetDeviceError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ForgetDeviceError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgetDeviceError::InvalidParameter(err.msg))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(ForgetDeviceError::InvalidUserPoolConfiguration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ForgetDeviceError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgetDeviceError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
-                    return RusotoError::Service(ForgetDeviceError::PasswordResetRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ForgetDeviceError::PasswordResetRequired(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ForgetDeviceError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgetDeviceError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ForgetDeviceError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgetDeviceError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(ForgetDeviceError::UserNotConfirmed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgetDeviceError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(ForgetDeviceError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgetDeviceError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9183,95 +8240,62 @@ pub enum ForgotPasswordError {
 
 impl ForgotPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ForgotPasswordError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
-                    return RusotoError::Service(ForgotPasswordError::CodeDeliveryFailure(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ForgotPasswordError::CodeDeliveryFailure(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(ForgotPasswordError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgotPasswordError::InternalError(err.msg))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(ForgotPasswordError::InvalidEmailRoleAccessPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(ForgotPasswordError::InvalidLambdaResponse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ForgotPasswordError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ForgotPasswordError::InvalidParameter(err.msg))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(ForgotPasswordError::InvalidSmsRoleAccessPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        ForgotPasswordError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        ForgotPasswordError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ForgotPasswordError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgotPasswordError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ForgotPasswordError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgotPasswordError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ForgotPasswordError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ForgotPasswordError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ForgotPasswordError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ForgotPasswordError::TooManyRequests(err.msg))
                 }
                 "UnexpectedLambdaException" => {
-                    return RusotoError::Service(ForgotPasswordError::UnexpectedLambda(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ForgotPasswordError::UnexpectedLambda(err.msg))
                 }
                 "UserLambdaValidationException" => {
-                    return RusotoError::Service(ForgotPasswordError::UserLambdaValidation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ForgotPasswordError::UserLambdaValidation(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(ForgotPasswordError::UserNotConfirmed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ForgotPasswordError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(ForgotPasswordError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ForgotPasswordError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9321,43 +8345,24 @@ pub enum GetCSVHeaderError {
 
 impl GetCSVHeaderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCSVHeaderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetCSVHeaderError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCSVHeaderError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetCSVHeaderError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCSVHeaderError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(GetCSVHeaderError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCSVHeaderError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetCSVHeaderError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCSVHeaderError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetCSVHeaderError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetCSVHeaderError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9405,63 +8410,38 @@ pub enum GetDeviceError {
 
 impl GetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetDeviceError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetDeviceError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::InvalidParameter(err.msg))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(GetDeviceError::InvalidUserPoolConfiguration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(GetDeviceError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
-                    return RusotoError::Service(GetDeviceError::PasswordResetRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetDeviceError::PasswordResetRequired(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetDeviceError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetDeviceError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(GetDeviceError::UserNotConfirmed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(GetDeviceError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9505,43 +8485,24 @@ pub enum GetGroupError {
 
 impl GetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetGroupError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetGroupError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetGroupError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetGroupError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(GetGroupError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetGroupError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetGroupError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetGroupError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetGroupError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetGroupError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9583,53 +8544,34 @@ impl GetIdentityProviderByIdentifierError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetIdentityProviderByIdentifierError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(
-                        GetIdentityProviderByIdentifierError::InternalError(String::from(
-                            error_message,
-                        )),
+                        GetIdentityProviderByIdentifierError::InternalError(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        GetIdentityProviderByIdentifierError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        GetIdentityProviderByIdentifierError::InvalidParameter(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(
-                        GetIdentityProviderByIdentifierError::NotAuthorized(String::from(
-                            error_message,
-                        )),
+                        GetIdentityProviderByIdentifierError::NotAuthorized(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        GetIdentityProviderByIdentifierError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        GetIdentityProviderByIdentifierError::ResourceNotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        GetIdentityProviderByIdentifierError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        GetIdentityProviderByIdentifierError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9663,28 +8605,17 @@ pub enum GetSigningCertificateError {
 
 impl GetSigningCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSigningCertificateError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetSigningCertificateError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetSigningCertificateError::InternalError(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetSigningCertificateError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9721,43 +8652,24 @@ pub enum GetUICustomizationError {
 
 impl GetUICustomizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUICustomizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetUICustomizationError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetUICustomizationError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetUICustomizationError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetUICustomizationError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(GetUICustomizationError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetUICustomizationError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetUICustomizationError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetUICustomizationError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetUICustomizationError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetUICustomizationError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9803,58 +8715,33 @@ pub enum GetUserError {
 
 impl GetUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetUserError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUserError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetUserError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUserError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(GetUserError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUserError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
-                    return RusotoError::Service(GetUserError::PasswordResetRequired(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUserError::PasswordResetRequired(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetUserError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUserError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetUserError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUserError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(GetUserError::UserNotConfirmed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUserError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(GetUserError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetUserError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -9921,130 +8808,93 @@ impl GetUserAttributeVerificationCodeError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<GetUserAttributeVerificationCodeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::CodeDeliveryFailure(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::CodeDeliveryFailure(err.msg),
                     )
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::InternalError(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::InternalError(err.msg),
                     )
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::InvalidEmailRoleAccessPolicy(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::InvalidLambdaResponse(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::InvalidLambdaResponse(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::InvalidParameter(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::InvalidParameter(err.msg),
                     )
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(
-                            String::from(error_message),
-                        ),
+                        GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::InvalidSmsRoleTrustRelationship(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::LimitExceeded(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::LimitExceeded(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::NotAuthorized(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::NotAuthorized(err.msg),
                     )
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::PasswordResetRequired(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::PasswordResetRequired(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::ResourceNotFound(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::ResourceNotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::TooManyRequests(err.msg),
                     )
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::UnexpectedLambda(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::UnexpectedLambda(err.msg),
                     )
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::UserLambdaValidation(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::UserLambdaValidation(err.msg),
                     )
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::UserNotConfirmed(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::UserNotConfirmed(err.msg),
                     )
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(
-                        GetUserAttributeVerificationCodeError::UserNotFound(String::from(
-                            error_message,
-                        )),
+                        GetUserAttributeVerificationCodeError::UserNotFound(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10097,43 +8947,30 @@ pub enum GetUserPoolMfaConfigError {
 
 impl GetUserPoolMfaConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserPoolMfaConfigError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(GetUserPoolMfaConfigError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetUserPoolMfaConfigError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetUserPoolMfaConfigError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(GetUserPoolMfaConfigError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetUserPoolMfaConfigError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetUserPoolMfaConfigError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetUserPoolMfaConfigError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10177,53 +9014,30 @@ pub enum GlobalSignOutError {
 
 impl GlobalSignOutError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GlobalSignOutError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(GlobalSignOutError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GlobalSignOutError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GlobalSignOutError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GlobalSignOutError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(GlobalSignOutError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GlobalSignOutError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
-                    return RusotoError::Service(GlobalSignOutError::PasswordResetRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GlobalSignOutError::PasswordResetRequired(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GlobalSignOutError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GlobalSignOutError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GlobalSignOutError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GlobalSignOutError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(GlobalSignOutError::UserNotConfirmed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GlobalSignOutError::UserNotConfirmed(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10279,78 +9093,47 @@ pub enum InitiateAuthError {
 
 impl InitiateAuthError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateAuthError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(InitiateAuthError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(InitiateAuthError::InternalError(err.msg))
                 }
                 "InvalidLambdaResponseException" => {
-                    return RusotoError::Service(InitiateAuthError::InvalidLambdaResponse(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(InitiateAuthError::InvalidLambdaResponse(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(InitiateAuthError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(InitiateAuthError::InvalidParameter(err.msg))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(InitiateAuthError::InvalidUserPoolConfiguration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(InitiateAuthError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(InitiateAuthError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
-                    return RusotoError::Service(InitiateAuthError::PasswordResetRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(InitiateAuthError::PasswordResetRequired(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(InitiateAuthError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(InitiateAuthError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(InitiateAuthError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(InitiateAuthError::TooManyRequests(err.msg))
                 }
                 "UnexpectedLambdaException" => {
-                    return RusotoError::Service(InitiateAuthError::UnexpectedLambda(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(InitiateAuthError::UnexpectedLambda(err.msg))
                 }
                 "UserLambdaValidationException" => {
-                    return RusotoError::Service(InitiateAuthError::UserLambdaValidation(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(InitiateAuthError::UserLambdaValidation(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(InitiateAuthError::UserNotConfirmed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(InitiateAuthError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(InitiateAuthError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(InitiateAuthError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10405,63 +9188,38 @@ pub enum ListDevicesError {
 
 impl ListDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListDevicesError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListDevicesError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::InvalidParameter(err.msg))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(ListDevicesError::InvalidUserPoolConfiguration(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListDevicesError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
-                    return RusotoError::Service(ListDevicesError::PasswordResetRequired(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListDevicesError::PasswordResetRequired(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListDevicesError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListDevicesError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(ListDevicesError::UserNotConfirmed(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(ListDevicesError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDevicesError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10505,43 +9263,24 @@ pub enum ListGroupsError {
 
 impl ListGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListGroupsError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGroupsError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListGroupsError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGroupsError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListGroupsError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGroupsError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListGroupsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGroupsError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListGroupsError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListGroupsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10581,43 +9320,30 @@ pub enum ListIdentityProvidersError {
 
 impl ListIdentityProvidersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentityProvidersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListIdentityProvidersError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListIdentityProvidersError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListIdentityProvidersError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListIdentityProvidersError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListIdentityProvidersError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListIdentityProvidersError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListIdentityProvidersError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10657,43 +9383,28 @@ pub enum ListResourceServersError {
 
 impl ListResourceServersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceServersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListResourceServersError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListResourceServersError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListResourceServersError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListResourceServersError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListResourceServersError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListResourceServersError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListResourceServersError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListResourceServersError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10733,43 +9444,24 @@ pub enum ListUserImportJobsError {
 
 impl ListUserImportJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserImportJobsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListUserImportJobsError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUserImportJobsError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListUserImportJobsError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUserImportJobsError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListUserImportJobsError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUserImportJobsError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListUserImportJobsError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUserImportJobsError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListUserImportJobsError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUserImportJobsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10809,43 +9501,28 @@ pub enum ListUserPoolClientsError {
 
 impl ListUserPoolClientsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserPoolClientsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListUserPoolClientsError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUserPoolClientsError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListUserPoolClientsError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListUserPoolClientsError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUserPoolClientsError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListUserPoolClientsError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListUserPoolClientsError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUserPoolClientsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10883,38 +9560,21 @@ pub enum ListUserPoolsError {
 
 impl ListUserPoolsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserPoolsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListUserPoolsError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUserPoolsError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListUserPoolsError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUserPoolsError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListUserPoolsError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUserPoolsError::NotAuthorized(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListUserPoolsError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUserPoolsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -10953,43 +9613,24 @@ pub enum ListUsersError {
 
 impl ListUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListUsersError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUsersError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListUsersError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUsersError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListUsersError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUsersError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListUsersError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUsersError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListUsersError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListUsersError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11029,43 +9670,24 @@ pub enum ListUsersInGroupError {
 
 impl ListUsersInGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersInGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListUsersInGroupError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUsersInGroupError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListUsersInGroupError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUsersInGroupError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListUsersInGroupError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUsersInGroupError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListUsersInGroupError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUsersInGroupError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListUsersInGroupError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListUsersInGroupError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11123,96 +9745,77 @@ pub enum ResendConfirmationCodeError {
 
 impl ResendConfirmationCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResendConfirmationCodeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::CodeDeliveryFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
-                        ResendConfirmationCodeError::InvalidLambdaResponse(String::from(
-                            error_message,
-                        )),
+                        ResendConfirmationCodeError::InvalidLambdaResponse(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::UnexpectedLambda(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::UserLambdaValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(ResendConfirmationCodeError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResendConfirmationCodeError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11291,130 +9894,101 @@ pub enum RespondToAuthChallengeError {
 
 impl RespondToAuthChallengeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RespondToAuthChallengeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AliasExistsException" => {
-                    return RusotoError::Service(RespondToAuthChallengeError::AliasExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RespondToAuthChallengeError::AliasExists(err.msg))
                 }
                 "CodeMismatchException" => {
-                    return RusotoError::Service(RespondToAuthChallengeError::CodeMismatch(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RespondToAuthChallengeError::CodeMismatch(err.msg))
                 }
                 "ExpiredCodeException" => {
-                    return RusotoError::Service(RespondToAuthChallengeError::ExpiredCode(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RespondToAuthChallengeError::ExpiredCode(err.msg))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
-                        RespondToAuthChallengeError::InvalidLambdaResponse(String::from(
-                            error_message,
-                        )),
+                        RespondToAuthChallengeError::InvalidLambdaResponse(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::InvalidPassword(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
-                        RespondToAuthChallengeError::InvalidUserPoolConfiguration(String::from(
-                            error_message,
-                        )),
+                        RespondToAuthChallengeError::InvalidUserPoolConfiguration(err.msg),
                     )
                 }
                 "MFAMethodNotFoundException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::MFAMethodNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(
-                        RespondToAuthChallengeError::PasswordResetRequired(String::from(
-                            error_message,
-                        )),
+                        RespondToAuthChallengeError::PasswordResetRequired(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return RusotoError::Service(
-                        RespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
-                            error_message,
-                        )),
+                        RespondToAuthChallengeError::SoftwareTokenMFANotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::UnexpectedLambda(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::UserLambdaValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::UserNotConfirmed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(RespondToAuthChallengeError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RespondToAuthChallengeError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11475,62 +10049,45 @@ pub enum SetRiskConfigurationError {
 
 impl SetRiskConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetRiskConfigurationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(SetRiskConfigurationError::CodeDeliveryFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(SetRiskConfigurationError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetRiskConfigurationError::InternalError(err.msg))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetRiskConfigurationError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(SetRiskConfigurationError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetRiskConfigurationError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetRiskConfigurationError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(SetRiskConfigurationError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return RusotoError::Service(
-                        SetRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
-                            error_message,
-                        )),
+                        SetRiskConfigurationError::UserPoolAddOnNotEnabled(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11573,43 +10130,24 @@ pub enum SetUICustomizationError {
 
 impl SetUICustomizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUICustomizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(SetUICustomizationError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUICustomizationError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(SetUICustomizationError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUICustomizationError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(SetUICustomizationError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUICustomizationError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(SetUICustomizationError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUICustomizationError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(SetUICustomizationError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUICustomizationError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11653,53 +10191,38 @@ pub enum SetUserMFAPreferenceError {
 
 impl SetUserMFAPreferenceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUserMFAPreferenceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(SetUserMFAPreferenceError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUserMFAPreferenceError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(SetUserMFAPreferenceError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUserMFAPreferenceError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::PasswordResetRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::UserNotConfirmed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(SetUserMFAPreferenceError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUserMFAPreferenceError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11745,57 +10268,40 @@ pub enum SetUserPoolMfaConfigError {
 
 impl SetUserPoolMfaConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUserPoolMfaConfigError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(SetUserPoolMfaConfigError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUserPoolMfaConfigError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetUserPoolMfaConfigError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(SetUserPoolMfaConfigError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUserPoolMfaConfigError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetUserPoolMfaConfigError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(SetUserPoolMfaConfigError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11841,53 +10347,32 @@ pub enum SetUserSettingsError {
 
 impl SetUserSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUserSettingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(SetUserSettingsError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetUserSettingsError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(SetUserSettingsError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUserSettingsError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(SetUserSettingsError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetUserSettingsError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(SetUserSettingsError::PasswordResetRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(SetUserSettingsError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUserSettingsError::ResourceNotFound(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(SetUserSettingsError::UserNotConfirmed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SetUserSettingsError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(SetUserSettingsError::UserNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SetUserSettingsError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -11947,88 +10432,53 @@ pub enum SignUpError {
 
 impl SignUpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SignUpError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
-                    return RusotoError::Service(SignUpError::CodeDeliveryFailure(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::CodeDeliveryFailure(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(SignUpError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::InternalError(err.msg))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
-                    return RusotoError::Service(SignUpError::InvalidEmailRoleAccessPolicy(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SignUpError::InvalidEmailRoleAccessPolicy(err.msg))
                 }
                 "InvalidLambdaResponseException" => {
-                    return RusotoError::Service(SignUpError::InvalidLambdaResponse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::InvalidLambdaResponse(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(SignUpError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::InvalidParameter(err.msg))
                 }
                 "InvalidPasswordException" => {
-                    return RusotoError::Service(SignUpError::InvalidPassword(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::InvalidPassword(err.msg))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return RusotoError::Service(SignUpError::InvalidSmsRoleAccessPolicy(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SignUpError::InvalidSmsRoleAccessPolicy(err.msg))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(SignUpError::InvalidSmsRoleTrustRelationship(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(SignUpError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(SignUpError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(SignUpError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::TooManyRequests(err.msg))
                 }
                 "UnexpectedLambdaException" => {
-                    return RusotoError::Service(SignUpError::UnexpectedLambda(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::UnexpectedLambda(err.msg))
                 }
                 "UserLambdaValidationException" => {
-                    return RusotoError::Service(SignUpError::UserLambdaValidation(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::UserLambdaValidation(err.msg))
                 }
                 "UsernameExistsException" => {
-                    return RusotoError::Service(SignUpError::UsernameExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SignUpError::UsernameExists(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12079,48 +10529,29 @@ pub enum StartUserImportJobError {
 
 impl StartUserImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartUserImportJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(StartUserImportJobError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartUserImportJobError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(StartUserImportJobError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartUserImportJobError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(StartUserImportJobError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartUserImportJobError::NotAuthorized(err.msg))
                 }
                 "PreconditionNotMetException" => {
                     return RusotoError::Service(StartUserImportJobError::PreconditionNotMet(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(StartUserImportJobError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartUserImportJobError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(StartUserImportJobError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartUserImportJobError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12163,48 +10594,29 @@ pub enum StopUserImportJobError {
 
 impl StopUserImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopUserImportJobError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(StopUserImportJobError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopUserImportJobError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(StopUserImportJobError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopUserImportJobError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(StopUserImportJobError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopUserImportJobError::NotAuthorized(err.msg))
                 }
                 "PreconditionNotMetException" => {
                     return RusotoError::Service(StopUserImportJobError::PreconditionNotMet(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(StopUserImportJobError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopUserImportJobError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(StopUserImportJobError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StopUserImportJobError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12249,55 +10661,44 @@ pub enum UpdateAuthEventFeedbackError {
 
 impl UpdateAuthEventFeedbackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAuthEventFeedbackError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::UserNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return RusotoError::Service(
-                        UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
-                            error_message,
-                        )),
+                        UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12347,65 +10748,40 @@ pub enum UpdateDeviceStatusError {
 
 impl UpdateDeviceStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateDeviceStatusError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceStatusError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UpdateDeviceStatusError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceStatusError::InvalidParameter(err.msg))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
-                        UpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
-                            error_message,
-                        )),
+                        UpdateDeviceStatusError::InvalidUserPoolConfiguration(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(UpdateDeviceStatusError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceStatusError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::PasswordResetRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateDeviceStatusError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceStatusError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(UpdateDeviceStatusError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceStatusError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(UpdateDeviceStatusError::UserNotConfirmed(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceStatusError::UserNotConfirmed(err.msg))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(UpdateDeviceStatusError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceStatusError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12449,43 +10825,24 @@ pub enum UpdateGroupError {
 
 impl UpdateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateGroupError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateGroupError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UpdateGroupError::InvalidParameter(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateGroupError::InvalidParameter(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(UpdateGroupError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateGroupError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateGroupError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateGroupError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(UpdateGroupError::TooManyRequests(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateGroupError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12527,50 +10884,39 @@ pub enum UpdateIdentityProviderError {
 
 impl UpdateIdentityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIdentityProviderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::InternalError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::NotAuthorized(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnsupportedIdentityProviderException" => {
                     return RusotoError::Service(
-                        UpdateIdentityProviderError::UnsupportedIdentityProvider(String::from(
-                            error_message,
-                        )),
+                        UpdateIdentityProviderError::UnsupportedIdentityProvider(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12611,43 +10957,30 @@ pub enum UpdateResourceServerError {
 
 impl UpdateResourceServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceServerError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateResourceServerError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateResourceServerError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateResourceServerError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(UpdateResourceServerError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateResourceServerError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateResourceServerError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateResourceServerError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12713,114 +11046,87 @@ pub enum UpdateUserAttributesError {
 
 impl UpdateUserAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserAttributesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AliasExistsException" => {
-                    return RusotoError::Service(UpdateUserAttributesError::AliasExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserAttributesError::AliasExists(err.msg))
                 }
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(UpdateUserAttributesError::CodeDeliveryFailure(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "CodeMismatchException" => {
-                    return RusotoError::Service(UpdateUserAttributesError::CodeMismatch(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserAttributesError::CodeMismatch(err.msg))
                 }
                 "ExpiredCodeException" => {
-                    return RusotoError::Service(UpdateUserAttributesError::ExpiredCode(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserAttributesError::ExpiredCode(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateUserAttributesError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserAttributesError::InternalError(err.msg))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(UpdateUserAttributesError::InvalidLambdaResponse(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserAttributesError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
-                        UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(String::from(
-                            error_message,
-                        )),
+                        UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(err.msg),
                     )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(UpdateUserAttributesError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserAttributesError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(UpdateUserAttributesError::PasswordResetRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserAttributesError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateUserAttributesError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(UpdateUserAttributesError::UnexpectedLambda(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(UpdateUserAttributesError::UserLambdaValidation(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(UpdateUserAttributesError::UserNotConfirmed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(UpdateUserAttributesError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserAttributesError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -12885,75 +11191,50 @@ pub enum UpdateUserPoolError {
 
 impl UpdateUserPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPoolError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateUserPoolError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateUserPoolError::InternalError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateUserPoolError::InternalError(err.msg))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(UpdateUserPoolError::InvalidEmailRoleAccessPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UpdateUserPoolError::InvalidParameter(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserPoolError::InvalidParameter(err.msg))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(UpdateUserPoolError::InvalidSmsRoleAccessPolicy(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
-                        UpdateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
-                            error_message,
-                        )),
+                        UpdateUserPoolError::InvalidSmsRoleTrustRelationship(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(UpdateUserPoolError::NotAuthorized(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateUserPoolError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateUserPoolError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserPoolError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(UpdateUserPoolError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserPoolError::TooManyRequests(err.msg))
                 }
                 "UserImportInProgressException" => {
-                    return RusotoError::Service(UpdateUserPoolError::UserImportInProgress(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserPoolError::UserImportInProgress(err.msg))
                 }
                 "UserPoolTaggingException" => {
-                    return RusotoError::Service(UpdateUserPoolError::UserPoolTagging(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserPoolError::UserPoolTagging(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13005,58 +11286,45 @@ pub enum UpdateUserPoolClientError {
 
 impl UpdateUserPoolClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPoolClientError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateUserPoolClientError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserPoolClientError::InternalError(err.msg))
                 }
                 "InvalidOAuthFlowException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::InvalidOAuthFlow(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(UpdateUserPoolClientError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserPoolClientError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ScopeDoesNotExistException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::ScopeDoesNotExist(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13099,43 +11367,30 @@ pub enum UpdateUserPoolDomainError {
 
 impl UpdateUserPoolDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPoolDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateUserPoolDomainError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserPoolDomainError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserPoolDomainError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(UpdateUserPoolDomainError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateUserPoolDomainError::NotAuthorized(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserPoolDomainError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateUserPoolDomainError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13189,82 +11444,59 @@ pub enum VerifySoftwareTokenError {
 
 impl VerifySoftwareTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifySoftwareTokenError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CodeMismatchException" => {
-                    return RusotoError::Service(VerifySoftwareTokenError::CodeMismatch(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifySoftwareTokenError::CodeMismatch(err.msg))
                 }
                 "EnableSoftwareTokenMFAException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::EnableSoftwareTokenMFA(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(VerifySoftwareTokenError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifySoftwareTokenError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
-                        VerifySoftwareTokenError::InvalidUserPoolConfiguration(String::from(
-                            error_message,
-                        )),
+                        VerifySoftwareTokenError::InvalidUserPoolConfiguration(err.msg),
                     )
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(VerifySoftwareTokenError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifySoftwareTokenError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::PasswordResetRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return RusotoError::Service(
-                        VerifySoftwareTokenError::SoftwareTokenMFANotFound(String::from(
-                            error_message,
-                        )),
+                        VerifySoftwareTokenError::SoftwareTokenMFANotFound(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(VerifySoftwareTokenError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifySoftwareTokenError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::UserNotConfirmed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(VerifySoftwareTokenError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifySoftwareTokenError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -13323,73 +11555,50 @@ pub enum VerifyUserAttributeError {
 
 impl VerifyUserAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyUserAttributeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "CodeMismatchException" => {
-                    return RusotoError::Service(VerifyUserAttributeError::CodeMismatch(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifyUserAttributeError::CodeMismatch(err.msg))
                 }
                 "ExpiredCodeException" => {
-                    return RusotoError::Service(VerifyUserAttributeError::ExpiredCode(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifyUserAttributeError::ExpiredCode(err.msg))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(VerifyUserAttributeError::InternalError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifyUserAttributeError::InternalError(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(VerifyUserAttributeError::InvalidParameter(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(VerifyUserAttributeError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifyUserAttributeError::LimitExceeded(err.msg))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(VerifyUserAttributeError::NotAuthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifyUserAttributeError::NotAuthorized(err.msg))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(VerifyUserAttributeError::PasswordResetRequired(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(VerifyUserAttributeError::ResourceNotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(VerifyUserAttributeError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifyUserAttributeError::TooManyRequests(err.msg))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(VerifyUserAttributeError::UserNotConfirmed(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(VerifyUserAttributeError::UserNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(VerifyUserAttributeError::UserNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

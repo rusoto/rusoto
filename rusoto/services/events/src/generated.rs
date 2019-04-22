@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>This structure specifies the VPC subnets and security groups for the task, and whether a public IP address is to be used. This structure is relevant only for ECS tasks that use the <code>awsvpc</code> network mode.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsVpcConfiguration {
@@ -677,33 +676,18 @@ pub enum DeleteRuleError {
 
 impl DeleteRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(DeleteRuleError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRuleError::ConcurrentModification(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(DeleteRuleError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRuleError::Internal(err.msg))
                 }
                 "ManagedRuleException" => {
-                    return RusotoError::Service(DeleteRuleError::ManagedRule(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRuleError::ManagedRule(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -735,28 +719,15 @@ pub enum DescribeEventBusError {
 
 impl DescribeEventBusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventBusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(DescribeEventBusError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeEventBusError::Internal(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeEventBusError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeEventBusError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -787,28 +758,15 @@ pub enum DescribeRuleError {
 
 impl DescribeRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(DescribeRuleError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeRuleError::Internal(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeRuleError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeRuleError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -843,38 +801,21 @@ pub enum DisableRuleError {
 
 impl DisableRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(DisableRuleError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisableRuleError::ConcurrentModification(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(DisableRuleError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableRuleError::Internal(err.msg))
                 }
                 "ManagedRuleException" => {
-                    return RusotoError::Service(DisableRuleError::ManagedRule(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableRuleError::ManagedRule(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DisableRuleError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DisableRuleError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -911,38 +852,21 @@ pub enum EnableRuleError {
 
 impl EnableRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(EnableRuleError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(EnableRuleError::ConcurrentModification(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(EnableRuleError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableRuleError::Internal(err.msg))
                 }
                 "ManagedRuleException" => {
-                    return RusotoError::Service(EnableRuleError::ManagedRule(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableRuleError::ManagedRule(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(EnableRuleError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(EnableRuleError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -973,23 +897,12 @@ pub enum ListRuleNamesByTargetError {
 
 impl ListRuleNamesByTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRuleNamesByTargetError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(ListRuleNamesByTargetError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListRuleNamesByTargetError::Internal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1017,23 +930,12 @@ pub enum ListRulesError {
 
 impl ListRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRulesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(ListRulesError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListRulesError::Internal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1063,28 +965,15 @@ pub enum ListTargetsByRuleError {
 
 impl ListTargetsByRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTargetsByRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(ListTargetsByRuleError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTargetsByRuleError::Internal(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListTargetsByRuleError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTargetsByRuleError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1113,23 +1002,12 @@ pub enum PutEventsError {
 
 impl PutEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEventsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(PutEventsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutEventsError::Internal(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1163,38 +1041,23 @@ pub enum PutPermissionError {
 
 impl PutPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPermissionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(PutPermissionError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(PutPermissionError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutPermissionError::Internal(err.msg))
                 }
                 "PolicyLengthExceededException" => {
-                    return RusotoError::Service(PutPermissionError::PolicyLengthExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutPermissionError::PolicyLengthExceeded(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(PutPermissionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutPermissionError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1233,43 +1096,24 @@ pub enum PutRuleError {
 
 impl PutRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRuleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(PutRuleError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutRuleError::ConcurrentModification(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(PutRuleError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutRuleError::Internal(err.msg))
                 }
                 "InvalidEventPatternException" => {
-                    return RusotoError::Service(PutRuleError::InvalidEventPattern(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutRuleError::InvalidEventPattern(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PutRuleError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutRuleError::LimitExceeded(err.msg))
                 }
                 "ManagedRuleException" => {
-                    return RusotoError::Service(PutRuleError::ManagedRule(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutRuleError::ManagedRule(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1309,43 +1153,24 @@ pub enum PutTargetsError {
 
 impl PutTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(PutTargetsError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutTargetsError::ConcurrentModification(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(PutTargetsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutTargetsError::Internal(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PutTargetsError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutTargetsError::LimitExceeded(err.msg))
                 }
                 "ManagedRuleException" => {
-                    return RusotoError::Service(PutTargetsError::ManagedRule(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutTargetsError::ManagedRule(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(PutTargetsError::ResourceNotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(PutTargetsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1381,33 +1206,20 @@ pub enum RemovePermissionError {
 
 impl RemovePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemovePermissionError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RemovePermissionError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(RemovePermissionError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemovePermissionError::Internal(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(RemovePermissionError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemovePermissionError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1443,38 +1255,23 @@ pub enum RemoveTargetsError {
 
 impl RemoveTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTargetsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RemoveTargetsError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(RemoveTargetsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveTargetsError::Internal(err.msg))
                 }
                 "ManagedRuleException" => {
-                    return RusotoError::Service(RemoveTargetsError::ManagedRule(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RemoveTargetsError::ManagedRule(err.msg))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(RemoveTargetsError::ResourceNotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RemoveTargetsError::ResourceNotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1507,28 +1304,17 @@ pub enum TestEventPatternError {
 
 impl TestEventPatternError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestEventPatternError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(TestEventPatternError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TestEventPatternError::Internal(err.msg))
                 }
                 "InvalidEventPatternException" => {
                     return RusotoError::Service(TestEventPatternError::InvalidEventPattern(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

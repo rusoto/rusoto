@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateMemberAccountRequest {
     /// <p>The ID of the AWS account that you want to associate with Amazon Macie as a member account.</p>
@@ -260,33 +259,20 @@ pub enum AssociateMemberAccountError {
 
 impl AssociateMemberAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateMemberAccountError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(AssociateMemberAccountError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateMemberAccountError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(AssociateMemberAccountError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateMemberAccountError::InvalidInput(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AssociateMemberAccountError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -322,38 +308,21 @@ pub enum AssociateS3ResourcesError {
 
 impl AssociateS3ResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateS3ResourcesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(AssociateS3ResourcesError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateS3ResourcesError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(AssociateS3ResourcesError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AssociateS3ResourcesError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(AssociateS3ResourcesError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateS3ResourcesError::InvalidInput(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(AssociateS3ResourcesError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AssociateS3ResourcesError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -386,28 +355,17 @@ pub enum DisassociateMemberAccountError {
 
 impl DisassociateMemberAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateMemberAccountError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(DisassociateMemberAccountError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisassociateMemberAccountError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DisassociateMemberAccountError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -440,33 +398,22 @@ pub enum DisassociateS3ResourcesError {
 
 impl DisassociateS3ResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateS3ResourcesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateS3ResourcesError::AccessDenied(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(DisassociateS3ResourcesError::Internal(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisassociateS3ResourcesError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DisassociateS3ResourcesError::InvalidInput(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -498,28 +445,15 @@ pub enum ListMemberAccountsError {
 
 impl ListMemberAccountsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMemberAccountsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalException" => {
-                    return RusotoError::Service(ListMemberAccountsError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListMemberAccountsError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListMemberAccountsError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListMemberAccountsError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -552,33 +486,18 @@ pub enum ListS3ResourcesError {
 
 impl ListS3ResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListS3ResourcesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListS3ResourcesError::AccessDenied(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListS3ResourcesError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListS3ResourcesError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListS3ResourcesError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListS3ResourcesError::InvalidInput(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListS3ResourcesError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -612,33 +531,18 @@ pub enum UpdateS3ResourcesError {
 
 impl UpdateS3ResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateS3ResourcesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(UpdateS3ResourcesError::AccessDenied(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateS3ResourcesError::AccessDenied(err.msg))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(UpdateS3ResourcesError::Internal(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateS3ResourcesError::Internal(err.msg))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(UpdateS3ResourcesError::InvalidInput(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateS3ResourcesError::InvalidInput(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

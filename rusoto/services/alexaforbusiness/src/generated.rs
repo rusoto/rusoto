@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p>An address book with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2481,33 +2480,18 @@ pub enum ApproveSkillError {
 
 impl ApproveSkillError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ApproveSkillError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(ApproveSkillError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ApproveSkillError::ConcurrentModification(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ApproveSkillError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ApproveSkillError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ApproveSkillError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ApproveSkillError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2539,25 +2523,14 @@ impl AssociateContactWithAddressBookError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateContactWithAddressBookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(
-                        AssociateContactWithAddressBookError::LimitExceeded(String::from(
-                            error_message,
-                        )),
+                        AssociateContactWithAddressBookError::LimitExceeded(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2589,35 +2562,24 @@ pub enum AssociateDeviceWithRoomError {
 
 impl AssociateDeviceWithRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateDeviceWithRoomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        AssociateDeviceWithRoomError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        AssociateDeviceWithRoomError::ConcurrentModification(err.msg),
                     )
                 }
                 "DeviceNotRegisteredException" => {
                     return RusotoError::Service(AssociateDeviceWithRoomError::DeviceNotRegistered(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AssociateDeviceWithRoomError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2649,25 +2611,14 @@ impl AssociateSkillGroupWithRoomError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateSkillGroupWithRoomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        AssociateSkillGroupWithRoomError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        AssociateSkillGroupWithRoomError::ConcurrentModification(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2701,35 +2652,24 @@ impl AssociateSkillWithSkillGroupError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateSkillWithSkillGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        AssociateSkillWithSkillGroupError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        AssociateSkillWithSkillGroupError::ConcurrentModification(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(AssociateSkillWithSkillGroupError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "SkillNotLinkedException" => {
                     return RusotoError::Service(AssociateSkillWithSkillGroupError::SkillNotLinked(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2759,25 +2699,14 @@ pub enum AssociateSkillWithUsersError {
 
 impl AssociateSkillWithUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateSkillWithUsersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        AssociateSkillWithUsersError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        AssociateSkillWithUsersError::ConcurrentModification(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2807,28 +2736,15 @@ pub enum CreateAddressBookError {
 
 impl CreateAddressBookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAddressBookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateAddressBookError::AlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAddressBookError::AlreadyExists(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateAddressBookError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateAddressBookError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2859,23 +2775,14 @@ impl CreateBusinessReportScheduleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateBusinessReportScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateBusinessReportScheduleError::AlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2903,23 +2810,14 @@ pub enum CreateConferenceProviderError {
 
 impl CreateConferenceProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConferenceProviderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateConferenceProviderError::AlreadyExists(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2949,28 +2847,15 @@ pub enum CreateContactError {
 
 impl CreateContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContactError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateContactError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateContactError::AlreadyExists(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateContactError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateContactError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3003,33 +2888,20 @@ pub enum CreateProfileError {
 
 impl CreateProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateProfileError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateProfileError::AlreadyExists(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateProfileError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateProfileError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateProfileError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3061,28 +2933,15 @@ pub enum CreateRoomError {
 
 impl CreateRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRoomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateRoomError::AlreadyExists(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateRoomError::AlreadyExists(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateRoomError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateRoomError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3115,33 +2974,20 @@ pub enum CreateSkillGroupError {
 
 impl CreateSkillGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSkillGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateSkillGroupError::AlreadyExists(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateSkillGroupError::AlreadyExists(err.msg))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateSkillGroupError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateSkillGroupError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateSkillGroupError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3175,33 +3021,18 @@ pub enum CreateUserError {
 
 impl CreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(CreateUserError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateUserError::ConcurrentModification(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateUserError::LimitExceeded(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateUserError::LimitExceeded(err.msg))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(CreateUserError::ResourceInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateUserError::ResourceInUse(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3233,28 +3064,17 @@ pub enum DeleteAddressBookError {
 
 impl DeleteAddressBookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAddressBookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteAddressBookError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteAddressBookError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteAddressBookError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3287,30 +3107,19 @@ impl DeleteBusinessReportScheduleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteBusinessReportScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DeleteBusinessReportScheduleError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DeleteBusinessReportScheduleError::ConcurrentModification(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBusinessReportScheduleError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3339,23 +3148,12 @@ pub enum DeleteConferenceProviderError {
 
 impl DeleteConferenceProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConferenceProviderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteConferenceProviderError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteConferenceProviderError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3385,28 +3183,17 @@ pub enum DeleteContactError {
 
 impl DeleteContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContactError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteContactError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteContactError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteContactError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3439,33 +3226,20 @@ pub enum DeleteDeviceError {
 
 impl DeleteDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(DeleteDeviceError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteDeviceError::ConcurrentModification(err.msg))
                 }
                 "InvalidCertificateAuthorityException" => {
                     return RusotoError::Service(DeleteDeviceError::InvalidCertificateAuthority(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteDeviceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteDeviceError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3497,28 +3271,17 @@ pub enum DeleteProfileError {
 
 impl DeleteProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteProfileError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteProfileError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteProfileError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3549,28 +3312,15 @@ pub enum DeleteRoomError {
 
 impl DeleteRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRoomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(DeleteRoomError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteRoomError::ConcurrentModification(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteRoomError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteRoomError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3599,25 +3349,14 @@ pub enum DeleteRoomSkillParameterError {
 
 impl DeleteRoomSkillParameterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRoomSkillParameterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DeleteRoomSkillParameterError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DeleteRoomSkillParameterError::ConcurrentModification(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3647,30 +3386,17 @@ pub enum DeleteSkillAuthorizationError {
 
 impl DeleteSkillAuthorizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSkillAuthorizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DeleteSkillAuthorizationError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DeleteSkillAuthorizationError::ConcurrentModification(err.msg),
                     )
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteSkillAuthorizationError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteSkillAuthorizationError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3701,28 +3427,17 @@ pub enum DeleteSkillGroupError {
 
 impl DeleteSkillGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSkillGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteSkillGroupError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteSkillGroupError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteSkillGroupError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3753,28 +3468,15 @@ pub enum DeleteUserError {
 
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(DeleteUserError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteUserError::ConcurrentModification(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteUserError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteUserError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3802,18 +3504,9 @@ impl DisassociateContactFromAddressBookError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateContactFromAddressBookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3843,32 +3536,19 @@ impl DisassociateDeviceFromRoomError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateDeviceFromRoomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DisassociateDeviceFromRoomError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DisassociateDeviceFromRoomError::ConcurrentModification(err.msg),
                     )
                 }
                 "DeviceNotRegisteredException" => {
                     return RusotoError::Service(
-                        DisassociateDeviceFromRoomError::DeviceNotRegistered(String::from(
-                            error_message,
-                        )),
+                        DisassociateDeviceFromRoomError::DeviceNotRegistered(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3901,30 +3581,19 @@ impl DisassociateSkillFromSkillGroupError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateSkillFromSkillGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DisassociateSkillFromSkillGroupError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DisassociateSkillFromSkillGroupError::ConcurrentModification(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DisassociateSkillFromSkillGroupError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3955,25 +3624,14 @@ impl DisassociateSkillFromUsersError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateSkillFromUsersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DisassociateSkillFromUsersError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DisassociateSkillFromUsersError::ConcurrentModification(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4003,25 +3661,14 @@ impl DisassociateSkillGroupFromRoomError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateSkillGroupFromRoomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        DisassociateSkillGroupFromRoomError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        DisassociateSkillGroupFromRoomError::ConcurrentModification(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4049,23 +3696,12 @@ pub enum ForgetSmartHomeAppliancesError {
 
 impl ForgetSmartHomeAppliancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ForgetSmartHomeAppliancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(ForgetSmartHomeAppliancesError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ForgetSmartHomeAppliancesError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4093,23 +3729,12 @@ pub enum GetAddressBookError {
 
 impl GetAddressBookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAddressBookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetAddressBookError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetAddressBookError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4137,23 +3762,12 @@ pub enum GetConferencePreferenceError {
 
 impl GetConferencePreferenceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConferencePreferenceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetConferencePreferenceError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetConferencePreferenceError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4181,23 +3795,12 @@ pub enum GetConferenceProviderError {
 
 impl GetConferenceProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConferenceProviderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetConferenceProviderError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetConferenceProviderError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4225,23 +3828,12 @@ pub enum GetContactError {
 
 impl GetContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContactError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetContactError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetContactError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4269,23 +3861,12 @@ pub enum GetDeviceError {
 
 impl GetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetDeviceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetDeviceError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4313,23 +3894,12 @@ pub enum GetProfileError {
 
 impl GetProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetProfileError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetProfileError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4357,23 +3927,12 @@ pub enum GetRoomError {
 
 impl GetRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRoomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetRoomError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetRoomError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4401,23 +3960,12 @@ pub enum GetRoomSkillParameterError {
 
 impl GetRoomSkillParameterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRoomSkillParameterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetRoomSkillParameterError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(GetRoomSkillParameterError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4445,23 +3993,12 @@ pub enum GetSkillGroupError {
 
 impl GetSkillGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSkillGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetSkillGroupError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(GetSkillGroupError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4488,18 +4025,9 @@ impl ListBusinessReportSchedulesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListBusinessReportSchedulesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4522,18 +4050,9 @@ pub enum ListConferenceProvidersError {}
 
 impl ListConferenceProvidersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConferenceProvidersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4559,23 +4078,12 @@ pub enum ListDeviceEventsError {
 
 impl ListDeviceEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceEventsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(ListDeviceEventsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListDeviceEventsError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4600,18 +4108,9 @@ pub enum ListSkillsError {}
 
 impl ListSkillsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSkillsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4634,18 +4133,9 @@ pub enum ListSkillsStoreCategoriesError {}
 
 impl ListSkillsStoreCategoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSkillsStoreCategoriesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4670,18 +4160,9 @@ impl ListSkillsStoreSkillsByCategoryError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<ListSkillsStoreSkillsByCategoryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4707,23 +4188,12 @@ pub enum ListSmartHomeAppliancesError {
 
 impl ListSmartHomeAppliancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSmartHomeAppliancesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(ListSmartHomeAppliancesError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListSmartHomeAppliancesError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4751,23 +4221,12 @@ pub enum ListTagsError {
 
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(ListTagsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTagsError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4795,23 +4254,12 @@ pub enum PutConferencePreferenceError {
 
 impl PutConferencePreferenceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConferencePreferenceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(PutConferencePreferenceError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutConferencePreferenceError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4839,25 +4287,14 @@ pub enum PutRoomSkillParameterError {
 
 impl PutRoomSkillParameterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRoomSkillParameterError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        PutRoomSkillParameterError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        PutRoomSkillParameterError::ConcurrentModification(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4887,30 +4324,17 @@ pub enum PutSkillAuthorizationError {
 
 impl PutSkillAuthorizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSkillAuthorizationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        PutSkillAuthorizationError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        PutSkillAuthorizationError::ConcurrentModification(err.msg),
                     )
                 }
                 "UnauthorizedException" => {
-                    return RusotoError::Service(PutSkillAuthorizationError::Unauthorized(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(PutSkillAuthorizationError::Unauthorized(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4943,33 +4367,20 @@ pub enum RegisterAVSDeviceError {
 
 impl RegisterAVSDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterAVSDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RegisterAVSDeviceError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidDeviceException" => {
-                    return RusotoError::Service(RegisterAVSDeviceError::InvalidDevice(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterAVSDeviceError::InvalidDevice(err.msg))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(RegisterAVSDeviceError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RegisterAVSDeviceError::LimitExceeded(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5001,28 +4412,15 @@ pub enum RejectSkillError {
 
 impl RejectSkillError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectSkillError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(RejectSkillError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RejectSkillError::ConcurrentModification(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(RejectSkillError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RejectSkillError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5051,23 +4449,12 @@ pub enum ResolveRoomError {
 
 impl ResolveRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResolveRoomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(ResolveRoomError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ResolveRoomError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5097,28 +4484,17 @@ pub enum RevokeInvitationError {
 
 impl RevokeInvitationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeInvitationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RevokeInvitationError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(RevokeInvitationError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(RevokeInvitationError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5144,18 +4520,9 @@ pub enum SearchAddressBooksError {}
 
 impl SearchAddressBooksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchAddressBooksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5178,18 +4545,9 @@ pub enum SearchContactsError {}
 
 impl SearchContactsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchContactsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5212,18 +4570,9 @@ pub enum SearchDevicesError {}
 
 impl SearchDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchDevicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5246,18 +4595,9 @@ pub enum SearchProfilesError {}
 
 impl SearchProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchProfilesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5280,18 +4620,9 @@ pub enum SearchRoomsError {}
 
 impl SearchRoomsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchRoomsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5314,18 +4645,9 @@ pub enum SearchSkillGroupsError {}
 
 impl SearchSkillGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchSkillGroupsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5348,18 +4670,9 @@ pub enum SearchUsersError {}
 
 impl SearchUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchUsersError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5389,33 +4702,20 @@ pub enum SendInvitationError {
 
 impl SendInvitationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendInvitationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(SendInvitationError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidUserStatusException" => {
-                    return RusotoError::Service(SendInvitationError::InvalidUserStatus(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(SendInvitationError::InvalidUserStatus(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(SendInvitationError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(SendInvitationError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5445,23 +4745,12 @@ pub enum StartDeviceSyncError {
 
 impl StartDeviceSyncError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDeviceSyncError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "DeviceNotRegisteredException" => {
-                    return RusotoError::Service(StartDeviceSyncError::DeviceNotRegistered(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartDeviceSyncError::DeviceNotRegistered(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5491,23 +4780,14 @@ impl StartSmartHomeApplianceDiscoveryError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<StartSmartHomeApplianceDiscoveryError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(StartSmartHomeApplianceDiscoveryError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5535,23 +4815,12 @@ pub enum TagResourceError {
 
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(TagResourceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5579,23 +4848,12 @@ pub enum UntagResourceError {
 
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5627,33 +4885,20 @@ pub enum UpdateAddressBookError {
 
 impl UpdateAddressBookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAddressBookError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateAddressBookError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NameInUseException" => {
-                    return RusotoError::Service(UpdateAddressBookError::NameInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateAddressBookError::NameInUse(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateAddressBookError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateAddressBookError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5687,30 +4932,19 @@ impl UpdateBusinessReportScheduleError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateBusinessReportScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
-                        UpdateBusinessReportScheduleError::ConcurrentModification(String::from(
-                            error_message,
-                        )),
+                        UpdateBusinessReportScheduleError::ConcurrentModification(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateBusinessReportScheduleError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5739,23 +4973,12 @@ pub enum UpdateConferenceProviderError {
 
 impl UpdateConferenceProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConferenceProviderError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateConferenceProviderError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateConferenceProviderError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5785,28 +5008,17 @@ pub enum UpdateContactError {
 
 impl UpdateContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContactError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateContactError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateContactError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateContactError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5839,33 +5051,18 @@ pub enum UpdateDeviceError {
 
 impl UpdateDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(UpdateDeviceError::ConcurrentModification(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceError::ConcurrentModification(err.msg))
                 }
                 "DeviceNotRegisteredException" => {
-                    return RusotoError::Service(UpdateDeviceError::DeviceNotRegistered(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateDeviceError::DeviceNotRegistered(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateDeviceError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateDeviceError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5899,33 +5096,20 @@ pub enum UpdateProfileError {
 
 impl UpdateProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProfileError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateProfileError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NameInUseException" => {
-                    return RusotoError::Service(UpdateProfileError::NameInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateProfileError::NameInUse(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateProfileError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateProfileError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5957,28 +5141,15 @@ pub enum UpdateRoomError {
 
 impl UpdateRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRoomError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "NameInUseException" => {
-                    return RusotoError::Service(UpdateRoomError::NameInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRoomError::NameInUse(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateRoomError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateRoomError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6011,33 +5182,20 @@ pub enum UpdateSkillGroupError {
 
 impl UpdateSkillGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSkillGroupError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateSkillGroupError::ConcurrentModification(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NameInUseException" => {
-                    return RusotoError::Service(UpdateSkillGroupError::NameInUse(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateSkillGroupError::NameInUse(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateSkillGroupError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateSkillGroupError::NotFound(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

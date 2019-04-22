@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>ActivateGatewayInput$ActivationKey</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayName</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayRegion</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayTimezone</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$TapeDriveType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$MediumChangerType</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ActivateGatewayInput {
@@ -2584,28 +2583,17 @@ pub enum ActivateGatewayError {
 
 impl ActivateGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ActivateGatewayError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ActivateGatewayError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ActivateGatewayError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ActivateGatewayError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2636,28 +2624,15 @@ pub enum AddCacheError {
 
 impl AddCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCacheError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(AddCacheError::InternalServerError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(AddCacheError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(AddCacheError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddCacheError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2688,28 +2663,19 @@ pub enum AddTagsToResourceError {
 
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(AddTagsToResourceError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(AddTagsToResourceError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2740,28 +2706,17 @@ pub enum AddUploadBufferError {
 
 impl AddUploadBufferError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddUploadBufferError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(AddUploadBufferError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AddUploadBufferError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(AddUploadBufferError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2792,28 +2747,19 @@ pub enum AddWorkingStorageError {
 
 impl AddWorkingStorageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddWorkingStorageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(AddWorkingStorageError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(AddWorkingStorageError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2844,28 +2790,15 @@ pub enum AttachVolumeError {
 
 impl AttachVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachVolumeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(AttachVolumeError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AttachVolumeError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(AttachVolumeError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(AttachVolumeError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2896,28 +2829,17 @@ pub enum CancelArchivalError {
 
 impl CancelArchivalError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelArchivalError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(CancelArchivalError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelArchivalError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CancelArchivalError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -2948,28 +2870,17 @@ pub enum CancelRetrievalError {
 
 impl CancelRetrievalError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelRetrievalError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(CancelRetrievalError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CancelRetrievalError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CancelRetrievalError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3000,30 +2911,19 @@ pub enum CreateCachediSCSIVolumeError {
 
 impl CreateCachediSCSIVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCachediSCSIVolumeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateCachediSCSIVolumeError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        CreateCachediSCSIVolumeError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        CreateCachediSCSIVolumeError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3054,28 +2954,19 @@ pub enum CreateNFSFileShareError {
 
 impl CreateNFSFileShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNFSFileShareError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateNFSFileShareError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CreateNFSFileShareError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3106,28 +2997,19 @@ pub enum CreateSMBFileShareError {
 
 impl CreateSMBFileShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSMBFileShareError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateSMBFileShareError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CreateSMBFileShareError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3160,33 +3042,22 @@ pub enum CreateSnapshotError {
 
 impl CreateSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(CreateSnapshotError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateSnapshotError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CreateSnapshotError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ServiceUnavailableError" => {
                     return RusotoError::Service(CreateSnapshotError::ServiceUnavailableError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3222,39 +3093,26 @@ impl CreateSnapshotFromVolumeRecoveryPointError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSnapshotFromVolumeRecoveryPointError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(
-                            String::from(error_message),
-                        ),
+                        CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(
-                            String::from(error_message),
-                        ),
+                        CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(err.msg),
                     )
                 }
                 "ServiceUnavailableError" => {
                     return RusotoError::Service(
                         CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(
-                            String::from(error_message),
+                            err.msg,
                         ),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3286,30 +3144,19 @@ pub enum CreateStorediSCSIVolumeError {
 
 impl CreateStorediSCSIVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStorediSCSIVolumeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateStorediSCSIVolumeError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        CreateStorediSCSIVolumeError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        CreateStorediSCSIVolumeError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3340,28 +3187,19 @@ pub enum CreateTapeWithBarcodeError {
 
 impl CreateTapeWithBarcodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTapeWithBarcodeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateTapeWithBarcodeError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(CreateTapeWithBarcodeError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3392,28 +3230,15 @@ pub enum CreateTapesError {
 
 impl CreateTapesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTapesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(CreateTapesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTapesError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(CreateTapesError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateTapesError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3444,32 +3269,19 @@ pub enum DeleteBandwidthRateLimitError {
 
 impl DeleteBandwidthRateLimitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBandwidthRateLimitError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DeleteBandwidthRateLimitError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DeleteBandwidthRateLimitError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DeleteBandwidthRateLimitError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DeleteBandwidthRateLimitError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3500,28 +3312,19 @@ pub enum DeleteChapCredentialsError {
 
 impl DeleteChapCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChapCredentialsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteChapCredentialsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DeleteChapCredentialsError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3552,28 +3355,17 @@ pub enum DeleteFileShareError {
 
 impl DeleteFileShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileShareError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteFileShareError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteFileShareError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DeleteFileShareError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3604,28 +3396,15 @@ pub enum DeleteGatewayError {
 
 impl DeleteGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGatewayError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteGatewayError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteGatewayError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(DeleteGatewayError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteGatewayError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3656,30 +3435,19 @@ pub enum DeleteSnapshotScheduleError {
 
 impl DeleteSnapshotScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteSnapshotScheduleError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DeleteSnapshotScheduleError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DeleteSnapshotScheduleError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3710,28 +3478,15 @@ pub enum DeleteTapeError {
 
 impl DeleteTapeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTapeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteTapeError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTapeError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(DeleteTapeError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteTapeError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3762,28 +3517,19 @@ pub enum DeleteTapeArchiveError {
 
 impl DeleteTapeArchiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTapeArchiveError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteTapeArchiveError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DeleteTapeArchiveError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3814,28 +3560,15 @@ pub enum DeleteVolumeError {
 
 impl DeleteVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVolumeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteVolumeError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteVolumeError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(DeleteVolumeError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteVolumeError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3868,32 +3601,19 @@ impl DescribeBandwidthRateLimitError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeBandwidthRateLimitError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeBandwidthRateLimitError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeBandwidthRateLimitError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DescribeBandwidthRateLimitError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeBandwidthRateLimitError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3924,28 +3644,15 @@ pub enum DescribeCacheError {
 
 impl DescribeCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCacheError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DescribeCacheError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeCacheError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(DescribeCacheError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeCacheError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -3978,32 +3685,19 @@ impl DescribeCachediSCSIVolumesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCachediSCSIVolumesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeCachediSCSIVolumesError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeCachediSCSIVolumesError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DescribeCachediSCSIVolumesError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeCachediSCSIVolumesError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4034,30 +3728,19 @@ pub enum DescribeChapCredentialsError {
 
 impl DescribeChapCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChapCredentialsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeChapCredentialsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DescribeChapCredentialsError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeChapCredentialsError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4090,32 +3773,19 @@ impl DescribeGatewayInformationError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeGatewayInformationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeGatewayInformationError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeGatewayInformationError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DescribeGatewayInformationError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeGatewayInformationError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4148,32 +3818,19 @@ impl DescribeMaintenanceStartTimeError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMaintenanceStartTimeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceStartTimeError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeMaintenanceStartTimeError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DescribeMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeMaintenanceStartTimeError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4204,28 +3861,19 @@ pub enum DescribeNFSFileSharesError {
 
 impl DescribeNFSFileSharesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNFSFileSharesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeNFSFileSharesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeNFSFileSharesError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4256,28 +3904,19 @@ pub enum DescribeSMBFileSharesError {
 
 impl DescribeSMBFileSharesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSMBFileSharesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeSMBFileSharesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeSMBFileSharesError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4308,28 +3947,19 @@ pub enum DescribeSMBSettingsError {
 
 impl DescribeSMBSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSMBSettingsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeSMBSettingsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeSMBSettingsError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4360,32 +3990,19 @@ pub enum DescribeSnapshotScheduleError {
 
 impl DescribeSnapshotScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSnapshotScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeSnapshotScheduleError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeSnapshotScheduleError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DescribeSnapshotScheduleError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeSnapshotScheduleError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4418,32 +4035,19 @@ impl DescribeStorediSCSIVolumesError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeStorediSCSIVolumesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeStorediSCSIVolumesError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeStorediSCSIVolumesError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DescribeStorediSCSIVolumesError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeStorediSCSIVolumesError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4474,28 +4078,19 @@ pub enum DescribeTapeArchivesError {
 
 impl DescribeTapeArchivesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTapeArchivesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeTapeArchivesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeTapeArchivesError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4528,32 +4123,19 @@ impl DescribeTapeRecoveryPointsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTapeRecoveryPointsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        DescribeTapeRecoveryPointsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeTapeRecoveryPointsError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DescribeTapeRecoveryPointsError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeTapeRecoveryPointsError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4584,28 +4166,15 @@ pub enum DescribeTapesError {
 
 impl DescribeTapesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTapesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DescribeTapesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTapesError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(DescribeTapesError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeTapesError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4636,28 +4205,19 @@ pub enum DescribeUploadBufferError {
 
 impl DescribeUploadBufferError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUploadBufferError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeUploadBufferError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeUploadBufferError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4688,28 +4248,19 @@ pub enum DescribeVTLDevicesError {
 
 impl DescribeVTLDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVTLDevicesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeVTLDevicesError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DescribeVTLDevicesError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4740,30 +4291,19 @@ pub enum DescribeWorkingStorageError {
 
 impl DescribeWorkingStorageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkingStorageError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeWorkingStorageError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        DescribeWorkingStorageError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        DescribeWorkingStorageError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4794,28 +4334,15 @@ pub enum DetachVolumeError {
 
 impl DetachVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachVolumeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DetachVolumeError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetachVolumeError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(DetachVolumeError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DetachVolumeError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4846,28 +4373,17 @@ pub enum DisableGatewayError {
 
 impl DisableGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableGatewayError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(DisableGatewayError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DisableGatewayError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(DisableGatewayError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4898,28 +4414,15 @@ pub enum JoinDomainError {
 
 impl JoinDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<JoinDomainError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(JoinDomainError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(JoinDomainError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(JoinDomainError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(JoinDomainError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -4950,28 +4453,17 @@ pub enum ListFileSharesError {
 
 impl ListFileSharesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFileSharesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListFileSharesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListFileSharesError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListFileSharesError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5002,28 +4494,15 @@ pub enum ListGatewaysError {
 
 impl ListGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGatewaysError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListGatewaysError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListGatewaysError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(ListGatewaysError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListGatewaysError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5054,28 +4533,17 @@ pub enum ListLocalDisksError {
 
 impl ListLocalDisksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLocalDisksError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListLocalDisksError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListLocalDisksError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListLocalDisksError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5106,28 +4574,19 @@ pub enum ListTagsForResourceError {
 
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5158,28 +4617,15 @@ pub enum ListTapesError {
 
 impl ListTapesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTapesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListTapesError::InternalServerError(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListTapesError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(ListTapesError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListTapesError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5210,28 +4656,19 @@ pub enum ListVolumeInitiatorsError {
 
 impl ListVolumeInitiatorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVolumeInitiatorsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListVolumeInitiatorsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ListVolumeInitiatorsError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5262,32 +4699,19 @@ pub enum ListVolumeRecoveryPointsError {
 
 impl ListVolumeRecoveryPointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVolumeRecoveryPointsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        ListVolumeRecoveryPointsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        ListVolumeRecoveryPointsError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        ListVolumeRecoveryPointsError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        ListVolumeRecoveryPointsError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5318,28 +4742,15 @@ pub enum ListVolumesError {
 
 impl ListVolumesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVolumesError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListVolumesError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListVolumesError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(ListVolumesError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListVolumesError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5370,28 +4781,19 @@ pub enum NotifyWhenUploadedError {
 
 impl NotifyWhenUploadedError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<NotifyWhenUploadedError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(NotifyWhenUploadedError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(NotifyWhenUploadedError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5422,28 +4824,15 @@ pub enum RefreshCacheError {
 
 impl RefreshCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RefreshCacheError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(RefreshCacheError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RefreshCacheError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(RefreshCacheError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(RefreshCacheError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5474,30 +4863,19 @@ pub enum RemoveTagsFromResourceError {
 
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        RemoveTagsFromResourceError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        RemoveTagsFromResourceError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5528,28 +4906,15 @@ pub enum ResetCacheError {
 
 impl ResetCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetCacheError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ResetCacheError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResetCacheError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(ResetCacheError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ResetCacheError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5580,28 +4945,19 @@ pub enum RetrieveTapeArchiveError {
 
 impl RetrieveTapeArchiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetrieveTapeArchiveError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(RetrieveTapeArchiveError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(RetrieveTapeArchiveError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5632,32 +4988,19 @@ pub enum RetrieveTapeRecoveryPointError {
 
 impl RetrieveTapeRecoveryPointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetrieveTapeRecoveryPointError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        RetrieveTapeRecoveryPointError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        RetrieveTapeRecoveryPointError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        RetrieveTapeRecoveryPointError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        RetrieveTapeRecoveryPointError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5688,30 +5031,19 @@ pub enum SetLocalConsolePasswordError {
 
 impl SetLocalConsolePasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetLocalConsolePasswordError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(SetLocalConsolePasswordError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        SetLocalConsolePasswordError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        SetLocalConsolePasswordError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5742,28 +5074,19 @@ pub enum SetSMBGuestPasswordError {
 
 impl SetSMBGuestPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetSMBGuestPasswordError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(SetSMBGuestPasswordError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(SetSMBGuestPasswordError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5794,28 +5117,17 @@ pub enum ShutdownGatewayError {
 
 impl ShutdownGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ShutdownGatewayError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(ShutdownGatewayError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ShutdownGatewayError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(ShutdownGatewayError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5846,28 +5158,15 @@ pub enum StartGatewayError {
 
 impl StartGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartGatewayError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
-                    return RusotoError::Service(StartGatewayError::InternalServerError(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartGatewayError::InternalServerError(err.msg))
                 }
                 "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(StartGatewayError::InvalidGatewayRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(StartGatewayError::InvalidGatewayRequest(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5898,32 +5197,19 @@ pub enum UpdateBandwidthRateLimitError {
 
 impl UpdateBandwidthRateLimitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBandwidthRateLimitError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        UpdateBandwidthRateLimitError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateBandwidthRateLimitError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        UpdateBandwidthRateLimitError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        UpdateBandwidthRateLimitError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -5954,28 +5240,19 @@ pub enum UpdateChapCredentialsError {
 
 impl UpdateChapCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChapCredentialsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateChapCredentialsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(UpdateChapCredentialsError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6006,32 +5283,19 @@ pub enum UpdateGatewayInformationError {
 
 impl UpdateGatewayInformationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewayInformationError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        UpdateGatewayInformationError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateGatewayInformationError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        UpdateGatewayInformationError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        UpdateGatewayInformationError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6062,32 +5326,19 @@ pub enum UpdateGatewaySoftwareNowError {
 
 impl UpdateGatewaySoftwareNowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewaySoftwareNowError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        UpdateGatewaySoftwareNowError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateGatewaySoftwareNowError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        UpdateGatewaySoftwareNowError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        UpdateGatewaySoftwareNowError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6120,32 +5371,19 @@ impl UpdateMaintenanceStartTimeError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateMaintenanceStartTimeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
-                        UpdateMaintenanceStartTimeError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateMaintenanceStartTimeError::InternalServerError(err.msg),
                     )
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        UpdateMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        UpdateMaintenanceStartTimeError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6176,28 +5414,19 @@ pub enum UpdateNFSFileShareError {
 
 impl UpdateNFSFileShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNFSFileShareError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateNFSFileShareError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(UpdateNFSFileShareError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6228,28 +5457,19 @@ pub enum UpdateSMBFileShareError {
 
 impl UpdateSMBFileShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSMBFileShareError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateSMBFileShareError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(UpdateSMBFileShareError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6280,30 +5500,19 @@ pub enum UpdateSnapshotScheduleError {
 
 impl UpdateSnapshotScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSnapshotScheduleError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateSnapshotScheduleError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(
-                        UpdateSnapshotScheduleError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        )),
+                        UpdateSnapshotScheduleError::InvalidGatewayRequest(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -6334,28 +5543,19 @@ pub enum UpdateVTLDeviceTypeError {
 
 impl UpdateVTLDeviceTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVTLDeviceTypeError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateVTLDeviceTypeError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InvalidGatewayRequestException" => {
                     return RusotoError::Service(UpdateVTLDeviceTypeError::InvalidGatewayRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

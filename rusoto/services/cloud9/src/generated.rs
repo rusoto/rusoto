@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_slice;
-use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateEnvironmentEC2Request {
     /// <p>The number of minutes until the running instance is shut down after the environment has last been used.</p>
@@ -327,53 +326,34 @@ pub enum CreateEnvironmentEC2Error {
 
 impl CreateEnvironmentEC2Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEnvironmentEC2Error> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(CreateEnvironmentEC2Error::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateEnvironmentEC2Error::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(CreateEnvironmentEC2Error::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateEnvironmentEC2Error::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(CreateEnvironmentEC2Error::Forbidden(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateEnvironmentEC2Error::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateEnvironmentEC2Error::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateEnvironmentEC2Error::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(CreateEnvironmentEC2Error::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(CreateEnvironmentEC2Error::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(CreateEnvironmentEC2Error::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateEnvironmentEC2Error::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -421,55 +401,44 @@ impl CreateEnvironmentMembershipError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateEnvironmentMembershipError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::BadRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::Conflict(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::Forbidden(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
-                        CreateEnvironmentMembershipError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        CreateEnvironmentMembershipError::InternalServerError(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -515,53 +484,32 @@ pub enum DeleteEnvironmentError {
 
 impl DeleteEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEnvironmentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(DeleteEnvironmentError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteEnvironmentError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(DeleteEnvironmentError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteEnvironmentError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DeleteEnvironmentError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteEnvironmentError::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteEnvironmentError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteEnvironmentError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteEnvironmentError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DeleteEnvironmentError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DeleteEnvironmentError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteEnvironmentError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DeleteEnvironmentError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -609,55 +557,44 @@ impl DeleteEnvironmentMembershipError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteEnvironmentMembershipError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::BadRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::Conflict(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::Forbidden(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
-                        DeleteEnvironmentMembershipError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DeleteEnvironmentMembershipError::InternalServerError(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -705,59 +642,44 @@ impl DescribeEnvironmentMembershipsError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEnvironmentMembershipsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEnvironmentMembershipsError::BadRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DescribeEnvironmentMembershipsError::Conflict(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeEnvironmentMembershipsError::Forbidden(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
-                        DescribeEnvironmentMembershipsError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeEnvironmentMembershipsError::InternalServerError(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(
-                        DescribeEnvironmentMembershipsError::LimitExceeded(String::from(
-                            error_message,
-                        )),
+                        DescribeEnvironmentMembershipsError::LimitExceeded(err.msg),
                     )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeEnvironmentMembershipsError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
-                        DescribeEnvironmentMembershipsError::TooManyRequests(String::from(
-                            error_message,
-                        )),
+                        DescribeEnvironmentMembershipsError::TooManyRequests(err.msg),
                     )
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -803,55 +725,38 @@ pub enum DescribeEnvironmentStatusError {
 
 impl DescribeEnvironmentStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentStatusError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::BadRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(DescribeEnvironmentStatusError::Conflict(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeEnvironmentStatusError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DescribeEnvironmentStatusError::Forbidden(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeEnvironmentStatusError::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
-                        DescribeEnvironmentStatusError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        DescribeEnvironmentStatusError::InternalServerError(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeEnvironmentStatusError::NotFound(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeEnvironmentStatusError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -897,53 +802,34 @@ pub enum DescribeEnvironmentsError {
 
 impl DescribeEnvironmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(DescribeEnvironmentsError::BadRequest(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeEnvironmentsError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(DescribeEnvironmentsError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeEnvironmentsError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DescribeEnvironmentsError::Forbidden(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeEnvironmentsError::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeEnvironmentsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DescribeEnvironmentsError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(DescribeEnvironmentsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(DescribeEnvironmentsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(DescribeEnvironmentsError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeEnvironmentsError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -989,53 +875,32 @@ pub enum ListEnvironmentsError {
 
 impl ListEnvironmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEnvironmentsError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(ListEnvironmentsError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListEnvironmentsError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(ListEnvironmentsError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListEnvironmentsError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(ListEnvironmentsError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListEnvironmentsError::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListEnvironmentsError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListEnvironmentsError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListEnvironmentsError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(ListEnvironmentsError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(ListEnvironmentsError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ListEnvironmentsError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(ListEnvironmentsError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1081,53 +946,32 @@ pub enum UpdateEnvironmentError {
 
 impl UpdateEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEnvironmentError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
-                    return RusotoError::Service(UpdateEnvironmentError::BadRequest(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateEnvironmentError::BadRequest(err.msg))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(UpdateEnvironmentError::Conflict(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateEnvironmentError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(UpdateEnvironmentError::Forbidden(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateEnvironmentError::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateEnvironmentError::InternalServerError(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateEnvironmentError::LimitExceeded(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateEnvironmentError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(UpdateEnvironmentError::NotFound(String::from(
-                        error_message,
-                    )))
+                    return RusotoError::Service(UpdateEnvironmentError::NotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(UpdateEnvironmentError::TooManyRequests(
-                        String::from(error_message),
-                    ))
+                    return RusotoError::Service(UpdateEnvironmentError::TooManyRequests(err.msg))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }
@@ -1175,55 +1019,44 @@ impl UpdateEnvironmentMembershipError {
     pub fn from_response(
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateEnvironmentMembershipError> {
-        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
-
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
-
-            match *error_type {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::BadRequest(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::Conflict(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::Forbidden(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
-                        UpdateEnvironmentMembershipError::InternalServerError(String::from(
-                            error_message,
-                        )),
+                        UpdateEnvironmentMembershipError::InternalServerError(err.msg),
                     )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::LimitExceeded(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::NotFound(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::TooManyRequests(
-                        String::from(error_message),
+                        err.msg,
                     ))
                 }
-                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
         }

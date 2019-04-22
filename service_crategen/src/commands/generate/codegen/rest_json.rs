@@ -114,8 +114,7 @@ impl GenerateProtocol for RestJsonGenerator {
         writeln!(
             writer,
             "use rusoto_core::signature::SignedRequest;
-                  use serde_json::from_slice;
-                  use serde_json::Value as SerdeJsonValue;"
+                  use rusoto_core::proto;"
         )
     }
 
