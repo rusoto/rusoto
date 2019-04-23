@@ -146,6 +146,7 @@ members = [
     "rusoto/services/waf",
     "rusoto/services/waf-regional",
     "rusoto/services/workdocs",
+    "rusoto/services/worklink",
     "rusoto/services/workmail",
     "rusoto/services/workspaces",
     "rusoto/services/xray"

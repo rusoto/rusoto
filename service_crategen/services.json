@@ -863,6 +863,12 @@
     "protocolVersion": "2016-05-01",
     "baseTypeName": "Workdocs"
   },
+  "worklink": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2018-09-25",
+    "baseTypeName": "Worklink"
+  },
   "workmail": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",
