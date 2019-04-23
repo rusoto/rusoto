@@ -48,6 +48,7 @@ members = [
     "rusoto/services/directconnect",
     "rusoto/services/discovery",
     "rusoto/services/dms",
+    "rusoto/services/docdb",
     "rusoto/services/ds",
     "rusoto/services/dynamodb",
     "rusoto/services/dynamodbstreams",
@@ -115,6 +116,7 @@ members = [
     "rusoto/services/pricing",
     "rusoto/services/ram",
     "rusoto/services/rds",
+    "rusoto/services/rds-data",
     "rusoto/services/redshift",
     "rusoto/services/rekognition",
     "rusoto/services/resource-groups",
@@ -146,6 +148,7 @@ members = [
     "rusoto/services/waf",
     "rusoto/services/waf-regional",
     "rusoto/services/workdocs",
+    "rusoto/services/worklink",
     "rusoto/services/workmail",
     "rusoto/services/workspaces",
     "rusoto/services/xray"

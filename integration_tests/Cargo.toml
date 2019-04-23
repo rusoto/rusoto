@@ -191,6 +191,10 @@ path = "../rusoto/services/discovery"
 optional = true
 path = "../rusoto/services/dms"
 
+[dependencies.rusoto_docdb]
+optional = true
+path = "../rusoto/services/docdb"
+
 [dependencies.rusoto_ds]
 optional = true
 path = "../rusoto/services/ds"
@@ -463,6 +467,10 @@ path = "../rusoto/services/resourcegroupstaggingapi"
 optional = true
 path = "../rusoto/services/rds"
 
+[dependencies.rusoto_rds_data]
+optional = true
+path = "../rusoto/services/rds-data"
+
 [dependencies.rusoto_route53]
 optional = true
 path = "../rusoto/services/route53"
@@ -571,6 +579,10 @@ path = "../rusoto/services/waf-regional"
 optional = true
 path = "../rusoto/services/workdocs"
 
+[dependencies.rusoto_worklink]
+optional = true
+path = "../rusoto/services/worklink"
+
 [dependencies.rusoto_workmail]
 optional = true
 path = "../rusoto/services/workmail"
@@ -653,6 +665,7 @@ all = [
 	   	"directconnect",
 		"discovery",
 		"dms",
+		"docdb",
 	   	"ds",
 	   	"dynamodb",
 	   	"dynamodbstreams",
@@ -720,6 +733,7 @@ all = [
 		"resource-groups",
 		"resourcegroupstaggingapi",
 		"rds",
+		"rds-data",
 		"route53",
 		"route53domains",
 		"s3",
@@ -747,6 +761,7 @@ all = [
 	   	"waf",
 		"waf-regional",
 		"workdocs",
+		"worklink",
 		"workmail",
 		"workspaces",
 		"xray",
@@ -797,6 +812,7 @@ devicefarm = ["rusoto_devicefarm"]
 directconnect = ["rusoto_directconnect"]
 discovery = ["rusoto_discovery"]
 dms = ["rusoto_dms"]
+docdb = ["rusoto_docdb"]
 ds = ["rusoto_ds"]
 dynamodb = ["rusoto_dynamodb"]
 dynamodbstreams = ["rusoto_dynamodbstreams"]
@@ -865,6 +881,7 @@ rekognition = ["rusoto_rekognition"]
 resource-groups = ["rusoto_resource_groups"]
 resourcegroupstaggingapi = ["rusoto_resourcegroupstaggingapi"]
 rds = ["rusoto_rds"]
+rds-data = ["rusoto_rds_data"]
 route53 = ["rusoto_route53"]
 route53domains = ["rusoto_route53domains"]
 s3 = ["rusoto_s3"]
@@ -894,6 +911,7 @@ waf-regional = ["rusoto_waf_regional"]
 workmail = ["rusoto_workmail"]
 workspaces = ["rusoto_workspaces"]
 workdocs = ["rusoto_workdocs"]
+worklink = ["rusoto_worklink"]
 xray = ["rusoto_xray"]
 amplify = ["rusoto_amplify"]
 apigatewaymanagementapi = ["rusoto_apigatewaymanagementapi"]
