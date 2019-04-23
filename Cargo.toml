@@ -131,6 +131,7 @@ members = [
     "rusoto/services/ses",
     "rusoto/services/shield",
     "rusoto/services/sms",
+    "rusoto/services/sms-voice",
     "rusoto/services/snowball",
     "rusoto/services/sns",
     "rusoto/services/sqs",

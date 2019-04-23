@@ -770,6 +770,12 @@
     "protocolVersion": "2016-10-24",
     "baseTypeName": "ServerMigrationService"
   },
+  "sms-voice": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2018-09-05",
+    "baseTypeName": "PinpointSmsVoice"
+  },
   "snowball": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",

@@ -511,6 +511,10 @@ path = "../rusoto/services/shield"
 optional = true
 path = "../rusoto/services/sms"
 
+[dependencies.rusoto_sms_voice]
+optional = true
+path = "../rusoto/services/sms-voice"
+
 [dependencies.rusoto_snowball]
 optional = true
 path = "../rusoto/services/snowball"
@@ -728,6 +732,7 @@ all = [
 	   	"ses",
 		"shield",
 		"sms",
+		"sms-voice",
 		"snowball",
 	   	"sns",
 	   	"sqs",
@@ -872,6 +877,7 @@ servicediscovery = ["rusoto_servicediscovery"]
 shield = ["rusoto_shield"]
 ses = ["rusoto_ses"]
 sms = ["rusoto_sms"]
+sms-voice = ["rusoto_sms_voice"]
 snowball = ["rusoto_snowball"]
 sns = ["rusoto_sns"]
 sqs = ["rusoto_sqs"]
