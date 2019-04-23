@@ -8,6 +8,7 @@
 - Change type for blob values from `Vec<u8>` to `Bytes`
 - Add DocDB service
 - Add Kafka service
+- Add Chime service
 - Add RDS Data service
 
 ## [0.38.0] - 2019-04-17

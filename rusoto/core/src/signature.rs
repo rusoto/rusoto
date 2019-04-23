@@ -738,6 +738,10 @@ fn build_hostname(service: &str, region: &Region) -> String {
             }
             _ => format!("{}.amazonaws.com", service),
         },
+        "chime" => match *region {
+            Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
+            _ => format!("service.{}.aws.amazon.com", service),
+        },
         "cloudfront" => match *region {
             Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
             _ => format!("{}.amazonaws.com", service),
