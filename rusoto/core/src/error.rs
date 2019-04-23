@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fmt;
 use std::io;
 
-use credential::CredentialsError;
+use crate::credential::CredentialsError;
 
 use super::request::{BufferedHttpResponse, HttpDispatchError};
 use super::proto::xml::util::XmlParseError;

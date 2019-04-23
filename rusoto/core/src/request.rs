@@ -28,13 +28,13 @@ use hyper::Error as HyperError;
 use hyper::Method;
 use hyper::StatusCode;
 use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
-use tls::HttpsConnector;
+use crate::tls::HttpsConnector;
 use tokio_timer::Timeout;
 
 use log::Level::Debug;
 
-use signature::{SignedRequest, SignedRequestPayload};
-use stream::ByteStream;
+use crate::signature::{SignedRequest, SignedRequestPayload};
+use crate::stream::ByteStream;
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
@@ -153,8 +153,8 @@ impl Future for BufferedHttpResponseFuture {
     type Error = HttpDispatchError;
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.future.poll().map_err(|err| err.into()).map(|async| {
-            async.map(|body| BufferedHttpResponse {
+        self.future.poll().map_err(|err| err.into()).map(|r#async| {
+            r#async.map(|body| BufferedHttpResponse {
                 status: self.status,
                 headers: Headers(mem::replace(&mut self.headers, HashMap::new())),
                 body: body,
@@ -567,8 +567,8 @@ impl fmt::Display for TlsError {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use signature::SignedRequest;
-    use Region;
+    use crate::signature::SignedRequest;
+    use crate::Region;
 
     #[test]
     fn http_client_is_send_and_sync() {

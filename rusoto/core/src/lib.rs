@@ -58,15 +58,15 @@ pub mod request;
 pub mod signature;
 
 #[doc(hidden)]
-pub use client::Client;
+pub use crate::client::Client;
 #[doc(hidden)]
 pub mod serialization;
 #[doc(hidden)]
 pub mod proto;
 
-pub use credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
-pub use error::{RusotoError, RusotoResult};
-pub use future::RusotoFuture;
-pub use region::Region;
-pub use request::{DispatchSignedRequest, HttpClient, HttpConfig, HttpDispatchError};
-pub use stream::ByteStream;
+pub use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+pub use crate::error::{RusotoError, RusotoResult};
+pub use crate::future::RusotoFuture;
+pub use crate::region::Region;
+pub use crate::request::{DispatchSignedRequest, HttpClient, HttpConfig, HttpDispatchError};
+pub use crate::stream::ByteStream;

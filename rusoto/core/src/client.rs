@@ -3,11 +3,11 @@ use std::time::Duration;
 
 use futures::{Async, Future, Poll};
 
-use credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
-use error::RusotoError;
-use future::{self, RusotoFuture};
-use request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
-use signature::SignedRequest;
+use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+use crate::error::RusotoError;
+use crate::future::{self, RusotoFuture};
+use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
+use crate::signature::SignedRequest;
 
 lazy_static! {
     static ref SHARED_CLIENT: Mutex<Weak<ClientInner<DefaultCredentialsProvider, HttpClient>>> =

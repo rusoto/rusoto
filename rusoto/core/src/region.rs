@@ -4,7 +4,7 @@
 //!
 //! For example: `UsEast1` to "us-east-1"
 
-use credential::ProfileProvider;
+use crate::credential::ProfileProvider;
 use serde::ser::SerializeTuple;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 use std;
