@@ -459,6 +459,10 @@ path = "../rusoto/services/resourcegroupstaggingapi"
 optional = true
 path = "../rusoto/services/rds"
 
+[dependencies.rusoto_rds_data]
+optional = true
+path = "../rusoto/services/rds-data"
+
 [dependencies.rusoto_route53]
 optional = true
 path = "../rusoto/services/route53"
@@ -715,6 +719,7 @@ all = [
 		"resource-groups",
 		"resourcegroupstaggingapi",
 		"rds",
+		"rds-data",
 		"route53",
 		"route53domains",
 		"s3",
@@ -859,6 +864,7 @@ rekognition = ["rusoto_rekognition"]
 resource-groups = ["rusoto_resource_groups"]
 resourcegroupstaggingapi = ["rusoto_resourcegroupstaggingapi"]
 rds = ["rusoto_rds"]
+rds-data = ["rusoto_rds_data"]
 route53 = ["rusoto_route53"]
 route53domains = ["rusoto_route53domains"]
 s3 = ["rusoto_s3"]

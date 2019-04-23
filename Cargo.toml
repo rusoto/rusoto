@@ -114,6 +114,7 @@ members = [
     "rusoto/services/pricing",
     "rusoto/services/ram",
     "rusoto/services/rds",
+    "rusoto/services/rds-data",
     "rusoto/services/redshift",
     "rusoto/services/rekognition",
     "rusoto/services/resource-groups",
