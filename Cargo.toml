@@ -47,6 +47,7 @@ members = [
     "rusoto/services/directconnect",
     "rusoto/services/discovery",
     "rusoto/services/dms",
+    "rusoto/services/docdb",
     "rusoto/services/ds",
     "rusoto/services/dynamodb",
     "rusoto/services/dynamodbstreams",
