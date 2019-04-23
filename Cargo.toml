@@ -19,6 +19,7 @@ members = [
     "rusoto/services/batch",
     "rusoto/services/budgets",
     "rusoto/services/ce",
+    "rusoto/services/chime",
     "rusoto/services/cloud9",
     "rusoto/services/clouddirectory",
     "rusoto/services/cloudformation",

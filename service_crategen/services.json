@@ -95,6 +95,12 @@
     "protocolVersion": "2017-10-25",
     "baseTypeName": "CostExplorer"
   },
+  "chime": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2018-05-01",
+    "baseTypeName": "Chime"
+  },
   "cloud9": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",
