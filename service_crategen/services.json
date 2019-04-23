@@ -263,6 +263,12 @@
     "protocolVersion": "2016-01-01",
     "baseTypeName": "DatabaseMigrationService"
   },
+  "docdb": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2014-10-31",
+    "baseTypeName": "Docdb"
+  },
   "ds": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",
