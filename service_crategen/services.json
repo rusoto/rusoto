@@ -668,6 +668,12 @@
     "protocolVersion": "2014-10-31",
     "baseTypeName": "Rds"
   },
+  "rds-data": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2018-08-01",
+    "baseTypeName": "RdsData"
+  },
   "redshift": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",
