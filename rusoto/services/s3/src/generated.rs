@@ -22006,6 +22006,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
+                    // std::thread::sleep(std::time::Duration::from_millis(1));
                     result =
                         ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
