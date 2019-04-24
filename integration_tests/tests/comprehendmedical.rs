@@ -7,7 +7,7 @@ use rusoto_comprehendmedical::{ComprehendMedical, ComprehendMedicalClient, Detec
 use rusoto_core::Region;
 
 #[test]
-fn should_detect_sentiment() {
+fn should_detect_phi() {
     let client = ComprehendMedicalClient::new(Region::UsEast1);
 
     let request = DetectPHIRequest {
