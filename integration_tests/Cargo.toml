@@ -355,6 +355,10 @@ path = "../rusoto/services/lambda"
 optional = true
 path = "../rusoto/services/lex-models"
 
+[dependencies.rusoto_license_manager]
+optional = true
+path = "../rusoto/services/license-manager"
+
 [dependencies.rusoto_lightsail]
 optional = true
 path = "../rusoto/services/lightsail"
@@ -705,6 +709,7 @@ all = [
 		"kms",
 		"lambda",
 		"lex-models",
+		"license-manager",
 		"lightsail",
 		"lex-runtime",
 		"logs",
@@ -852,6 +857,7 @@ kinesisvideomedia = ["rusoto_kinesis_video_media"]
 kinesisvideoarchivedmedia = ["rusoto_kinesis_video_archived_media"]
 kms = ["rusoto_kms"]
 lambda = ["rusoto_lambda"]
+license-manager = ["rusoto_license_manager"]
 lightsail = ["rusoto_lightsail"]
 lex-models = ["rusoto_lex_models"]
 lex-runtime = ["rusoto_lex_runtime"]

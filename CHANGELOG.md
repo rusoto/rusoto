@@ -7,6 +7,7 @@
 - Fix de/serialization of DynamoDB binary set attribute values
 - Change type for blob values from `Vec<u8>` to `Bytes`
 - Add DocDB service
+- Add License Manager service
 - Add Kafka service
 - Add Chime service
 - Add RDS Data service
