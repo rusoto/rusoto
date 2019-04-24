@@ -155,6 +155,10 @@ path = "../rusoto/services/cognito-sync"
 optional = true
 path = "../rusoto/services/comprehend"
 
+[dependencies.rusoto_comprehendmedical]
+optional = true
+path = "../rusoto/services/comprehendmedical"
+
 [dependencies.rusoto_config]
 optional = true
 path = "../rusoto/services/config"
@@ -660,6 +664,7 @@ all = [
 		"cognito-idp",
 		"cognito-sync",
 		"comprehend",
+		"comprehendmedical",
 		"config",
 		"connect",
 		"cur",
@@ -808,6 +813,7 @@ cognito-identity = ["rusoto_cognito_identity"]
 cognito-idp = ["rusoto_cognito_idp"]
 cognito-sync = ["rusoto_cognito_sync"]
 comprehend = ["rusoto_comprehend"]
+comprehendmedical = ["rusoto_comprehendmedical"]
 config = ["rusoto_config"]
 connect = ["rusoto_connect"]
 cur = ["rusoto_cur"]

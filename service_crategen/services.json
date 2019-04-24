@@ -215,6 +215,12 @@
     "protocolVersion": "2017-11-27",
     "baseTypeName": "Comprehend"
   },
+  "comprehendmedical": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2018-10-30",
+    "baseTypeName": "ComprehendMedical"
+  },
   "config": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",
