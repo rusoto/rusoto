@@ -527,6 +527,12 @@
     "protocolVersion": "2016-11-28",
     "baseTypeName": "LexRuntime"
   },
+  "license-manager": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2018-08-01",
+    "baseTypeName": "LicenseManager"
+  },
   "lightsail": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",

@@ -91,6 +91,7 @@ members = [
     "rusoto/services/lambda",
     "rusoto/services/lex-models",
     "rusoto/services/lex-runtime",
+    "rusoto/services/license-manager",
     "rusoto/services/lightsail",
     "rusoto/services/logs",
     "rusoto/services/neptune",
