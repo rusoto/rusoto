@@ -377,6 +377,12 @@
     "protocolVersion": "2018-01-01",
     "baseTypeName": "Fms"
   },
+  "fsx": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2018-03-01",
+    "baseTypeName": "Fsx"
+  },
   "gamelift": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",
