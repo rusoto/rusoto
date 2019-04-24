@@ -154,14 +154,8 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Box::new(response.buffer().from_err().map(|response| {{
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b\"null\" {{
-                        body = bytes::Bytes::from_static(b\"{{}}\");
-                    }}
-
-                    serde_json::from_str::<{}>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+        format!("Box::new(response.buffer().from_err().and_then(|response| {{
+                    proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()
                 }}))",
             output_type)
     } else {
