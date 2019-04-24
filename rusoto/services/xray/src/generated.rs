@@ -2346,18 +2346,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<BatchGetTracesResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<BatchGetTracesResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2385,18 +2378,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateGroupResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateGroupResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2424,18 +2410,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateSamplingRuleResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateSamplingRuleResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2463,18 +2442,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteGroupResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteGroupResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2502,18 +2474,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteSamplingRuleResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteSamplingRuleResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2537,19 +2502,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetEncryptionConfigResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<GetEncryptionConfigResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2573,18 +2530,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetGroupResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetGroupResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2609,18 +2559,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetGroupsResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetGroupsResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2648,18 +2591,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSamplingRulesResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetSamplingRulesResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2687,20 +2623,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSamplingStatisticSummariesResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<GetSamplingStatisticSummariesResult>(&body)
-                            .unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2725,18 +2652,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSamplingTargetsResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetSamplingTargetsResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2764,18 +2684,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetServiceGraphResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetServiceGraphResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2803,18 +2716,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetTraceGraphResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetTraceGraphResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2842,18 +2748,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetTraceSummariesResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetTraceSummariesResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2881,19 +2780,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutEncryptionConfigResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<PutEncryptionConfigResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2920,19 +2811,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutTelemetryRecordsResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<PutTelemetryRecordsResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2959,18 +2842,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutTraceSegmentsResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<PutTraceSegmentsResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2998,18 +2874,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateGroupResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateGroupResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3037,18 +2906,11 @@ impl XRay for XRayClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateSamplingRuleResult, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateSamplingRuleResult>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(

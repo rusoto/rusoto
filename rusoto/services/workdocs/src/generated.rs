@@ -4930,10 +4930,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4962,18 +4962,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ActivateUserResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ActivateUserResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5008,19 +5001,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AddResourcePermissionsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<AddResourcePermissionsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5055,18 +5040,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateCommentResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateCommentResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5106,19 +5084,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateCustomMetadataResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<CreateCustomMetadataResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5149,18 +5119,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateFolderResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateFolderResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5195,18 +5158,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateLabelsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateLabelsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5238,20 +5194,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateNotificationSubscriptionResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<CreateNotificationSubscriptionResponse>(&body)
-                            .unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5280,18 +5227,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateUserResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateUserResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5323,10 +5263,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5357,10 +5297,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5405,19 +5345,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteCustomMetadataResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DeleteCustomMetadataResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5448,10 +5380,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5477,10 +5409,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5512,10 +5444,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5556,18 +5488,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteLabelsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteLabelsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5596,10 +5521,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5622,10 +5547,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5683,19 +5608,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeActivitiesResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DescribeActivitiesResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5736,18 +5653,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeCommentsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DescribeCommentsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5793,19 +5703,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeDocumentVersionsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DescribeDocumentVersionsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5854,19 +5756,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeFolderContentsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DescribeFolderContentsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5906,18 +5800,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeGroupsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DescribeGroupsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5957,20 +5844,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeNotificationSubscriptionsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DescribeNotificationSubscriptionsResponse>(&body)
-                            .unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6012,20 +5890,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeResourcePermissionsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DescribeResourcePermissionsResponse>(&body)
-                            .unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6057,19 +5926,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeRootFoldersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DescribeRootFoldersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6126,18 +5987,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeUsersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DescribeUsersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6164,18 +6018,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetCurrentUserResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetCurrentUserResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6212,18 +6059,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDocumentResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetDocumentResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6266,18 +6106,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDocumentPathResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetDocumentPathResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6318,19 +6151,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDocumentVersionResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<GetDocumentVersionResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6364,18 +6189,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetFolderResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetFolderResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6418,18 +6236,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetFolderPathResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetFolderPathResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6472,18 +6283,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetResourcesResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetResourcesResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6516,20 +6320,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<InitiateDocumentVersionUploadResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<InitiateDocumentVersionUploadResponse>(&body)
-                            .unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6558,10 +6353,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6596,10 +6391,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6631,10 +6426,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6670,10 +6465,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6701,10 +6496,10 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -6736,18 +6531,11 @@ impl Workdocs for WorkdocsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateUserResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateUserResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(

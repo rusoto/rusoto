@@ -2477,18 +2477,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 202 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CancelJobResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CancelJobResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2517,18 +2510,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateJobResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateJobResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2557,18 +2543,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreatePipelineResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreatePipelineResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2597,18 +2576,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreatePresetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreatePresetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2634,18 +2606,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 202 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeletePipelineResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeletePipelineResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2671,18 +2636,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 202 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeletePresetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeletePresetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2720,19 +2678,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListJobsByPipelineResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<ListJobsByPipelineResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2767,18 +2717,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListJobsByStatusResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListJobsByStatusResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2813,18 +2756,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListPipelinesResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListPipelinesResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2859,18 +2795,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListPresetsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListPresetsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2893,18 +2822,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ReadJobResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ReadJobResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2930,18 +2852,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ReadPipelineResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ReadPipelineResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -2967,18 +2882,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ReadPresetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ReadPresetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3004,18 +2912,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TestRoleResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<TestRoleResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3044,18 +2945,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdatePipelineResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdatePipelineResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3084,20 +2978,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdatePipelineNotificationsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<UpdatePipelineNotificationsResponse>(&body)
-                            .unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3123,19 +3008,11 @@ impl Ets for EtsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdatePipelineStatusResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<UpdatePipelineStatusResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(

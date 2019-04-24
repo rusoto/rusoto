@@ -1511,17 +1511,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateBackupResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateBackupResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1551,17 +1543,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateFileSystemResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateFileSystemResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1591,17 +1575,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateFileSystemFromBackupResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateFileSystemFromBackupResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1625,17 +1601,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteBackupResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteBackupResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1665,17 +1633,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteFileSystemResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteFileSystemResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1705,17 +1665,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeBackupsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeBackupsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1745,17 +1697,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeFileSystemsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeFileSystemsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1784,17 +1728,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListTagsForResourceResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1820,17 +1756,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<TagResourceResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1857,17 +1785,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UntagResourceResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1897,17 +1817,9 @@ impl Fsx for FsxClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateFileSystemResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateFileSystemResponse, _>()
                 }))
             } else {
                 Box::new(

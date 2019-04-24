@@ -153,10 +153,10 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(

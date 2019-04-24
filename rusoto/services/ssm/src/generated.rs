@@ -13855,17 +13855,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<AddTagsToResourceResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AddTagsToResourceResult, _>()
                 }))
             } else {
                 Box::new(
@@ -13892,17 +13884,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CancelCommandResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CancelCommandResult, _>()
                 }))
             } else {
                 Box::new(
@@ -13930,17 +13914,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CancelMaintenanceWindowExecutionResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CancelMaintenanceWindowExecutionResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13966,17 +13942,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateActivationResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateActivationResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14003,17 +13971,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateAssociationResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateAssociationResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14040,17 +14000,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateAssociationBatchResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateAssociationBatchResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14076,17 +14028,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateDocumentResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateDocumentResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14113,17 +14057,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateMaintenanceWindowResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateMaintenanceWindowResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14147,17 +14083,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreatePatchBaselineResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreatePatchBaselineResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14183,17 +14111,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateResourceDataSyncResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateResourceDataSyncResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14219,17 +14139,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteActivationResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteActivationResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14256,17 +14168,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteAssociationResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteAssociationResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14293,17 +14197,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteDocumentResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteDocumentResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14330,17 +14226,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteInventoryResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteInventoryResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14367,17 +14255,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteMaintenanceWindowResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteMaintenanceWindowResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14401,17 +14281,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteParameterResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteParameterResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14438,17 +14310,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteParametersResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteParametersResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14475,17 +14339,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeletePatchBaselineResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeletePatchBaselineResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14511,17 +14367,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteResourceDataSyncResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteResourceDataSyncResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14547,17 +14395,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeregisterManagedInstanceResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterManagedInstanceResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14587,17 +14427,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterPatchBaselineForPatchGroupResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14629,17 +14461,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterTargetFromMaintenanceWindowResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14671,17 +14495,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterTaskFromMaintenanceWindowResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14707,17 +14523,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeActivationsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeActivationsResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14743,17 +14551,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeAssociationResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAssociationResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14785,17 +14585,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeAssociationExecutionTargetsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAssociationExecutionTargetsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14821,17 +14613,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeAssociationExecutionsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAssociationExecutionsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14855,17 +14639,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeAutomationExecutionsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAutomationExecutionsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14890,17 +14666,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeAutomationStepExecutionsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAutomationStepExecutionsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14926,17 +14694,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeAvailablePatchesResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAvailablePatchesResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14960,17 +14720,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeDocumentResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeDocumentResult, _>()
                 }))
             } else {
                 Box::new(
@@ -14997,17 +14749,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeDocumentPermissionResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeDocumentPermissionResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15037,17 +14781,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeEffectiveInstanceAssociationsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15079,17 +14815,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeEffectivePatchesForPatchBaselineResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15119,17 +14847,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeInstanceAssociationsStatusResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15155,17 +14875,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeInstanceInformationResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeInstanceInformationResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15189,17 +14901,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeInstancePatchStatesResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeInstancePatchStatesResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15229,17 +14933,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeInstancePatchStatesForPatchGroupResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15263,17 +14959,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeInstancePatchesResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeInstancePatchesResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15297,17 +14985,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeInventoryDeletionsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeInventoryDeletionsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15336,29 +15016,16 @@ impl Ssm for SsmClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                        if response.status.is_success() {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeMaintenanceWindowExecutionTaskInvocationsResult, _>()
                 }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        DescribeMaintenanceWindowExecutionTaskInvocationsError::from_response(
-                            response,
-                        ),
-                    )
-                }))
-            }
-        })
+                        } else {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                                Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_response(response))
+                            }))
+                        }
+                    })
     }
 
     /// <p>For a given Maintenance Window execution, lists the tasks that were executed.</p>
@@ -15381,17 +15048,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMaintenanceWindowExecutionTasksResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15423,17 +15082,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMaintenanceWindowExecutionsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15463,17 +15114,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeMaintenanceWindowScheduleResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMaintenanceWindowScheduleResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15500,17 +15143,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMaintenanceWindowTargetsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15537,17 +15172,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMaintenanceWindowTasksResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15571,17 +15198,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeMaintenanceWindowsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMaintenanceWindowsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15611,17 +15230,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeMaintenanceWindowsForTargetResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMaintenanceWindowsForTargetResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15647,17 +15258,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeParametersResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeParametersResult, _>()
                 }))
             } else {
                 Box::new(
@@ -15684,17 +15287,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribePatchBaselinesResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribePatchBaselinesResult, _>()
                 }))
             } else {
                 Box::new(
@@ -15720,17 +15315,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribePatchGroupStateResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribePatchGroupStateResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15754,17 +15341,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribePatchGroupsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribePatchGroupsResult, _>()
                 }))
             } else {
                 Box::new(
@@ -15790,17 +15369,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeSessionsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeSessionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -15827,17 +15398,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetAutomationExecutionResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetAutomationExecutionResult, _>()
                 }))
             } else {
                 Box::new(
@@ -15863,17 +15426,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetCommandInvocationResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetCommandInvocationResult, _>()
                 }))
             } else {
                 Box::new(
@@ -15899,17 +15454,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetConnectionStatusResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetConnectionStatusResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -15935,17 +15482,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetDefaultPatchBaselineResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDefaultPatchBaselineResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15975,17 +15514,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDeployablePatchSnapshotForInstanceResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16011,17 +15542,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetDocumentResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDocumentResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16048,17 +15571,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetInventoryResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetInventoryResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16085,17 +15600,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetInventorySchemaResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetInventorySchemaResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16122,17 +15629,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetMaintenanceWindowResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMaintenanceWindowResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16158,17 +15657,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetMaintenanceWindowExecutionResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMaintenanceWindowExecutionResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16196,17 +15687,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMaintenanceWindowExecutionTaskResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16238,17 +15721,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetMaintenanceWindowExecutionTaskInvocationResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMaintenanceWindowExecutionTaskInvocationResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16272,17 +15747,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetMaintenanceWindowTaskResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMaintenanceWindowTaskResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16306,17 +15773,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetParameterResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetParameterResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16343,17 +15802,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetParameterHistoryResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetParameterHistoryResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16379,17 +15830,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetParametersResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetParametersResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16416,17 +15859,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetParametersByPathResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetParametersByPathResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16452,17 +15887,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetPatchBaselineResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetPatchBaselineResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16489,17 +15916,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetPatchBaselineForPatchGroupResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16523,17 +15942,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<LabelParameterVersionResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<LabelParameterVersionResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16559,17 +15970,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListAssociationVersionsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListAssociationVersionsResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16593,17 +15996,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListAssociationsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListAssociationsResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16630,17 +16025,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListCommandInvocationsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListCommandInvocationsResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16666,17 +16053,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListCommandsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListCommandsResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16703,17 +16082,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListComplianceItemsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListComplianceItemsResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16739,17 +16110,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListComplianceSummariesResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListComplianceSummariesResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16773,17 +16136,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListDocumentVersionsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListDocumentVersionsResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16809,17 +16164,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListDocumentsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListDocumentsResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16846,17 +16193,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListInventoryEntriesResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListInventoryEntriesResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16883,17 +16222,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListResourceComplianceSummariesResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListResourceComplianceSummariesResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16919,17 +16250,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListResourceDataSyncResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListResourceDataSyncResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16955,17 +16278,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListTagsForResourceResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResult, _>()
                 }))
             } else {
                 Box::new(
@@ -16991,17 +16306,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ModifyDocumentPermissionResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ModifyDocumentPermissionResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17025,17 +16332,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<PutComplianceItemsResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutComplianceItemsResult, _>()
                 }))
             } else {
                 Box::new(
@@ -17062,17 +16361,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<PutInventoryResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutInventoryResult, _>()
                 }))
             } else {
                 Box::new(
@@ -17099,17 +16390,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<PutParameterResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutParameterResult, _>()
                 }))
             } else {
                 Box::new(
@@ -17136,17 +16419,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<RegisterDefaultPatchBaselineResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RegisterDefaultPatchBaselineResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17176,17 +16451,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RegisterPatchBaselineForPatchGroupResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17218,17 +16485,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RegisterTargetWithMaintenanceWindowResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17258,17 +16517,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RegisterTaskWithMaintenanceWindowResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17294,17 +16545,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<RemoveTagsFromResourceResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RemoveTagsFromResourceResult, _>()
                 }))
             } else {
                 Box::new(
@@ -17330,17 +16573,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ResumeSessionResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ResumeSessionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -17367,17 +16602,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<SendAutomationSignalResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SendAutomationSignalResult, _>()
                 }))
             } else {
                 Box::new(
@@ -17403,17 +16630,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<SendCommandResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SendCommandResult, _>()
                 }))
             } else {
                 Box::new(
@@ -17440,17 +16659,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<StartAssociationsOnceResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartAssociationsOnceResult, _>()
                 }))
             } else {
                 Box::new(
@@ -17476,17 +16687,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<StartAutomationExecutionResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartAutomationExecutionResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17510,17 +16713,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<StartSessionResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartSessionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -17547,17 +16742,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<StopAutomationExecutionResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopAutomationExecutionResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17581,17 +16768,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<TerminateSessionResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TerminateSessionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -17618,17 +16797,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateAssociationResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateAssociationResult, _>()
                 }))
             } else {
                 Box::new(
@@ -17655,17 +16826,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateAssociationStatusResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateAssociationStatusResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17689,17 +16852,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateDocumentResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateDocumentResult, _>()
                 }))
             } else {
                 Box::new(
@@ -17726,17 +16881,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateDocumentDefaultVersionResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateDocumentDefaultVersionResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17760,17 +16907,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateMaintenanceWindowResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMaintenanceWindowResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17794,17 +16933,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateMaintenanceWindowTargetResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMaintenanceWindowTargetResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17828,17 +16959,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateMaintenanceWindowTaskResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMaintenanceWindowTaskResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17862,17 +16985,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateManagedInstanceRoleResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateManagedInstanceRoleResult, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17896,17 +17011,9 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdatePatchBaselineResult>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdatePatchBaselineResult, _>()
                 }))
             } else {
                 Box::new(

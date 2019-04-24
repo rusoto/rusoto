@@ -3335,18 +3335,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateApiKeyResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateApiKeyResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3374,18 +3367,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateDataSourceResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateDataSourceResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3413,18 +3399,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateFunctionResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateFunctionResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3452,18 +3431,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateGraphqlApiResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateGraphqlApiResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3495,18 +3467,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateResolverResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateResolverResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3534,18 +3499,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateTypeResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateTypeResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3574,18 +3532,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteApiKeyResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteApiKeyResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3614,18 +3565,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteDataSourceResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteDataSourceResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3654,18 +3598,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteFunctionResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteFunctionResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3690,18 +3627,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteGraphqlApiResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteGraphqlApiResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3731,18 +3661,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteResolverResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteResolverResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3771,18 +3694,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteTypeResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteTypeResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3811,18 +3727,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDataSourceResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetDataSourceResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3851,18 +3760,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetFunctionResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetFunctionResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3887,18 +3789,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetGraphqlApiResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetGraphqlApiResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3927,11 +3822,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = GetIntrospectionSchemaResponse::default();
                     result.schema = Some(response.body);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3960,18 +3855,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetResolverResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetResolverResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3996,19 +3884,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSchemaCreationStatusResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<GetSchemaCreationStatusResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4035,18 +3915,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetTypeResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetTypeResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4080,18 +3953,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListApiKeysResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListApiKeysResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4125,18 +3991,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListDataSourcesResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListDataSourcesResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4170,18 +4029,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListFunctionsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListFunctionsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4215,18 +4067,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListGraphqlApisResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListGraphqlApisResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4264,18 +4109,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListResolversResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListResolversResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4313,19 +4151,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListResolversByFunctionResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<ListResolversByFunctionResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4357,18 +4187,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTypesResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListTypesResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4396,19 +4219,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartSchemaCreationResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<StartSchemaCreationResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4439,18 +4254,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateApiKeyResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateApiKeyResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4482,18 +4290,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateDataSourceResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateDataSourceResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4525,18 +4326,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateFunctionResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateFunctionResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4564,18 +4358,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateGraphqlApiResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateGraphqlApiResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4608,18 +4395,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateResolverResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateResolverResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4651,18 +4431,11 @@ impl AppSync for AppSyncClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateTypeResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateTypeResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(

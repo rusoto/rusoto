@@ -3674,18 +3674,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AcceptInvitationResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<AcceptInvitationResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3716,18 +3709,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ArchiveFindingsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ArchiveFindingsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3755,18 +3741,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateDetectorResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateDetectorResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3797,18 +3776,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateFilterResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateFilterResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3839,18 +3811,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateIPSetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateIPSetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3881,18 +3846,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateMembersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateMembersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3923,19 +3881,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateSampleFindingsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<CreateSampleFindingsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -3965,19 +3915,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateThreatIntelSetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<CreateThreatIntelSetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4004,19 +3946,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeclineInvitationsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DeclineInvitationsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4041,18 +3975,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteDetectorResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteDetectorResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4081,18 +4008,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteFilterResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteFilterResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4121,18 +4041,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteIPSetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteIPSetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4160,19 +4073,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteInvitationsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DeleteInvitationsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4203,18 +4108,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteMembersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteMembersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4243,19 +4141,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteThreatIntelSetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DeleteThreatIntelSetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4283,20 +4173,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateFromMasterAccountResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DisassociateFromMasterAccountResponse>(&body)
-                            .unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4324,19 +4205,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateMembersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DisassociateMembersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4360,18 +4233,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDetectorResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetDetectorResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4400,18 +4266,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetFilterResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetFilterResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4442,18 +4301,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetFindingsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetFindingsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4484,19 +4336,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetFindingsStatisticsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<GetFindingsStatisticsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4521,18 +4365,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetIPSetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetIPSetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4556,19 +4393,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetInvitationsCountResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<GetInvitationsCountResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4595,18 +4424,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMasterAccountResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetMasterAccountResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4637,18 +4459,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMembersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetMembersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4677,19 +4492,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetThreatIntelSetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<GetThreatIntelSetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4720,18 +4527,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<InviteMembersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<InviteMembersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4765,18 +4565,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListDetectorsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListDetectorsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4813,18 +4606,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListFiltersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListFiltersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4855,18 +4641,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListFindingsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListFindingsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4903,18 +4682,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListIPSetsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListIPSetsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4948,18 +4720,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListInvitationsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListInvitationsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -4999,18 +4764,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListMembersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListMembersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5047,19 +4805,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListThreatIntelSetsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<ListThreatIntelSetsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5089,19 +4839,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartMonitoringMembersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<StartMonitoringMembersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5131,19 +4873,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopMonitoringMembersResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<StopMonitoringMembersResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5173,19 +4907,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UnarchiveFindingsResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<UnarchiveFindingsResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5213,18 +4939,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateDetectorResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateDetectorResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5256,18 +4975,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateFilterResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateFilterResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5298,19 +5010,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateFindingsFeedbackResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<UpdateFindingsFeedbackResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5341,18 +5045,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateIPSetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateIPSetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -5384,19 +5081,11 @@ impl GuardDuty for GuardDutyClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateThreatIntelSetResponse, _>()?;
 
-                    if body.as_ref() == b"null" || body.is_empty() {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<UpdateThreatIntelSetResponse>(&body).unwrap();
-
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(

@@ -7345,17 +7345,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<AcceptPortfolioShareOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AcceptPortfolioShareOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -7385,17 +7377,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<AssociatePrincipalWithPortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociatePrincipalWithPortfolioOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7424,17 +7408,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<AssociateProductWithPortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateProductWithPortfolioOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7463,29 +7439,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<AssociateServiceActionWithProvisioningArtifactOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                        if response.status.is_success() {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<AssociateServiceActionWithProvisioningArtifactOutput, _>()
                 }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        AssociateServiceActionWithProvisioningArtifactError::from_response(
-                            response,
-                        ),
-                    )
-                }))
-            }
-        })
+                        } else {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                                Err(AssociateServiceActionWithProvisioningArtifactError::from_response(response))
+                            }))
+                        }
+                    })
     }
 
     /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
@@ -7506,17 +7469,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<AssociateTagOptionWithResourceOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateTagOptionWithResourceOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7545,31 +7500,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(
-                    response.buffer().from_err().map(|response| {
-                        let mut body = response.body;
-
-                        if body.is_empty() || body.as_ref() == b"null" {
-                            body = bytes::Bytes::from_static(b"{}");
-                        }
-
-                        serde_json::from_str::<
-                            BatchAssociateServiceActionWithProvisioningArtifactOutput,
-                        >(String::from_utf8_lossy(body.as_ref()).as_ref())
-                        .unwrap()
-                    }),
-                )
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        BatchAssociateServiceActionWithProvisioningArtifactError::from_response(
-                            response,
-                        ),
-                    )
+                        if response.status.is_success() {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<BatchAssociateServiceActionWithProvisioningArtifactOutput, _>()
                 }))
-            }
-        })
+                        } else {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                                Err(BatchAssociateServiceActionWithProvisioningArtifactError::from_response(response))
+                            }))
+                        }
+                    })
     }
 
     /// <p>Disassociates a batch of self-service actions from the specified provisioning artifact.</p>
@@ -7591,29 +7531,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<
-                        BatchDisassociateServiceActionFromProvisioningArtifactOutput,
-                    >(String::from_utf8_lossy(body.as_ref()).as_ref())
-                    .unwrap()
+                        if response.status.is_success() {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<BatchDisassociateServiceActionFromProvisioningArtifactOutput, _>()
                 }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        BatchDisassociateServiceActionFromProvisioningArtifactError::from_response(
-                            response,
-                        ),
-                    )
-                }))
-            }
-        })
+                        } else {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                                Err(BatchDisassociateServiceActionFromProvisioningArtifactError::from_response(response))
+                            }))
+                        }
+                    })
     }
 
     /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
@@ -7630,17 +7557,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CopyProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CopyProductOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -7670,17 +7589,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateConstraintOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateConstraintOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -7710,17 +7621,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreatePortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreatePortfolioOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -7750,17 +7653,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreatePortfolioShareOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreatePortfolioShareOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -7786,17 +7681,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateProductOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -7826,17 +7713,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateProvisionedProductPlanOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateProvisionedProductPlanOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7863,17 +7742,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateProvisioningArtifactOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateProvisioningArtifactOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7900,17 +7771,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateServiceActionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateServiceActionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -7939,17 +7802,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreateTagOptionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateTagOptionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -7979,17 +7834,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteConstraintOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteConstraintOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8019,17 +7866,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeletePortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeletePortfolioOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8059,17 +7898,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeletePortfolioShareOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeletePortfolioShareOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8095,17 +7926,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteProductOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8135,17 +7958,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteProvisionedProductPlanOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteProvisionedProductPlanOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8172,17 +7987,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteProvisioningArtifactOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteProvisioningArtifactOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8209,17 +8016,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteServiceActionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteServiceActionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8248,17 +8047,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteTagOptionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteTagOptionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8288,17 +8079,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeConstraintOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConstraintOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8328,17 +8111,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeCopyProductStatusOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeCopyProductStatusOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8365,17 +8140,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribePortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribePortfolioOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8405,17 +8172,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribePortfolioShareStatusOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribePortfolioShareStatusOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8442,17 +8201,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProductOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8482,17 +8233,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeProductAsAdminOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProductAsAdminOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8521,17 +8264,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeProductViewOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProductViewOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8560,17 +8295,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeProvisionedProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProvisionedProductOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8598,17 +8325,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeProvisionedProductPlanOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProvisionedProductPlanOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8635,17 +8354,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeProvisioningArtifactOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProvisioningArtifactOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8673,17 +8384,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeProvisioningParametersOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProvisioningParametersOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8707,17 +8410,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeRecordOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeRecordOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8747,17 +8442,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeServiceActionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeServiceActionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8786,17 +8473,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeTagOptionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeTagOptionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -8824,17 +8503,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DisableAWSOrganizationsAccessOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisableAWSOrganizationsAccessOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8864,17 +8535,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DisassociatePrincipalFromPortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociatePrincipalFromPortfolioOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8904,17 +8567,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DisassociateProductFromPortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateProductFromPortfolioOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8945,29 +8600,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DisassociateServiceActionFromProvisioningArtifactOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                        if response.status.is_success() {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<DisassociateServiceActionFromProvisioningArtifactOutput, _>()
                 }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        DisassociateServiceActionFromProvisioningArtifactError::from_response(
-                            response,
-                        ),
-                    )
-                }))
-            }
-        })
+                        } else {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                                Err(DisassociateServiceActionFromProvisioningArtifactError::from_response(response))
+                            }))
+                        }
+                    })
     }
 
     /// <p>Disassociates the specified TagOption from the specified resource.</p>
@@ -8988,17 +8630,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DisassociateTagOptionFromResourceOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateTagOptionFromResourceOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9025,17 +8659,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<EnableAWSOrganizationsAccessOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<EnableAWSOrganizationsAccessOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9062,17 +8688,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ExecuteProvisionedProductPlanOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ExecuteProvisionedProductPlanOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9102,17 +8720,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ExecuteProvisionedProductServiceActionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ExecuteProvisionedProductServiceActionOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9140,17 +8750,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetAWSOrganizationsAccessStatusOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetAWSOrganizationsAccessStatusOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9179,17 +8781,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListAcceptedPortfolioSharesOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListAcceptedPortfolioSharesOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9216,17 +8810,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListConstraintsForPortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListConstraintsForPortfolioOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9253,17 +8839,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListLaunchPathsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListLaunchPathsOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9294,17 +8872,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListOrganizationPortfolioAccessOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListOrganizationPortfolioAccessOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9333,17 +8903,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListPortfolioAccessOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListPortfolioAccessOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9369,17 +8931,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListPortfoliosOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListPortfoliosOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9409,17 +8963,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListPortfoliosForProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListPortfoliosForProductOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9446,17 +8992,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListPrincipalsForPortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListPrincipalsForPortfolioOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9483,17 +9021,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListProvisionedProductPlansOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListProvisionedProductPlansOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9520,17 +9050,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListProvisioningArtifactsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListProvisioningArtifactsOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9560,17 +9082,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListProvisioningArtifactsForServiceActionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListProvisioningArtifactsForServiceActionOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9597,17 +9111,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListRecordHistoryOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListRecordHistoryOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9637,17 +9143,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListResourcesForTagOptionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListResourcesForTagOptionOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9674,17 +9172,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListServiceActionsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListServiceActionsOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9717,17 +9207,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListServiceActionsForProvisioningArtifactOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListServiceActionsForProvisioningArtifactOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9751,17 +9233,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListTagOptionsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagOptionsOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9791,17 +9265,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ProvisionProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ProvisionProductOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9831,17 +9297,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<RejectPortfolioShareOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RejectPortfolioShareOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9870,17 +9328,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ScanProvisionedProductsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ScanProvisionedProductsOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9904,17 +9354,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<SearchProductsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SearchProductsOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9944,17 +9386,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<SearchProductsAsAdminOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SearchProductsAsAdminOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -9983,17 +9417,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<SearchProvisionedProductsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SearchProvisionedProductsOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10020,17 +9446,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<TerminateProvisionedProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TerminateProvisionedProductOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10057,17 +9475,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateConstraintOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateConstraintOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -10097,17 +9507,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdatePortfolioOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdatePortfolioOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -10134,17 +9536,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateProductOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -10174,17 +9568,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateProvisionedProductOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateProvisionedProductOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10211,17 +9597,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateProvisioningArtifactOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateProvisioningArtifactOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10248,17 +9626,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateServiceActionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateServiceActionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -10287,17 +9657,9 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<UpdateTagOptionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateTagOptionOutput, _>()
                 }))
             } else {
                 Box::new(

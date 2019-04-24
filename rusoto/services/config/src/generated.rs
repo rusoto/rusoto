@@ -4722,17 +4722,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<BatchGetAggregateResourceConfigResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4758,17 +4750,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<BatchGetResourceConfigResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<BatchGetResourceConfigResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4926,17 +4910,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeleteEvaluationResultsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteEvaluationResultsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5014,17 +4990,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeliverConfigSnapshotResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeliverConfigSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5056,17 +5024,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeAggregateComplianceByConfigRulesResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5096,17 +5056,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeAggregationAuthorizationsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5136,17 +5088,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeComplianceByConfigRuleResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5173,17 +5117,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeComplianceByResourceResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeComplianceByResourceResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5213,17 +5149,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeConfigRuleEvaluationStatusResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5249,17 +5177,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeConfigRulesResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConfigRulesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5290,25 +5210,16 @@ impl ConfigService for ConfigServiceClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeConfigurationAggregatorSourcesStatusResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                        if response.status.is_success() {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
                 }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
-                }))
-            }
-        })
+                        } else {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                                Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
+                            }))
+                        }
+                    })
     }
 
     /// <p>Returns the details of one or more configuration aggregators. If the configuration aggregator is not specified, this action returns the details for all the configuration aggregators associated with the account. </p>
@@ -5329,17 +5240,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeConfigurationAggregatorsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5371,17 +5274,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeConfigurationRecorderStatusResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5411,17 +5306,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeConfigurationRecordersResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConfigurationRecordersResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5449,17 +5336,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeDeliveryChannelStatusResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5486,17 +5365,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeDeliveryChannelsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeDeliveryChannelsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5526,17 +5397,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribePendingAggregationRequestsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribePendingAggregationRequestsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5566,17 +5429,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeRetentionConfigurationsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeRetentionConfigurationsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5608,17 +5463,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetAggregateComplianceDetailsByConfigRuleResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5648,17 +5495,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetAggregateConfigRuleComplianceSummaryResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5690,17 +5529,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetAggregateDiscoveredResourceCountsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5729,17 +5560,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetAggregateResourceConfigResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetAggregateResourceConfigResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5767,17 +5590,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetComplianceDetailsByConfigRuleResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5807,17 +5622,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetComplianceDetailsByResourceResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetComplianceDetailsByResourceResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5843,17 +5650,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetComplianceSummaryByConfigRuleResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5885,17 +5684,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetComplianceSummaryByResourceTypeResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5924,17 +5715,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetDiscoveredResourceCountsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDiscoveredResourceCountsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5961,17 +5744,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetResourceConfigHistoryResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetResourceConfigHistoryResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5999,17 +5774,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListAggregateDiscoveredResourcesResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6038,17 +5805,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListDiscoveredResourcesResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListDiscoveredResourcesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6075,17 +5834,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<PutAggregationAuthorizationResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutAggregationAuthorizationResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6135,17 +5886,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<PutConfigurationAggregatorResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutConfigurationAggregatorResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6221,17 +5964,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<PutEvaluationsResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutEvaluationsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6261,17 +5996,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<PutRetentionConfigurationResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutRetentionConfigurationResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6298,17 +6025,9 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<StartConfigRulesEvaluationResponse>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartConfigRulesEvaluationResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {

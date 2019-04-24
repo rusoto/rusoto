@@ -1836,17 +1836,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ActivatePipelineOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ActivatePipelineOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -1870,17 +1862,8 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<AddTagsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -1907,17 +1890,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<CreatePipelineOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreatePipelineOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -1944,17 +1919,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DeactivatePipelineOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeactivatePipelineOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2004,17 +1971,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribeObjectsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeObjectsOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2041,17 +2000,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<DescribePipelinesOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribePipelinesOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2078,17 +2029,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<EvaluateExpressionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<EvaluateExpressionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2115,17 +2058,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<GetPipelineDefinitionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetPipelineDefinitionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2151,17 +2086,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ListPipelinesOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListPipelinesOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2188,17 +2115,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<PollForTaskOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PollForTaskOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2225,17 +2144,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<PutPipelineDefinitionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutPipelineDefinitionOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2261,17 +2172,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<QueryObjectsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<QueryObjectsOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2298,17 +2201,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<RemoveTagsOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RemoveTagsOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2335,17 +2230,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ReportTaskProgressOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ReportTaskProgressOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2372,17 +2259,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ReportTaskRunnerHeartbeatOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ReportTaskRunnerHeartbeatOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2429,17 +2308,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<SetTaskStatusOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SetTaskStatusOutput, _>()
                 }))
             } else {
                 Box::new(
@@ -2466,17 +2337,9 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
-                    let mut body = response.body;
-
-                    if body.is_empty() || body.as_ref() == b"null" {
-                        body = bytes::Bytes::from_static(b"{}");
-                    }
-
-                    serde_json::from_str::<ValidatePipelineDefinitionOutput>(
-                        String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ValidatePipelineDefinitionOutput, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {

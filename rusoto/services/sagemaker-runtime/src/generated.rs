@@ -195,7 +195,7 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = InvokeEndpointOutput::default();
                     result.body = response.body;
 
@@ -216,7 +216,7 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
                         result.invoked_production_variant = Some(value)
                     };
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
