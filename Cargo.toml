@@ -39,6 +39,7 @@ members = [
     "rusoto/services/cognito-idp",
     "rusoto/services/cognito-sync",
     "rusoto/services/comprehend",
+    "rusoto/services/comprehendmedical",
     "rusoto/services/config",
     "rusoto/services/connect",
     "rusoto/services/cur",

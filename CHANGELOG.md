@@ -10,6 +10,7 @@
 - Add Kafka service
 - Add Chime service
 - Add RDS Data service
+- Add ComprehendMedical service
 
 ## [0.38.0] - 2019-04-17
 
