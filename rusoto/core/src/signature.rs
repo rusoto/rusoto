@@ -22,10 +22,10 @@ use time::now_utc;
 use time::Tm;
 use url::percent_encoding::{percent_decode, utf8_percent_encode, EncodeSet};
 
-use credential::AwsCredentials;
-use param::{Params, ServiceParams};
-use region::Region;
-use stream::ByteStream;
+use crate::credential::AwsCredentials;
+use crate::param::{Params, ServiceParams};
+use crate::region::Region;
+use crate::stream::ByteStream;
 
 /// Possible payloads included in a `SignedRequest`.
 pub enum SignedRequestPayload {
@@ -783,9 +783,9 @@ mod tests {
     use std::collections::BTreeMap;
     use time::empty_tm;
 
-    use credential::{ProfileProvider, ProvideAwsCredentials};
-    use param::Params;
-    use Region;
+    use crate::credential::{ProfileProvider, ProvideAwsCredentials};
+    use crate::param::Params;
+    use crate::Region;
 
     use super::{build_canonical_query_string, SignedRequest};
 
