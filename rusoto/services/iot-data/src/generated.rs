@@ -467,11 +467,11 @@ impl IotData for IotDataClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = DeleteThingShadowResponse::default();
                     result.payload = response.body;
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -498,11 +498,11 @@ impl IotData for IotDataClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = GetThingShadowResponse::default();
                     result.payload = Some(response.body);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -538,10 +538,10 @@ impl IotData for IotDataClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let result = ::std::mem::drop(response);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
@@ -570,11 +570,11 @@ impl IotData for IotDataClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = UpdateThingShadowResponse::default();
                     result.payload = Some(response.body);
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(

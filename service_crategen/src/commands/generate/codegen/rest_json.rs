@@ -62,11 +62,11 @@ impl GenerateProtocol for RestJsonGenerator {
 
                     self.client.sign_and_dispatch(request, |response| {{
                         if {status_check} {{
-                            Box::new(response.buffer().from_err().map(|response| {{
+                            Box::new(response.buffer().from_err().and_then(|response| {{
                                 {parse_body}
                                 {parse_headers}
                                 {parse_status_code}
-                                result
+                                Ok(result)
                             }}))
                         }} else {{
                             Box::new(response.buffer().from_err().and_then(|response| {{
@@ -401,21 +401,8 @@ fn payload_body_parser(
 /// Parse the http response body as a JSON object with serde, and use that
 /// as the result object
 fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
-    // `serde-json` serializes field-less structs as "null", but AWS returns
-    // "{{}}" for a field-less response, so we must check for this result
-    // and convert it if necessary.
     format!(
-        "
-            let mut body = response.body;
-
-            if body.as_ref() == b\"null\" || body.is_empty() {{
-                body = bytes::Bytes::from_static(b\"{{}}\");
-            }}
-
-            debug!(\"Response body: {{:?}}\", body);
-            debug!(\"Response status: {{}}\", response.status);
-            let {mutable} result = serde_json::from_slice::<{output_shape}>(&body).unwrap();
-            ",
+        "let {mutable} result = proto::json::ResponsePayload::new(&response).deserialize::<{output_shape}, _>()?;",
         output_shape = output_shape,
         mutable = if mutable_result { "mut" } else { "" }
     )

@@ -1,6 +1,6 @@
 use serde_json::{from_slice, Value};
 
-use super::super::request::BufferedHttpResponse;
+use super::super::super::request::BufferedHttpResponse;
 
 #[derive(Deserialize)]
 struct RawError {
@@ -56,7 +56,7 @@ impl Error {
 #[test]
 fn deserialize_dynamodb_error() {
     use hyper::StatusCode;
-    use super::super::request::Headers;
+    use super::super::super::request::Headers;
 
     let payload = r#"{"__type":"com.amazonaws.dynamodb.v20120810#ResourceNotFoundException",
 "message":"Requested resource not found: Table: tablename not found"}"#;

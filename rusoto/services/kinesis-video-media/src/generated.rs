@@ -184,7 +184,7 @@ impl KinesisVideoMedia for KinesisVideoMediaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = GetMediaOutput::default();
                     result.payload = Some(response.body);
 
@@ -193,7 +193,7 @@ impl KinesisVideoMedia for KinesisVideoMediaClient {
                         result.content_type = Some(value)
                     };
 
-                    result
+                    Ok(result)
                 }))
             } else {
                 Box::new(
