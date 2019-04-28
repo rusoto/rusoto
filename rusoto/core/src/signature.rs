@@ -684,7 +684,7 @@ impl EncodeSet for StrictPathEncodeSet {
 #[inline]
 #[doc(hidden)]
 pub fn encode_uri_path(uri: &str) -> String {
-    utf8_percent_encode(&decode_uri(uri), StrictPathEncodeSet).collect::<String>()
+    utf8_percent_encode(uri, StrictPathEncodeSet).collect::<String>()
 }
 
 #[inline]
@@ -852,7 +852,7 @@ mod tests {
         );
         assert_eq!(
             super::canonical_uri(&request.path, &Region::default()),
-            "/pathwith%20already%20existing%20encoding%20and%20some%20not%20encoded%20values"
+            "/pathwith%2520already%2520existing%2520encoding%20and%20some%20not%20encoded%20values"
         );
     }
     #[test]
