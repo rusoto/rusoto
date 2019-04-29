@@ -38,7 +38,7 @@ use std::str::FromStr;
 /// `CnNorth1` is currently untested due to Rusoto maintainers not having access to AWS China.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Region {
-    /// Region that covers the Easter part of Asia Pacific
+    /// Region that covers the Eastern part of Asia Pacific
     ApEast1,
 
     /// Region that covers the North-Eastern part of Asia Pacific
