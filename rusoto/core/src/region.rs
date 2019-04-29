@@ -38,6 +38,9 @@ use std::str::FromStr;
 /// `CnNorth1` is currently untested due to Rusoto maintainers not having access to AWS China.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Region {
+    /// Region that covers the Easter part of Asia Pacific
+    ApEast1,
+
     /// Region that covers the North-Eastern part of Asia Pacific
     ApNortheast1,
 
@@ -122,6 +125,7 @@ impl Region {
     /// ```
     pub fn name(&self) -> &str {
         match *self {
+            Region::ApEast1 => "ap-east-1",
             Region::ApNortheast1 => "ap-northeast-1",
             Region::ApNortheast2 => "ap-northeast-2",
             Region::ApSouth1 => "ap-south-1",
@@ -219,6 +223,7 @@ impl FromStr for Region {
     fn from_str(s: &str) -> Result<Region, ParseRegionError> {
         let v: &str = &s.to_lowercase();
         match v {
+            "ap-east-1" | "apeast1" => Ok(Region::ApEast1),
             "ap-northeast-1" | "apnortheast1" => Ok(Region::ApNortheast1),
             "ap-northeast-2" | "apnortheast2" => Ok(Region::ApNortheast2),
             "ap-south-1" | "apsouth1" => Ok(Region::ApSouth1),
@@ -293,6 +298,7 @@ mod tests {
                 .to_string(),
             "Not a valid AWS region: foo".to_owned()
         );
+        assert_eq!("ap-east-1".parse(), Ok(Region::ApEast1));
         assert_eq!("ap-northeast-1".parse(), Ok(Region::ApNortheast1));
         assert_eq!("ap-northeast-2".parse(), Ok(Region::ApNortheast2));
         assert_eq!("ap-south-1".parse(), Ok(Region::ApSouth1));
@@ -317,6 +323,7 @@ mod tests {
 
     #[test]
     fn region_serialize_deserialize() {
+        assert_tokens(&Region::ApEast1, &tokens_for_region("ap-east-1"));
         assert_tokens(&Region::ApNortheast1, &tokens_for_region("ap-northeast-1"));
         assert_tokens(&Region::ApNortheast2, &tokens_for_region("ap-northeast-2"));
         assert_tokens(&Region::ApSouth1, &tokens_for_region("ap-south-1"));

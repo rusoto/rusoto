@@ -13,6 +13,7 @@
 - Add Chime service
 - Add RDS Data service
 - Add ComprehendMedical service
+- Add Ap-East-1 Region
 
 ## [0.38.0] - 2019-04-17
 
