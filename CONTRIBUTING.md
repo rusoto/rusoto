@@ -37,7 +37,7 @@ See [rusoto.org](https://www.rusoto.org/supported-aws-services.html) for a table
 
 Build the project with `cargo build`.
 
-Integration tests can be executed by running `cargo test --features FEATURE`, where FEATURE is one or more space-separated Cargo features to test as defined in `Cargo.toml`.
+Integration tests can be executed by running `cargo test --features FEATURE`, where FEATURE is one or more space-separated Cargo features to test as defined in `Cargo.toml` under the `integration_tests` directory.
 Each AWS service has a Cargo feature to enable it.
 The feature "all" can be used to test all supported services.
 The integration tests will create real AWS resources and you may be charged.
