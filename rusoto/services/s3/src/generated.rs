@@ -10312,26 +10312,6 @@ impl PermissionSerializer {
     }
 }
 
-pub struct PolicySerializer;
-impl PolicySerializer {
-    #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(
-        mut writer: &mut EventWriter<W>,
-        name: &str,
-        obj: &String,
-    ) -> Result<(), xml::writer::Error>
-    where
-        W: Write,
-    {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
-    }
-}
-
 /// <p>The container element for a bucket's policy status.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PolicyStatus {
@@ -22892,9 +22872,7 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
-        let mut writer = EventWriter::new(Vec::new());
-        PolicySerializer::serialize(&mut writer, "Policy", &input.policy);
-        request.set_payload(Some(writer.into_inner()));
+        request.set_payload(Some(input.policy.into_bytes()));
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
