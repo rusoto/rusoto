@@ -674,6 +674,12 @@
     "protocolVersion": "2018-02-27",
     "baseTypeName": "PerformanceInsights"
   },
+  "pinpoint": {
+    "version": "0.38.0",
+    "coreVersion": "0.38.0",
+    "protocolVersion": "2016-12-01",
+    "baseTypeName": "Pinpoint"
+  },
   "polly": {
     "version": "0.38.0",
     "coreVersion": "0.38.0",

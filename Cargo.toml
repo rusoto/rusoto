@@ -115,6 +115,7 @@ members = [
     "rusoto/services/opsworkscm",
     "rusoto/services/organizations",
     "rusoto/services/pi",
+    "rusoto/services/pinpoint",
     "rusoto/services/polly",
     "rusoto/services/pricing",
     "rusoto/services/ram",
