@@ -11,6 +11,7 @@ members = [
     "rusoto/services/apigatewaymanagementapi",
     "rusoto/services/apigatewayv2",
     "rusoto/services/application-autoscaling",
+    "rusoto/services/appmesh",
     "rusoto/services/appstream",
     "rusoto/services/appsync",
     "rusoto/services/athena",

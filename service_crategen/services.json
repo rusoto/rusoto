@@ -47,6 +47,12 @@
     "protocolVersion": "2016-02-06",
     "baseTypeName": "ApplicationAutoScaling"
   },
+  "appmesh": {
+    "version": "0.40.0",
+    "coreVersion": "0.40.0",
+    "protocolVersion": "2019-01-25",
+    "baseTypeName": "AppMesh"
+  },
   "appstream": {
     "version": "0.40.0",
     "coreVersion": "0.40.0",
