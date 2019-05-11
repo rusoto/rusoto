@@ -56,21 +56,7 @@ script:
         # for internal use.
         travis_wait travis-cargo --only stable doc -- --no-deps -p rusoto -p rusoto_credential $CARGO_ARGS
       fi
-after_success:
-  # upload the documentation from the build with stable (automatically only
-  # actually runs from the master branch, not individual PRs), not on OSX.
-  - |
-      if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        travis-cargo --only stable doc-upload
-      fi
-  # measure code coverage and upload to coveralls.io (the verify argument
-  # mitigates kcov crashes due to malformed debuginfo, at the cost of some
-  # speed. <https://github.com/huonw/travis-cargo/issues/12>)
-  # Don't run on OSX.
-  - |
-      if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        travis-cargo coveralls --no-sudo --verify -- --lib
-      fi
+
 env:
   global:
     - RUSOTO_FEATURES="all"
