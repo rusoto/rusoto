@@ -25,6 +25,6 @@ extern crate xml;
 mod generated;
 mod custom;
 
-pub use generated::*;
-pub use custom::*;
+pub use crate::generated::*;
+pub use crate::custom::*;
             

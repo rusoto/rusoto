@@ -138,7 +138,8 @@ pub fn generate_services(
                 readme: Some("README.md".into()),
                 repository: Some("https://github.com/rusoto/rusoto".into()),
                 version: service_config.version.clone(),
-                homepage: Some("https://www.rusoto.org/".into())
+                homepage: Some("https://www.rusoto.org/".into()),
+                edition: "2018".into()
             },
             features: Some(features),
             dependencies: service_dependencies,
@@ -249,8 +250,8 @@ See [LICENSE][license] for details.
 mod generated;
 mod custom;
 
-pub use generated::*;
-pub use custom::*;
+pub use crate::generated::*;
+pub use crate::custom::*;
             "#,
             service_docs = ::doco::Module(service.documentation().unwrap_or(&service.full_name().to_owned())),
             client_name = service.client_type_name(),

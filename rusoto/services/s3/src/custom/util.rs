@@ -3,7 +3,7 @@ use rusoto_core::signature::SignedRequest;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::region::Region;
 use rusoto_core::credential::AwsCredentials;
-use generated::{GetObjectRequest, PutObjectRequest, DeleteObjectRequest, UploadPartRequest};
+use crate::generated::{GetObjectRequest, PutObjectRequest, DeleteObjectRequest, UploadPartRequest};
 use std::time::Duration;
 /// URL encodes an S3 object key. This is necessary for `copy_object` and `upload_part_copy`,
 /// which require the `copy_source` field to be URL encoded.
