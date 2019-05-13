@@ -29,7 +29,7 @@ impl StaticProvider {
     ) -> StaticProvider {
         StaticProvider {
             credentials: AwsCredentials::new(access_key, secret_access_key, token, None),
-            valid_for: valid_for,
+            valid_for,
         }
     }
 

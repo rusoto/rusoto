@@ -191,9 +191,9 @@ fn get_critical_variable(var_name: String) -> Result<String, CredentialsError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test_utils::{lock, ENV_MUTEX};
     use chrono::Utc;
     use std::env;
-    use crate::test_utils::{lock, ENV_MUTEX};
 
     static AWS_ACCESS_KEY_ID: &str = "AWS_ACCESS_KEY_ID";
     static AWS_SECRET_ACCESS_KEY: &str = "AWS_SECRET_ACCESS_KEY";

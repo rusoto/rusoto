@@ -74,6 +74,13 @@ impl ContainerProvider {
     }
 }
 
+/// Default: create a new provider with the given handle.
+impl Default for ContainerProvider {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// Future returned from `ContainerProvider`.
 pub struct ContainerProviderFuture {
     inner: ContainerProviderFutureInner,
@@ -106,7 +113,7 @@ impl ProvideAwsCredentials for ContainerProvider {
             Ok(future) => ContainerProviderFutureInner::Future(future),
             Err(e) => ContainerProviderFutureInner::Result(err(e)),
         };
-        ContainerProviderFuture { inner: inner }
+        ContainerProviderFuture { inner }
     }
 }
 
@@ -163,8 +170,8 @@ fn new_request(uri: &str, env_var_name: &str) -> Result<Request<Body>, Credentia
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::env;
     use crate::test_utils::{lock, ENV_MUTEX};
+    use std::env;
 
     #[test]
     fn request_from_relative_uri() {

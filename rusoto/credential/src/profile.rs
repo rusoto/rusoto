@@ -232,7 +232,7 @@ impl ProvideAwsCredentials for ProfileProvider {
             Err(err) => ProfileProviderFutureInner::Result(result(Err(err))),
         };
 
-        ProfileProviderFuture { inner: inner }
+        ProfileProviderFuture { inner }
     }
 }
 

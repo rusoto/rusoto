@@ -83,8 +83,8 @@ impl AwsCredentials {
         AwsCredentials {
             key: key.into(),
             secret: secret.into(),
-            token: token,
-            expires_at: expires_at,
+            token,
+            expires_at,
             claims: BTreeMap::new(),
         }
     }
@@ -539,8 +539,8 @@ mod tests {
     use std::io::Read;
     use std::path::Path;
 
-    use futures::Future;
     use crate::test_utils::{is_secret_hidden_behind_asterisks, lock, ENV_MUTEX, SECRET};
+    use futures::Future;
 
     use super::*;
 
