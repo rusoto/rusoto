@@ -1,9 +1,9 @@
 use std::error::Error;
 use std::fmt::{Formatter, Result as FmtResult};
 
-use bytes::Bytes;
 use base64;
-use serde::de::{Error as SerdeError, Visitor, SeqAccess};
+use bytes::Bytes;
+use serde::de::{Error as SerdeError, SeqAccess, Visitor};
 use serde::ser::SerializeSeq;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
@@ -222,8 +222,8 @@ mod tests {
     extern crate serde;
     extern crate serde_json;
 
-    use bytes::Bytes;
     use super::{SerdeBlob, SerdeBlobList};
+    use bytes::Bytes;
 
     #[test]
     fn serialize_optional_blob_when_none() {
@@ -265,8 +265,7 @@ mod tests {
 
     #[test]
     fn deserialize_optional_blob_when_has_content() {
-        let deserialized: Option<Bytes> =
-            deserialize_blob_helper("\"aGVsbG8gd29ybGQh\"").unwrap();
+        let deserialized: Option<Bytes> = deserialize_blob_helper("\"aGVsbG8gd29ybGQh\"").unwrap();
 
         assert_eq!(Some(Bytes::from_static(b"hello world!")), deserialized);
     }
@@ -321,7 +320,7 @@ mod tests {
         let blob_list = vec![
             Bytes::from_static(b"Sunny"),
             Bytes::from_static(b"Rainy"),
-            Bytes::from_static(b"Snowy")
+            Bytes::from_static(b"Snowy"),
         ];
         let serialized = serialize_blob_list_helper(blob_list);
 
@@ -337,13 +336,17 @@ mod tests {
 
     #[test]
     fn deserialize_blob_list_when_has_content() {
-        let deserialized: Vec<Bytes> = deserialize_blob_list_helper("[\"U3Vubnk=\",\"UmFpbnk=\",\"U25vd3k=\"]").unwrap();
+        let deserialized: Vec<Bytes> =
+            deserialize_blob_list_helper("[\"U3Vubnk=\",\"UmFpbnk=\",\"U25vd3k=\"]").unwrap();
 
-        assert_eq!(vec![
-            Bytes::from_static(b"Sunny"),
-            Bytes::from_static(b"Rainy"),
-            Bytes::from_static(b"Snowy")
-        ], deserialized);
+        assert_eq!(
+            vec![
+                Bytes::from_static(b"Sunny"),
+                Bytes::from_static(b"Rainy"),
+                Bytes::from_static(b"Snowy")
+            ],
+            deserialized
+        );
     }
 
     fn serialize_blob_helper<B: SerdeBlob>(blob: B) -> String {

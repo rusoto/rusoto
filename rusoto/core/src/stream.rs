@@ -124,8 +124,8 @@ impl io::Read for ImplBlockingRead {
 
 #[test]
 fn test_async_read() {
-    use std::io::Read;
     use bytes::Bytes;
+    use std::io::Read;
 
     let chunks = vec![Bytes::from_static(b"1234"), Bytes::from_static(b"5678")];
     let stream = ByteStream::new(stream::iter_ok(chunks));
@@ -145,8 +145,8 @@ fn test_async_read() {
 
 #[test]
 fn test_blocking_read() {
-    use std::io::Read;
     use bytes::Bytes;
+    use std::io::Read;
 
     let chunks = vec![Bytes::from_static(b"1234"), Bytes::from_static(b"5678")];
     let stream = ByteStream::new(stream::iter_ok(chunks));
