@@ -127,9 +127,11 @@ fn get_role_name(
         "http://{}/{}/",
         AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH
     );
-    let uri = role_name_address
-        .parse::<Uri>()
-        .map_err(|err| CredentialsError::new(err))?;
+    let uri = match role_name_address.parse::<Uri>() {
+        Ok(u) => u,
+        Err(e) => return Err(CredentialsError::new(e)),
+    };
+
     Ok(client.get(uri, timeout))
 }
 
@@ -144,9 +146,10 @@ fn get_credentials_from_role(
         AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH, role_name
     );
 
-    let uri = credentials_provider_url
-        .parse::<Uri>()
-        .map_err(|err| CredentialsError::new(err))?;
+    let uri = match credentials_provider_url.parse::<Uri>() {
+        Ok(u) => u,
+        Err(e) => return Err(CredentialsError::new(e)),
+    };
 
     Ok(client.get(uri, timeout))
 }

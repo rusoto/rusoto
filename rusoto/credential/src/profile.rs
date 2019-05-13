@@ -84,7 +84,7 @@ impl ProfileProvider {
                 config
                     .get(&ProfileProvider::default_profile_name())
                     .and_then(|props| props.get(REGION))
-                    .map(|value| value.to_owned())
+                    .map(std::borrow::ToOwned::to_owned)
             })
         })
     }
@@ -209,7 +209,7 @@ impl ProvideAwsCredentials for ProfileProvider {
                 config
                     .get(&ProfileProvider::default_profile_name())
                     .and_then(|props| props.get("credential_process"))
-                    .map(|value| value.to_owned())
+                    .map(std::borrow::ToOwned::to_owned)
             })
         }) {
             Ok(Some(command)) => {
@@ -338,10 +338,8 @@ fn parse_credentials_file(
 
     let file_lines = BufReader::new(&file);
     for (line_no, line) in file_lines.lines().enumerate() {
-        let unwrapped_line: String = line.expect(&format!(
-            "Failed to read credentials file, line: {}",
-            line_no
-        ));
+        let unwrapped_line: String =
+            line.unwrap_or_else(|_| panic!("Failed to read credentials file, line: {}", line_no));
 
         // skip empty lines
         if unwrapped_line.is_empty() {
