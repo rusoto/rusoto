@@ -60,9 +60,9 @@ pub mod signature;
 #[doc(hidden)]
 pub use crate::client::Client;
 #[doc(hidden)]
-pub mod serialization;
-#[doc(hidden)]
 pub mod proto;
+#[doc(hidden)]
+pub mod serialization;
 
 pub use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
 pub use crate::error::{RusotoError, RusotoResult};

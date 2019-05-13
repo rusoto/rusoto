@@ -12,8 +12,8 @@ use std::fmt;
 use std::str;
 use std::time::Duration;
 
-use bytes::Bytes;
 use base64;
+use bytes::Bytes;
 use hex;
 use hmac::{Hmac, Mac};
 use md5;

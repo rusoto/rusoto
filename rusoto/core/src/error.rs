@@ -4,8 +4,8 @@ use std::io;
 
 use crate::credential::CredentialsError;
 
-use super::request::{BufferedHttpResponse, HttpDispatchError};
 use super::proto::xml::util::XmlParseError;
+use super::request::{BufferedHttpResponse, HttpDispatchError};
 
 /// Generic error type returned by all rusoto requests.
 #[derive(Debug, PartialEq)]

@@ -7,12 +7,12 @@ struct RawError {
     #[serde(rename = "__type", default)]
     typ: Option<String>,
     #[serde(default)]
-    message: Option<String>
+    message: Option<String>,
 }
 
 pub struct Error {
     pub typ: String,
-    pub msg: String
+    pub msg: String,
 }
 
 impl Error {
@@ -24,7 +24,10 @@ impl Error {
             let pieces: Vec<&str> = raw_error_type.split("#").collect();
             let typ = pieces.last().expect("Expected error type");
 
-            Some(Error {typ: typ.to_string(), msg})
+            Some(Error {
+                typ: typ.to_string(),
+                msg,
+            })
         } else {
             None
         }
@@ -35,18 +38,31 @@ impl Error {
     pub fn parse_rest(res: &BufferedHttpResponse) -> Option<Error> {
         if let Ok(json) = from_slice::<Value>(&res.body) {
             let typ = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => {
-                    raw_error_type.split(':').next().unwrap_or_else(|| "Unknown")
-                },
-                _ => json.get("code").or_else(|| json.get("Code")).and_then(|c| c.as_str()).unwrap_or("Unknown")
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or("Unknown"),
             };
 
             // message can come in either \"message\" or \"Message\"
             // see boto BaseJSONParser impl for parsing message
             // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let msg = json.get("message").or_else(|| json.get("Message")).and_then(|m| m.as_str()).unwrap_or("").to_string();
+            let msg = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("")
+                .to_string();
 
-            Some(Error {typ: typ.to_string(), msg}) 
+            Some(Error {
+                typ: typ.to_string(),
+                msg,
+            })
         } else {
             None
         }
@@ -55,19 +71,22 @@ impl Error {
 
 #[test]
 fn deserialize_dynamodb_error() {
-    use hyper::StatusCode;
     use super::super::super::request::Headers;
+    use hyper::StatusCode;
 
     let payload = r#"{"__type":"com.amazonaws.dynamodb.v20120810#ResourceNotFoundException",
 "message":"Requested resource not found: Table: tablename not found"}"#;
-    let response = BufferedHttpResponse{
+    let response = BufferedHttpResponse {
         status: StatusCode::OK,
         body: payload.into(),
-        headers: Headers::default()
+        headers: Headers::default(),
     };
 
     let error = Error::parse(&response).unwrap();
 
     assert_eq!(error.typ, "ResourceNotFoundException");
-    assert_eq!(error.msg, "Requested resource not found: Table: tablename not found");
+    assert_eq!(
+        error.msg,
+        "Requested resource not found: Table: tablename not found"
+    );
 }

@@ -15,6 +15,7 @@ use std::rc::Rc;
 use std::sync::Arc;
 use std::time::Duration;
 
+use crate::tls::HttpsConnector;
 use bytes::Bytes;
 use futures::{Async, Future, Poll, Stream};
 use hyper::body::Payload;
@@ -28,7 +29,6 @@ use hyper::Error as HyperError;
 use hyper::Method;
 use hyper::StatusCode;
 use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
-use crate::tls::HttpsConnector;
 use tokio_timer::Timeout;
 
 use log::Level::Debug;
@@ -316,7 +316,9 @@ impl Payload for HttpClientPayload {
                 if buffer.len() == 0 {
                     Ok(Async::Ready(None))
                 } else {
-                    Ok(Async::Ready(Some(io::Cursor::new(buffer.split_off(0).into()))))
+                    Ok(Async::Ready(Some(io::Cursor::new(
+                        buffer.split_off(0).into(),
+                    ))))
                 }
             }
             Some(SignedRequestPayload::Stream(ref mut stream)) => match stream.poll()? {

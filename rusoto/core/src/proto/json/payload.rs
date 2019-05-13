@@ -2,11 +2,11 @@ use bytes::Bytes;
 use serde::de::DeserializeOwned;
 use serde_json::from_slice;
 
-use super::super::super::RusotoError;
 use super::super::super::request::BufferedHttpResponse;
+use super::super::super::RusotoError;
 
 pub struct ResponsePayload {
-    body: Bytes
+    body: Bytes,
 }
 
 impl ResponsePayload {

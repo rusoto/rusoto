@@ -201,11 +201,15 @@ enum DeserializerNext {
     Element(String),
 }
 
-pub fn deserialize_elements<T, S, F>(tag_name: &str, stack: &mut T, mut handle_element: F) -> Result<S, XmlParseError>
+pub fn deserialize_elements<T, S, F>(
+    tag_name: &str,
+    stack: &mut T,
+    mut handle_element: F,
+) -> Result<S, XmlParseError>
 where
     T: Peek + Next,
     S: Default,
-    F: FnMut(&str, &mut T, &mut S) -> Result<(), XmlParseError>
+    F: FnMut(&str, &mut T, &mut S) -> Result<(), XmlParseError>,
 {
     let mut obj = S::default();
 
@@ -214,16 +218,20 @@ where
     loop {
         let next_event = match stack.peek() {
             Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-            Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+            Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                DeserializerNext::Element(name.local_name.to_owned())
+            }
             _ => DeserializerNext::Skip,
         };
 
         match next_event {
             DeserializerNext::Element(name) => {
                 handle_element(&name[..], stack, &mut obj)?;
-            },
+            }
             DeserializerNext::Close => break,
-            DeserializerNext::Skip => { stack.next(); }
+            DeserializerNext::Skip => {
+                stack.next();
+            }
         }
     }
 
