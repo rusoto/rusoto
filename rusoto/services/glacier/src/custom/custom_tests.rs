@@ -1,6 +1,6 @@
 extern crate rusoto_mock;
 
-use ::*;
+use crate::generated::*;
 
 use rusoto_core::Region;
 use self::rusoto_mock::*;

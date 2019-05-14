@@ -2,7 +2,7 @@ extern crate rusoto_mock;
 
 use bytes::Bytes;
 
-use ::{GetPolicyRequest, GetPolicyResponse, Lambda, LambdaClient, InvocationRequest};
+use crate::generated::{GetPolicyRequest, GetPolicyResponse, Lambda, LambdaClient, InvocationRequest};
 
 use rusoto_core::Region;
 use rusoto_core::signature::{SignedRequest,SignedRequestPayload};

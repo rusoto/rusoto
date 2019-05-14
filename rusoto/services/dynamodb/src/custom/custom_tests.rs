@@ -1,4 +1,4 @@
-use ::{AttributeValue};
+use crate::generated::{AttributeValue};
 
 #[test]
 fn attribute_value_default_is_empty() {

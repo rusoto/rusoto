@@ -1,8 +1,8 @@
 extern crate rusoto_mock;
 
-use custom::util::quote_txt_record;
 use rusoto_core::{Region, RusotoError};
-use {ListResourceRecordSetsError, ListResourceRecordSetsRequest, Route53, Route53Client};
+use crate::generated::{ListResourceRecordSetsError, ListResourceRecordSetsRequest, Route53, Route53Client};
+use crate::custom::util::quote_txt_record;
 
 use self::rusoto_mock::*;
 
