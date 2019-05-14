@@ -70,7 +70,7 @@ impl Headers {
 
     /// Get value for HTTP header
     pub fn get(&self, name: &str) -> Option<&str> {
-        self.0.get(&name.to_lowercase()).map(|n| n.as_str())
+        self.0.get(&name.to_lowercase()).map(std::string::String::as_str)
     }
 
     /// Create iterator over HTTP headers
@@ -153,11 +153,11 @@ impl Future for BufferedHttpResponseFuture {
     type Error = HttpDispatchError;
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.future.poll().map_err(|err| err.into()).map(|r#async| {
+        self.future.poll().map_err(std::convert::Into::into).map(|r#async| {
             r#async.map(|body| BufferedHttpResponse {
                 status: self.status,
                 headers: Headers(mem::replace(&mut self.headers, HashMap::new())),
-                body: body,
+                body,
             })
         })
     }
@@ -181,12 +181,12 @@ impl HttpResponse {
         }));
         let body = hyper_response
             .into_body()
-            .map(|chunk| chunk.into_bytes())
+            .map(hyper::Chunk::into_bytes)
             .map_err(|err| io::Error::new(io::ErrorKind::Other, err));
 
         HttpResponse {
-            status: status,
-            headers: headers,
+            status,
+            headers,
             body: ByteStream::new(body),
         }
     }
@@ -201,7 +201,7 @@ pub struct HttpDispatchError {
 impl HttpDispatchError {
     /// Construct a new HttpDispatchError for testing purposes
     pub fn new(message: String) -> HttpDispatchError {
-        HttpDispatchError { message: message }
+        HttpDispatchError { message }
     }
 }
 
@@ -313,12 +313,10 @@ impl Payload for HttpClientPayload {
         match self.inner {
             None => Ok(Async::Ready(None)),
             Some(SignedRequestPayload::Buffer(ref mut buffer)) => {
-                if buffer.len() == 0 {
+                if buffer.is_empty() {
                     Ok(Async::Ready(None))
                 } else {
-                    Ok(Async::Ready(Some(io::Cursor::new(
-                        buffer.split_off(0).into(),
-                    ))))
+                    Ok(Async::Ready(Some(io::Cursor::new(buffer.split_off(0)))))
                 }
             }
             Some(SignedRequestPayload::Stream(ref mut stream)) => match stream.poll()? {
@@ -332,7 +330,7 @@ impl Payload for HttpClientPayload {
     fn is_end_stream(&self) -> bool {
         match self.inner {
             None => true,
-            Some(SignedRequestPayload::Buffer(ref buffer)) => buffer.len() == 0,
+            Some(SignedRequestPayload::Buffer(ref buffer)) => buffer.is_empty(),
             Some(SignedRequestPayload::Stream(_)) => false,
         }
     }

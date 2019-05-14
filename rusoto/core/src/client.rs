@@ -109,7 +109,7 @@ where
     ) -> Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send> {
         Box::new(SignAndDispatchFuture {
             inner: self.clone(),
-            state: Some(SignAndDispatchState::Lazy { request: request }),
+            state: Some(SignAndDispatchState::Lazy { request }),
             timeout: None,
         })
     }
@@ -161,8 +161,8 @@ where
             SignAndDispatchState::Lazy { request } => {
                 let future = self.inner.credentials_provider.credentials();
                 self.state = Some(SignAndDispatchState::FetchingCredentials {
-                    future: future,
-                    request: request,
+                    future,
+                    request,
                 });
                 self.poll()
             }
@@ -173,22 +173,22 @@ where
                 Err(err) => Err(SignAndDispatchError::Credentials(err)),
                 Ok(Async::NotReady) => {
                     self.state = Some(SignAndDispatchState::FetchingCredentials {
-                        future: future,
-                        request: request,
+                        future,
+                        request,
                     });
                     Ok(Async::NotReady)
                 }
                 Ok(Async::Ready(credentials)) => {
                     request.sign_with_plus(&credentials, true);
                     let future = self.inner.dispatcher.dispatch(request, self.timeout);
-                    self.state = Some(SignAndDispatchState::Dispatching { future: future });
+                    self.state = Some(SignAndDispatchState::Dispatching { future });
                     self.poll()
                 }
             },
             SignAndDispatchState::Dispatching { mut future } => match future.poll() {
                 Err(err) => Err(SignAndDispatchError::Dispatch(err)),
                 Ok(Async::NotReady) => {
-                    self.state = Some(SignAndDispatchState::Dispatching { future: future });
+                    self.state = Some(SignAndDispatchState::Dispatching { future });
                     Ok(Async::NotReady)
                 }
                 Ok(Async::Ready(response)) => Ok(Async::Ready(response)),
