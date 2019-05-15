@@ -151,7 +151,7 @@ impl DispatchSignedRequest for MockRequestDispatcher {
         }
         match self.outcome {
           RequestOutcome::Performed(ref status) => ok(HttpResponse {
-            status: status.clone(),
+            status: *status,
             body: ByteStream::from(self.body.clone()),
             headers: Headers::new(self.headers.iter().map(|(k, v)| (k.as_ref(), v.to_owned()))),
           }),
@@ -179,7 +179,7 @@ impl ReadMockResponse for MockResponseReader {
 
         input_file
             .read_to_string(&mut mock_response)
-            .expect(&format!("Failed to read {:?}", file_name,));
+            .unwrap_or_else(|_| panic!("Failed to read {:?}", file_name));
 
         mock_response
     }
