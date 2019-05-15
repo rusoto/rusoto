@@ -83,8 +83,8 @@ impl AwsCredentials {
         AwsCredentials {
             key: key.into(),
             secret: secret.into(),
-            token: token,
-            expires_at: expires_at,
+            token,
+            expires_at,
             claims: BTreeMap::new(),
         }
     }
@@ -505,6 +505,12 @@ impl ChainProvider {
     }
 }
 
+impl Default for ChainProvider {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// This is a helper function as Option<T>::filter is not yet stable (see issue #45860).
 /// <https://github.com/rust-lang/rfcs/issues/2036> also affects the implementation of this.
 fn non_empty_env_var(name: &str) -> Option<String> {
@@ -539,8 +545,8 @@ mod tests {
     use std::io::Read;
     use std::path::Path;
 
-    use futures::Future;
     use crate::test_utils::{is_secret_hidden_behind_asterisks, lock, ENV_MUTEX, SECRET};
+    use futures::Future;
 
     use super::*;
 

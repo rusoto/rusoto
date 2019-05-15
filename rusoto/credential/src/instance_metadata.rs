@@ -7,7 +7,9 @@ use futures::{Future, Poll};
 use hyper::Uri;
 
 use crate::request::{HttpClient, HttpClientFuture};
-use crate::{parse_credentials_from_aws_service, AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use crate::{
+    parse_credentials_from_aws_service, AwsCredentials, CredentialsError, ProvideAwsCredentials,
+};
 
 const AWS_CREDENTIALS_PROVIDER_IP: &str = "169.254.169.254";
 const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-credentials";
@@ -52,6 +54,12 @@ impl InstanceMetadataProvider {
     /// Set the timeout on the provider to the specified duration.
     pub fn set_timeout(&mut self, timeout: Duration) {
         self.timeout = timeout;
+    }
+}
+
+impl Default for InstanceMetadataProvider {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -119,9 +127,11 @@ fn get_role_name(
         "http://{}/{}/",
         AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH
     );
-    let uri = role_name_address
-        .parse::<Uri>()
-        .map_err(|err| CredentialsError::new(err))?;
+    let uri = match role_name_address.parse::<Uri>() {
+        Ok(u) => u,
+        Err(e) => return Err(CredentialsError::new(e)),
+    };
+
     Ok(client.get(uri, timeout))
 }
 
@@ -136,9 +146,10 @@ fn get_credentials_from_role(
         AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH, role_name
     );
 
-    let uri = credentials_provider_url
-        .parse::<Uri>()
-        .map_err(|err| CredentialsError::new(err))?;
+    let uri = match credentials_provider_url.parse::<Uri>() {
+        Ok(u) => u,
+        Err(e) => return Err(CredentialsError::new(e)),
+    };
 
     Ok(client.get(uri, timeout))
 }
