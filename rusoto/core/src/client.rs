@@ -160,10 +160,7 @@ where
         match self.state.take().unwrap() {
             SignAndDispatchState::Lazy { request } => {
                 let future = self.inner.credentials_provider.credentials();
-                self.state = Some(SignAndDispatchState::FetchingCredentials {
-                    future,
-                    request,
-                });
+                self.state = Some(SignAndDispatchState::FetchingCredentials { future, request });
                 self.poll()
             }
             SignAndDispatchState::FetchingCredentials {
@@ -172,10 +169,8 @@ where
             } => match future.poll() {
                 Err(err) => Err(SignAndDispatchError::Credentials(err)),
                 Ok(Async::NotReady) => {
-                    self.state = Some(SignAndDispatchState::FetchingCredentials {
-                        future,
-                        request,
-                    });
+                    self.state =
+                        Some(SignAndDispatchState::FetchingCredentials { future, request });
                     Ok(Async::NotReady)
                 }
                 Ok(Async::Ready(credentials)) => {

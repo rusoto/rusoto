@@ -38,16 +38,26 @@ impl Error {
     pub fn parse_rest(res: &BufferedHttpResponse) -> Option<Error> {
         if let Ok(json) = from_slice::<Value>(&res.body) {
             let typ = match res.headers.get("x-amzn-errortype") {
-                Some(raw_error_type) => {
-                    raw_error_type.split(':').next().unwrap_or_else(|| "Unknown")
-                },
-                _ => json.get("code").or_else(|| json.get("Code")).and_then(serde_json::Value::as_str).unwrap_or("Unknown")
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(serde_json::Value::as_str)
+                    .unwrap_or("Unknown"),
             };
 
             // message can come in either \"message\" or \"Message\"
             // see boto BaseJSONParser impl for parsing message
             // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
-            let msg = json.get("message").or_else(|| json.get("Message")).and_then(serde_json::Value::as_str).unwrap_or("").to_string();
+            let msg = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(serde_json::Value::as_str)
+                .unwrap_or("")
+                .to_string();
 
             Some(Error {
                 typ: typ.to_string(),

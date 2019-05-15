@@ -70,7 +70,9 @@ impl Headers {
 
     /// Get value for HTTP header
     pub fn get(&self, name: &str) -> Option<&str> {
-        self.0.get(&name.to_lowercase()).map(std::string::String::as_str)
+        self.0
+            .get(&name.to_lowercase())
+            .map(std::string::String::as_str)
     }
 
     /// Create iterator over HTTP headers
@@ -153,13 +155,16 @@ impl Future for BufferedHttpResponseFuture {
     type Error = HttpDispatchError;
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.future.poll().map_err(std::convert::Into::into).map(|r#async| {
-            r#async.map(|body| BufferedHttpResponse {
-                status: self.status,
-                headers: Headers(mem::replace(&mut self.headers, HashMap::new())),
-                body,
+        self.future
+            .poll()
+            .map_err(std::convert::Into::into)
+            .map(|r#async| {
+                r#async.map(|body| BufferedHttpResponse {
+                    status: self.status,
+                    headers: Headers(mem::replace(&mut self.headers, HashMap::new())),
+                    body,
+                })
             })
-        })
     }
 }
 
