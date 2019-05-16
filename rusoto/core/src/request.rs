@@ -4,7 +4,6 @@
 
 //extern crate lazy_static;
 
-use std::collections::hash_map::{self, HashMap};
 use std::env;
 use std::error::Error;
 use std::fmt;
@@ -18,16 +17,13 @@ use std::time::Duration;
 use crate::tls::HttpsConnector;
 use bytes::Bytes;
 use futures::{Async, Future, Poll, Stream};
+use http::header::{HeaderName, HeaderValue};
+use http::{HeaderMap, Method, StatusCode};
 use hyper::body::Payload;
 use hyper::client::connect::Connect;
 use hyper::client::HttpConnector;
 use hyper::client::ResponseFuture as HyperResponseFuture;
-use hyper::header::{
-    HeaderMap as HyperHeaders, HeaderName as HyperHeaderName, HeaderValue as HyperHeaderValue,
-};
 use hyper::Error as HyperError;
-use hyper::Method;
-use hyper::StatusCode;
 use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
 use tokio_timer::Timeout;
 
@@ -50,50 +46,6 @@ lazy_static! {
     );
 }
 
-/// HTTP headers
-#[derive(Debug, PartialEq, Default)]
-pub struct Headers(HashMap<String, String>);
-
-impl Headers {
-    /// Create Headers from iterator
-    pub fn new<'a, T>(headers: T) -> Self
-    where
-        T: IntoIterator<Item = (&'a str, String)>,
-    {
-        Headers(
-            headers
-                .into_iter()
-                .map(|(k, v)| (k.to_ascii_lowercase(), v))
-                .collect(),
-        )
-    }
-
-    /// Get value for HTTP header
-    pub fn get(&self, name: &str) -> Option<&str> {
-        self.0
-            .get(&name.to_lowercase())
-            .map(std::string::String::as_str)
-    }
-
-    /// Create iterator over HTTP headers
-    ///
-    /// Header names are normalized to lowercase.
-    pub fn iter(&self) -> HeaderIter {
-        HeaderIter(self.0.iter())
-    }
-}
-
-/// Iterator returned by `Headers::iter`
-pub struct HeaderIter<'a>(hash_map::Iter<'a, String, String>);
-
-impl<'a> Iterator for HeaderIter<'a> {
-    type Item = (&'a str, &'a str);
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().map(|(k, v)| (k.as_str(), v.as_str()))
-    }
-}
-
 /// Stores the response from a HTTP request.
 pub struct HttpResponse {
     /// Status code of HTTP Request
@@ -101,7 +53,7 @@ pub struct HttpResponse {
     /// Contents of Response
     pub body: ByteStream,
     /// Response headers
-    pub headers: Headers,
+    pub headers: HeaderMap<String>,
 }
 
 /// Stores the buffered response from a HTTP request.
@@ -112,7 +64,7 @@ pub struct BufferedHttpResponse {
     /// Contents of Response
     pub body: Bytes,
     /// Response headers
-    pub headers: Headers,
+    pub headers: HeaderMap<String>,
 }
 
 impl BufferedHttpResponse {
@@ -146,7 +98,7 @@ impl fmt::Debug for BufferedHttpResponse {
 /// Future returned from `HttpResponse::buffer`.
 pub struct BufferedHttpResponseFuture {
     status: StatusCode,
-    headers: HashMap<String, String>,
+    headers: HeaderMap<String>,
     future: ::futures::stream::Concat2<ByteStream>,
 }
 
@@ -161,7 +113,7 @@ impl Future for BufferedHttpResponseFuture {
             .map(|r#async| {
                 r#async.map(|body| BufferedHttpResponse {
                     status: self.status,
-                    headers: Headers(mem::replace(&mut self.headers, HashMap::new())),
+                    headers: mem::replace(&mut self.headers, Default::default()),
                     body,
                 })
             })
@@ -173,17 +125,21 @@ impl HttpResponse {
     pub fn buffer(self) -> BufferedHttpResponseFuture {
         BufferedHttpResponseFuture {
             status: self.status,
-            headers: self.headers.0,
+            headers: self.headers,
             future: self.body.concat2(),
         }
     }
 
     fn from_hyper(hyper_response: HyperResponse<Body>) -> HttpResponse {
         let status = hyper_response.status();
-        let headers = Headers::new(hyper_response.headers().iter().map(|(h, v)| {
-            let value_string = v.to_str().unwrap().to_owned();
-            (h.as_str(), value_string)
-        }));
+        let headers = hyper_response
+            .headers()
+            .iter()
+            .map(|(h, v)| {
+                let value_string = v.to_str().unwrap().to_owned();
+                (h.clone(), value_string)
+            })
+            .collect();
         let body = hyper_response
             .into_body()
             .map(hyper::Chunk::into_bytes)
@@ -459,9 +415,9 @@ where
         };
 
         // translate the headers map to a format Hyper likes
-        let mut hyper_headers = HyperHeaders::new();
+        let mut hyper_headers = HeaderMap::new();
         for h in request.headers().iter() {
-            let header_name = match h.0.parse::<HyperHeaderName>() {
+            let header_name = match h.0.parse::<HeaderName>() {
                 Ok(name) => name,
                 Err(err) => {
                     return HttpClientFuture(ClientFutureInner::Error(format!(
@@ -471,7 +427,7 @@ where
                 }
             };
             for v in h.1.iter() {
-                let header_value = match HyperHeaderValue::from_bytes(v) {
+                let header_value = match HeaderValue::from_bytes(v) {
                     Ok(value) => value,
                     Err(err) => {
                         return HttpClientFuture(ClientFutureInner::Error(format!(
@@ -631,41 +587,6 @@ mod tests {
         let request = SignedRequest::new("POST", "sqs", &a_region, "/");
         assert_eq!("https", request.scheme());
         assert_eq!("localhost", request.hostname());
-    }
-
-    #[test]
-    fn headers() {
-        let input = &[
-            ("amazon-style-header-name", "SomeRandomValue"),
-            ("Minio-Style-Header-Name", "AnotherValue"),
-            ("RaNDOm-styLe-HeAdEr-NAme", "yet again another value"),
-        ];
-        let headers = Headers::new(input.iter().map(|&(k, v)| (k, v.to_string())));
-
-        assert_eq!(
-            headers.get("Amazon-Style-Header-Name").unwrap(),
-            "SomeRandomValue"
-        );
-        assert_eq!(
-            headers.get("Minio-Style-Header-Name").unwrap(),
-            "AnotherValue"
-        );
-        assert_eq!(
-            headers.get("random-style-header-name").unwrap(),
-            "yet again another value"
-        );
-        assert!(headers.get("No-Such-Header").is_none());
-
-        let mut output: Vec<_> = headers.iter().collect();
-        output.sort();
-        assert_eq!(
-            output,
-            &[
-                ("amazon-style-header-name", "SomeRandomValue"),
-                ("minio-style-header-name", "AnotherValue"),
-                ("random-style-header-name", "yet again another value")
-            ]
-        );
     }
 
     #[test]
