@@ -78,7 +78,7 @@ impl ImplAsyncRead {
 
 impl io::Read for ImplAsyncRead {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        if buf.len() == 0 {
+        if buf.is_empty() {
             return Ok(0);
         }
         loop {

@@ -37,11 +37,11 @@ pub enum SignedRequestPayload {
 
 impl fmt::Debug for SignedRequestPayload {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            &SignedRequestPayload::Buffer(ref buf) => {
+        match *self {
+            SignedRequestPayload::Buffer(ref buf) => {
                 write!(f, "SignedRequestPayload::Buffer(len = {})", buf.len())
             }
-            &SignedRequestPayload::Stream(ref stream) => write!(
+            SignedRequestPayload::Stream(ref stream) => write!(
                 f,
                 "SignedRequestPayload::Stream(size_hint = {:?})",
                 stream.size_hint()
@@ -630,7 +630,7 @@ fn build_canonical_query_string_with_plus(
         }
         output.push_str("=");
 
-        if let &Some(ref unwrapped_val) = val {
+        if let Some(ref unwrapped_val) = *val {
             if should_treat_plus_literally {
                 output.push_str(&encode_uri_strict(&unwrapped_val));
             } else {

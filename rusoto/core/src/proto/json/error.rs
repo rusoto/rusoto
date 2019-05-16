@@ -19,9 +19,9 @@ impl Error {
     pub fn parse(res: &BufferedHttpResponse) -> Option<Error> {
         if let Ok(raw_err) = from_slice::<RawError>(&res.body) {
             let raw_error_type = raw_err.typ.unwrap_or_else(|| "Unknown".to_owned());
-            let msg = raw_err.message.unwrap_or(String::new());
+            let msg = raw_err.message.unwrap_or_default();
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let pieces: Vec<&str> = raw_error_type.split('#').collect();
             let typ = pieces.last().expect("Expected error type");
 
             Some(Error {
@@ -45,7 +45,7 @@ impl Error {
                 _ => json
                     .get("code")
                     .or_else(|| json.get("Code"))
-                    .and_then(|c| c.as_str())
+                    .and_then(serde_json::Value::as_str)
                     .unwrap_or("Unknown"),
             };
 
@@ -55,7 +55,7 @@ impl Error {
             let msg = json
                 .get("message")
                 .or_else(|| json.get("Message"))
-                .and_then(|m| m.as_str())
+                .and_then(serde_json::Value::as_str)
                 .unwrap_or("")
                 .to_string();
 
