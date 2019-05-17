@@ -39,15 +39,14 @@ extern crate rusoto_core;
 extern crate serde;
 extern crate serde_json;
 
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::Read;
 use std::time::Duration;
 
 use futures::future::{ok, err, FutureResult};
-use http::{HttpTryFrom, StatusCode};
+use http::{HeaderMap, header::HeaderName, HttpTryFrom, StatusCode};
 use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::{Headers, HttpResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::{ByteStream, DispatchSignedRequest, HttpDispatchError};
 use serde::Serialize;
@@ -75,7 +74,7 @@ impl ProvideAwsCredentials for MockCredentialsProvider {
 pub struct MockRequestDispatcher {
     outcome: RequestOutcome,
     body: Vec<u8>,
-    headers: HashMap<String, String>,
+    headers: HeaderMap<String>,
     request_checker: Option<Box<Fn(&SignedRequest) + Send + Sync>>,
 }
 
@@ -137,7 +136,7 @@ impl MockRequestDispatcher {
 
     /// Mocks a single service header that would be returned from AWS
     pub fn with_header(mut self, key: &str, value: &str) -> MockRequestDispatcher {
-        self.headers.insert(key.into(), value.into());
+        self.headers.insert(key.parse::<HeaderName>().unwrap(), value.into());
         self
     }
 }
@@ -153,7 +152,7 @@ impl DispatchSignedRequest for MockRequestDispatcher {
           RequestOutcome::Performed(ref status) => ok(HttpResponse {
             status: *status,
             body: ByteStream::from(self.body.clone()),
-            headers: Headers::new(self.headers.iter().map(|(k, v)| (k.as_ref(), v.to_owned()))),
+            headers: self.headers.clone()
           }),
           RequestOutcome::Failed(ref error) => err(error.clone()),
         }

@@ -21204,8 +21204,11 @@ impl S3 for S3Client {
             };
             let mut values = ::std::collections::HashMap::new();
             for (key, value) in response.headers.iter() {
-                if key.starts_with("x-amz-meta-") {
-                    values.insert(key["x-amz-meta-".len()..].to_owned(), value.to_owned());
+                if key.as_str().starts_with("x-amz-meta-") {
+                    values.insert(
+                        key.as_str()["x-amz-meta-".len()..].to_owned(),
+                        value.to_owned(),
+                    );
                 }
             }
             result.metadata = Some(values);
@@ -21800,8 +21803,11 @@ impl S3 for S3Client {
                 };
                 let mut values = ::std::collections::HashMap::new();
                 for (key, value) in response.headers.iter() {
-                    if key.starts_with("x-amz-meta-") {
-                        values.insert(key["x-amz-meta-".len()..].to_owned(), value.to_owned());
+                    if key.as_str().starts_with("x-amz-meta-") {
+                        values.insert(
+                            key.as_str()["x-amz-meta-".len()..].to_owned(),
+                            value.to_owned(),
+                        );
                     }
                 }
                 result.metadata = Some(values);

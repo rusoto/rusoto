@@ -71,15 +71,14 @@ impl Error {
 
 #[test]
 fn deserialize_dynamodb_error() {
-    use super::super::super::request::Headers;
-    use hyper::StatusCode;
+    use http::StatusCode;
 
     let payload = r#"{"__type":"com.amazonaws.dynamodb.v20120810#ResourceNotFoundException",
 "message":"Requested resource not found: Table: tablename not found"}"#;
     let response = BufferedHttpResponse {
         status: StatusCode::OK,
         body: payload.into(),
-        headers: Headers::default(),
+        headers: Default::default(),
     };
 
     let error = Error::parse(&response).unwrap();
