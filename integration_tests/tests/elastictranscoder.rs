@@ -302,16 +302,13 @@ fn list_presets() {
     use rusoto_elastictranscoder::ListPresetsRequest;
 
     initialize();
-
     let client = create_client();
 
     let request = ListPresetsRequest::default();
     let response = client.list_presets(request).sync();
-
     assert!(response.is_ok());
 
     let response = response.unwrap();
-
     assert!(response.presets.is_some());
 
     let presets = response.presets.unwrap();
@@ -325,12 +322,28 @@ fn list_presets() {
         .filter(|x| x.id == Some(AWS_ETS_WEB_PRESET_ID.to_owned()))
         .next();
 
-    assert!(web_preset.is_some());
+    let found_preset = match web_preset {
+        Some(w) => w.clone(),
+        None => {
+            // get the next page
+            assert!(response.next_page_token.is_some());
+            let page_two_request = ListPresetsRequest {
+                page_token: response.next_page_token,
+                ..Default::default()
+            };
 
-    let web_preset = web_preset.unwrap();
+            let page_two_response = client.list_presets(page_two_request).sync().unwrap();
+            let presets_pg_2 = page_two_response.presets.unwrap();
+            let web_preset = presets_pg_2
+                .iter()
+                .filter(|x| x.id == Some(AWS_ETS_WEB_PRESET_ID.to_owned()))
+                .next();
+            web_preset.unwrap().clone()
+        },
+    };
 
-    assert_eq!(web_preset.id, Some(AWS_ETS_WEB_PRESET_ID.to_owned()));
-    assert_eq!(web_preset.name, Some(AWS_ETS_WEB_PRESET_NAME.to_owned()));
+    assert_eq!(found_preset.id, Some(AWS_ETS_WEB_PRESET_ID.to_owned()));
+    assert_eq!(found_preset.name, Some(AWS_ETS_WEB_PRESET_NAME.to_owned()));
 }
 
 #[test]
