@@ -101,7 +101,7 @@ pub fn generate_services(
                 return "extern crate xml;".into();
             }
             let safe_name = k.replace("-", "_");
-            let use_macro = k == "serde_derive" || k == "log" || k == "lazy_static";
+            let use_macro = k == "serde_derive" || k == "lazy_static";
             if use_macro {
                 return format!("#[macro_use]\nextern crate {};", safe_name);
             }

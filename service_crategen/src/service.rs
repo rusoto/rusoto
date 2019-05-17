@@ -151,7 +151,6 @@ impl<'b> Service<'b> {
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.7".into()));
             }
             "rest-json" => {
-                dependencies.insert("log".to_owned(), cargo::Dependency::Simple("0.4.1".into()));
                 dependencies.insert(
                     "serde".to_owned(),
                     cargo::Dependency::Simple("1.0.2".into()),
