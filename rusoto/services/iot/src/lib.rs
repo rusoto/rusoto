@@ -18,8 +18,6 @@
 
 extern crate bytes;
 extern crate futures;
-#[macro_use]
-extern crate log;
 extern crate rusoto_core;
 extern crate serde;
 #[macro_use]
