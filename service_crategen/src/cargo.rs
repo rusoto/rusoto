@@ -29,6 +29,7 @@ pub struct Metadata {
     pub repository: Option<String>,
     pub version: String,
     pub homepage: Option<String>,
+    pub edition: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

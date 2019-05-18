@@ -6,7 +6,7 @@ use rusoto_core;
 
 use rusoto_core::credential::AwsCredentials;
 use rusoto_core::{CredentialsError, ProvideAwsCredentials, RusotoFuture};
-use {
+use crate::{
     AssumeRoleError, AssumeRoleRequest, AssumeRoleResponse, AssumeRoleWithSAMLError,
     AssumeRoleWithSAMLRequest, AssumeRoleWithSAMLResponse, AssumeRoleWithWebIdentityError,
     AssumeRoleWithWebIdentityRequest, AssumeRoleWithWebIdentityResponse,
@@ -24,15 +24,15 @@ pub const DEFAULT_ROLE_DURATION_SECONDS: i32 = 900;
 pub trait NewAwsCredsForStsCreds {
     /// Creates an [AwsCredentials](../rusoto_credential/struct.AwsCredentials.html) from a [Credentials](struct.Credentials.html)
     /// Returns a [CredentialsError](../rusoto_credential/struct.CredentialsError.html) in case of an error.
-    fn new_for_credentials(sts_creds: ::Credentials) -> Result<AwsCredentials, CredentialsError>;
+    fn new_for_credentials(sts_creds: crate::generated::Credentials) -> Result<AwsCredentials, CredentialsError>;
 }
 
 impl NewAwsCredsForStsCreds for AwsCredentials {
-    fn new_for_credentials(sts_creds: ::Credentials) -> Result<AwsCredentials, CredentialsError> {
-        let expires_at = Some(try!(sts_creds
+    fn new_for_credentials(sts_creds: crate::generated::Credentials) -> Result<AwsCredentials, CredentialsError> {
+        let expires_at = Some(sts_creds
             .expiration
             .parse::<DateTime<Utc>>()
-            .map_err(CredentialsError::from)));
+            .map_err(CredentialsError::from)?);
 
         Ok(AwsCredentials::new(
             sts_creds.access_key_id,
@@ -208,13 +208,13 @@ impl Future for StsSessionCredentialsProviderFuture {
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         match self.inner.poll() {
             Ok(Async::Ready(resp)) => {
-                let creds = try!(resp
+                let creds = resp
                     .credentials
-                    .ok_or(CredentialsError::new("no credentials in response")));
+                    .ok_or(CredentialsError::new("no credentials in response"))?;
 
-                Ok(Async::Ready(try!(AwsCredentials::new_for_credentials(
+                Ok(Async::Ready(AwsCredentials::new_for_credentials(
                     creds
-                ))))
+                )?))
             }
             Ok(Async::NotReady) => Ok(Async::NotReady),
             Err(err) => Err(CredentialsError::new(format!(
@@ -325,13 +325,13 @@ impl Future for StsAssumeRoleSessionCredentialsProviderFuture {
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         match self.inner.poll() {
             Ok(Async::Ready(resp)) => {
-                let creds = try!(resp
+                let creds = resp
                     .credentials
-                    .ok_or(CredentialsError::new("no credentials in response")));
+                    .ok_or(CredentialsError::new("no credentials in response"))?;
 
-                Ok(Async::Ready(try!(AwsCredentials::new_for_credentials(
+                Ok(Async::Ready(AwsCredentials::new_for_credentials(
                     creds
-                ))))
+                )?))
             }
             Ok(Async::NotReady) => Ok(Async::NotReady),
             Err(err) => Err(CredentialsError::new(format!(
@@ -424,11 +424,11 @@ impl Future for StsWebIdentityFederationSessionCredentialsProviderFuture {
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         match self.inner.poll() {
             Ok(Async::Ready(resp)) => {
-                let creds = try!(resp
+                let creds = resp
                     .credentials
-                    .ok_or(CredentialsError::new("no credentials in response")));
+                    .ok_or(CredentialsError::new("no credentials in response"))?;
 
-                let mut aws_creds = try!(AwsCredentials::new_for_credentials(creds));
+                let mut aws_creds = AwsCredentials::new_for_credentials(creds)?;
 
                 if let Some(subject_from_wif) = resp.subject_from_web_identity_token {
                     aws_creds.claims_mut().insert(

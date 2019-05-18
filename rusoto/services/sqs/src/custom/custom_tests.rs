@@ -1,7 +1,7 @@
 extern crate rusoto_mock;
 
 use std::collections::HashMap;
-use ::{Sqs, SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue, GetQueueUrlRequest, GetQueueUrlError};
+use crate::generated::{Sqs, SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue, GetQueueUrlRequest, GetQueueUrlError};
 
 use rusoto_core::{Region, RusotoError};
 use rusoto_core::signature::SignedRequest;

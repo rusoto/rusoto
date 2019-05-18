@@ -1,6 +1,6 @@
 extern crate rusoto_mock;
 
-use ::{CloudFront, CloudFrontClient, ListDistributionsRequest};
+use crate::generated::{CloudFront, CloudFrontClient, ListDistributionsRequest};
 
 use rusoto_core::Region;
 use self::rusoto_mock::*;

@@ -1,6 +1,6 @@
 extern crate rusoto_mock;
 
-use ::*;
+use crate::generated::*;
 
 use bytes::Bytes;
 use futures::{Future, Stream};
