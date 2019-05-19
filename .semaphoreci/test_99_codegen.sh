@@ -3,7 +3,10 @@ set -Eeu
 
 cd service_crategen
 git submodule update --init
-cargo run -- generate -c ./services.json -o ../rusoto/services
+ver=$(cargo fmt --version)
+echo "Checking rustfmt with $ver"
+cd ..
+make generate
 diff=$(git diff)
 if [ -n "$diff" ]; then
     echo
