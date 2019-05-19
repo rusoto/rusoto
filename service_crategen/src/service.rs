@@ -34,7 +34,7 @@ impl<'b> Service<'b> {
             .metadata
             .service_id
             .as_ref()
-            .map(|service_id| service_id.as_str())
+            .map(std::string::String::as_str)
     }
 
     pub fn documentation(&self) -> Option<&String> {

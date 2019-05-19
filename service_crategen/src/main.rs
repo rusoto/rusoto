@@ -87,7 +87,7 @@ fn main() {
             .expect("Unable to read services configuration file.");
 
         let out_dir = Path::new(matches.value_of("out_dir").unwrap());
-        let service: Option<Vec<&str>> = matches.values_of("service").map(|x| x.collect());
+        let service: Option<Vec<&str>> = matches.values_of("service").map(std::iter::Iterator::collect);
 
         commands::generate::generate_services(&service_configs, out_dir, &service.as_ref());
     }
