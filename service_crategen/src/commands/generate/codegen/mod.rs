@@ -496,7 +496,7 @@ fn generate_struct_fields<P: GenerateProtocol>(
                                         serialize_with=\"::rusoto_core::serialization::SerdeBlobList::serialize_blob_list\",
                                         default,
                                     )]".to_owned()
-                                ); 
+                                );
                             }
                         }
                     }

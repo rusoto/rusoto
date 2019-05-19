@@ -12,10 +12,7 @@ pub struct Service<'a> {
 
 impl<'b> Service<'b> {
     pub fn new(config: &'b ServiceConfig, definition: ServiceDefinition) -> Self {
-        Service {
-            config,
-            definition,
-        }
+        Service { config, definition }
     }
 
     pub fn name(&self) -> &str {
