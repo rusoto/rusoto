@@ -23,7 +23,7 @@ To use `rusoto_appstream` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_appstream = "0.38.0"
+rusoto_appstream = "0.39.0"
 ```
 
 ## Contributing

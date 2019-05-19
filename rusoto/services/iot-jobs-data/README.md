@@ -23,7 +23,7 @@ To use `rusoto_iot_jobs_data` in your application, add it as a dependency in you
 
 ```toml
 [dependencies]
-rusoto_iot_jobs_data = "0.38.0"
+rusoto_iot_jobs_data = "0.39.0"
 ```
 
 ## Contributing

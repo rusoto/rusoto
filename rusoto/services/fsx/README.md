@@ -23,7 +23,7 @@ To use `rusoto_fsx` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_fsx = "0.38.0"
+rusoto_fsx = "0.39.0"
 ```
 
 ## Contributing

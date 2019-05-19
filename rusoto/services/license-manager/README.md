@@ -23,7 +23,7 @@ To use `rusoto_license_manager` in your application, add it as a dependency in y
 
 ```toml
 [dependencies]
-rusoto_license_manager = "0.38.0"
+rusoto_license_manager = "0.39.0"
 ```
 
 ## Contributing

@@ -23,7 +23,7 @@ To use `rusoto_elastictranscoder` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_elastictranscoder = "0.38.0"
+rusoto_elastictranscoder = "0.39.0"
 ```
 
 ## Contributing

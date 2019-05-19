@@ -23,7 +23,7 @@ To use `rusoto_mq` in your application, add it as a dependency in your `Cargo.to
 
 ```toml
 [dependencies]
-rusoto_mq = "0.38.0"
+rusoto_mq = "0.39.0"
 ```
 
 ## Contributing

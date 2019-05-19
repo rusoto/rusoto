@@ -23,7 +23,7 @@ To use `rusoto_dax` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_dax = "0.38.0"
+rusoto_dax = "0.39.0"
 ```
 
 ## Contributing

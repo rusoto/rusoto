@@ -23,7 +23,7 @@ To use `rusoto_comprehend` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_comprehend = "0.38.0"
+rusoto_comprehend = "0.39.0"
 ```
 
 ## Contributing

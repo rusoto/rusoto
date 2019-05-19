@@ -23,7 +23,7 @@ To use `rusoto_connect` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_connect = "0.38.0"
+rusoto_connect = "0.39.0"
 ```
 
 ## Contributing

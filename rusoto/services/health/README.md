@@ -23,7 +23,7 @@ To use `rusoto_health` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_health = "0.38.0"
+rusoto_health = "0.39.0"
 ```
 
 ## Contributing

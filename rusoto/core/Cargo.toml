@@ -13,7 +13,7 @@ license = "MIT"
 name = "rusoto_core"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.38.0"
+version = "0.39.0"
 homepage = "https://www.rusoto.org/"
 exclude = ["test_resources/*"]
 edition = "2018"
@@ -50,7 +50,7 @@ xml-rs = "0.7"
 
 [dependencies.rusoto_credential]
 path = "../credential"
-version = "0.17"
+version = "0.39"
 
 [dependencies.clippy]
 optional = true
