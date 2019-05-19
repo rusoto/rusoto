@@ -344,7 +344,7 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
             let payload_shape_required = match output_shape.required {
                 Some(ref s) => {
                     // if there's any required shape present the body payload parser will handle it
-                    s.len() > 0
+                    s.is_empty()
                 }
                 None => false,
             };

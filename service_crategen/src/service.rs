@@ -13,8 +13,8 @@ pub struct Service<'a> {
 impl<'b> Service<'b> {
     pub fn new(config: &'b ServiceConfig, definition: ServiceDefinition) -> Self {
         Service {
-            config: config,
-            definition: definition,
+            config,
+            definition,
         }
     }
 

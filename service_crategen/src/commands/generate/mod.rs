@@ -85,7 +85,7 @@ pub fn generate_services(
         println!("Generating crate for {} @ {}...", service.full_name(), service.api_version());
 
         if !crate_dir.exists() {
-            fs::create_dir(&crate_dir).expect(&format!("Unable to create directory at {}", crate_dir.display()));
+            fs::create_dir(&crate_dir).unwrap_or_else(|_| panic!("Unable to create directory at {}", crate_dir.display()));
         }
 
         let mut features = BTreeMap::new();

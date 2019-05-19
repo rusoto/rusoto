@@ -266,7 +266,7 @@ fn streaming_members<'a>(shape: &'a Shape) -> Box<Iterator<Item = &'a Member> + 
         .members
         .as_ref()
         .into_iter()
-        .flat_map(|members| members.values())
+        .flat_map(std::collections::BTreeMap::values)
         .filter(|&member| member.streaming());
     Box::new(it)
 }

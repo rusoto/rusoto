@@ -39,7 +39,7 @@ impl ServiceDefinition {
 
     pub fn load_all() -> Result<BTreeMap<String, Self>, Box<error::Error>> {
         fs::read_dir(BOTOCORE_DIR)?
-            .filter_map(|e| e.ok())
+            .filter_map(std::result::Result::ok)
             .map(|e| e.path())
             .filter(|p| p.is_dir())
             .filter_map(|path| {
@@ -51,7 +51,7 @@ impl ServiceDefinition {
                 let service_entries = service_entries.unwrap();
 
                 let mut version_dirs: Vec<_> = service_entries
-                    .filter_map(|e| e.ok())
+                    .filter_map(std::result::Result::ok)
                     .map(|e| e.path())
                     .filter(|p| p.is_dir())
                     .collect();
