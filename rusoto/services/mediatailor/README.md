@@ -23,7 +23,7 @@ To use `rusoto_mediatailor` in your application, add it as a dependency in your 
 
 ```toml
 [dependencies]
-rusoto_mediatailor = "0.38.0"
+rusoto_mediatailor = "0.39.0"
 ```
 
 ## Contributing

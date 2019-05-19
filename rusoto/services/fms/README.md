@@ -23,7 +23,7 @@ To use `rusoto_fms` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_fms = "0.38.0"
+rusoto_fms = "0.39.0"
 ```
 
 ## Contributing

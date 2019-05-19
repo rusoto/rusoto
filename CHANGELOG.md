@@ -3,6 +3,8 @@
 ## [Unreleased]
 (Please put notes here)
 
+## [0.39.0] - 2019-05-19
+
 - Add Worklink service
 - Add FSX service
 - Fix de/serialization of DynamoDB binary set attribute values
@@ -15,6 +17,9 @@
 - Add ComprehendMedical service
 - Add Ap-East-1 Region
 - Remove log crate dependency from services
+- Remove decoding of the uri path before encoding it
+- Use http::HeaderMap instead of our custom implementation
+- Update all public crates to Rust 2018 edition
 
 ## [0.38.0] - 2019-04-17
 
