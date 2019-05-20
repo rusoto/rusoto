@@ -85,7 +85,7 @@ pub fn generate_services(
         println!("Generating crate for {} @ {}...", service.full_name(), service.api_version());
 
         if !crate_dir.exists() {
-            fs::create_dir(&crate_dir).expect(&format!("Unable to create directory at {}", crate_dir.display()));
+            fs::create_dir(&crate_dir).unwrap_or_else(|_| panic!("Unable to create directory at {}", crate_dir.display()));
         }
 
         let mut features = BTreeMap::new();
@@ -213,7 +213,7 @@ See [LICENSE][license] for details.
             let src_dir = crate_dir.join("src");
 
             if !src_dir.exists() {
-                fs::create_dir(&src_dir).expect(&format!("Unable to create directory at {}", src_dir.display()));
+                fs::create_dir(&src_dir).unwrap_or_else(|_| panic!("Unable to create directory at {}", src_dir.display()));
             }
 
             let lib_file_path = src_dir.join("lib.rs");
@@ -256,7 +256,7 @@ pub use crate::custom::*;
             service_docs = ::doco::Module(service.documentation().unwrap_or(&service.full_name().to_owned())),
             client_name = service.client_type_name(),
             trait_name = service.service_type_name(),
-            examples = generate_examples(&crate_dir).unwrap_or("".to_string()),
+            examples = generate_examples(&crate_dir).unwrap_or_else(|| "".to_string()),
             extern_crates = extern_crates
             ).expect("Couldn't write library file");
 
@@ -276,7 +276,7 @@ pub use crate::custom::*;
             let custom_dir_path = src_dir.join("custom");
 
             if !custom_dir_path.exists() {
-                fs::create_dir(&custom_dir_path).expect(&format!("Unable to create directory at {}", custom_dir_path.display()));
+                fs::create_dir(&custom_dir_path).unwrap_or_else(|_| panic!("Unable to create directory at {}", custom_dir_path.display()));
             }
 
             let custom_mod_file_path = custom_dir_path.join("mod.rs");
@@ -313,13 +313,13 @@ pub use crate::custom::*;
             let test_resources_dir = crate_dir.join("test_resources");
 
             if !test_resources_dir.exists() {
-                fs::create_dir(&test_resources_dir).expect(&format!("Unable to create directory at {}", test_resources_dir.display()));
+                fs::create_dir(&test_resources_dir).unwrap_or_else(|_| panic!("Unable to create directory at {}", test_resources_dir.display()));
             }
 
             let generated_test_resources_dir = test_resources_dir.join("generated");
 
             if !generated_test_resources_dir.exists() {
-                fs::create_dir(&generated_test_resources_dir).expect(&format!("Unable to create directory at {}", generated_test_resources_dir.display()));
+                fs::create_dir(&generated_test_resources_dir).unwrap_or_else(|_| panic!("Unable to create directory at {}", generated_test_resources_dir.display()));
             }
 
             let test_valid_resources = codegen::tests::find_valid_responses_for_service(&service);
@@ -327,7 +327,7 @@ pub use crate::custom::*;
                 let test_valid_resources_dir = generated_test_resources_dir.join("valid");
 
                 if !test_valid_resources_dir.exists() {
-                    fs::create_dir(&test_valid_resources_dir).expect(&format!("Unable to create directory at {}", generated_test_resources_dir.display()));
+                    fs::create_dir(&test_valid_resources_dir).unwrap_or_else(|_| panic!("Unable to create directory at {}", generated_test_resources_dir.display()));
                 }
 
                 for resource in test_valid_resources {
@@ -340,7 +340,7 @@ pub use crate::custom::*;
                 let test_error_resources_dir = generated_test_resources_dir.join("error");
 
                 if !test_error_resources_dir.exists() {
-                    fs::create_dir(&test_error_resources_dir).expect(&format!("Unable to create directory at {}", generated_test_resources_dir.display()));
+                    fs::create_dir(&test_error_resources_dir).unwrap_or_else(|_| panic!("Unable to create directory at {}", generated_test_resources_dir.display()));
                 }
 
                 for resource in test_error_resources {

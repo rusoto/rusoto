@@ -239,7 +239,8 @@ impl GenerateErrorTypes for JsonErrorTypes {
         operation: &Operation,
         service: &Service,
     ) -> String {
-        format!("
+        format!(
+            "
                 impl {type_name} {{
                     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<{type_name}> {{
                         if let Some(err) = proto::json::Error::parse(&res) {{
@@ -250,8 +251,9 @@ impl GenerateErrorTypes for JsonErrorTypes {
                         return RusotoError::Unknown(res);
                     }}
                 }}",
-                type_name = error_type_name(service, operation_name),
-                type_matchers = self.generate_error_type_matchers(operation_name, operation, service))
+            type_name = error_type_name(service, operation_name),
+            type_matchers = self.generate_error_type_matchers(operation_name, operation, service)
+        )
     }
 }
 
@@ -292,7 +294,8 @@ impl GenerateErrorTypes for RestJsonErrorTypes {
         operation: &Operation,
         service: &Service,
     ) -> String {
-        format!("
+        format!(
+            "
                 impl {type_name} {{
                     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<{type_name}> {{
                         if let Some(err) = proto::json::Error::parse_rest(&res) {{
@@ -303,7 +306,9 @@ impl GenerateErrorTypes for RestJsonErrorTypes {
                         return RusotoError::Unknown(res);
                     }}
                 }}",
-                type_name = error_type_name(service, operation_name),
-                type_matchers = JsonErrorTypes.generate_error_type_matchers(operation_name, operation, service))
+            type_name = error_type_name(service, operation_name),
+            type_matchers =
+                JsonErrorTypes.generate_error_type_matchers(operation_name, operation, service)
+        )
     }
 }

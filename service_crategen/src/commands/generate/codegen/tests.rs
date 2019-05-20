@@ -184,7 +184,7 @@ pub fn find_responses_in_dir(dir_path: &Path) -> Vec<Response> {
     let dir = fs::read_dir(dir_path).expect("read_dir");
 
     let mut responses = dir
-        .filter_map(|e| e.ok())
+        .filter_map(std::result::Result::ok)
         .filter(|d| d.path().extension().map(|ex| ex == "xml").unwrap_or(false))
         .filter_map(|d| Response::from_response_path(&d.path()))
         .collect::<Vec<_>>();

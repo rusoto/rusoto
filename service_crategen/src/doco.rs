@@ -39,7 +39,7 @@ fn prefix(input: &str, pre: &str, fmt: &mut Formatter) -> FmtResult {
         if i > 0 {
             fmt.write_char('\n')?;
         }
-        if line.len() == 0 {
+        if line.is_empty() {
             write!(fmt, "{}", pre)?;
         } else {
             write!(fmt, "{} {}", pre, line.trim())?;

@@ -12,10 +12,7 @@ pub struct Service<'a> {
 
 impl<'b> Service<'b> {
     pub fn new(config: &'b ServiceConfig, definition: ServiceDefinition) -> Self {
-        Service {
-            config: config,
-            definition: definition,
-        }
+        Service { config, definition }
     }
 
     pub fn name(&self) -> &str {
@@ -34,7 +31,7 @@ impl<'b> Service<'b> {
             .metadata
             .service_id
             .as_ref()
-            .map(|service_id| service_id.as_str())
+            .map(std::string::String::as_str)
     }
 
     pub fn documentation(&self) -> Option<&String> {

@@ -154,10 +154,12 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Box::new(response.buffer().from_err().and_then(|response| {{
+        format!(
+            "Box::new(response.buffer().from_err().and_then(|response| {{
                     proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()
                 }}))",
-            output_type)
+            output_type
+        )
     } else {
         "Box::new(future::ok(::std::mem::drop(response)))".to_owned()
     }
