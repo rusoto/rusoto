@@ -21,9 +21,10 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use serde_json;
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
-use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsInput {
     /// <p>The ID of the ML object to tag. For example, <code>exampleModelId</code>.</p>

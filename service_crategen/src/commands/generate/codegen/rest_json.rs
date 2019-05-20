@@ -104,7 +104,9 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        writeln!(writer, "use serde_json;")?;
+        if service.needs_serde_json_crate() {
+            writeln!(writer, "use serde_json;")?;
+        }
 
         // avoid unused imports when building services that don't use params
         if service_has_query_parameters(service) {

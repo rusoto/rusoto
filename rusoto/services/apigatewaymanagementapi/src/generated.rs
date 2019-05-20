@@ -23,7 +23,6 @@ use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
-use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PostToConnectionRequest {
     /// <p>The identifier of the connection that a specific client is using.</p>
