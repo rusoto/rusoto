@@ -389,12 +389,12 @@ fn required_primitive_field_serializer(
 
 fn serialize_primitive_expression(shape_type: &ShapeType, var_name: &str) -> String {
     match *shape_type {
-        ShapeType::String |
-        ShapeType::Timestamp |
-        ShapeType::Integer |
-        ShapeType::Double |
-        ShapeType::Long |
-        ShapeType::Boolean => format!("&{}", var_name),
+        ShapeType::String
+        | ShapeType::Timestamp
+        | ShapeType::Integer
+        | ShapeType::Double
+        | ShapeType::Long
+        | ShapeType::Boolean => format!("&{}", var_name),
         ShapeType::Blob => format!("::std::str::from_utf8(&{}).unwrap()", var_name),
         shape_type => panic!("Unknown primitive shape type: {:?}", shape_type),
     }

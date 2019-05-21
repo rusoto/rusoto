@@ -260,7 +260,8 @@ fn generate_list_deserializer(shape: &Shape, service: &Service) -> String {
         .and_then(|m| m.location_name.to_owned())
         .unwrap_or_else(|| "member".to_owned());
 
-    format!("
+    format!(
+        "
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {{
             if name == \"{location_name}\" {{
                 obj.push({member_name}Deserializer::deserialize(\"{location_name}\", stack)?);
@@ -270,8 +271,9 @@ fn generate_list_deserializer(shape: &Shape, service: &Service) -> String {
             Ok(())
         }})
         ",
-            location_name = location_name,
-            member_name = mutate_type_name(service, &shape.member_type()[..]))
+        location_name = location_name,
+        member_name = mutate_type_name(service, &shape.member_type()[..])
+    )
 }
 
 fn generate_flat_list_deserializer(shape: &Shape, service: &Service) -> String {

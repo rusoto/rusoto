@@ -170,20 +170,12 @@ impl<'b> Service<'b> {
                     "serde_derive".to_owned(),
                     cargo::Dependency::Simple("1.0.2".into()),
                 );
-                // panic!("self.name is {}", self.name());
                 // some rest-json services don't use the `serde_json` crate:
-                match self.name() {
-                    "AmazonApiGatewayManagementApi"
-                    | "Amazon CloudSearch Domain"
-                    | "AWS Mobile"
-                    | "AWS IoT Data Plane"
-                    | "Amazon SageMaker Runtime" => (),
-                    _ => {
-                        dependencies.insert(
-                            "serde_json".to_owned(),
-                            cargo::Dependency::Simple("1.0.1".into()),
-                        );
-                    },
+                if self.needs_serde_json_crate() {
+                    dependencies.insert(
+                        "serde_json".to_owned(),
+                        cargo::Dependency::Simple("1.0.1".into()),
+                    );
                 }
             }
             protocol => panic!("Unknown protocol {}", protocol),
