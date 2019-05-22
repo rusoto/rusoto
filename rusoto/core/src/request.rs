@@ -313,7 +313,7 @@ pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
 impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new() -> Result<Self, TlsError> {
-        #[cfg(feature = "native-tls")]
+        #[cfg(not(feature = "rustls"))]
         let connector = match HttpsConnector::new(4) {
             Ok(connector) => connector,
             Err(tls_error) => {
@@ -331,7 +331,7 @@ impl HttpClient {
 
     /// Create a tls-enabled http client.
     pub fn new_with_config(config: HttpConfig) -> Result<Self, TlsError> {
-        #[cfg(feature = "native-tls")]
+        #[cfg(not(feature = "rustls"))]
         let connector = match HttpsConnector::new(4) {
             Ok(connector) => connector,
             Err(tls_error) => {
