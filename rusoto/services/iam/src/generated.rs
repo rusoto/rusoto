@@ -7136,7 +7136,7 @@ impl PolicyDocumentTypeDeserializer {
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
+        let obj = rusoto_core::signature::decode_uri(&characters(stack)?);
         end_element(tag_name, stack)?;
 
         Ok(obj)
