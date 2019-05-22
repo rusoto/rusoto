@@ -89,8 +89,7 @@ pub fn generate_services(
         }
 
         let mut features = BTreeMap::new();
-        features.insert("default".into(), vec!["native-tls".into()]);
-        features.insert("native-tls".into(), vec!["rusoto_core/native-tls".into()]);
+        features.insert("default".into(), vec!["rusoto_core/default".into()]);
         features.insert("rustls".into(), vec!["rusoto_core/rustls".into()]);
 
         let service_dependencies = service.get_dependencies();
