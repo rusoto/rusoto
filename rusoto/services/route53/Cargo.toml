@@ -27,6 +27,5 @@ version = "0.39.0"
 path = "../../../mock"
 
 [features]
-default = ["native-tls"]
-native-tls = ["rusoto_core/native-tls"]
+default = ["rusoto_core/default"]
 rustls = ["rusoto_core/rustls"]
